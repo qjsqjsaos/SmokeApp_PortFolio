@@ -30,10 +30,11 @@
         app:layout_constraintEnd_toEndOf="@+id/et_id"
         app:layout_constraintStart_toStartOf="@+id/et_id"
         app:layout_constraintTop_toBottomOf="@+id/et_id" />
+
     <EditText
         android:id="@+id/et_passck"
-        android:layout_width="200dp"
-        android:layout_height="45dp"
+        android:layout_width="154dp"
+        android:layout_height="46dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="패스워드 확인"
@@ -44,8 +45,8 @@
 
     <EditText
         android:id="@+id/et_name"
-        android:layout_width="200dp"
-        android:layout_height="45dp"
+        android:layout_width="167dp"
+        android:layout_height="37dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="이름"
