@@ -17,15 +17,15 @@ public class RegisterRequest extends StringRequest {
 
 
 
-    public RegisterRequest(String userID, String userPassword, String userBirthday, String userNickname, int userPhone, Response.Listener<String> listener) { //문자형태로 보낸다는 뜻
+    public RegisterRequest(String userID, String userPassword, int userBirthday, String userNickname, int userPhone, Response.Listener<String> listener) { //문자형태로 보낸다는 뜻
         super(Method.POST, URL, listener, null);
 
         map = new HashMap<>();
         map.put("userID", userID);
         map.put("userPassword", userPassword);
-        map.put("userBirthday", userBirthday);//인트형이니 가라식으로 스트링형태를 만들어 주기 위해 앞에 ""을 붙임.
+        map.put("userBirthday", userBirthday + "");//인트형이니 가라식으로 스트링형태를 만들어 주기 위해 앞에 ""을 붙임.
         map.put("userNickname", userNickname);
-        map.put("userPhone", userPhone + "");
+        map.put("userPhone", userPhone+ "");
 
     }
 

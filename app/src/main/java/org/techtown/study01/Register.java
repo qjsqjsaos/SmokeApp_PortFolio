@@ -38,8 +38,8 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 String userID = idText.getText().toString();
                 String userPassword = passwordText.getText().toString();
+                int userBirthday = Integer.parseInt(birthdayText.getText().toString());
                 String userNickname = nicknameText.getText().toString();
-                String userBirthday = birthdayText.getText().toString();
                 int userPhone = Integer.parseInt(phoneText.getText().toString());
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -75,6 +75,15 @@ public class Register extends AppCompatActivity {
                 RegisterRequest registerRequest = new RegisterRequest(userID, userPassword, userBirthday, userNickname, userPhone, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(Register.this);
                 queue.add(registerRequest);
+            }
+        });
+
+        Button register_cancel_button = findViewById(R.id.btn_regi_cancel);
+        register_cancel_button.setOnClickListener(new View.OnClickListener() { //취소 버튼
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Register.this, Login.class);
+                startActivity(intent);
             }
         });
 
