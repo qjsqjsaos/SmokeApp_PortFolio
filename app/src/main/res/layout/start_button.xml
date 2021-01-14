@@ -4,14 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_color"
     android:orientation="horizontal"
-    tools:context=".MainActivity">
-
-    //금연 로고
-
-    //금연 로고 아래 명언
-
-    //끊어 보자 버튼
+    tools:context=".FirstToMain.Startbutton">
 
     <ImageView
         android:id="@+id/imageView"
@@ -46,13 +41,12 @@
         android:id="@+id/btn_login"
         android:layout_width="126dp"
         android:layout_height="84dp"
-        android:fontFamily="@font/mapo"
         android:text="담배 끊기"
         android:textColor="@color/black"
         android:textColorHint="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:backgroundTint="#FFFFFF"
+        app:backgroundTint="#BDB76B"
         app:cornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

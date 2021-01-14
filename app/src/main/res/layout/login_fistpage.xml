@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@drawable/background_color"
+    android:orientation="vertical"
+    app:layout_constraintCircleRadius="50dp">
 
     <TextView
         android:id="@+id/textView3"
@@ -17,15 +19,6 @@
         android:text="No Smoking Together"
         android:textSize="28sp"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:text="로그인"
-        android:textSize="25sp" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -48,13 +41,12 @@
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:background="@color/white"
-            android:fontFamily="@font/mapo"
+            android:background="#BDB76B"
             android:hint="아이디를 입력해주세요"
+            android:inputType="textEmailAddress"
             android:paddingBottom="0dp"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:inputType="textEmailAddress"/>
+            android:textStyle="bold" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,8 +62,7 @@
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
-            android:background="@color/white"
-            android:fontFamily="@font/mapo"
+            android:background="	#BDB76B"
             android:hint="비밀번호를 입력해주세요."
             android:inputType="textWebPassword"
             android:textSize="18sp"
@@ -88,7 +79,6 @@
         android:layout_gravity="center"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:fontFamily="@font/mapo"
         android:gravity="center"
         android:text="자동 로그인"
         android:textSize="16sp"
@@ -99,7 +89,6 @@
         android:layout_width="110dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:fontFamily="@font/mapo"
         android:text="로그인"
 
         android:textSize="18sp"
@@ -119,7 +108,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/mapo"
             android:gravity="center"
             android:text="아이디찾기"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
@@ -131,7 +119,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/mapo"
             android:gravity="center"
             android:text="비밀번호찾기"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
@@ -143,7 +130,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/mapo"
             android:gravity="center"
             android:text="회원가입"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.techtown.study01">
+    package="org.techtown.study01.FirstToMain">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,17 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Study01">
-        <activity android:name=".Home"></activity>
-        <activity android:name=".Register" />
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".homeMain.HomeMain"></activity>
+        <activity android:name=".register.Register"></activity>
+        <activity android:name=".start.Startbutton"></activity>
+        <activity android:name=".findid.FindId"></activity>
+    <activity android:name=".login_fitstPage.Login">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".Login" />
-        <activity android:name=".HomeMain" />
-    </application>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+
+</application>
 
 </manifest>
