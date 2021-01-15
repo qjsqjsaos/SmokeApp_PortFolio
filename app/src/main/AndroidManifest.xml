@@ -16,6 +16,7 @@
         <activity android:name=".register.Register"></activity>
         <activity android:name=".start.Startbutton"></activity>
         <activity android:name=".findid.FindId"></activity>
+        <activity android:name=".findid.Id_pw_complete"></activity>
     <activity android:name=".login_fitstPage.Login">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
