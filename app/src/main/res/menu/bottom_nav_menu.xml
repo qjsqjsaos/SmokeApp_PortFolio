@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/check_health"
+        android:icon="@drawable/health"
+        android:title="@string/title_check_health" />
+
+    <item
+        android:id="@+id/community"
+        android:icon="@drawable/community"
+        android:title="@string/title_community" />
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/health_center"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_health_center" />
+
+    <item
+        android:id="@+id/shop"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_shop" />
+
+</menu>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_color"
     android:orientation="horizontal"
-    tools:context=".FirstToMain.Startbutton">
+    >
 
     <ImageView
         android:id="@+id/imageView"
@@ -46,7 +46,7 @@
         android:textColorHint="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:backgroundTint="#BDB76B"
+        app:backgroundTint="#949597"
         app:cornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
