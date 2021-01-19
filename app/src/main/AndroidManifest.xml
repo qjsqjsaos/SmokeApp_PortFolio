@@ -10,23 +10,27 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Study01"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name="MaintoEnd.Settings"></activity>
         <activity
             android:name=".homeMain.BottomNavi"
-            android:label="@string/title_activity_bottom_navi"></activity>
-        <activity android:name=".homeMain.HomeMain" />
-        <activity android:name=".register.Register" />
-        <activity android:name=".start.Startbutton" />
-        <activity android:name=".findid.FindId" />
-        <activity android:name=".findid.Id_pw_complete" />
-        <activity android:name=".login_fitstPage.Login">
+            android:label="@string/title_activity_bottom_navi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".register.Register" />
+        <activity android:name=".start.Startbutton" />
+        <activity android:name=".findid.FindId" />
+        <activity android:name=".findid.Id_pw_complete" />
+        <activity android:name=".login_fitstPage.Login"></activity>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7522479314167243~9048215236" />
     </application>
 
 </manifest>

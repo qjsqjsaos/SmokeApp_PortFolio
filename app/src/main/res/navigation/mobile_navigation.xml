@@ -7,19 +7,8 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="org.techtown.study01.FirstToMain.homeMain.ui.home.HomeFragment"
+        android:name="org.techtown.study01.FirstToMain.homeMain.BottomNavi"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/activity_bottom_navi" />
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="org.techtown.study01.FirstToMain.homeMain.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="org.techtown.study01.FirstToMain.homeMain.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
 </navigation>
