@@ -9,6 +9,6 @@
         android:id="@+id/navigation_home"
         android:name="org.techtown.study01.FirstToMain.homeMain.BottomNavi"
         android:label="@string/title_home"
-        tools:layout="@layout/activity_bottom_navi" />
+        tools:layout="@layout/bottom_navi" />
 
 </navigation>

@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_color"
-    android:orientation="horizontal"
-    >
+    android:background="@drawable/start_background"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/imageView"
@@ -41,12 +40,12 @@
         android:id="@+id/btn_login"
         android:layout_width="126dp"
         android:layout_height="84dp"
-        android:background="@drawable/radius"
+        android:background="@drawable/first_page_and_info_btn"
         android:elegantTextHeight="false"
         android:elevation="10dp"
         android:text="담배 끊기"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/button_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

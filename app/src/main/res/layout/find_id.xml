@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_color">
+    android:background="@drawable/home_and_another_background">
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+        style="@style/title_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:text="이메일로 아이디 찾기"
-        android:textSize="25sp"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="이메일로 아이디찾기"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,11 +45,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <Button
+        style="@style/bold_theme"
         android:layout_width="369dp"
         android:layout_height="62dp"
         android:layout_marginTop="36dp"
-        android:background="@drawable/radius"
+        android:background="@drawable/all_btn"
         android:text="이메일로 전송하기"
+        android:textColor="@color/white"
+        android:textSize="@dimen/button_text_size"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />

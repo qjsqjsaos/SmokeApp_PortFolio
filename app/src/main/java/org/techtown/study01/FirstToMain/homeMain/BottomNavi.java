@@ -7,10 +7,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import org.techtown.study01.FirstToMain.R;
 
@@ -21,7 +17,7 @@ public class BottomNavi extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bottom_navi);
+        setContentView(R.layout.bottom_navi);
 
         bottomNavigationView = findViewById(R.id.nav_view);
 

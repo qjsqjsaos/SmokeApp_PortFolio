@@ -12,7 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name="MaintoEnd.Settings"></activity>
+        <activity android:name="MaintoEnd.Special.Goal"></activity>
+        <activity android:name="MaintoEnd.Special.Ranking" />
+        <activity android:name="MaintoEnd.Special.Diary" />
+        <activity android:name="MaintoEnd.HomeMain.Shop" />
+        <activity android:name="MaintoEnd.HomeMain.HealthCenter" />
+        <activity android:name="MaintoEnd.HomeMain.Community" />
         <activity
             android:name=".homeMain.BottomNavi"
             android:label="@string/title_activity_bottom_navi">
@@ -26,7 +31,7 @@
         <activity android:name=".start.Startbutton" />
         <activity android:name=".findid.FindId" />
         <activity android:name=".findid.Id_pw_complete" />
-        <activity android:name=".login_fitstPage.Login"></activity>
+        <activity android:name=".login_fitstPage.Login" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
