@@ -1,4 +1,4 @@
-package MaintoEnd.Special;
+package org.techtown.study01.FirstToMain.start;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import org.techtown.study01.FirstToMain.R;
 
-public class Goal extends AppCompatActivity {
+public class first_page_loading extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.goal);
+        setContentView(R.layout.first_page_loading);
     }
 }

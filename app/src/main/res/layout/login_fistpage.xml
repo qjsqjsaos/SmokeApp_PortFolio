@@ -34,6 +34,7 @@
         android:id="@+id/TextInputLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -54,6 +55,7 @@
         android:id="@+id/TextInputLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -61,7 +63,6 @@
             android:layout_width="330dp"
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
             android:background="	#BDB76B"
             android:hint="비밀번호를 입력해주세요."
             android:inputType="textWebPassword"
@@ -77,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginEnd="5dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="5dp"
         android:gravity="center"
         android:text="자동 로그인"
@@ -93,7 +94,7 @@
 
         android:background="@drawable/all_btn"
         android:text="로그인"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:cornerRadius="50dp" />

@@ -6,4 +6,33 @@
     android:layout_height="match_parent"
     tools:context="MaintoEnd.HomeMain.Shop">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteY="78dp">
+
+
+        <TextView
+            android:id="@+id/textView35"
+            style="@style/bold_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="현재 개발중입니다.\n\n이용에 불편을 드려 죄송합니다." />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/textView38"
+        style="@style/title_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="상점"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,4 +6,17 @@
     android:layout_height="match_parent"
     tools:context="MaintoEnd.Special.Ranking">
 
+    <TextView
+        android:id="@+id/textView37"
+        style="@style/title_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="금연 랭킹"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

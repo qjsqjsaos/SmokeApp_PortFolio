@@ -51,7 +51,7 @@
         android:layout_marginTop="36dp"
         android:background="@drawable/all_btn"
         android:text="이메일로 전송하기"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
