@@ -14,7 +14,6 @@
         style="@style/title_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
@@ -26,8 +25,9 @@
         android:layout_width="339dp"
         android:layout_height="153dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="28dp"
-        android:paddingTop="25dp"
+        android:layout_marginBottom="10dp"
+        android:paddingTop="12.5dp"
+        android:paddingBottom="12.5dp"
         app:srcCompat="@mipmap/smokeimage" />
 
     <com.google.android.material.textfield.TextInputLayout

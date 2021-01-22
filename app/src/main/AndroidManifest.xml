@@ -25,6 +25,7 @@
         <activity android:name=".register.Register" />
         <activity android:name=".start.Startbutton" />
         <activity android:name=".findid.FindId" />
+        <activity android:name=".findPW.FindPw" />
         <activity android:name=".findid.Id_pw_complete" />
         <activity android:name=".login_fitstPage.Login">
             <intent-filter>

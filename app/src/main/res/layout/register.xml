@@ -4,9 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/start_background"
     android:orientation="vertical"
-    android:background="#ffffff"
-    tools:context=".JoinActivity">
+    tools:context=".register.Register">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/title_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:text="회원가입"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +36,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="70"/>
+            android:layout_weight="70" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -32,25 +51,43 @@
                 android:gravity="center_vertical">
 
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="아이디"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="70">
+                android:layout_weight="70"
+                android:weightSum="11">
 
                 <EditText
                     android:id="@+id/id"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="7"
                     android:background="@drawable/round_edittext"
+                    android:hint="영문 + 숫자 20자리 이하 작성 요망"
+                    android:maxLength="20"
                     android:paddingLeft="5dp"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/check_id_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:background="@drawable/all_btn"
+                    android:text="중복확인" />
 
             </LinearLayout>
 
@@ -64,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="비밀번호"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000" />
 
             </LinearLayout>
 
@@ -77,10 +114,12 @@
                     android:id="@+id/pw"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textPassword"
                     android:background="@drawable/round_edittext"
+                    android:hint="영문+숫자 최소 8글자이상 20글자 이하 "
+                    android:inputType="textPassword"
+                    android:maxLength="20"
                     android:paddingLeft="5dp"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp" />
 
             </LinearLayout>
 
@@ -94,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="비밀번호 확인"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000" />
 
             </LinearLayout>
 
@@ -110,7 +149,7 @@
                     android:background="@drawable/round_edittext"
                     android:inputType="textPassword"
                     android:paddingLeft="5dp"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp" />
 
 
             </LinearLayout>
@@ -125,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="이름"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000" />
 
             </LinearLayout>
 
@@ -139,8 +178,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/round_edittext"
+                    android:hint="15글자 이하"
+                    android:maxLength="15"
                     android:paddingLeft="5dp"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp" />
 
             </LinearLayout>
 
@@ -154,7 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="이메일"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000" />
 
             </LinearLayout>
 
@@ -169,19 +210,18 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/round_edittext"
                     android:hint=" xxxxxx@xxxx.xxx 형식으로 작성하세요."
-                    android:textSize="15dp"
                     android:inputType="textEmailAddress"
-                    android:paddingLeft="5dp"/>
+                    android:maxLength="30"
+                    android:paddingLeft="5dp"
+                    android:textSize="15dp" />
 
             </LinearLayout>
-
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="30"/>
-
+                android:layout_weight="30" />
 
 
             <LinearLayout
@@ -194,7 +234,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="휴대폰 번호"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000" />
 
             </LinearLayout>
 
@@ -209,10 +249,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/back_spinner"
-                    android:text="010"
-                    android:textSize="15dp"
-                    android:paddingLeft="5dp"/>
+                    android:background="@drawable/round_edittext"
+                    android:hint="010"
+                    android:maxLength="3"
+                    android:paddingLeft="5dp"
+                    android:textSize="15dp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -230,8 +271,8 @@
                     android:hint="0000"
                     android:inputType="number"
                     android:maxLength="4"
-                    android:textSize="15dp"
-                    android:paddingLeft="5dp"/>
+                    android:paddingLeft="5dp"
+                    android:textSize="15dp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -249,15 +290,15 @@
                     android:hint="0000"
                     android:inputType="number"
                     android:maxLength="4"
-                    android:textSize="15dp"
-                    android:paddingLeft="5dp"/>
+                    android:paddingLeft="5dp"
+                    android:textSize="15dp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="30"/>
+                android:layout_weight="30" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -280,16 +321,21 @@
                     android:background="@drawable/round_edittext"
                     android:hint="인증번호"
                     android:inputType="number"
-                    android:maxLength="4"
-                    android:textSize="15dp"
-                    android:paddingLeft="5dp"/>
+                    android:maxLength="6"
+                    android:paddingLeft="5dp"
+                    android:textSize="15dp" />
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
 
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="확인"/>
+                    android:background="@drawable/all_btn"
+                    android:text="확인" />
 
 
             </LinearLayout>
@@ -297,7 +343,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_weight="60"/>
+                android:layout_weight="60" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -313,7 +359,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/all_btn"
                     android:text="회원가입"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -329,19 +375,20 @@
                     android:layout_weight="1"
                     android:background="@drawable/all_btn"
                     android:text="돌아가기"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="60"/>
+                android:layout_weight="60" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="70"/>
+            android:layout_weight="70" />
 
     </LinearLayout>
 

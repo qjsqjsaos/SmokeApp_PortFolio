@@ -3,6 +3,7 @@ package org.techtown.study01.FirstToMain.login_fitstPage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,17 +19,18 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
-import org.techtown.study01.FirstToMain.homeMain.HomeMain;
+import org.techtown.study01.FirstToMain.findPW.FindPw;
+import org.techtown.study01.FirstToMain.findid.FindId;
+import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
 import org.techtown.study01.FirstToMain.register.Register;
 
 
 public class Login extends AppCompatActivity {
 
-    public class LoginActivity extends AppCompatActivity {
 
         private EditText idText, passwordText; //아이디 비밀번호 입력
-        private Button btn_login; //로그인버튼
-        private TextView rg_sign; //회원가입버튼
+        private Button btn_login;//로그인버튼
+        private TextView rg_sign, btn_findId, btn_findPw; ; //회원가입버튼
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class Login extends AppCompatActivity {
             rg_sign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(LoginActivity.this, Register.class);
+                    Intent intent = new Intent(Login.this, Register.class);
                     startActivity(intent);
                 }
             });
@@ -52,9 +54,8 @@ public class Login extends AppCompatActivity {
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String userID = idText.getText().toString();
-                    String userPass = passwordText.getText().toString();
-
+                    String id = idText.getText().toString();
+                    String pw = passwordText.getText().toString();
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -64,26 +65,21 @@ public class Login extends AppCompatActivity {
 
                                 if (success) {//로그인 성공시
 
-                                    String userID = jsonObject.getString("userID");
-                                    String userPass = jsonObject.getString("userPassword");
-                                    String userBirthday = jsonObject.getString("userBirthday");
-                                    String userNickname = jsonObject.getString("userNickname");
-                                    String userPhone = jsonObject.getString("userPhone");
+                                    String id = jsonObject.getString("id");
+                                    String pw = jsonObject.getString("pw");
+                                    String name = jsonObject.getString("name");
 
 
-                                    Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(LoginActivity.this, HomeMain.class);
+                                    Toast.makeText(getApplicationContext(), name + "님 환영합니다.", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(Login.this, BottomNavi.class);
 
-                                    intent.putExtra("userID", userID);
-                                    intent.putExtra("userPass", userPass);
-                                    intent.putExtra("userNickname", userNickname);
-                                    intent.putExtra("userPhone", userPhone);
-                                    intent.putExtra("userBirthday", userBirthday);
+                                    intent.putExtra("id", id);
+                                    intent.putExtra("pw", pw);
 
                                     startActivity(intent);
 
                                 } else {//로그인 실패시
-                                    Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -92,12 +88,32 @@ public class Login extends AppCompatActivity {
                             }
                         }
                     };
-                    LoginRequest loginRequest = new LoginRequest(userID, userPass, responseListener);
-                    RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+                    LoginRequest loginRequest = new LoginRequest(id, pw, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(Login.this);
                     queue.add(loginRequest);
 
                 }
             });
+
+            btn_findId = (TextView) findViewById(R.id.tv_id);
+            btn_findPw = (TextView) findViewById(R.id.tv_pass);
+
+            //아이디 찾기 화면으로 이동
+            btn_findId.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Login.this, FindId.class);
+                    startActivity(intent);
+                }
+            });
+
+            //비밀 번호 찾기 화면으로 이동
+            btn_findPw.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent2 = new Intent(Login.this, FindPw.class);
+                    startActivity(intent2);
+                }
+            });
         }
     }
-}

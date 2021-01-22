@@ -17,12 +17,12 @@ public class LoginRequest extends StringRequest {
 
 
 
-    public LoginRequest(String userID, String userPassword, Response.Listener<String> listener) { //문자형태로 보낸다는 뜻
+    public LoginRequest(String id, String pw, Response.Listener<String> listener) { //문자형태로 보낸다는 뜻
         super(Method.POST, URL, listener, null);
 
         map = new HashMap<>();
-        map.put("userID", userID);
-        map.put("userPassword", userPassword);
+        map.put("id", id);
+        map.put("pw", pw);
 
     }
 
