@@ -42,10 +42,10 @@
             android:layout_width="330dp"
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
-            android:background="#BDB76B"
+            android:background="@drawable/all_btn"
             android:hint="아이디를 입력해주세요"
             android:inputType="textEmailAddress"
-            android:paddingBottom="0dp"
+            android:paddingLeft="25sp"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -60,10 +60,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordText"
+            android:background="@drawable/all_btn"
             android:layout_width="330dp"
             android:layout_height="70dp"
+            android:paddingLeft="25sp"
             android:layout_gravity="center_horizontal"
-            android:background="	#BDB76B"
             android:hint="비밀번호를 입력해주세요."
             android:inputType="textWebPassword"
             android:textSize="18sp"

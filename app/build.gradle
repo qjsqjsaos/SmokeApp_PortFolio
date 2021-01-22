@@ -38,6 +38,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    //noinspection GradleCompatible
     implementation 'com.android.support:design:29.0.0' //BottomNavi
     implementation 'com.android.volley:volley:1.1.1' // 로그인 라이브러리 네트워크 통신 라이브러리 데이터베이스 연동때 필요함.
     implementation 'com.google.android.material:material:1.0.0' //TextInputLayout&TextInputEditText를 위해 넣어둠
