@@ -24,6 +24,8 @@ import org.techtown.study01.FirstToMain.findid.FindId;
 import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
 import org.techtown.study01.FirstToMain.register.Register;
 
+import static android.text.TextUtils.isEmpty;
+
 
 public class Login extends AppCompatActivity {
 
@@ -56,6 +58,7 @@ public class Login extends AppCompatActivity {
                 public void onClick(View view) {
                     String id = idText.getText().toString();
                     String pw = passwordText.getText().toString();
+
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -64,7 +67,6 @@ public class Login extends AppCompatActivity {
                                 boolean success = jsonObject.getBoolean("success");
 
                                 if (success) {//로그인 성공시
-
                                     String id = jsonObject.getString("id");
                                     String pw = jsonObject.getString("pw");
                                     String name = jsonObject.getString("name");

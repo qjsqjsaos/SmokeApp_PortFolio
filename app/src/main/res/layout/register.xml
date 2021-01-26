@@ -71,10 +71,10 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:background="@drawable/round_edittext"
-                    android:hint="영문 + 숫자 20자리 이하 작성 요망"
+                    android:hint="영문, 숫자 20자리 이하"
                     android:maxLength="20"
                     android:paddingLeft="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/register_hint_size" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -115,11 +115,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/round_edittext"
-                    android:hint="영문+숫자 최소 8글자이상 20글자 이하 "
+                    android:hint="영문 + 숫자 + 특수문자 각 하나 포함, 최소 8글자이상 20글자 이하 "
                     android:inputType="textPassword"
                     android:maxLength="20"
                     android:paddingLeft="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/register_hint_size" />
 
             </LinearLayout>
 
@@ -163,7 +163,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="이름"
+                    android:text="닉네임"
                     android:textColor="#000000" />
 
             </LinearLayout>
@@ -178,10 +178,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/round_edittext"
-                    android:hint="15글자 이하"
+                    android:hint="한글, 영어, 숫자 조합 최소 2자 이상 15자 이하"
                     android:maxLength="15"
                     android:paddingLeft="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/register_hint_size" />
 
             </LinearLayout>
 
@@ -206,136 +206,15 @@
 
                 <EditText
                     android:id="@+id/email"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="14"
                     android:background="@drawable/round_edittext"
-                    android:hint=" xxxxxx@xxxx.xxx 형식으로 작성하세요."
+                    android:hint="인증 번호를 받을 이메일 주소를 입력해 주세요."
                     android:inputType="textEmailAddress"
                     android:maxLength="30"
                     android:paddingLeft="5dp"
-                    android:textSize="15dp" />
-
-            </LinearLayout>
-
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="100"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="휴대폰 번호"
-                    android:textColor="#000000" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="70"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/phone1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/round_edittext"
-                    android:hint="010"
-                    android:maxLength="3"
-                    android:paddingLeft="5dp"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    android:text="-" />
-
-                <EditText
-                    android:id="@+id/phone2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/round_edittext"
-                    android:hint="0000"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:paddingLeft="5dp"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    android:text="-" />
-
-                <EditText
-                    android:id="@+id/phone3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/round_edittext"
-                    android:hint="0000"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:paddingLeft="5dp"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    />
-
-                <Button
-                    android:id="@+id/requestNumber_btn"
-                    android:background="@drawable/all_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="29dp"
-                    android:text="인증요청"
-                    android:layout_weight="1.2"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="30" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="70"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="" />
-
-                <EditText
-                    android:id="@+id/smsnumber"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:background="@drawable/round_edittext"
-                    android:hint="인증번호"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:paddingLeft="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/register_hint_size" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -343,15 +222,69 @@
                     android:layout_weight="0.5" />
 
                 <Button
-                    android:id="@+id/smsnumber_btn"
+                    android:id="@+id/sendEmail"
                     android:layout_width="0dp"
                     android:layout_height="29dp"
-                    android:layout_weight="2"
+                    android:layout_weight="4"
+                    android:background="@drawable/all_btn"
+                    android:text="보내기" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:gravity="center_vertical" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="70"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:gravity="center"
+                    style="@style/bold_theme"
+                    android:text="3:00"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    />
+
+                <EditText
+                    android:id="@+id/smsnumber"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:background="@drawable/round_edittext"
+                    android:hint="인증번호 입력 후 확인"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:paddingLeft="5dp"
+                    android:textSize="@dimen/register_hint_size" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+
+                <Button
+                    android:id="@+id/email_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="29dp"
+                    android:layout_weight="3"
                     android:background="@drawable/all_btn"
                     android:text="확인" />
 
-
             </LinearLayout>
+
+
+
+
+
+
 
             <LinearLayout
                 android:layout_width="0dp"

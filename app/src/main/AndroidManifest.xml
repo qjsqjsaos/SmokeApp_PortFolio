@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".start.Quest1"></activity>
+        <activity android:name=".start.Quest1" />
         <activity android:name=".start.first_page_loading" />
         <activity android:name="MaintoEnd.Special.Ranking" />
         <activity android:name="MaintoEnd.Special.Diary" />
@@ -21,7 +21,7 @@
         <activity android:name="MaintoEnd.HomeMain.Community" />
         <activity
             android:name=".homeMain.BottomNavi"
-            android:label="@string/title_activity_bottom_navi"/>
+            android:label="@string/title_activity_bottom_navi" />
         <activity android:name=".register.Register" />
         <activity android:name=".start.Startbutton" />
         <activity android:name=".findid.FindId" />

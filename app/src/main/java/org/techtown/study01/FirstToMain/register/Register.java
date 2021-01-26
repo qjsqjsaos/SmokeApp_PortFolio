@@ -1,9 +1,13 @@
 package org.techtown.study01.FirstToMain.register;
 
+import android.app.admin.SystemUpdatePolicy;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,14 +30,25 @@ import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
+import javax.xml.validation.Validator;
+
 import static android.text.TextUtils.isEmpty;
 
 public class Register extends AppCompatActivity {
 
     private Button btnBack, join_btn, check_id_btn;
-    private Boolean validate = false;
+    private Boolean validate = false; //중복체크 되었는지 안되었는지 확인
     private AlertDialog dialog;
+    private Button sendEmail, email_btn = null;
+    private EditText email, smsnumber = null; //받는 사람의 이메일
+    private Boolean smsValidate = false; //이메일 인증번호 되었는지 안되었는지 확인
 
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +74,6 @@ public class Register extends AppCompatActivity {
         final EditText Epwc = (EditText) findViewById(R.id.pwc);
         final EditText Ename = (EditText) findViewById(R.id.name);
         final EditText Eemail = (EditText) findViewById(R.id.email);
-        final EditText Ephone1 = (EditText) findViewById(R.id.phone1);
-        final EditText Ephone2 = (EditText) findViewById(R.id.phone2);
-        final EditText Ephone3 = (EditText) findViewById(R.id.phone3);
         final EditText Esmsnumber = (EditText) findViewById(R.id.smsnumber);
 
         //id중복체크 버튼
@@ -70,41 +82,56 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String id = Eid.getText().toString();
-                if (validate) {
-                    return;
-                }
-                if (id.equals("")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
-                    dialog = builder.setMessage("아이디를 입력해주세요.")
+                AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
+
+                //아이디 유효성
+                if(!Pattern.matches("^[0-9_a-zA-Z]{4,20}$", id)) {
+                    dialog = builder.setMessage("아이디 형식을 지켜주세요.")
                             .setPositiveButton("확인", null)
                             .create();
                     dialog.show();
                     return;
                 }
 
+                if (validate) {
+                    return;
+                }
+                    if (id.equals("")) {
+                        dialog = builder.setMessage("아이디를 입력해주세요.")
+                                .setPositiveButton("확인", null)
+                                .create();
+                        dialog.show();
+                        return;
+                }
+
+
                 Response.Listener<String> responseListener=new Response.Listener<String>() { //결과 리스너 생성 (중복체크)
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonResponse=new JSONObject(response);
-                            boolean success=jsonResponse.getBoolean("success");
+
+                            boolean success =jsonResponse.getBoolean("success");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
                             if(success){
-                                AlertDialog.Builder builder=new AlertDialog.Builder( Register.this );
                                 dialog=builder.setMessage("사용할 수 있는 아이디입니다.")
                                         .setPositiveButton("확인",null)
                                         .create();
                                 dialog.show();
-                                Eid.setEnabled(false);
                                 validate=true;
+                                Eid.setEnabled(false);
                                 check_id_btn.setText("확인");
+                                return;
                             }
                             else{
-                                AlertDialog.Builder builder=new AlertDialog.Builder( Register.this );
-                                dialog=builder.setMessage("사용할 수 없는 아이디입니다.")
+                                dialog=builder.setMessage("존재하는 아이디입니다.")
                                         .setNegativeButton("확인",null)
                                         .create();
+                                validate=false;
                                 dialog.show();
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -115,6 +142,81 @@ public class Register extends AppCompatActivity {
                 RequestQueue queue= Volley.newRequestQueue(Register.this);
                 queue.add(idcheck);
 
+            }
+        });
+
+
+        //이메일 인증번호 보내기
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .permitDiskReads()
+                .permitDiskWrites()
+                .permitNetwork().build());
+
+        email = (EditText) findViewById(R.id.email); //받는 사람의 이메일
+
+        sendEmail = findViewById(R.id.sendEmail);
+        sendEmail.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                //랜덤 인증번호 (6자)
+                int result = (int) (Math.floor(Math.random() * 1000000) + 100000);
+                if(result>1000000){
+                    result = result - 100000;
+                }
+                    //구글 이메일로 smtp 사용해서 인증번호 보내기
+                try {
+                    GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+                    //GMailSender.sendMail(제목, 본문내용, 받는사람);
+                    gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result +" 입니다. \n " +
+                            "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", email.getText().toString());
+                    Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+                } catch (SendFailedException e) {
+                    Toast.makeText(getApplicationContext(), "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                } catch (MessagingException e) {
+                    Toast.makeText(getApplicationContext(), "이메일을 입력해주세요", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //이메일 인증버튼 눌렀을 때 반응
+
+                int finalResult = result;
+
+                email_btn = (Button) findViewById(R.id.email_btn);
+                email_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        smsnumber = (EditText) findViewById(R.id.smsnumber);
+                        int keyNumber = Integer.parseInt(smsnumber.getText().toString());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
+                        if (smsnumber.equals("")) {
+                            dialog = builder.setMessage("인증번호를 입력해주세요.")
+                                    .setPositiveButton("확인", null)
+                                    .create();
+                            dialog.show();
+                            return;
+                        }
+                        if(finalResult == keyNumber){
+                            dialog=builder.setMessage("인증 되었습니다.")
+                                    .setPositiveButton("확인",null)
+                                    .create();
+                            dialog.show();
+                            smsValidate = true;
+                            return;
+                        }
+                        else{
+                            dialog=builder.setMessage("인증번호가 틀립니다.")
+                                    .setNegativeButton("확인",null)
+                                    .create();
+                            smsValidate = false;
+                            dialog.show();
+                            return;
+                        }
+                    }
+                });
             }
         });
 
@@ -130,7 +232,6 @@ public class Register extends AppCompatActivity {
                 String pwc = Epwc.getText().toString();
                 String name = Ename.getText().toString();
                 String email = Eemail.getText().toString();
-                String phone = Ephone1.getText().toString() + Ephone2.getText().toString() + Ephone3.getText().toString();
                 String smsnumber = Esmsnumber.getText().toString();
 
 
@@ -169,13 +270,16 @@ public class Register extends AppCompatActivity {
 
                 //각 정보를 입력안했을때는 Toast메세지 출력 후 리턴
                 if (isEmpty(id)) {
-                    Toast.makeText(getApplicationContext(), "아이디를 입력해주새요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "아이디를 입력해주세요.", Toast.LENGTH_LONG).show();
                     return;
-                } else if (isEmpty(pw)) {
+                } else if (!validate) {
+                    Toast.makeText(getApplicationContext(), "아이디 중복확인을 해주세요.", Toast.LENGTH_LONG).show();
+                    return;
+                }else if (isEmpty(pw)) {
                     Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show();
                     return;
                 } else if (isEmpty(pwc)) {
-                    Toast.makeText(getApplicationContext(), "비밀번호를 확인하세요", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "비밀번호를 확인하세요.", Toast.LENGTH_LONG).show();
                     return;
                 } else if (!pw.equals(pwc)) {
                     Toast.makeText(getApplicationContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
@@ -183,18 +287,57 @@ public class Register extends AppCompatActivity {
                 } else if (isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "이메일을 입력해주세요.", Toast.LENGTH_LONG).show();
                     return;
-                } else if (isEmpty(phone)) {
-                    Toast.makeText(getApplicationContext(), "휴대폰 번호를 입력해주세요.", Toast.LENGTH_LONG).show();
-                    return;
                 } else if (isEmpty(smsnumber)) {
-                    Toast.makeText(getApplicationContext(), "휴대폰 인증을 완료해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "인증번호를 입력해주세요.", Toast.LENGTH_LONG).show();
                     return;
-                } else {
+                } else if (!smsValidate) {
+                    Toast.makeText(getApplicationContext(), "인증번호가 일치하지않습니다.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
+                //비밀번호 유효성
+                else if(!Pattern.matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&]).{8,20}.$", pw))
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
+                    dialog = builder.setMessage("비밀번호 형식을 지켜주세요.")
+                            .setPositiveButton("확인", null)
+                            .create();
+                    dialog.show();
+                    return;
+                }
+
+                //이메일 형식체크
+                else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
+                    dialog = builder.setMessage("이메일 형식을 지켜주세요.")
+                            .setPositiveButton("확인", null)
+                            .create();
+                    dialog.show();
+                    return;
+                }
+
+
+                //닉네임 유효성
+                else if(!Pattern.matches("^[가-힣a-zA-Z0-9_]{2,15}$",name))
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
+                    dialog = builder.setMessage("닉네임 형식을 지켜주세요.")
+                            .setPositiveButton("확인", null)
+                            .create();
+                    dialog.show();
+                    return;
+                }
+
+                else {
                     //모든 값이 다 있으면 DB에 저장하는 메소드 실행
-                    RegisterRequest register = new RegisterRequest(id, pw, name, email, phone, responseListener);
+                    RegisterRequest register = new RegisterRequest(id, pw, name, email, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(Register.this);
                     queue.add(register);
                 }
+
+
             }
         });
 
