@@ -17,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 
 
 public class GMailSender extends javax.mail.Authenticator {
-    private String mailhost = "smtp.gmail.com";
+    private String mailHost = "smtp.gmail.com";
     private String user;
     private String password;
     private Session session;
@@ -29,7 +29,7 @@ public class GMailSender extends javax.mail.Authenticator {
         emailCode = createEmailCode();
         Properties props = new Properties();
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", mailhost);
+        props.put("mail.smtp.host", mailHost);
         props.put("mail.smtp.auth","true");
         props.put("mail.smtp.port", "587");                 // mail 포트 465, 587
         props.put("mail.smtp.starttls","true");

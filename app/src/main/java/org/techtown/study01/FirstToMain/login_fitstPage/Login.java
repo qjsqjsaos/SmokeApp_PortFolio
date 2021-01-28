@@ -60,10 +60,11 @@ public class Login extends AppCompatActivity {
                     String pw = passwordText.getText().toString();
 
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
+
                         @Override
                         public void onResponse(String response) {
                             try {
-                                JSONObject jsonObject = new JSONObject(response);
+                               JSONObject jsonObject = new JSONObject(response);
                                 boolean success = jsonObject.getBoolean("success");
 
                                 if (success) {//로그인 성공시
