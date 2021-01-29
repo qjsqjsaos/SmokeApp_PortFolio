@@ -32,7 +32,9 @@ import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
+import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,16 +45,15 @@ import javax.xml.validation.Validator;
 import static android.text.TextUtils.isEmpty;
 
 public class Register extends AppCompatActivity {
-
     private Button btnBack, join_btn, check_id_btn;
-    private Boolean validate, check_number_smtp; //중복체크 되었는지 안되었는지 확인
+    private Boolean validate, checkNumberSmtp, timeLimit; //중복체크 되었는지 안되었는지 확인, 인증 번호 확인, 타이머 인증 확인
     private String checkId; //회원가입 버튼누르고 중복확인
     private AlertDialog dialog;
     private Button sendEmail, email_btn = null;
     private EditText email, smsNumber = null; //받는 사람의 이메일
-    private int result; //이메일 인증번호
-    private int keyNumber; //입력한 인증번호
-    private TextView countView;
+    private int result, keyNumber;  //이메일 인증번호, 입력한 인증번호
+    private CountDownTimer countDownTimer; //카운트 다운 타이머
+    private TextView countView; //카운트 다운 표시 텍스트
 
 
 
@@ -61,6 +62,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
+        countView = (TextView)findViewById(R.id.countView);
 
         //입력받을 EditText 선언
         final EditText Eid = (EditText) findViewById(R.id.id);
@@ -69,6 +71,9 @@ public class Register extends AppCompatActivity {
         final EditText Ename = (EditText) findViewById(R.id.name);
         final EditText Eemail = (EditText) findViewById(R.id.email);
         final EditText Esmsnumber = (EditText) findViewById(R.id.smsNumber);
+
+
+
 
         //id중복체크 버튼
         check_id_btn = (Button) findViewById(R.id.check_id_btn);
@@ -99,6 +104,7 @@ public class Register extends AppCompatActivity {
                 }catch (Exception e){
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),"잘못된 값입니다. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
+
                 }
 
 
@@ -117,7 +123,7 @@ public class Register extends AppCompatActivity {
                                         .create();
                                 dialog.show();
                                 checkId = Eid.getText().toString(); //중복확인된 아이디 가져오기
-                                validate = false;
+                                validate = true;
                             }
                             else{
 
@@ -164,6 +170,27 @@ public class Register extends AppCompatActivity {
                     gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result +" 입니다. \n " +
                             "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", email.getText().toString());
                     Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+
+                    //타이머 설정
+                    try{
+                        if(!email.equals("")) {
+                            countDownTimer = new CountDownTimer(180000,1000) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    countView.setText(CountDTimer.countDown());
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    countView.setText("시간초과 : 다시 보내기");
+                                    timeLimit = false;
+                                }
+                            };
+                            countDownTimer.start();
+                        }
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     return;
                 } catch (SendFailedException e) {
                     Toast.makeText(getApplicationContext(), "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
@@ -175,6 +202,8 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
+
+
 
                 //이메일 인증버튼 눌렀을 때 반응
 
@@ -191,19 +220,19 @@ public class Register extends AppCompatActivity {
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                return;
+                                checkNumberSmtp = false;
                             } else if (result == keyNumber) {
                                 dialog = builder.setMessage("인증 되었습니다.")
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                return;
+                                checkNumberSmtp = true;
                             }else if (keyNumber < 1000000 && result != keyNumber) {
                                 dialog = builder.setMessage("인증번호가 틀립니다.")
                                         .setNegativeButton("확인", null)
                                         .create();
                                 dialog.show();
-                                return;
+                                checkNumberSmtp = false;
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -211,7 +240,7 @@ public class Register extends AppCompatActivity {
                                     .setNegativeButton("확인", null)
                                     .create();
                             dialog.show();
-                            return;
+                            checkNumberSmtp = false;
                         }
 
                     }
@@ -285,7 +314,7 @@ public class Register extends AppCompatActivity {
                        if (isEmpty(id)) {
                            Toast.makeText(getApplicationContext(), "아이디를 입력해주세요.", Toast.LENGTH_LONG).show();
                            return;
-                       } else if (validate == null) {
+                       } else if (validate == null || false) {
                            Toast.makeText(getApplicationContext(), "아이디 중복확인을 해주세요.", Toast.LENGTH_LONG).show();
                            return;
                        } else if (isEmpty(pw)) {
@@ -306,10 +335,10 @@ public class Register extends AppCompatActivity {
                        } else if (isEmpty(smsnumber)) {
                            Toast.makeText(getApplicationContext(), "인증번호를 입력해주세요.", Toast.LENGTH_LONG).show();
                            return;
-                       } else if (check_number_smtp == null) {
+                       } else if (checkNumberSmtp == null || false) {
                            Toast.makeText(getApplicationContext(), "인증번호 확인버튼을 눌러주세요.", Toast.LENGTH_LONG).show();
                            return;
-                       } else if (result != keyNumber) {
+                       } else if (result != keyNumber || timeLimit == false) {
                            Toast.makeText(getApplicationContext(), "인증번호가 일치하지않습니다.", Toast.LENGTH_LONG).show();
                            return;
                        } else if (!checkId.equals(id)) {
@@ -360,4 +389,5 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+
 }
