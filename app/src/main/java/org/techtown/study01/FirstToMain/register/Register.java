@@ -46,7 +46,7 @@ import static android.text.TextUtils.isEmpty;
 
 public class Register extends AppCompatActivity {
     private Button btnBack, join_btn, check_id_btn;
-    private Boolean validate, checkNumberSmtp, timeLimit; //중복체크 되었는지 안되었는지 확인, 인증 번호 확인, 타이머 인증 확인
+    private Boolean validate, checkNumberSmtp, timeLimit = false; //중복체크 되었는지 안되었는지 확인, 인증 번호 확인, 타이머 인증 확인
     private String checkId; //회원가입 버튼누르고 중복확인
     private AlertDialog dialog;
     private Button sendEmail, email_btn = null;
@@ -54,6 +54,9 @@ public class Register extends AppCompatActivity {
     private int result, keyNumber;  //이메일 인증번호, 입력한 인증번호
     private CountDownTimer countDownTimer; //카운트 다운 타이머
     private TextView countView; //카운트 다운 표시 텍스트
+    private final int MILLISINFUTURE = 300 * 1000; //총 시간 (300초 = 5분)
+    private final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
+
 
 
 
@@ -158,13 +161,14 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //랜덤 인증번호 (6자)
-                result = (int) (Math.floor(Math.random() * 1000000) + 100000);
-                if(result>1000000){
-                    result = result - 100000;
-                }
+
                     //구글 이메일로 smtp 사용해서 인증번호 보내기
                 try {
+                    //랜덤 인증번호 (6자)
+                    result = (int) (Math.floor(Math.random() * 1000000) + 100000);
+                    if(result>1000000){
+                        result = result - 100000;
+                    }
                     GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
                     //GMailSender.sendMail(제목, 본문내용, 받는사람);
                     gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result +" 입니다. \n " +
@@ -174,24 +178,52 @@ public class Register extends AppCompatActivity {
                     //타이머 설정
                     try{
                         if(!email.equals("")) {
-                            countDownTimer = new CountDownTimer(180000,1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-                                    countView.setText(CountDTimer.countDown());
-                                }
+                                countView = (TextView) findViewById(R.id.countView);
+                                //줄어드는 시간을 나타내는 TextView
+                                smsNumber = (EditText) findViewById(R.id.smsNumber);
+                                //사용자 인증 번호 입력창
+                                email_btn = (Button) findViewById(R.id.email_btn);
+                                //인증하기 버튼
 
-                                @Override
-                                public void onFinish() {
-                                    countView.setText("시간초과 : 다시 보내기");
-                                    timeLimit = false;
-                                }
-                            };
-                            countDownTimer.start();
+
+                                countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
+                                    @Override
+                                    public void onTick(long millisUntilFinished) { //(300초에서 1초 마다 계속 줄어듬)
+
+                                        long emailAuthCount = millisUntilFinished / 1000;
+                                        Log.d("Alex", emailAuthCount + "");
+
+                                        if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) { //초가 10보다 크면 그냥 출력
+                                            countView.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                                        } else { //초가 10보다 작으면 앞에 '0' 붙여서 같이 출력. ex) 02,03,04...
+                                            countView.setText((emailAuthCount / 60) + " : 0" + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                                        }
+
+                                        //emailAuthCount은 종료까지 남은 시간임. 1분 = 60초 되므로,
+                                        // 분을 나타내기 위해서는 종료까지 남은 총 시간에 60을 나눠주면 그 몫이 분이 된다.
+                                        // 분을 제외하고 남은 초를 나타내기 위해서는, (총 남은 시간 - (분*60) = 남은 초) 로 하면 된다.
+                                        timeLimit = true;
+                                    }
+
+                                    @Override
+                                    public void onFinish() { //시간이 초과 되서 꺼지면 false, 인증되고 꺼지면 true.
+
+                                        if(checkNumberSmtp = true){
+                                            countDownTimer.cancel();
+                                            countView.setText("인증완료");
+                                            timeLimit = true;
+                                        } else {
+
+                                            countView.setText("시간초과 : 다시시도");
+                                            timeLimit = false;
+                                        }
+                                    }
+                                }.start();
                         }
                     }catch (Exception e) {
                         e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                     }
-                    return;
                 } catch (SendFailedException e) {
                     Toast.makeText(getApplicationContext(), "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
                 } catch (MessagingException e) {
@@ -222,11 +254,23 @@ public class Register extends AppCompatActivity {
                                 dialog.show();
                                 checkNumberSmtp = false;
                             } else if (result == keyNumber) {
-                                dialog = builder.setMessage("인증 되었습니다.")
+
+                                if(timeLimit == false) { //만약 제한 시간이 지나고 인증번호 확인을 눌렀을 때,
+                                dialog = builder.setMessage("다시 인증번호를 전송해주세요.")
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                checkNumberSmtp = true;
+                                checkNumberSmtp = false;}
+
+                                else{
+                                    dialog = builder.setMessage("인증 되었습니다.")
+                                            .setPositiveButton("확인", null)
+                                            .create();
+                                    dialog.show();
+                                    countDownTimer.onFinish(); //인증 버튼 누르고 시간초과 끄기
+                                    checkNumberSmtp = true;
+                                }
+
                             }else if (keyNumber < 1000000 && result != keyNumber) {
                                 dialog = builder.setMessage("인증번호가 틀립니다.")
                                         .setNegativeButton("확인", null)
@@ -242,7 +286,6 @@ public class Register extends AppCompatActivity {
                             dialog.show();
                             checkNumberSmtp = false;
                         }
-
                     }
                 });
 
