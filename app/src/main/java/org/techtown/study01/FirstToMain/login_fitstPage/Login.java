@@ -24,6 +24,8 @@ import org.techtown.study01.FirstToMain.findid.FindId;
 import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
 import org.techtown.study01.FirstToMain.register.Register;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.text.TextUtils.isEmpty;
 
 
@@ -47,6 +49,9 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Login.this, Register.class);
+                    intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
             });

@@ -1,12 +1,13 @@
 package org.techtown.study01.FirstToMain.register;
 
-import android.app.admin.SystemUpdatePolicy;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.StrictMode;
-import android.text.style.RelativeSizeSpan;
+
+import android.os.SystemClock;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -14,11 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
+
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,15 +32,10 @@ import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimerTask;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
-import javax.xml.validation.Validator;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -48,14 +43,15 @@ public class Register extends AppCompatActivity {
     private Button btnBack, join_btn, check_id_btn;
     private Boolean validate, checkNumberSmtp, timeLimit = false; //중복체크 되었는지 안되었는지 확인, 인증 번호 확인, 타이머 인증 확인
     private String checkId; //회원가입 버튼누르고 중복확인
-    private AlertDialog dialog;
-    private Button sendEmail, email_btn = null;
+    private AlertDialog dialog; //알림 다이아로그
+    private Button sendEmail, email_btn = null; //버튼
     private EditText email, smsNumber = null; //받는 사람의 이메일
     private int result, keyNumber;  //이메일 인증번호, 입력한 인증번호
     private CountDownTimer countDownTimer; //카운트 다운 타이머
     private TextView countView; //카운트 다운 표시 텍스트
     private final int MILLISINFUTURE = 300 * 1000; //총 시간 (300초 = 5분)
     private final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
+    private Long mLastClickTime = 0L; //이메일 버튼 클릭 방지 변수
 
 
 
@@ -65,7 +61,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
-        countView = (TextView)findViewById(R.id.countView);
+        countView = (TextView) findViewById(R.id.countView);
 
         //입력받을 EditText 선언
         final EditText Eid = (EditText) findViewById(R.id.id);
@@ -74,8 +70,6 @@ public class Register extends AppCompatActivity {
         final EditText Ename = (EditText) findViewById(R.id.name);
         final EditText Eemail = (EditText) findViewById(R.id.email);
         final EditText Esmsnumber = (EditText) findViewById(R.id.smsNumber);
-
-
 
 
         //id중복체크 버튼
@@ -104,34 +98,33 @@ public class Register extends AppCompatActivity {
                         dialog.show();
                         return;
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"잘못된 값입니다. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "잘못된 값입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
 
                 }
 
 
-                Response.Listener<String> responseListener=new Response.Listener<String>() { //결과 리스너 생성 (중복체크)
+                Response.Listener<String> responseListener = new Response.Listener<String>() { //결과 리스너 생성 (중복체크)
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonResponse=new JSONObject(response);
+                            JSONObject jsonResponse = new JSONObject(response);
 
-                            boolean success =jsonResponse.getBoolean("success");
+                            boolean success = jsonResponse.getBoolean("success");
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
-                            if(success){
-                                dialog=builder.setMessage("사용할 수 있는 아이디입니다.")
-                                        .setPositiveButton("확인",null)
+                            if (success) {
+                                dialog = builder.setMessage("사용할 수 있는 아이디입니다.")
+                                        .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
                                 checkId = Eid.getText().toString(); //중복확인된 아이디 가져오기
                                 validate = true;
-                            }
-                            else{
+                            } else {
 
-                                dialog=builder.setMessage("존재하는 아이디입니다.")
-                                        .setNegativeButton("확인",null)
+                                dialog = builder.setMessage("존재하는 아이디입니다.")
+                                        .setNegativeButton("확인", null)
                                         .create();
                                 dialog.show();
                                 validate = false;
@@ -143,7 +136,7 @@ public class Register extends AppCompatActivity {
                     }
                 };
                 Idcheck idcheck = new Idcheck(id, responseListener);
-                RequestQueue queue= Volley.newRequestQueue(Register.this);
+                RequestQueue queue = Volley.newRequestQueue(Register.this);
                 queue.add(idcheck);
             }
         });
@@ -160,79 +153,83 @@ public class Register extends AppCompatActivity {
         sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(SystemClock.elapsedRealtime() - mLastClickTime > 300000) { //5동안
+                    switch (v.getId()) {
+                        case R.id.sendEmail:
+
+                            //구글 이메일로 smtp 사용해서 인증번호 보내기
+                            try {
+                                //랜덤 인증번호 (6자)
+                                result = (int) (Math.floor(Math.random() * 1000000) + 100000);
+                                if (result > 1000000) {
+                                    result = result - 100000;
+                                }
+                                GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+                                //GMailSender.sendMail(제목, 본문내용, 받는사람);
+                                gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result + " 입니다. \n " +
+                                        "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", email.getText().toString());
+                                Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+
+                                //타이머 설정
+                                try {
+                                    if (!email.equals("")) {
 
 
-                    //구글 이메일로 smtp 사용해서 인증번호 보내기
-                try {
-                    //랜덤 인증번호 (6자)
-                    result = (int) (Math.floor(Math.random() * 1000000) + 100000);
-                    if(result>1000000){
-                        result = result - 100000;
-                    }
-                    GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
-                    //GMailSender.sendMail(제목, 본문내용, 받는사람);
-                    gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result +" 입니다. \n " +
-                            "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", email.getText().toString());
-                    Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-
-                    //타이머 설정
-                    try{
-                        if(!email.equals("")) {
-                                countView = (TextView) findViewById(R.id.countView);
-                                //줄어드는 시간을 나타내는 TextView
-                                smsNumber = (EditText) findViewById(R.id.smsNumber);
-                                //사용자 인증 번호 입력창
-                                email_btn = (Button) findViewById(R.id.email_btn);
-                                //인증하기 버튼
+                                        countView = (TextView) findViewById(R.id.countView);
+                                        //줄어드는 시간을 나타내는 TextView
+                                        smsNumber = (EditText) findViewById(R.id.smsNumber);
+                                        //사용자 인증 번호 입력창
+                                        email_btn = (Button) findViewById(R.id.email_btn);
+                                        //인증하기 버튼
 
 
-                                countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
-                                    @Override
-                                    public void onTick(long millisUntilFinished) { //(300초에서 1초 마다 계속 줄어듬)
+                                        countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
+                                            @Override
+                                            public void onTick(long millisUntilFinished) { //(300초에서 1초 마다 계속 줄어듬)
 
-                                        long emailAuthCount = millisUntilFinished / 1000;
-                                        Log.d("Alex", emailAuthCount + "");
+                                                long emailAuthCount = millisUntilFinished / 1000;
+                                                Log.d("Alex", emailAuthCount + "");
 
-                                        if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) { //초가 10보다 크면 그냥 출력
-                                            countView.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));
-                                        } else { //초가 10보다 작으면 앞에 '0' 붙여서 같이 출력. ex) 02,03,04...
-                                            countView.setText((emailAuthCount / 60) + " : 0" + (emailAuthCount - ((emailAuthCount / 60) * 60)));
-                                        }
+                                                if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) { //초가 10보다 크면 그냥 출력
+                                                    countView.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                                                } else { //초가 10보다 작으면 앞에 '0' 붙여서 같이 출력. ex) 02,03,04...
+                                                    countView.setText((emailAuthCount / 60) + " : 0" + (emailAuthCount - ((emailAuthCount / 60) * 60)));
+                                                }
 
-                                        //emailAuthCount은 종료까지 남은 시간임. 1분 = 60초 되므로,
-                                        // 분을 나타내기 위해서는 종료까지 남은 총 시간에 60을 나눠주면 그 몫이 분이 된다.
-                                        // 분을 제외하고 남은 초를 나타내기 위해서는, (총 남은 시간 - (분*60) = 남은 초) 로 하면 된다.
-                                        timeLimit = true;
+                                                //emailAuthCount은 종료까지 남은 시간임. 1분 = 60초 되므로,
+                                                // 분을 나타내기 위해서는 종료까지 남은 총 시간에 60을 나눠주면 그 몫이 분이 된다.
+                                                // 분을 제외하고 남은 초를 나타내기 위해서는, (총 남은 시간 - (분*60) = 남은 초) 로 하면 된다.
+
+                                                timeLimit = true; //인증버튼에 true 값 전달. => 270행
+                                            }
+
+                                            @Override
+                                            public void onFinish() { //시간이 초과 되서 꺼지면 false, 인증되고 꺼지면 true.
+                                                countView.setText("시간초과 : 다시시도");
+                                                    timeLimit = false;
+                                            }
+
+                                        }.start();
+
                                     }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (SendFailedException e) {
+                                Toast.makeText(getApplicationContext(), "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                            } catch (MessagingException e) {
+                                Toast.makeText(getApplicationContext(), "이메일을 입력해주세요", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Toast.makeText(getApplicationContext(), "잘못된 값입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                            }
 
-                                    @Override
-                                    public void onFinish() { //시간이 초과 되서 꺼지면 false, 인증되고 꺼지면 true.
-
-                                        if(checkNumberSmtp = true){
-                                            countDownTimer.cancel();
-                                            countView.setText("인증완료");
-                                            timeLimit = true;
-                                        } else {
-
-                                            countView.setText("시간초과 : 다시시도");
-                                            timeLimit = false;
-                                        }
-                                    }
-                                }.start();
-                        }
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                     }
-                } catch (SendFailedException e) {
-                    Toast.makeText(getApplicationContext(), "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
-                } catch (MessagingException e) {
-                    Toast.makeText(getApplicationContext(), "이메일을 입력해주세요", Toast.LENGTH_SHORT).show();
-                } catch (Exception e){
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"잘못된 값입니다. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
                 }
+                mLastClickTime = SystemClock.elapsedRealtime();
             }
+
         });
 
 
@@ -254,20 +251,20 @@ public class Register extends AppCompatActivity {
                                 dialog.show();
                                 checkNumberSmtp = false;
                             } else if (result == keyNumber) {
-
                                 if(timeLimit == false) { //만약 제한 시간이 지나고 인증번호 확인을 눌렀을 때,
                                 dialog = builder.setMessage("다시 인증번호를 전송해주세요.")
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                checkNumberSmtp = false;}
-
-                                else{
-                                    dialog = builder.setMessage("인증 되었습니다.")
+                                checkNumberSmtp = false;
+                                }
+                                else {
+                                        dialog = builder.setMessage("인증 되었습니다.")
                                             .setPositiveButton("확인", null)
                                             .create();
                                     dialog.show();
-                                    countDownTimer.onFinish(); //인증 버튼 누르고 시간초과 끄기
+                                    countDownTimer.cancel();
+                                    countView.setText("인증완료");
                                     checkNumberSmtp = true;
                                 }
 
@@ -432,5 +429,4 @@ public class Register extends AppCompatActivity {
             }
         });
     }
-
 }
