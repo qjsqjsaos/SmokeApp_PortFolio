@@ -12,6 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".register.Register_Auth">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".start.Quest1" />
         <activity android:name=".start.first_page_loading" />
         <activity android:name="MaintoEnd.Special.Ranking" />
@@ -28,11 +35,7 @@
         <activity android:name=".findPW.FindPw" />
         <activity android:name=".findid.Id_pw_complete" />
         <activity android:name=".login_fitstPage.Login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
