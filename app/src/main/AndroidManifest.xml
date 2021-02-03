@@ -12,31 +12,67 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".register.Terms_Service"></activity>
-        <activity android:name=".register.Terms_Personal"></activity>
-        <activity android:name=".register.Register_Auth">
+        <activity android:name=".homeMain.User_CardView"></activity>
+        <activity
+            android:name=".register.Terms_Service"
+            android:screenOrientation="portrait">
+            >
+        </activity>
+        <activity
+            android:name=".register.Terms_Personal"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".register.Register_Auth"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".start.Quest1"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.first_page_loading"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MaintoEnd.Special.Ranking"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MaintoEnd.Special.Diary"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MaintoEnd.HomeMain.Shop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MaintoEnd.HomeMain.HealthCenter"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MaintoEnd.HomeMain.Community"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".homeMain.BottomNavi"
+            android:label="@string/title_activity_bottom_navi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".register.Register"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".start.Startbutton"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".findid.FindId"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".findPW.FindPw"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".findid.Id_pw_complete"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login_fitstPage.Login"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".start.Quest1" />
-        <activity android:name=".start.first_page_loading" />
-        <activity android:name="MaintoEnd.Special.Ranking" />
-        <activity android:name="MaintoEnd.Special.Diary" />
-        <activity android:name="MaintoEnd.HomeMain.Shop" />
-        <activity android:name="MaintoEnd.HomeMain.HealthCenter" />
-        <activity android:name="MaintoEnd.HomeMain.Community" />
-        <activity
-            android:name=".homeMain.BottomNavi"
-            android:label="@string/title_activity_bottom_navi" />
-        <activity android:name=".register.Register" />
-        <activity android:name=".start.Startbutton" />
-        <activity android:name=".findid.FindId" />
-        <activity android:name=".findPW.FindPw" />
-        <activity android:name=".findid.Id_pw_complete" />
-        <activity android:name=".login_fitstPage.Login"></activity>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

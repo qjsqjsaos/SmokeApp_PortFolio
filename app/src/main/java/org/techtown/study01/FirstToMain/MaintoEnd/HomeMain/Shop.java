@@ -1,4 +1,4 @@
-package MaintoEnd.HomeMain;
+package org.techtown.study01.FirstToMain.MaintoEnd.HomeMain;
 
 import androidx.appcompat.app.AppCompatActivity;
 

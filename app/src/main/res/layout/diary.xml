@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="MaintoEnd.Special.Diary">
+    tools:context=".MaintoEnd.Special.Diary">
 
     <TextView
         android:id="@+id/textView36"

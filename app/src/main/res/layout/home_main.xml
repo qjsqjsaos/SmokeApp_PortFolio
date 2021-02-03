@@ -26,10 +26,13 @@
             android:paddingRight="10dp">
 
 
+
+
             <LinearLayout
                 android:layout_width="115dp"
                 android:layout_height="60dp"
                 android:orientation="horizontal">
+
 
                 <Button
                     android:id="@+id/notice_Btn"
@@ -113,38 +116,7 @@
             android:layout_height="130dp"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/diary_btn"
-                android:layout_width="96dp"
-                android:layout_height="95dp"
-                android:layout_marginStart="30dp"
-                android:background="@drawable/diary" />
-
-            <Button
-                android:id="@+id/rank_btn"
-                android:layout_width="96dp"
-                android:layout_height="95dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:background="@drawable/ranking"
-                android:gravity="center_vertical" />
-
-            <Button
-                android:id="@+id/goal_btn"
-                android:layout_width="96dp"
-                android:layout_height="95dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/goal"
-                android:gravity="center_vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.949" />
-        </LinearLayout>
+            android:orientation="horizontal"/>
 
 
     </LinearLayout>

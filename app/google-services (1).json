@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "210513731504",
+    "project_id": "nosmokingtogetherapp",
+    "storage_bucket": "nosmokingtogetherapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210513731504:android:de20469a223ab9b8a80075",
+        "android_client_info": {
+          "package_name": "org.techtown.study01.FirstToMain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210513731504-l9ah4ile50mvitca82t5hfstbbdj4a7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.techtown.study01.FirstToMain",
+            "certificate_hash": "30012953434b5c66cfd65383c90e01514bce8fd2"
+          }
+        },
+        {
+          "client_id": "210513731504-ub3nrata4mduah8a8f7ae8giid3s38nt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb1o9qJYPHjP0VwnUaKF6fYKnWyRkUWdY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210513731504-ub3nrata4mduah8a8f7ae8giid3s38nt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

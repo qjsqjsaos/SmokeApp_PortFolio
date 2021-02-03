@@ -1,4 +1,4 @@
-package MaintoEnd.Special;
+package org.techtown.study01.FirstToMain.MaintoEnd.Special;
 
 import androidx.appcompat.app.AppCompatActivity;
 

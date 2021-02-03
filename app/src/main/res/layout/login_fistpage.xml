@@ -141,5 +141,13 @@
 
     </LinearLayout>
 
+    <com.google.android.gms.common.SignInButton
+        android:background="@drawable/all_btn"
+        android:id="@+id/btn_google"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="@dimen/register_and_textInput"
+        android:layout_height="50dp" />
+
 
 </LinearLayout>
