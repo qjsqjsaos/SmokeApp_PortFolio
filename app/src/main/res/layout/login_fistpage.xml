@@ -39,7 +39,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/idText"
-            android:layout_width="330dp"
+            android:layout_width="@dimen/register_and_textInput"
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/all_btn"
@@ -61,7 +61,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordText"
             android:background="@drawable/all_btn"
-            android:layout_width="330dp"
+            android:layout_width="@dimen/register_and_textInput"
             android:layout_height="70dp"
             android:paddingLeft="25sp"
             android:layout_gravity="center_horizontal"
@@ -88,11 +88,10 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="110dp"
+        android:layout_width="@dimen/register_and_textInput"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
-
         android:background="@drawable/all_btn"
         android:text="로그인"
         android:textColor="@color/black"

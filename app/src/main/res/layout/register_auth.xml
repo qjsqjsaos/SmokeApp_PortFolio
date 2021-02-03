@@ -1,82 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/start_background">
+    android:background="@drawable/start_background"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView4"
         style="@style/title_name"
+        android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
         android:text="이용약관동의"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="bold" />
 
     <TextView
+        android:layout_gravity="center"
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="금연투게더 이용을 위해서\n\n이용약관에 동의해 주세요."
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        android:layout_marginTop="52dp"
+        android:text="금연투게더 이용을 위해서\n이용약관에 동의해 주세요."
+        android:textSize="@dimen/explain_text" />
+<LinearLayout
+    android:layout_marginTop="36dp"
+    android:layout_width="@dimen/register_and_textInput"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="left"
+    android:background="@drawable/textbox">
 
     <CheckBox
+        android:textSize="@dimen/button_text_size"
         android:id="@+id/all_check_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:text="all_check_btn"
+        android:text="전체 동의"
+        />
+</LinearLayout>
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <CheckBox
-        android:id="@+id/check_btn1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+       android:layout_gravity="center"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="176dp"
-        android:text="check_btn1"
+        android:gravity="left"
+        android:background="@drawable/textbox">
+        <LinearLayout
+            android:layout_width="@dimen/register_and_textInput"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+            <CheckBox
+                android:id="@+id/check_btn1"
+                android:textSize="@dimen/button_text_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이용약관 동의 (필수)" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
+
+            <TextView
+                android:id="@+id/serviceView"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                android:textSize="@dimen/terms_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="약관보기"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
     <CheckBox
         android:id="@+id/check_btn2"
+        android:textSize="@dimen/button_text_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="112dp"
-        android:text="CheckBox"
+        android:text="개인정보취급방침 동의 (필수)" />
 
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            />
 
+
+        <TextView
+            android:id="@+id/personalView"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textSize="@dimen/terms_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="약관보기"
+            android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
     <Button
-
+        android:background="@drawable/all_btn"
+        android:textColor="@color/black"
+        android:textSize="@dimen/button_text_size"
+        style="@style/bold_theme"
+        android:layout_width="@dimen/register_and_textInput"
+        android:layout_gravity="center"
+        android:layout_marginTop="36dp"
         android:id="@+id/button"
+        android:layout_height="wrap_content"
+        android:text="동의 후 회원가입" />
+
+    <TextView
+        style="@style/bold_theme"
+        android:layout_gravity="center"
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.724" />
+        android:layout_marginTop="52dp"
+        android:text="금연투게더는 개인정보를 안전하게\n      보호하고, 취급하고 있습니다."
+        android:textSize="@dimen/explain_text" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
