@@ -18,38 +18,66 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/home_and_another_background"
-            android:gravity="right|center_vertical"
+            android:gravity="center|center_vertical"
             android:orientation="horizontal"
-            android:paddingRight="10dp">
-
-
-
+            >
 
             <LinearLayout
-                android:layout_width="115dp"
-                android:layout_height="60dp"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/cardView"
+                android:padding="5dp"
+                android:background="@drawable/all_btn"
                 android:orientation="horizontal">
 
+                <LinearLayout
+                    android:padding="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/notice_Btn"
-                    android:layout_width="44dp"
-                    android:layout_height="42dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@drawable/notice" />
 
-                <Button
-                    android:id="@+id/setting_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="15dp"
-                    android:background="@drawable/settings" />
+                    <ImageView
+                        android:id="@+id/userView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/user" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:padding="5dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+
+
+                    <TextView
+                        android:id="@+id/nickName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="이름"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/noSmoke_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="금연날짜"
+                        android:textSize="20sp" />
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -57,7 +85,7 @@
 
         <TextView
             android:id="@+id/text_wisesay"
-            android:layout_width="340dp"
+            android:layout_width="320dp"
             android:layout_height="190dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"

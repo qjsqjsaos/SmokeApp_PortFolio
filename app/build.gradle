@@ -7,11 +7,12 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "org.techtown.study01"
-        minSdkVersion 16
+        applicationId "org.techtown.study01.FirstToMain"
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

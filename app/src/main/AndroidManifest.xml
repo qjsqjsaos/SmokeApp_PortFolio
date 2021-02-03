@@ -12,12 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".homeMain.User_CardView"></activity>
         <activity
             android:name=".register.Terms_Service"
             android:screenOrientation="portrait">
-            >
         </activity>
+
         <activity
             android:name=".register.Terms_Personal"
             android:screenOrientation="portrait" />

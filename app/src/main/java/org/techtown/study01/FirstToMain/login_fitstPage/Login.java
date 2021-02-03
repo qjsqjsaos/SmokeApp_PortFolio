@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -155,7 +156,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     .build();
 
             //액티비티에서 사용하면 객체는 this, 프래그먼트 사용시 getContext사용하기
-            googleApiClient = new GoogleApiClient.Builder(this)
+            googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                     .enableAutoManage(this,this)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                     .build();
@@ -202,15 +203,19 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     public void onComplete(@NonNull Task<AuthResult> task) {//task는 인증결과과
                         if(task.isSuccessful()) { //로그인이 성공했으면,
                             Toast.makeText(Login.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), HomeMain.class);
 
-                            //어카운트 데이터 써먹기(중요)
-                            intent.putExtra("nickName", account.getDisplayName());
-                            intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
+
+                            Intent intent = new Intent(Login.this, BottomNavi.class);
+                            //액티비티에서 프래그먼트로는 Bundle을 사용하고, 액티비티간에는 Intent를 사용한다.
+                            HomeMain homeMain = new HomeMain();
+                            Bundle bundle = new Bundle(); //어카운트 데이터 써먹기(중요)
+                            bundle.putString("nickName", account.getDisplayName());
+                            bundle.putString("photoUrl", String.valueOf(account.getPhotoUrl()));
                             //valueOf는 특정 자료형을 스트링형태로 변환 할 때 사용.
-
+                            homeMain.setArguments(bundle);
 
                             startActivity(intent);
+
                         }else {//로그인이 실패했으면..
                             Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_SHORT).show();
 

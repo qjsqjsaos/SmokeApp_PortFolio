@@ -1,23 +1,33 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
 //홈 화면
 public class HomeMain extends Fragment{
 
     ViewGroup viewGroup;
+    ImageView userView;
+    TextView nameView;
+    TextView dateView;
+
 
     @Nullable
     @Override
@@ -26,9 +36,21 @@ public class HomeMain extends Fragment{
 
         viewGroup = (ViewGroup) inflater.inflate(R.layout.home_main, container, false);
 
-        User_CardView user_cardView = viewGroup.findViewById(R.id.cardView);
+        userView = viewGroup.findViewById(R.id.userView);
+        nameView = viewGroup.findViewById(R.id.nickName);
+        dateView = viewGroup.findViewById(R.id.noSmoke_date);
 
-        /** 02월 03일 마지막. 여기부터 다시시작하기*/
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String nickName = bundle.getString("nickName");
+            nameView.setText(nickName); //닉네임으로 이름바꿔주기
+
+            /** dateView.setText();*/ //여기는 금연 설정할 때 값 받아올 때 넣어야함.!!!!!!!!!!!!!
+
+            String photoUrl = bundle.getString("photoUrl");
+            Glide.with(this).load(photoUrl).into(userView); //프로필 url(photoUrl)을 이미지 뷰에 세팅
+        }
 
         return viewGroup;
     }
