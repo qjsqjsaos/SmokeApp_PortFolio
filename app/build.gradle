@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "org.techtown.study01.FirstToMain"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -32,6 +32,9 @@ android {
 allprojects {
     repositories {
         google()
+
+        //카카오 SDK 레포지토리 설정
+        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
     }
 }
 //파이어베이스 연동
@@ -40,28 +43,36 @@ apply plugin: 'com.google.gms.google-services'
 
 
 dependencies {
+    implementation 'de.hdodenhof:circleimageview:3.1.0' //서클 이미지 뷰(동그란 이미지 뷰)
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.gms:play-services-ads:19.7.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:design:29.0.0' //BottomNavi
     implementation 'com.android.volley:volley:1.1.1' // 로그인 라이브러리 네트워크 통신 라이브러리 데이터베이스 연동때 필요함.
-    implementation 'com.google.android.material:material:1.0.0' //TextInputLayout&TextInputEditText를 위해 넣어둠
+    implementation 'com.google.android.material:material:1.2.1'
+    //TextInputLayout&TextInputEditText를 위해 넣어둠
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment:2.3.2'
-    implementation 'androidx.navigation:navigation-ui:2.3.2'
+    implementation 'androidx.navigation:navigation-fragment:2.3.3'
+    implementation 'androidx.navigation:navigation-ui:2.3.3'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    implementation 'com.google.android.gms:play-services-ads:19.7.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation files('libs\\additionnal (1).jar')
-    implementation files('libs\\activation (1).jar')
-    implementation files('libs\\mail.jar')
-    testImplementation 'junit:junit:4.+'
+    implementation files('libs\\additionnal (1).jar') //smtp
+    implementation files('libs\\activation (1).jar')//smtp
+    implementation files('libs\\mail.jar')//smtp
+    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.3.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })//구글 로그인 버튼
+
+    compile 'com.shobhitpuri.custombuttons:google-signin:1.0.0' //구글 로그인 버튼
 
 
     //파이어베이스
@@ -72,4 +83,12 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1' //파이어베이스 인증2
     implementation 'com.github.bumptech.glide:glide:4.9.0' //글라이드 이미지 로딩(프로필)
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0' //글라이드 이미지 로딩2(프로필)
+
+
+    //카카오
+    implementation "com.kakao.sdk:v2-user-rx:2.3.0" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-talk-rx:2.3.0" // 친구, 메시지(카카오톡)
+    implementation "com.kakao.sdk:v2-story-rx:2.3.0" // 카카오스토리
+    implementation "com.kakao.sdk:v2-link-rx:2.3.0" // 메시지(카카오링크)
+    implementation "com.kakao.sdk:v2-navi:2.3.0" // 카카오내비
 }

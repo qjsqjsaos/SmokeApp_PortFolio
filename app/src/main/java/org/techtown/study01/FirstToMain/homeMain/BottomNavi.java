@@ -1,5 +1,6 @@
     package org.techtown.study01.FirstToMain.homeMain;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -19,10 +20,25 @@ public class BottomNavi extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navi);
 
-        bottomNavigationView = findViewById(R.id.nav_view);
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("nickName");
+        String photo = intent.getStringExtra("photoUrl");
+
 
         /**프래그먼트 생성*/
         fragment1 = new HomeMain();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("nickName",name);
+        bundle.putString("photoUrl",photo);
+
+        fragment1.setArguments(bundle);
+
+
+
+        bottomNavigationView = findViewById(R.id.nav_view);
+
+
 
         /**제일 처음 띄워주는 프래그먼트*/
         getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commitAllowingStateLoss();

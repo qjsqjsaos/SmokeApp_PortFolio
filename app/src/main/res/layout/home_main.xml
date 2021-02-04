@@ -27,34 +27,36 @@
             >
 
             <LinearLayout
+                android:id="@+id/card"
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardView"
-                android:padding="5dp"
                 android:background="@drawable/all_btn"
-                android:orientation="horizontal">
+                android:clickable="false"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <LinearLayout
-                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/userView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/user" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/user" />
+
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:padding="5dp"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:orientation="vertical"
+                    android:padding="5dp"
                     android:weightSum="2">
 
 

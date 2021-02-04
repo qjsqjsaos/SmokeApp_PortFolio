@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,11 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -31,6 +35,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,10 +56,10 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         private EditText idText, passwordText; //아이디 비밀번호 입력
         private Button btn_login;//로그인버튼
-        private TextView rg_sign, btn_findId, btn_findPw, btn_google; ; //회원가입버튼
+        private TextView rg_sign, btn_findId, btn_findPw, btn_google; ; //회원가입버튼, 아이디 비번찾기 버튼
 
         //파이어베이스 구글 로그인
-        private SignInButton signInButton; //구글 로그인 버튼
+        private GoogleSignInButton signInButton; //구글 로그인 버튼
         private FirebaseAuth auth; //파이어 베이스 인증 객체
         private GoogleApiClient googleApiClient; //구글 API 클라이언트 객체
         private static  final int REQ_SIGN_GOOGLE = 100; //구글 로그인 결과 코드
@@ -156,7 +161,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     .build();
 
             //액티비티에서 사용하면 객체는 this, 프래그먼트 사용시 getContext사용하기
-            googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+            googleApiClient = new GoogleApiClient.Builder(this)
                     .enableAutoManage(this,this)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                     .build();
@@ -204,17 +209,13 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                         if(task.isSuccessful()) { //로그인이 성공했으면,
                             Toast.makeText(Login.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
-
-                            Intent intent = new Intent(Login.this, BottomNavi.class);
-                            //액티비티에서 프래그먼트로는 Bundle을 사용하고, 액티비티간에는 Intent를 사용한다.
-                            HomeMain homeMain = new HomeMain();
-                            Bundle bundle = new Bundle(); //어카운트 데이터 써먹기(중요)
-                            bundle.putString("nickName", account.getDisplayName());
-                            bundle.putString("photoUrl", String.valueOf(account.getPhotoUrl()));
-                            //valueOf는 특정 자료형을 스트링형태로 변환 할 때 사용.
-                            homeMain.setArguments(bundle);
-
+                            Intent intent = new Intent(getApplicationContext(), BottomNavi.class);
+                            intent.putExtra("nickName", account.getDisplayName());
+                            intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
                             startActivity(intent);
+                            //인텐트를 통해 Login액티비티에서 BottomNavi액티비티로 도착한다.
+                            //그리고 BottomNavi액티비티에서 HomeMain프래그먼트로 번들에 담아 데이터를 보낸다.
+                            //HomeMain에서 데이터를 꺼내 사용(중요)
 
                         }else {//로그인이 실패했으면..
                             Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_SHORT).show();
