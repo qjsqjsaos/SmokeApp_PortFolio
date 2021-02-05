@@ -35,6 +35,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.kakao.sdk.auth.LoginClient;
+import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.user.UserApiClient;
+import com.kakao.sdk.user.model.User;
 import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
 import org.json.JSONException;
@@ -46,17 +50,27 @@ import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 import org.techtown.study01.FirstToMain.register.Register;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
+
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.text.TextUtils.isEmpty;
 
 
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-
+        private static final String TAG = "Login"; //로그 찍을때,
 
         private EditText idText, passwordText; //아이디 비밀번호 입력
         private Button btn_login;//로그인버튼
         private TextView rg_sign, btn_findId, btn_findPw, btn_google; ; //회원가입버튼, 아이디 비번찾기 버튼
+
+        //카카오 로그인
+        private View kakao_login_btn; //카카오 로그인 버튼
+        private String nickName_kakao, photoUrl_kakao; //카카오 닉네임, 프로필사진 자료.
+
+
 
         //파이어베이스 구글 로그인
         private GoogleSignInButton signInButton; //구글 로그인 버튼
@@ -152,7 +166,55 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 }
             });
 
-        /** 여기서 부터 파이어 베이스 구글 아이디 연동 코드*/
+
+
+            /** 카카오 로그인 연동 코드*/
+
+            kakao_login_btn = findViewById(R.id.kakaoLogin);
+
+            //콜백 객체 만들어서 callback 변수에 넣고 아래 setOnclickListener에서 사용
+            Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
+                @Override
+                public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
+                    //토큰이 전달 되면 로그인 성공, 아니면 null값 받고 실패
+                    if(oAuthToken != null) {
+                        //로그인이 되었을 때,
+                    }
+                    if(throwable != null) {
+                        //로그인이 되었을 때,
+                        Intent intent2 = new Intent(getApplicationContext(), BottomNavi.class);
+                        intent2.putExtra("nickName_kakao", nickName_kakao);
+                        intent2.putExtra("photoUrl_kakao", photoUrl_kakao);
+                        startActivity(intent2);
+                    }
+                    updateKakaoLoginUi();
+                    return null;
+                }
+            };
+
+            kakao_login_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(LoginClient.getInstance().isKakaoTalkLoginAvailable(Login.this)) { //설치하는 디바이스에 카카오톡이 설치 유무를 알아낸다.
+
+                        LoginClient.getInstance().loginWithKakaoTalk(Login.this, callback);
+
+
+                    } else { //디비이스에 설치가 되어 있지 않을 때
+
+                        LoginClient.getInstance().loginWithKakaoAccount(Login.this, callback);
+
+                    }
+                }
+            });
+
+
+            updateKakaoLoginUi();
+
+
+
+        /** 파이어 베이스 구글 아이디 연동 코드*/
 
             //기본적인 구글 옵션 세팅
             GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -227,5 +289,35 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+
+    /** 카카오 updateKakaoLoginUi 메서드*/
+
+    private void updateKakaoLoginUi(){ //여기서 로그인 정보를 호출해서 확인하고, 정보를 보낼 수 있다.
+        UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
+            @Override
+            public Unit invoke(User user, Throwable throwable) { //로그인이 되어있는지 확인하는 메서드(카카오)
+                if(user != null) {
+                    Log.i(TAG, "invoke : id = " + user.getId());
+                    Log.i(TAG, "invoke : email = " + user.getKakaoAccount().getEmail());
+                    Log.i(TAG, "invoke : nickName = " + user.getKakaoAccount().getProfile().getNickname());
+                    Log.i(TAG, "invoke : gender = " + user.getKakaoAccount().getGender());
+                    Log.i(TAG, "invoke : age = " + user.getKakaoAccount().getAgeRange());
+
+
+                    nickName_kakao = user.getKakaoAccount().getProfile().getNickname();
+                    photoUrl_kakao = user.getKakaoAccount().getProfile().getThumbnailImageUrl();
+
+                    // 프로필 사진 => 변수_수열 = user.getKakaoAccount().getProfile().getThumbnailImageUrl();
+                    // 넣을때는 Glide.with(넣을 이미지 뷰).load(변수_수열).circleCrop().into(넣을 이미지 뷰);
+
+                }
+                if (throwable != null) {
+                    Log.w(TAG, "invoke: " + throwable.getLocalizedMessage());
+                }
+                return null;
+            }
+        });
     }
 }

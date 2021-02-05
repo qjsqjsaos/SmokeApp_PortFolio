@@ -11,7 +11,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:name=".login_fitstPage.KakaoApplication">
+
+
+        <!-- 카카오 Redirect URI -->
+        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ 카카오 네이티브 앱키 -->
+            <data android:host="oauth"
+                android:scheme="kakao38558cf656078bb9b03ff6fc7c6f4003" />
+
+        </intent-filter>
+    </activity>
+
         <activity
             android:name=".register.Terms_Service"
             android:screenOrientation="portrait">

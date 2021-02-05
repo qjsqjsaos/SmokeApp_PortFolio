@@ -20,20 +20,32 @@ public class BottomNavi extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navi);
 
+
+        //구글 로그인 데이터 받기
         Intent intent = getIntent();
         String name = intent.getStringExtra("nickName");
         String photo = intent.getStringExtra("photoUrl");
 
+        //카카오 로그인 데이터 받기
+        Intent intent2 = getIntent();
+        String name2 = intent2.getStringExtra("nickName_kakao");
+        String photo2 = intent2.getStringExtra("photoUrl_kakao");
 
         /**프래그먼트 생성*/
+
         fragment1 = new HomeMain();
 
+        //구글 로그인 데이터 보내기
         Bundle bundle = new Bundle();
         bundle.putString("nickName",name);
         bundle.putString("photoUrl",photo);
-
         fragment1.setArguments(bundle);
 
+        //카카오 로그인 데이터 보내기
+        Bundle bundle2 = new Bundle();
+        bundle2.putString("photoUrl_kakao",name2);
+        bundle2.putString("photoUrl_kakao",photo2);
+        fragment1.setArguments(bundle2);
 
 
         bottomNavigationView = findViewById(R.id.nav_view);

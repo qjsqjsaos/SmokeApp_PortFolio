@@ -50,5 +50,5 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/smokeimage" />
+        android:src="@drawable/smokeimage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

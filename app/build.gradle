@@ -33,8 +33,6 @@ allprojects {
     repositories {
         google()
 
-        //카카오 SDK 레포지토리 설정
-        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
     }
 }
 //파이어베이스 연동
@@ -72,7 +70,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })//구글 로그인 버튼
 
-    compile 'com.shobhitpuri.custombuttons:google-signin:1.0.0' //구글 로그인 버튼
+    implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0' //구글 로그인 버튼
 
 
     //파이어베이스
@@ -81,8 +79,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.1'// 바이어베이스 코어
     implementation 'com.google.firebase:firebase-auth:19.1.0'//파이어베이스 인증
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1' //파이어베이스 인증2
-    implementation 'com.github.bumptech.glide:glide:4.9.0' //글라이드 이미지 로딩(프로필)
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0' //글라이드 이미지 로딩2(프로필)
+    implementation 'com.github.bumptech.glide:glide:4.11.0' //글라이드 이미지 로딩(프로필) (카카오 프로필도 포함)
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0' //글라이드 이미지 로딩2(프로필) (카카오 프로필도 포함)
 
 
     //카카오

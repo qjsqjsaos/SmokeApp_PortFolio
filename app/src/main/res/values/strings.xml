@@ -2,7 +2,7 @@
     <string name="app_name">study01</string>
     <string name="title_activity_bottom_navi">MainActivity</string>
     <string name="title_home">홈</string>
-    <string name="google_sign_up">Sign in with Google</string>
+    <string name="google_sign_up">Google 계정으로 로그인</string>
     <string name="title_community">커뮤니티</string>
     <string name="title_check_health">상태 변화</string>
     <string name="title_health_center">보건소</string>
