@@ -30,7 +30,6 @@ public class HomeMain extends Fragment{
     private TextView nameView;
     private TextView dateView;
     private LinearLayout card;
-    public Boolean google = false;
 
     @Nullable
     @Override
@@ -44,9 +43,14 @@ public class HomeMain extends Fragment{
         dateView = viewGroup.findViewById(R.id.noSmoke_date);
         card = viewGroup.findViewById(R.id.card);
 
+
+
         //BottomNavi에서 받은 번들 데이터(구글)
         Bundle bundle = this.getArguments();
+
         if (bundle != null) {
+
+
                 String nickName = bundle.getString("nickName");
                 nameView.setText(nickName); //닉네임으로 이름바꿔주기
                 Log.d("fragment", nickName);

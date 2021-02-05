@@ -4,6 +4,7 @@ package org.techtown.study01.FirstToMain.login_fitstPage;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -62,6 +63,10 @@ import static android.text.TextUtils.isEmpty;
 
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
         private static final String TAG = "Login"; //로그 찍을때,
+        public static Context mcontext; //context 변수 선언
+        public Intent intent; //구글 로그인 인텐트
+        public Intent intent2; //카카오 로그인 인텐트
+
 
         private EditText idText, passwordText; //아이디 비밀번호 입력
         private Button btn_login;//로그인버튼
@@ -69,8 +74,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         //카카오 로그인
         private View kakao_login_btn; //카카오 로그인 버튼
-        private String nickName_kakao, photoUrl_kakao; //카카오 닉네임, 프로필사진 자료.
-        private Boolean kakao = false; //넘어가는 데이터 식별용
+
+
 
 
 
@@ -79,8 +84,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         private FirebaseAuth auth; //파이어 베이스 인증 객체
         private GoogleApiClient googleApiClient; //구글 API 클라이언트 객체
         private static  final int REQ_SIGN_GOOGLE = 100; //구글 로그인 결과 코드
-        private static final int GOOGLE_REQUESTCODE = 101;
-        private static final int KAKAO_REQUESTCODE = 102;//넘어가는 데이터 식별용
+
 
 
 
@@ -89,6 +93,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             super.onCreate(savedInstanceState);
             setContentView(R.layout.login_fistpage);
 
+            mcontext = this; // onCreate에서 this 할당
 
             idText = findViewById(R.id.idText);
             passwordText = findViewById(R.id.passwordText);
@@ -184,13 +189,43 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 @Override
                 public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
                     //토큰이 전달 되면 로그인 성공, 아니면 null값 받고 실패
+                    Log.d("토큰", String.valueOf(oAuthToken));
                     if(oAuthToken != null) {
+
                         //로그인이 되었을 때,
+
+                        UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
+                            @Override
+                            public Unit invoke(User user, Throwable throwable) { //로그인이 되어있는지 확인하는 메서드(카카오)
+                                if(user != null) {
+                                    Log.d("유저", String.valueOf(user));
+
+                                    intent2 = new Intent(getApplicationContext(), BottomNavi.class);
+                                    intent2.putExtra("nickName_kakao", user.getKakaoAccount().getProfile().getNickname());
+                                    intent2.putExtra("photoUrl_kakao", user.getKakaoAccount().getProfile().getThumbnailImageUrl());
+                                    startActivity(intent2);
+
+                                    Log.i(TAG, "invoke : id = " + user.getId());
+                                    Log.i(TAG, "invoke : email = " + user.getKakaoAccount().getEmail());
+                                    Log.i(TAG, "invoke : nickName = " + user.getKakaoAccount().getProfile().getNickname());
+                                    Log.i(TAG, "invoke : gender = " + user.getKakaoAccount().getGender());
+                                    Log.i(TAG, "invoke : age = " + user.getKakaoAccount().getAgeRange());
+
+                                    // 프로필 사진 => 변수_수열 = user.getKakaoAccount().getProfile().getThumbnailImageUrl();
+                                    // 넣을때는 Glide.with(넣을 이미지 뷰).load(변수_수열).circleCrop().into(넣을 이미지 뷰);
+
+                                }
+                                if (throwable != null) {
+                                    Log.w(TAG, "invoke: " + throwable.getLocalizedMessage());
+
+                                }
+                                return null;
+                            }
+                        });
                     }
                     if(throwable != null) {
                         //로그인이 되었을 때,
                     }
-                    updateKakaoLoginUi();
                     return null;
                 }
             };
@@ -204,16 +239,15 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
                         LoginClient.getInstance().loginWithKakaoTalk(Login.this, callback);
 
+
                     } else { //디비이스에 설치가 되어 있지 않을 때
 
                         LoginClient.getInstance().loginWithKakaoAccount(Login.this, callback);
-
                     }
                 }
             });
 
 
-            updateKakaoLoginUi();
 
 
 
@@ -274,10 +308,10 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                         if(task.isSuccessful()) { //로그인이 성공했으면,
                             Toast.makeText(Login.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(getApplicationContext(), BottomNavi.class);
+                            intent = new Intent(getApplicationContext(), BottomNavi.class);
                             intent.putExtra("nickName", account.getDisplayName());
                             intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
-                            startActivityForResult(new Intent(getApplicationContext(), BottomNavi.class),101);
+                            startActivity(intent);
 
 
                             //인텐트를 통해 Login액티비티에서 BottomNavi액티비티로 도착한다.
@@ -296,38 +330,10 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     }
 
-
     /** 카카오 updateKakaoLoginUi 메서드*/
 
     public void updateKakaoLoginUi(){ //여기서 로그인 정보를 호출해서 확인하고, 정보를 보낼 수 있다.
-        UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
-            @Override
-            public Unit invoke(User user, Throwable throwable) { //로그인이 되어있는지 확인하는 메서드(카카오)
-                if(user != null) {
-                    Log.i(TAG, "invoke : id = " + user.getId());
-                    Log.i(TAG, "invoke : email = " + user.getKakaoAccount().getEmail());
-                    Log.i(TAG, "invoke : nickName = " + user.getKakaoAccount().getProfile().getNickname());
-                    Log.i(TAG, "invoke : gender = " + user.getKakaoAccount().getGender());
-                    Log.i(TAG, "invoke : age = " + user.getKakaoAccount().getAgeRange());
 
-                    nickName_kakao = user.getKakaoAccount().getProfile().getNickname();
-                    photoUrl_kakao = user.getKakaoAccount().getProfile().getThumbnailImageUrl();
-
-                    Intent intent2 = new Intent(getApplicationContext(), BottomNavi.class);
-                    intent2.putExtra("nickName_kakao", nickName_kakao);
-                    intent2.putExtra("photoUrl_kakao", photoUrl_kakao);
-                    startActivity(intent2);
-
-
-                    // 프로필 사진 => 변수_수열 = user.getKakaoAccount().getProfile().getThumbnailImageUrl();
-                    // 넣을때는 Glide.with(넣을 이미지 뷰).load(변수_수열).circleCrop().into(넣을 이미지 뷰);
-
-                }
-                if (throwable != null) {
-                    Log.w(TAG, "invoke: " + throwable.getLocalizedMessage());
-                }
-                return null;
-            }
-        });
     }
+
 }

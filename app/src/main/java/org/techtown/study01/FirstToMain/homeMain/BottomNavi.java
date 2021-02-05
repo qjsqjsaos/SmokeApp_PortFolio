@@ -22,8 +22,7 @@ import java.lang.reflect.Method;
     public class BottomNavi extends AppCompatActivity {
         private BottomNavigationView bottomNavigationView;
         private HomeMain fragment1;
-        public int requestCode;
-        public Boolean google = false;
+
 
 
         @Override
@@ -31,14 +30,19 @@ import java.lang.reflect.Method;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navi);
 
+            Intent google = ((Login)Login.mcontext).intent;
+            Intent kakao = ((Login)Login.mcontext).intent2;
+
+           String google_text = google.getStringExtra("nickName");
+           String kakao_text = kakao.getStringExtra("nickName_kakao");
+
+
+
 
         /**프래그먼트 생성*/
 
         fragment1 = new HomeMain();
-
-
-
-            if(requestCode == 101){
+            if(google_text.equals("nickName")) {
                 //구글 로그인 데이터 받기
                 Intent intent = getIntent();
                 String name = intent.getStringExtra("nickName");
@@ -48,30 +52,25 @@ import java.lang.reflect.Method;
 
                 //데이터 보내기
                 Bundle bundle = new Bundle();
-                bundle.putString("nickName",name);
-                bundle.putString("photoUrl",photo);
-
+                bundle.putString("nickName", name);
+                bundle.putString("photoUrl", photo);
                 fragment1.setArguments(bundle);
-                google = true;
-            }
+            }else if(kakao_text.equals("nickName_kakao")) {
 
 
-
-            if(requestCode == 102){
                 //카카오 로그인 데이터 받기
                 Intent intent2 = getIntent();
                 String name2 = intent2.getStringExtra("nickName_kakao");
                 String photo2 = intent2.getStringExtra("photoUrl_kakao");
 
+                Log.d("Bundle2", String.valueOf(name2));
+                Log.d("Bundle2", String.valueOf(photo2));
                 //데이터 보내기
-                Bundle bundle = new Bundle();
-                bundle.putString("nickName_kakao",name2);
-                bundle.putString("photoUrl_kakao",photo2);
-                fragment1.setArguments(bundle);
-
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("nickName_kakao", name2);
+                bundle2.putString("photoUrl_kakao", photo2);
+                fragment1.setArguments(bundle2);
             }
-
-
 
 
 
