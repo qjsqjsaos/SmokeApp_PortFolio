@@ -79,8 +79,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.1'// 바이어베이스 코어
     implementation 'com.google.firebase:firebase-auth:19.1.0'//파이어베이스 인증
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1' //파이어베이스 인증2
-    implementation 'com.github.bumptech.glide:glide:4.11.0' //글라이드 이미지 로딩(프로필) (카카오 프로필도 포함)
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0' //글라이드 이미지 로딩2(프로필) (카카오 프로필도 포함)
+    implementation 'com.github.bumptech.glide:glide:4.9.0' //글라이드 이미지 로딩(프로필)
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0' //글라이드 이미지 로딩2(프로필)
 
 
     //카카오

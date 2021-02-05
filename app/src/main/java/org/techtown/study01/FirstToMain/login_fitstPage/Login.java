@@ -1,6 +1,7 @@
 //로그인 화면
 package org.techtown.study01.FirstToMain.login_fitstPage;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,6 +70,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         //카카오 로그인
         private View kakao_login_btn; //카카오 로그인 버튼
         private String nickName_kakao, photoUrl_kakao; //카카오 닉네임, 프로필사진 자료.
+        private Boolean kakao = false; //넘어가는 데이터 식별용
 
 
 
@@ -77,11 +79,16 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         private FirebaseAuth auth; //파이어 베이스 인증 객체
         private GoogleApiClient googleApiClient; //구글 API 클라이언트 객체
         private static  final int REQ_SIGN_GOOGLE = 100; //구글 로그인 결과 코드
+        private static final int GOOGLE_REQUESTCODE = 101;
+        private static final int KAKAO_REQUESTCODE = 102;//넘어가는 데이터 식별용
+
+
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.login_fistpage);
+
 
             idText = findViewById(R.id.idText);
             passwordText = findViewById(R.id.passwordText);
@@ -182,10 +189,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     }
                     if(throwable != null) {
                         //로그인이 되었을 때,
-                        Intent intent2 = new Intent(getApplicationContext(), BottomNavi.class);
-                        intent2.putExtra("nickName_kakao", nickName_kakao);
-                        intent2.putExtra("photoUrl_kakao", photoUrl_kakao);
-                        startActivity(intent2);
                     }
                     updateKakaoLoginUi();
                     return null;
@@ -196,10 +199,10 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 @Override
                 public void onClick(View v) {
 
-                    if(LoginClient.getInstance().isKakaoTalkLoginAvailable(Login.this)) { //설치하는 디바이스에 카카오톡이 설치 유무를 알아낸다.
+                    //설치하는 디바이스에 카카오톡이 설치 유무를 알아낸다.
+                    if(LoginClient.getInstance().isKakaoTalkLoginAvailable(Login.this)) { //설치되어 있을 때,
 
                         LoginClient.getInstance().loginWithKakaoTalk(Login.this, callback);
-
 
                     } else { //디비이스에 설치가 되어 있지 않을 때
 
@@ -274,7 +277,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             Intent intent = new Intent(getApplicationContext(), BottomNavi.class);
                             intent.putExtra("nickName", account.getDisplayName());
                             intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
-                            startActivity(intent);
+                            startActivityForResult(new Intent(getApplicationContext(), BottomNavi.class),101);
+
+
                             //인텐트를 통해 Login액티비티에서 BottomNavi액티비티로 도착한다.
                             //그리고 BottomNavi액티비티에서 HomeMain프래그먼트로 번들에 담아 데이터를 보낸다.
                             //HomeMain에서 데이터를 꺼내 사용(중요)
@@ -294,7 +299,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     /** 카카오 updateKakaoLoginUi 메서드*/
 
-    private void updateKakaoLoginUi(){ //여기서 로그인 정보를 호출해서 확인하고, 정보를 보낼 수 있다.
+    public void updateKakaoLoginUi(){ //여기서 로그인 정보를 호출해서 확인하고, 정보를 보낼 수 있다.
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
             public Unit invoke(User user, Throwable throwable) { //로그인이 되어있는지 확인하는 메서드(카카오)
@@ -305,9 +310,14 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     Log.i(TAG, "invoke : gender = " + user.getKakaoAccount().getGender());
                     Log.i(TAG, "invoke : age = " + user.getKakaoAccount().getAgeRange());
 
-
                     nickName_kakao = user.getKakaoAccount().getProfile().getNickname();
                     photoUrl_kakao = user.getKakaoAccount().getProfile().getThumbnailImageUrl();
+
+                    Intent intent2 = new Intent(getApplicationContext(), BottomNavi.class);
+                    intent2.putExtra("nickName_kakao", nickName_kakao);
+                    intent2.putExtra("photoUrl_kakao", photoUrl_kakao);
+                    startActivity(intent2);
+
 
                     // 프로필 사진 => 변수_수열 = user.getKakaoAccount().getProfile().getThumbnailImageUrl();
                     // 넣을때는 Glide.with(넣을 이미지 뷰).load(변수_수열).circleCrop().into(넣을 이미지 뷰);
