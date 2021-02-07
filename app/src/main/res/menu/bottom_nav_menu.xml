@@ -7,19 +7,20 @@
         android:title="@string/title_check_health" />
 
     <item
-        android:id="@+id/community"
-        android:icon="@drawable/community"
-        android:title="@string/title_community" />
+        android:id="@+id/health_center"
+        android:icon="@drawable/health_center"
+        android:title="@string/title_health_center" />
 
     <item
         android:id="@+id/home"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
 
+
     <item
-        android:id="@+id/health_center"
-        android:icon="@drawable/health_center"
-        android:title="@string/title_health_center" />
+        android:id="@+id/community"
+        android:icon="@drawable/community"
+        android:title="@string/title_community" />
 
     <item
         android:id="@+id/shop"

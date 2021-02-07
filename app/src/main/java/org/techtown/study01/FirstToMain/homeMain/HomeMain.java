@@ -2,6 +2,7 @@ package org.techtown.study01.FirstToMain.homeMain;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +24,7 @@ import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
 //홈 화면
-public class HomeMain extends Fragment{
+public class HomeMain extends Fragment {
 
     private ViewGroup viewGroup;
     private ImageView userView;
@@ -31,10 +32,13 @@ public class HomeMain extends Fragment{
     private TextView dateView;
     private LinearLayout card;
 
+    private static final String TAG = "MyTag"; //로그 찍을때,
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
 
         viewGroup = (ViewGroup) inflater.inflate(R.layout.home_main, container, false);
 
@@ -43,35 +47,31 @@ public class HomeMain extends Fragment{
         dateView = viewGroup.findViewById(R.id.noSmoke_date);
         card = viewGroup.findViewById(R.id.card);
 
-
-
-        //BottomNavi에서 받은 번들 데이터(구글)
+        //BottomNavi에서 받은 번들 데이터
         Bundle bundle = this.getArguments();
+        Log.d(TAG, "번들가져오고");
 
-        if (bundle != null) {
-
-
-                String nickName = bundle.getString("nickName");
-                nameView.setText(nickName); //닉네임으로 이름바꿔주기
-                Log.d("fragment", nickName);
-                /** dateView.setText();*/ //여기는 금연 설정할 때 값 받아올 때 넣어야함.!!!!!!!!!!!!!
-
-                String photoUrl = bundle.getString("photoUrl");
-                Glide.with(this).load(photoUrl).circleCrop().into(userView); //프로필 url(photoUrl)을 이미지 뷰에 세팅
-                Log.d("fragment", photoUrl);
+        String name = bundle.getString("name");
+        String nickName = bundle.getString("nickName");
+        String photoUrl = bundle.getString("photoUrl");
+        Log.d(TAG,"번들 메세지들 다 가져옴");
 
 
-                //BottomNavi에서 받은 번들 데이터(카카오)
-                String nickName2 = bundle.getString("nickName_kakao");
-                nameView.setText(nickName2); //닉네임으로 이름바꿔주기
-                Log.d("fragment2", nickName2);
+        if(name == null){ //구글 로그인
+            nameView.setText(nickName); //닉네임으로 이름바꿔주기
+            Log.d("google", nickName);
+            /** dateView.setText();*/ //여기는 금연 설정할 때 값 받아올 때 넣어야함.!!!!!!!!!!!!!
 
-                /** dateView.setText();*/ //여기는 금연 설정할 때 값 받아올 때 넣어야함.!!!!!!!!!!!!!
+            Glide.with(this).load(photoUrl).circleCrop().into(userView); //프로필 url(photoUrl)을 이미지 뷰에 세팅
+            Log.d("google", photoUrl);
 
-                String photoUrl2 = bundle.getString("photoUrl_kakao");
-                Glide.with(this).load(photoUrl2).circleCrop().into(userView); //프로필 url(photoUrl)을 이미지 뷰에 세팅
-                Log.d("fragment2", photoUrl2);
+        } else if(nickName == null && photoUrl == null) { //일반 로그인
+            nameView.setText(name); //닉네임으로 이름바꿔주기
+            Log.d("normal", name);
         }
+
+
+
 
 
         card.setOnClickListener(new View.OnClickListener() {

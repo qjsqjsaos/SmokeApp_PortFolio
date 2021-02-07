@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
-
 <LinearLayout style="@style/bold_theme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -163,22 +158,5 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-           <ImageView
-               android:id="@+id/kakaoLogin"
-               android:layout_width="@dimen/Login_btn_width"
-               android:layout_height="@dimen/Login_btn_height"
-               android:src="@drawable/kakao_login_large_narrow"
-               />
-
-        </LinearLayout>
 
     </LinearLayout>
-
-    </ScrollView>

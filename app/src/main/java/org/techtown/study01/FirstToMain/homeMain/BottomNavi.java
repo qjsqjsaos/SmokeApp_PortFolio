@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.SurfaceControl;
 
 import com.firebase.ui.auth.viewmodel.RequestCodes;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.techtown.study01.FirstToMain.R;
@@ -22,6 +24,8 @@ import java.lang.reflect.Method;
     public class BottomNavi extends AppCompatActivity {
         private BottomNavigationView bottomNavigationView;
         private HomeMain fragment1;
+        private static final String TAG = "MyTag"; //로그 찍을때,
+
 
 
 
@@ -30,50 +34,33 @@ import java.lang.reflect.Method;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navi);
 
-            Intent google = ((Login)Login.mcontext).intent;
-            Intent kakao = ((Login)Login.mcontext).intent2;
 
-           String google_text = google.getStringExtra("nickName");
-           String kakao_text = kakao.getStringExtra("nickName_kakao");
-
-
-
-
-        /**프래그먼트 생성*/
+            /**프래그먼트 생성*/
 
         fragment1 = new HomeMain();
-            if(google_text.equals("nickName")) {
-                //구글 로그인 데이터 받기
-                Intent intent = getIntent();
-                String name = intent.getStringExtra("nickName");
-                String photo = intent.getStringExtra("photoUrl");
-                Log.d("Bundle", String.valueOf(name));
-                Log.d("Bundle", String.valueOf(photo));
 
-                //데이터 보내기
-                Bundle bundle = new Bundle();
-                bundle.putString("nickName", name);
-                bundle.putString("photoUrl", photo);
-                fragment1.setArguments(bundle);
-            }else if(kakao_text.equals("nickName_kakao")) {
+            // 일반 로그인
+            Intent intent = getIntent();
+            String name = intent.getStringExtra("name");
+            Log.d(TAG,"일반로그인");
+
+            //구글로그인
+
+            String name2 = intent.getStringExtra("nickName");
+            Log.d(TAG,"구글로그인 닉네임 성공");
+            String photo = intent.getStringExtra("photoUrl");
+            Log.d(TAG,"구글로그인 프로필사진 성공");
 
 
-                //카카오 로그인 데이터 받기
-                Intent intent2 = getIntent();
-                String name2 = intent2.getStringExtra("nickName_kakao");
-                String photo2 = intent2.getStringExtra("photoUrl_kakao");
+            //데이터 보내기
+            Bundle bundle = new Bundle();
+            bundle.putString("name", name);
+            bundle.putString("nickName", name2);
+            bundle.putString("photoUrl", photo);
 
-                Log.d("Bundle2", String.valueOf(name2));
-                Log.d("Bundle2", String.valueOf(photo2));
-                //데이터 보내기
-                Bundle bundle2 = new Bundle();
-                bundle2.putString("nickName_kakao", name2);
-                bundle2.putString("photoUrl_kakao", photo2);
-                fragment1.setArguments(bundle2);
-            }
-
-
-
+            Log.d("bundle", String.valueOf(bundle));
+            fragment1.setArguments(bundle);
+            Log.d(TAG,"번들 보내기");
 
         bottomNavigationView = findViewById(R.id.nav_view);
 
