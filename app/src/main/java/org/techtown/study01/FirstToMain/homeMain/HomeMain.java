@@ -57,17 +57,17 @@ public class HomeMain extends Fragment {
         Log.d(TAG,"번들 메세지들 다 가져옴");
 
 
-        if(name == null){ //구글 로그인
+        if(nickName != null && photoUrl != null){ //구글 로그인
             nameView.setText(nickName); //닉네임으로 이름바꿔주기
-            Log.d("google", nickName);
+            Log.d(TAG, nickName);
             /** dateView.setText();*/ //여기는 금연 설정할 때 값 받아올 때 넣어야함.!!!!!!!!!!!!!
 
             Glide.with(this).load(photoUrl).circleCrop().into(userView); //프로필 url(photoUrl)을 이미지 뷰에 세팅
-            Log.d("google", photoUrl);
+            Log.d(TAG, photoUrl);
 
-        } else if(nickName == null && photoUrl == null) { //일반 로그인
+        } else if(name != null) { //일반 로그인
             nameView.setText(name); //닉네임으로 이름바꿔주기
-            Log.d("normal", name);
+            Log.d(TAG, name);
         }
 
 
