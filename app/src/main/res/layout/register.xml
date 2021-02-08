@@ -68,6 +68,7 @@
                 <EditText
                     android:id="@+id/id"
                     android:layout_width="0dp"
+                    android:maxLines="1"
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:background="@drawable/round_edittext"
@@ -112,6 +113,7 @@
 
                 <EditText
                     android:id="@+id/pw"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/round_edittext"
@@ -144,6 +146,7 @@
 
                 <EditText
                     android:id="@+id/pwc"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/round_edittext"
@@ -176,11 +179,12 @@
                 <EditText
                     android:singleLine="true"
                     android:id="@+id/name"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/round_edittext"
-                    android:hint="한글, 영어, 숫자 조합 최소 2자 이상 15자 이하"
-                    android:maxLength="15"
+                    android:hint="한글, 영어, 숫자 조합 최소 2자 이상 10자 이하"
+                    android:maxLength="10"
                     android:paddingLeft="5dp"
                     android:textSize="@dimen/register_hint_size" />
 
@@ -207,6 +211,7 @@
 
                 <EditText
                     android:id="@+id/email"
+                    android:maxLines="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="14"
@@ -255,6 +260,7 @@
 
                 <EditText
                     android:id="@+id/smsNumber"
+                    android:maxLines="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"

@@ -61,7 +61,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
         private static final String TAG = "Login"; //로그 찍을때,
 
-        private CheckBox autoLogin_check;
+
         private EditText idText, passwordText; //아이디 비밀번호 입력
         private Button btn_login;//로그인버튼
         private TextView rg_sign, btn_findId, btn_findPw, btn_google; ; //회원가입버튼, 아이디 비번찾기 버튼
@@ -98,10 +98,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             });
 
 
-            // TODO: 2021-02-08 자동로그인 기능 넣기 check!
-            // TODO: 2021-02-08 아이디 비번 입력창 텍스트 바꾸기
-            // TODO: 2021-02-08 네비 아이콘 확인
-            // TODO: 2021-02-08 각 화면 만들기
 
             btn_login = findViewById(R.id.btn_login);
 

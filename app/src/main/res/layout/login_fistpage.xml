@@ -40,10 +40,13 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idText"
+                android:maxLength="30"
+                android:paddingTop="@dimen/floating_hint_margin"
+                android:background="@drawable/edit_text_login"
                 android:layout_width="@dimen/register_and_textInput"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/all_btn"
+                android:maxLines="1"
                 android:hint="아이디를 입력해주세요"
                 android:inputType="textEmailAddress"
                 android:paddingLeft="25sp"
@@ -51,6 +54,8 @@
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/TextInputLayout2"
@@ -63,9 +68,12 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordText"
-                android:background="@drawable/all_btn"
+                android:maxLength="30"
+                android:paddingTop="@dimen/floating_hint_margin"
+                android:background="@drawable/edit_text_login"
                 android:layout_width="@dimen/register_and_textInput"
                 android:layout_height="70dp"
+                android:maxLines="1"
                 android:paddingLeft="25sp"
                 android:layout_gravity="center_horizontal"
                 android:hint="비밀번호를 입력해주세요."
