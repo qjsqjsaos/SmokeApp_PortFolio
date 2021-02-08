@@ -2,10 +2,14 @@
 package org.techtown.study01.FirstToMain.login_fitstPage;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -76,7 +80,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             setContentView(R.layout.login_fistpage);
 
 
-            autoLogin_check = findViewById(R.id.checkbox);
 
             idText = findViewById(R.id.idText);
             passwordText = findViewById(R.id.passwordText);
@@ -94,13 +97,19 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             });
 
 
+
+            // TODO: 2021-02-08 자동로그인 기능 넣기
+            // TODO: 2021-02-08 아이디 비번 입력창 텍스트 바꾸기
+            // TODO: 2021-02-08 네비 아이콘 확인
+            // TODO: 2021-02-08 각 화면 만들기
+
+
             btn_login = findViewById(R.id.btn_login);
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String id = idText.getText().toString();
                     String pw = passwordText.getText().toString();
-
 
 
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -112,6 +121,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                 boolean success = jsonObject.getBoolean("success");
 
                                 if (success) {//로그인 성공시
+
                                     String id = jsonObject.getString("id");
                                     String pw = jsonObject.getString("pw");
                                     String name = jsonObject.getString("name");
@@ -120,11 +130,13 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                     Toast.makeText(getApplicationContext(), name + "님 환영합니다.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(Login.this, BottomNavi.class);
 
+
                                     intent.putExtra("id", id);
                                     intent.putExtra("pw", pw);
                                     intent.putExtra("name", name);
 
                                     startActivity(intent);
+
 
                                 } else {//로그인 실패시
                                     Toast.makeText(getApplicationContext(), "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
