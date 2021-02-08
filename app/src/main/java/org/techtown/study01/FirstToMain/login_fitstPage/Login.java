@@ -82,8 +82,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             super.onCreate(savedInstanceState);
             setContentView(R.layout.login_fistpage);
 
-
-
             idText = findViewById(R.id.idText);
             passwordText = findViewById(R.id.passwordText);
 

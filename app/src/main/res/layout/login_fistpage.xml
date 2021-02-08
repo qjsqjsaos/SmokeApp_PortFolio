@@ -34,7 +34,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            app:hintTextAppearance="@style/TextLabel"
+            app:hintTextColor="@color/Green">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idText"
@@ -55,7 +57,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            app:errorEnabled="true">
+            app:hintTextAppearance="@style/TextLabel"
+            app:errorEnabled="true"
+            app:hintTextColor="@color/Green">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordText"
@@ -72,22 +76,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <CheckBox
-            android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:text="로그인 정보 저장"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Button
+    <Button
             android:id="@+id/btn_login"
             android:layout_width="@dimen/register_and_textInput"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/register_and_textInput_height"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:background="@drawable/all_btn"
