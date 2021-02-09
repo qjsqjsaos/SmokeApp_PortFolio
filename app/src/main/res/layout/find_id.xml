@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
-        android:id="@+id/editTextPhone"
+        android:id="@+id/editTextEmail"
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="53dp"
         android:layout_marginTop="36dp"
@@ -49,6 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <Button
+        android:id="@+id/sendId"
         style="@style/bold_theme"
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="62dp"
