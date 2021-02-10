@@ -294,10 +294,7 @@ public class Register extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Register.this, Login.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -347,6 +344,7 @@ public class Register extends AppCompatActivity {
                             }
                         }
                     };
+
 
 
                     //각 정보를 입력안했을때는 Toast메세지 출력 후 리턴
