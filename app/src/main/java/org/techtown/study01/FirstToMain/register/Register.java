@@ -42,7 +42,6 @@ import static android.text.TextUtils.isEmpty;
 public class Register extends AppCompatActivity {
     private Button btnBack, join_btn, check_id_btn;
     private Boolean validate, checkNumberSmtp, timeLimit, nameCheck = false; //중복체크 되었는지 안되었는지 확인, 인증 번호 확인, 타이머 인증 확인, 닉네임 중복체크
-    private String checkId; //회원가입 버튼누르고 중복확인
     private AlertDialog dialog; //알림 다이아로그
     private Button sendEmail, email_btn, sendName = null; //버튼
     private EditText email, smsNumber = null; //받는 사람의 이메일
@@ -185,14 +184,14 @@ public class Register extends AppCompatActivity {
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
                             if (success) {
-                                dialog = builder.setMessage("사용할 수 있는 아이디입니다.")
+                                dialog = builder.setMessage("사용할 수 있는 닉네임입니다.")
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
                                 nameCheck = true;
                             } else {
 
-                                dialog = builder.setMessage("존재하는 아이디입니다.")
+                                dialog = builder.setMessage("존재하는 닉네임입니다.")
                                         .setNegativeButton("확인", null)
                                         .create();
                                 dialog.show();
