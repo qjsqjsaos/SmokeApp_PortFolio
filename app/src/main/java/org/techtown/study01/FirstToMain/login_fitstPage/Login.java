@@ -98,7 +98,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             });
 
 
-
             btn_login = findViewById(R.id.btn_login);
 
             //자동 로그인

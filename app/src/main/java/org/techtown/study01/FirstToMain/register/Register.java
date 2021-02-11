@@ -3,16 +3,17 @@ package org.techtown.study01.FirstToMain.register;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.StrictMode;
 
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -29,8 +30,8 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.study01.FirstToMain.Etc.Loading_ProgressDialog;
 import org.techtown.study01.FirstToMain.R;
-import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
 import java.util.regex.Pattern;
 
@@ -44,15 +45,14 @@ public class Register extends AppCompatActivity {
     private Boolean validate, checkNumberSmtp, timeLimit, nameCheck = false; //중복체크 되었는지 안되었는지 확인, 인증 번호 확인, 타이머 인증 확인, 닉네임 중복체크
     private AlertDialog dialog; //알림 다이아로그
     private Button sendEmail, email_btn, sendName = null; //버튼
-    private EditText email, smsNumber = null; //받는 사람의 이메일
+    private EditText smsNumber = null; //받는 사람의 이메일
     private int result, keyNumber;  //이메일 인증번호, 입력한 인증번호
     private CountDownTimer countDownTimer; //카운트 다운 타이머
     private TextView countView; //카운트 다운 표시 텍스트
     private final int MILLISINFUTURE = 300 * 1000; //총 시간 (300초 = 5분)
     private final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
     private Long mLastClickTime = 0L; //이메일 버튼 클릭 방지 변수
-
-
+    public Loading_ProgressDialog LPDialog;//로딩중 화면 가져오기
 
 
     @Override
@@ -217,12 +217,12 @@ public class Register extends AppCompatActivity {
                 .permitDiskWrites()
                 .permitNetwork().build());
 
-        email = (EditText) findViewById(R.id.email); //받는 사람의 이메일
         sendEmail = findViewById(R.id.sendEmail);
         sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String dbEmail = Eemail.getText().toString(); //이메일 중복체크용
+
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() { //결과 리스너 생성 (이메일 중복체크)
                     @Override
@@ -239,24 +239,35 @@ public class Register extends AppCompatActivity {
                                     switch (v.getId()) {
                                         case R.id.sendEmail:
 
-                                            //구글 이메일로 smtp 사용해서 인증번호 보내기
+
                                             try {
                                                 //랜덤 인증번호 (6자)
                                                 result = (int) (Math.floor(Math.random() * 1000000) + 100000);
                                                 if (result > 1000000) {
                                                     result = result - 100000;
                                                 }
-                                                GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
-                                                //GMailSender.sendMail(제목, 본문내용, 받는사람);
-                                                gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result + " 입니다. \n " +
-                                                        "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", email.getText().toString());
-                                                Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
 
-                                                //타이머 설정
+
                                                 try {
-                                                    if (!email.equals("")) {
+                                                    if (!dbEmail.equals("")) {
+
+                                                        //로딩창 객체 생성 후
+                                                        LPDialog = new Loading_ProgressDialog(Register.this); //getApplicationContext 사용시 에러가 남.. 이유는 모르겠음.
+                                                        LPDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //로딩창을 투명하게
+
+                                                        LPDialog.show(); //로딩창 생기게 하기
+
+                                                        //구글 이메일로 smtp 사용해서 인증번호 보내기
+                                                        GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+                                                        //GMailSender.sendMail(제목, 본문내용, 받는사람);
+                                                        gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result + " 입니다. \n " +
+                                                                "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", dbEmail);
+                                                        Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+
+                                                        LPDialog.dismiss(); //로딩창끄기
 
 
+                                                        //타이머 설정
                                                         countView = (TextView) findViewById(R.id.countView);
                                                         //줄어드는 시간을 나타내는 TextView
                                                         smsNumber = (EditText) findViewById(R.id.smsNumber);
@@ -268,7 +279,6 @@ public class Register extends AppCompatActivity {
                                                         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
                                                             @Override
                                                             public void onTick(long millisUntilFinished) { //(300초에서 1초 마다 계속 줄어듬)
-
                                                                 long emailAuthCount = millisUntilFinished / 1000;
                                                                 Log.d("Alex", emailAuthCount + "");
 
@@ -288,20 +298,18 @@ public class Register extends AppCompatActivity {
                                                             @Override
                                                             public void onFinish() { //시간이 초과 되서 꺼지면 false, 인증되고 꺼지면 true.
                                                                 countView.setText("시간초과 : 다시시도");
+
                                                                 timeLimit = false;
                                                             }
 
                                                         }.start();
 
                                                     }
+                                                    return;
                                                 } catch (Exception e) {
                                                     e.printStackTrace();
                                                     Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                                                 }
-                                            } catch (SendFailedException e) {
-                                                Toast.makeText(getApplicationContext(), "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
-                                            } catch (MessagingException e) {
-                                                Toast.makeText(getApplicationContext(), "이메일을 입력해주세요", Toast.LENGTH_SHORT).show();
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                                 Toast.makeText(getApplicationContext(), "잘못된 값입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
@@ -533,4 +541,5 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+
 }

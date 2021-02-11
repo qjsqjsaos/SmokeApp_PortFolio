@@ -1,5 +1,8 @@
 package org.techtown.study01.FirstToMain.register;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -111,6 +114,7 @@ public class GMailSender extends javax.mail.Authenticator {
             throw new IOException("Not Supported");
         }
     }
+
 
 }
 

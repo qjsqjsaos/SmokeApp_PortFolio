@@ -83,18 +83,6 @@ public class FindId extends AppCompatActivity {
                                 Eid = jsonObject.getString("id"); //찾는 아이디 값 가져오고
 
 
-                                //Gmail로 이메일 보내기
-                                Log.d("sooyeol", Eid);
-
-                                GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
-                                //GMailSender.sendMail(제목, 본문내용, 받는사람);
-                                gMailSender.sendMail("금연 솔루션 입니다. 찾으시는 아이디를 확인해주세요",
-
-                                        "아이디는 : " + Eid + " 입니다. \n " +
-
-                                        "나머지 부분이 기억이 안나시면 앱에 문의 버튼을 눌러 문의 부탁드립니다.", editText.getText().toString()); //받는 사람(보내는 사람, 아이디 찾는 사람) 이메일
-                                Toast.makeText(getApplicationContext(), "이메일에 아이디가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-
 
                             } else {//로그인 실패시
                                 Toast.makeText(getApplicationContext(), "이메일을 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
