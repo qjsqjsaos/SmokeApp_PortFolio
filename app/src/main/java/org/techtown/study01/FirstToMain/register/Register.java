@@ -257,7 +257,7 @@ public class Register extends AppCompatActivity {
 
                                                         LPDialog.show(); //로딩창 생기게 하기
 
-                                                        startLoading(dbEmail);
+                                                        startLoading(dbEmail); //지메일 호출되게하는 메서드
 
                                                         //타이머 설정
                                                         countView = (TextView) findViewById(R.id.countView);
@@ -535,7 +535,7 @@ public class Register extends AppCompatActivity {
             }
         });
     }
-    private void startLoading(String dbEmail) {
+    private void startLoading(String dbEmail) { //핸들러 로딩중을 띄우게 하기 위해서 나누어 두었다.
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -553,7 +553,7 @@ public class Register extends AppCompatActivity {
                 }
                 LPDialog.dismiss(); //로딩창끄기
             }
-        }, 1000); // 화면에 Logo 1초간 보이기
+        }, 1500); // 화면에 Logo 1.5초간 보이기
     }// startLoading Method..
 
 }
