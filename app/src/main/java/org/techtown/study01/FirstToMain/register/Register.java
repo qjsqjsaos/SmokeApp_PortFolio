@@ -257,15 +257,7 @@ public class Register extends AppCompatActivity {
 
                                                         LPDialog.show(); //로딩창 생기게 하기
 
-                                                        //구글 이메일로 smtp 사용해서 인증번호 보내기
-                                                        GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
-                                                        //GMailSender.sendMail(제목, 본문내용, 받는사람);
-                                                        gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result + " 입니다. \n " +
-                                                                "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", dbEmail);
-                                                        Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-
-                                                        LPDialog.dismiss(); //로딩창끄기
-
+                                                        startLoading(dbEmail);
 
                                                         //타이머 설정
                                                         countView = (TextView) findViewById(R.id.countView);
@@ -291,7 +283,7 @@ public class Register extends AppCompatActivity {
                                                                 //emailAuthCount은 종료까지 남은 시간임. 1분 = 60초 되므로,
                                                                 // 분을 나타내기 위해서는 종료까지 남은 총 시간에 60을 나눠주면 그 몫이 분이 된다.
                                                                 // 분을 제외하고 남은 초를 나타내기 위해서는, (총 남은 시간 - (분*60) = 남은 초) 로 하면 된다.
-
+                                                                mLastClickTime = SystemClock.elapsedRealtime(); //이메일 두번 클릭 방지(5분 쿨타임)
                                                                 timeLimit = true; //인증버튼에 true 값 전달. => 270행
                                                             }
 
@@ -304,8 +296,10 @@ public class Register extends AppCompatActivity {
 
                                                         }.start();
 
-                                                    }
+                                                    }else{
+                                                    Toast.makeText(getApplicationContext(), "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show();
                                                     return;
+                                                    }
                                                 } catch (Exception e) {
                                                     e.printStackTrace();
                                                     Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
@@ -317,7 +311,7 @@ public class Register extends AppCompatActivity {
 
                                     }
                                 }
-                                mLastClickTime = SystemClock.elapsedRealtime(); //이메일 두번 클릭 방지(5분 쿨타임)
+
 
                             } else {
 
@@ -541,5 +535,25 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+    private void startLoading(String dbEmail) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                //구글 이메일로 smtp 사용해서 인증번호 보내기
+                GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+                //GMailSender.sendMail(제목, 본문내용, 받는사람);
+                try {
+                    gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result + " 입니다. \n " +
+                            "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", dbEmail);
+                    Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                LPDialog.dismiss(); //로딩창끄기
+            }
+        }, 1000); // 화면에 Logo 1초간 보이기
+    }// startLoading Method..
 
 }
