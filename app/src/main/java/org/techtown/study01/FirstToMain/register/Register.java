@@ -251,12 +251,6 @@ public class Register extends AppCompatActivity {
                                                 try {
                                                     if (!dbEmail.equals("")) {
 
-                                                        //로딩창 객체 생성 후
-                                                        LPDialog = new Loading_ProgressDialog(Register.this); //getApplicationContext 사용시 에러가 남.. 이유는 모르겠음.
-                                                        LPDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //로딩창을 투명하게
-
-                                                        LPDialog.show(); //로딩창 생기게 하기
-
                                                         startLoading(dbEmail); //지메일 호출되게하는 메서드
 
                                                         //타이머 설정
@@ -535,25 +529,18 @@ public class Register extends AppCompatActivity {
             }
         });
     }
-    private void startLoading(String dbEmail) { //핸들러 로딩중을 띄우게 하기 위해서 나누어 두었다.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+    public void startLoading(String dbEmail) {
 
-                //구글 이메일로 smtp 사용해서 인증번호 보내기
-                GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
-                //GMailSender.sendMail(제목, 본문내용, 받는사람);
-                try {
-                    gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : " + result + " 입니다. \n " +
-                            "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", dbEmail);
-                    Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                LPDialog.dismiss(); //로딩창끄기
-            }
-        }, 1500); // 화면에 Logo 1.5초간 보이기
-    }// startLoading Method..
-
+        //구글 이메일로 smtp 사용해서 인증번호 보내기
+        GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+        //GMailSender.sendMail(제목, 본문내용, 받는사람);
+        try {
+            gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : \"" + result + "\" 입니다. \n " +
+                    "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", dbEmail);
+            Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "이메일 전송 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
