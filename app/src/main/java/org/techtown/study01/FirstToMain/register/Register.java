@@ -41,10 +41,10 @@ import static android.text.TextUtils.isEmpty;
 
 public class Register extends AppCompatActivity {
     private Button btnBack, join_btn, check_id_btn;
-    private Boolean validate, checkNumberSmtp, timeLimit, emailCheck, nameCheck = false; //중복체크 되었는지 안되었는지 확인, 인증 번호 확인, 타이머 인증 확인, 이메일 중복체크, 이름 중복체크
+    private Boolean validate, checkNumberSmtp, timeLimit, nameCheck = false; //중복체크 되었는지 안되었는지 확인, 인증 번호 확인, 타이머 인증 확인, 닉네임 중복체크
     private String checkId; //회원가입 버튼누르고 중복확인
     private AlertDialog dialog; //알림 다이아로그
-    private Button sendEmail, email_btn = null; //버튼
+    private Button sendEmail, email_btn, sendName = null; //버튼
     private EditText email, smsNumber = null; //받는 사람의 이메일
     private int result, keyNumber;  //이메일 인증번호, 입력한 인증번호
     private CountDownTimer countDownTimer; //카운트 다운 타이머
@@ -137,6 +137,77 @@ public class Register extends AppCompatActivity {
                 Idcheck idcheck = new Idcheck(id, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(Register.this);
                 queue.add(idcheck);
+            }
+        });
+
+
+        //닉네임 중복확인 버튼
+
+        sendName = findViewById(R.id.sendName);
+        sendName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String dbname = Ename.getText().toString(); // mysql에서 이름 가져오기
+                AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
+
+                try {
+                    //입력칸이 빈칸일때
+                    if (dbname.equals("")) {
+                        dialog = builder.setMessage("닉네임을 입력해주세요.")
+                                .setPositiveButton("확인", null)
+                                .create();
+                        dialog.show();
+                        return;
+                    }
+                    //닉네임 유효성
+                    if (!Pattern.matches("^[가-힣a-zA-Z0-9_]{2,10}$", dbname)) {
+                        dialog = builder.setMessage("닉네임 형식을 지켜주세요.")
+                                .setPositiveButton("확인", null)
+                                .create();
+                        dialog.show();
+                        return;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "잘못된 값입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+
+                }
+
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() { //결과 리스너 생성 (중복체크)
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+
+                            boolean success = jsonResponse.getBoolean("success");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
+                            if (success) {
+                                dialog = builder.setMessage("사용할 수 있는 아이디입니다.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                                nameCheck = true;
+                            } else {
+
+                                dialog = builder.setMessage("존재하는 아이디입니다.")
+                                        .setNegativeButton("확인", null)
+                                        .create();
+                                dialog.show();
+                                nameCheck = false;
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "닉네임 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                };
+                NameRequest nameRequest = new NameRequest(dbname, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(Register.this);
+                queue.add(nameRequest);
             }
         });
 
@@ -401,6 +472,9 @@ public class Register extends AppCompatActivity {
                            return;
                        } else if (isEmpty(name)) {
                            Toast.makeText(getApplicationContext(), "닉네임을 입력해주세요.", Toast.LENGTH_LONG).show();
+                           return;
+                       }else if (nameCheck == null || false) {
+                           Toast.makeText(getApplicationContext(), "닉네임 중복확인을 해주세요.", Toast.LENGTH_LONG).show();
                            return;
                        } else if (isEmpty(email)) {
                            Toast.makeText(getApplicationContext(), "이메일을 입력해주세요.", Toast.LENGTH_LONG).show();
