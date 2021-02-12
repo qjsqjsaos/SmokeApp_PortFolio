@@ -21,45 +21,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="52dp"
-        android:background="#F44336"
-        android:text="여기다가는 자바를 통해서 사용자 이메일을 입력 후 색깔 바꾸기"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="52dp"
-        android:background="#F44336"
-        android:text="(아이디, 비밀번호) 전송이 완료되었습니다.로 입력"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
     <Button
         android:id="@+id/button3"
         style="@style/bold_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginBottom="368dp"
         android:background="@drawable/all_btn"
-        android:text="돌아가기"
+        android:text="변경하기"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        app:layout_constraintVertical_bias="0.024" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/pwcheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="101dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="26dp"
+        android:ems="10"
+        android:hint="비밀번호 확인"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="46dp"
+        android:ems="10"
+        android:hint="비밀번호"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/pwcheck"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
