@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextPhone2"
+        android:id="@+id/editTextEmailPw"
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="53dp"
         android:layout_marginTop="36dp"
@@ -37,14 +37,14 @@
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="가입 시 입력하셨\n이메일을 입력해 주시면, \n이메일로 비밀번호를 전송해 드립니다."
+        android:text="가입 시 입력하셨던 \n이메일로 비밀번호를 전송해 드립니다."
         android:textSize="@dimen/explain_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/sendForPw"
         style="@style/bold_theme"
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="62dp"
@@ -53,9 +53,12 @@
         android:text="이메일로 전송하기"
         android:textColor="@color/black"
         android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPhone2" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailPw"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

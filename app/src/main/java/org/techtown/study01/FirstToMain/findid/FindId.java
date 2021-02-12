@@ -1,11 +1,11 @@
 package org.techtown.study01.FirstToMain.findid;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 
 import android.os.StrictMode;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -88,6 +88,10 @@ public class FindId extends AppCompatActivity {
                                 Eid = jsonObject.getString("id"); //찾는 아이디 값 가져오고
                                 if(email.equals(Eemail)){
                                     idSendStart();
+
+                                    Intent intent = new Intent(FindId.this, Id_pw_complete.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
 
 
@@ -107,9 +111,9 @@ public class FindId extends AppCompatActivity {
                     }
                 };
 
-                FindId_Check findIdCheck = new FindId_Check(email, responseListener);
+                FindId_Pw_Check findIdPwCheck = new FindId_Pw_Check(email, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(FindId.this);
-                queue.add(findIdCheck);
+                queue.add(findIdPwCheck);
             }
         });
     }
@@ -123,7 +127,7 @@ public class FindId extends AppCompatActivity {
 
         try {
             gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 아이디를 확인해주세요.", "아이디는 \"" + Eid + "\" 입니다. \n " +
-                    "아이디가 맞는지 확인해 주시고, 전체 아이디가 기억나시지 않으시면, 'merrygoaround0726@gmail.com' 이메일로 문의주시기 바랍니다. 감사합니다. ", email);
+                    "아이디가 맞는지 확인해 주시고, 궁금하신 점은 'merrygoaround0726@gmail.com' 이메일로 문의주시기 바랍니다. 감사합니다. ", email);
         } catch (Exception e) {
             e.printStackTrace();
         }
