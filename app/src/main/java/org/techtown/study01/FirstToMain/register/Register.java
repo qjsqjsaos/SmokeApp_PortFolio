@@ -261,7 +261,6 @@ public class Register extends AppCompatActivity {
                                                         email_btn = (Button) findViewById(R.id.email_btn);
                                                         //인증하기 버튼
 
-
                                                         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
                                                             @Override
                                                             public void onTick(long millisUntilFinished) { //(300초에서 1초 마다 계속 줄어듬)
