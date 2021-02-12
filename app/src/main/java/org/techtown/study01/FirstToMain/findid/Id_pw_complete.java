@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,10 +30,12 @@ public class Id_pw_complete extends AppCompatActivity {
         String findIdMessage = intent.getStringExtra("findId"); //아이디 식별메세지
         String findPWMessage = intent.getStringExtra("findPw"); //비밀번호 식별메세지
 
-        if(findIdMessage.equals("아이디찾기") && findPWMessage == null){ //만약 아이디찾기라면,
+        // TODO: 2021-02-13 여기해결하기(해결했지만 더 확인.)
+
+    if(findIdMessage != null || findPWMessage != null)
+        if (findIdMessage == "아이디찾기") { //만약 아이디찾기라면,
             textView.setText("이메일로 아이디가 전송되었습니다.");
-        }
-        else if(findIdMessage == null && findPWMessage.equals("비밀번호찾기")){ // 만약 비밀번호 찾기라면
+        } else if (findPWMessage == "비밀번호찾기") { // 만약 비밀번호 찾기라면
             textView.setText("비밀번호가 변경되었습니다.");
         }
 

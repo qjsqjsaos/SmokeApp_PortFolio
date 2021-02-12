@@ -68,7 +68,7 @@ public class FindId extends AppCompatActivity {
                         return;
                     }
                     //이메일 유효성
-                   else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                   if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                         dialog = builder.setMessage("이메일 형식을 지켜주세요.")
                                 .setPositiveButton("확인", null)
                                 .create();

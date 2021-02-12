@@ -43,6 +43,7 @@ public class AuthforPw extends AppCompatActivity {
                     intent1.putExtra("id", id); // 받은 아이디, 비밀번호 다시 넣어서 ChangePw에 전달
                     intent1.putExtra("pw", pw); // 받은 아이디, 비밀번호 다시 넣어서 ChangePw에 전달
                     startActivity(intent1);
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(),"인증번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                     return;

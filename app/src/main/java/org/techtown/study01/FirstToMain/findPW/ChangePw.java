@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 public class ChangePw extends AppCompatActivity {
 
     private EditText pw, pwcheck;
-    private String newpw;
+    private String newpw, pw2;
     public String message = "비밀번호찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
 
     @Override
@@ -38,30 +38,32 @@ public class ChangePw extends AppCompatActivity {
         pwcheck = findViewById(R.id.AuthTextEmail33); //비밀번호 확인
 
 
-        //아이디 비번 인텐트로 가져오기
-        Intent intent = getIntent();
-        String Eid = intent.getStringExtra("id");
-        String Epw = intent.getStringExtra("pw");
-
-        String pw1 = pw.getText().toString();
-        String pw2 = pwcheck.getText().toString();
 
         Button button = findViewById(R.id.sendForPw);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newpw = pw.getText().toString();
+                //아이디 비번 인텐트로 가져오기
+                Intent intent = getIntent();
+                String Eid = intent.getStringExtra("id");
+                String Epw = intent.getStringExtra("pw");
 
-                if(!pw1.equals(pw2)) { //비밀번호와 비밀번호 확인이 맞지 않을때,
+                newpw = pw.getText().toString();
+                pw2 = pwcheck.getText().toString();
+
+                if(!newpw.equals(pw2)) { //비밀번호와 비밀번호 확인이 맞지 않을때,
                     Toast.makeText(getApplicationContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(pw.equals("") || pwcheck.equals("")){ //둘 중 하나라도 빈칸이면,
-                    Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
+                if(newpw.equals("") || pw2.equals("")){ //둘 중 하나라도 빈칸이면,
+                    Toast.makeText(getApplicationContext(), "비밀번호를 전부 입력해주세요.", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(Epw.equals(pw1) || Epw.equals(pw2)) {//전에 쓰던 비밀번호와 같을때,
+                }
+                if(Epw.equals(newpw) || Epw.equals(pw2)) {//전에 쓰던 비밀번호와 같을때,
                     Toast.makeText(getApplicationContext(), "전에 쓰던 비밀번호는 사용하실 수 없습니다.", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!Pattern.matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&]).{8,20}.$", newpw)) { //비밀번호 형식 안지킬시
+                }
+                if (!Pattern.matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&]).{8,20}.$", newpw)) { //비밀번호 형식 안지킬시
                     Toast.makeText(getApplicationContext(), "영문+숫자+특수문자 각 1자 이상 포함 8~20자 글자여야 합니다.", Toast.LENGTH_SHORT).show();
                     return;
                 }
