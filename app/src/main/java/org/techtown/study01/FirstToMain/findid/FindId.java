@@ -36,6 +36,7 @@ public class FindId extends AppCompatActivity {
     private EditText editText;
     private Button button;
     private String Eid, email, Eemail; //찾은 아이디 넣을 스트링 객체
+    public String message = "아이디찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
 
 
     @Override
@@ -88,8 +89,8 @@ public class FindId extends AppCompatActivity {
                                 Eid = jsonObject.getString("id"); //찾는 아이디 값 가져오고
                                 if(email.equals(Eemail)){
                                     idSendStart();
-
                                     Intent intent = new Intent(FindId.this, Id_pw_complete.class);
+                                    intent.putExtra("findId",message); //식별 메세지
                                     startActivity(intent);
                                     finish();
                                 }
@@ -111,9 +112,9 @@ public class FindId extends AppCompatActivity {
                     }
                 };
 
-                FindId_Pw_Check findIdPwCheck = new FindId_Pw_Check(email, responseListener);
+                FindId_Check findId_check = new FindId_Check(email, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(FindId.this);
-                queue.add(findIdPwCheck);
+                queue.add(findId_check);
             }
         });
     }

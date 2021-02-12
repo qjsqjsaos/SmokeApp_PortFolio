@@ -14,7 +14,7 @@
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="이메일로 비밀번호 찾기"
+        android:text="비밀번호 변경"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,94 +22,64 @@
 
     <EditText
 
-        android:id="@+id/IdforPw22"
+        android:id="@+id/IdforPw"
+        android:paddingLeft="@dimen/EditText_paddingLeft"
+        android:background="@drawable/round_edittext"
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="@dimen/Login_and_textInput_height"
         android:layout_marginTop="36dp"
-        android:background="@drawable/round_edittext"
-        android:ems="10"
-        android:hint="아이디를 입력해주세요."
-        android:inputType="text"
         android:maxLength="30"
         android:maxLines="1"
-        android:paddingLeft="@dimen/EditText_paddingLeft"
+        android:ems="10"
+        android:hint="비밀번호"
+        android:inputType="textWebPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <EditText
-        android:id="@+id/AuthTextEmail45"
+        android:id="@+id/AuthTextEmail33"
+        android:paddingLeft="@dimen/EditText_paddingLeft"
+        android:background="@drawable/round_edittext"
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="@dimen/Login_and_textInput_height"
         android:layout_marginTop="36dp"
-        android:background="@drawable/round_edittext"
-        android:ems="10"
-        android:hint="이메일을 입력해 주세요."
-        android:inputType="textEmailAddress"
         android:maxLength="30"
         android:maxLines="1"
-        android:paddingLeft="@dimen/EditText_paddingLeft"
+        android:ems="10"
+        android:hint="비밀번호 확인"
+        android:inputType="textWebPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IdforPw22" />
+        app:layout_constraintTop_toBottomOf="@+id/IdforPw" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="52dp"
         android:gravity="center"
-        android:text="가입 시 입력하셨던 \n아이디와 이메일을 입력해주세요."
+        android:text="새로운 비밀번호를 입력해주세요."
         android:textSize="@dimen/explain_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <Button
-        android:id="@+id/sendForPw22"
+        android:id="@+id/sendForPw"
         style="@style/bold_theme"
         android:layout_width="@dimen/register_and_textInput"
         android:layout_height="62dp"
         android:layout_marginTop="36dp"
         android:background="@drawable/all_btn"
-        android:text="이메일로 전송하기"
+        android:text="비밀번호 변경하기"
         android:textColor="@color/black"
         android:textSize="@dimen/button_text_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AuthTextEmail45" />
-
-    <TextView
-        android:id="@+id/textView65"
-        android:layout_width="@dimen/register_and_textInput"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:gravity="center"
-        android:text="아이디가 기억나시지 않으시면\n아이디 찾기를 이용해보세요."
-        android:textSize="@dimen/explain_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendForPw22" />
-
-    <Button
-        android:id="@+id/goId"
-        style="@style/bold_theme"
-        android:layout_width="@dimen/register_and_textInput"
-        android:layout_height="62dp"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/all_btn"
-        android:text="아이디 찾기"
-        android:textColor="@color/black"
-        android:textSize="@dimen/button_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView65" />
+        app:layout_constraintTop_toBottomOf="@+id/AuthTextEmail33" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

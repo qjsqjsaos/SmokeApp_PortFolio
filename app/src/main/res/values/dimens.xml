@@ -1,13 +1,22 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="terms_size">14sp</dimen> //약관보기 텍스트 사이즈
+
+
     <dimen name="register_and_textInput">320dp</dimen> //회원가입 창, 로그인 입력 창 포함된 버튼 가로 사이즈
-    <dimen name="register_and_textInput_height">50dp</dimen> //회원가입 창, 로그인 입력 창 포함된 버튼 세로 사이즈
+    <dimen name="Login_and_textInput_height">70dp</dimen> // 로그인 입력창 세로 사이즈
+    <dimen name="EditText_paddingLeft">25dp</dimen> //입력창 패딩 레프트(회원가입제외)
+
+    <dimen name="register_and_textInput_height">50dp</dimen> //회원가입 창 세로 사이즈
+
+
+
     <dimen name="button_text_size">18sp</dimen> //버튼 텍스트사이즈
     <dimen name="explain_text">18sp</dimen> //설명텍스트 사이즈
-    <dimen name="activity_vertical_margin">16dp</dimen> //
+    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="register_hint_size">12sp</dimen>//회원가입 힌트 텍스트 사이즈
     <dimen name="Login_btn_width">210dp</dimen> //연동 로그인 버튼 가로
     <dimen name="Login_btn_height">50dp</dimen> //연동 로그인 버튼 세로
     <dimen name="floating_hint_margin">5dp</dimen>//회원가입 힌트와 입렵창 사이(패딩) 사이즈
+
 </resources>

@@ -12,10 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".findPW.AuthforPw"></activity>
+        <activity android:name=".findPW.ChangePw" />
         <activity
             android:name=".register.Terms_Service"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".register.Terms_Personal"
             android:screenOrientation="portrait" />

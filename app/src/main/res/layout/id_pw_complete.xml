@@ -4,60 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home_and_another_background">
+    android:background="@drawable/start_background">
+
+    <Button
+        android:id="@+id/authButton962"
+        style="@style/bold_theme"
+        android:layout_width="@dimen/register_and_textInput"
+        android:layout_height="62dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/all_btn"
+        android:text="로그인 하러 가기"
+        android:textColor="@color/black"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView354" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/textView3366"
         style="@style/title_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_stroke"
+        android:background="@drawable/start_background"
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="이메일로 전송완료!"
+        android:text="비밀번호가 변경되었습니다"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button3"
-        style="@style/bold_theme"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/textView354"
+        android:layout_width="@dimen/register_and_textInput"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="368dp"
-        android:background="@drawable/all_btn"
-        android:text="변경하기"
-        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="자! 이제 금연을 시작해봅시다."
+        android:textSize="@dimen/explain_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.425" />
+
+    <ImageView
+        android:id="@+id/imageView486"
+        android:layout_width="136dp"
+        android:layout_height="318dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/smokeimage"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/pwcheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="101dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="26dp"
-        android:ems="10"
-        android:hint="비밀번호 확인"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="46dp"
-        android:ems="10"
-        android:hint="비밀번호"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/pwcheck"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

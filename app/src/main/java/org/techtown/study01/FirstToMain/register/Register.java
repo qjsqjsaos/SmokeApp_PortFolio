@@ -2,12 +2,8 @@ package org.techtown.study01.FirstToMain.register;
 
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.StrictMode;
 
 import android.os.SystemClock;
@@ -30,13 +26,9 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.techtown.study01.FirstToMain.Etc.Loading_ProgressDialog;
 import org.techtown.study01.FirstToMain.R;
 
 import java.util.regex.Pattern;
-
-import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -52,7 +44,6 @@ public class Register extends AppCompatActivity {
     private final int MILLISINFUTURE = 300 * 1000; //총 시간 (300초 = 5분)
     private final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
     private Long mLastClickTime = 0L; //이메일 버튼 클릭 방지 변수
-    public Loading_ProgressDialog LPDialog;//로딩중 화면 가져오기
 
 
     @Override
@@ -90,7 +81,7 @@ public class Register extends AppCompatActivity {
                         return;
                     }
                     //아이디 유효성
-                    if (!Pattern.matches("^[0-9_a-zA-Z]{4,20}$", id)) {
+                    else if (!Pattern.matches("^[0-9_a-zA-Z]{4,20}$", id)) {
                         dialog = builder.setMessage("아이디 형식을 지켜주세요.")
                                 .setPositiveButton("확인", null)
                                 .create();
