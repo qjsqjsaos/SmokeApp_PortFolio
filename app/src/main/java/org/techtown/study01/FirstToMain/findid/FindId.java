@@ -127,7 +127,7 @@ public class FindId extends AppCompatActivity {
                 //GMailSender.sendMail(제목, 본문내용, 받는사람);
 
         try {
-            gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 아이디를 확인해주세요.", "아이디는 \"" + Eid + "\" 입니다. \n " +
+            gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 아이디를 확인해주세요.", "아이디는 \"" + replaceStar(Eid,5) + "\" 입니다. \n " +
                     "아이디가 맞는지 확인해 주시고, 궁금하신 점은 'merrygoaround0726@gmail.com' 이메일로 문의주시기 바랍니다. 감사합니다. ", email);
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,4 +135,13 @@ public class FindId extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "이메일로 아이디가 전송되었습니다.", Toast.LENGTH_SHORT).show();
 
             }
+
+    public static String replaceStar(String str, int len){ //아이디 별표시해서 출력
+        String returnStr="";
+        for(int i=0; i<str.length();i++){
+            if(i<len)returnStr=returnStr+str.substring(i,i+1);
+            else returnStr=returnStr+"*";
+        }
+        return returnStr;
+    }
 }
