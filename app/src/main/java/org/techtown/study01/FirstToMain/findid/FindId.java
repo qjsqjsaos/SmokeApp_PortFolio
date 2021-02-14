@@ -90,7 +90,7 @@ public class FindId extends AppCompatActivity {
                                 if(email.equals(Eemail)){
                                     idSendStart();
                                     Intent intent = new Intent(FindId.this, Id_pw_complete.class);
-                                    intent.putExtra("findId",message); //식별 메세지
+                                    intent.putExtra("findId", message); //식별 메세지
                                     startActivity(intent);
                                     finish();
                                 }

@@ -27,7 +27,7 @@ public class ChangePw extends AppCompatActivity {
 
     private EditText pw, pwcheck;
     private String newpw, pw2;
-    public String message = "비밀번호찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
+    public String messagepPw = "비밀번호찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class ChangePw extends AppCompatActivity {
                             if (success) {
                                 Toast.makeText(getApplicationContext(), "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent1 = new Intent(ChangePw.this, Id_pw_complete.class);
-                                intent1.putExtra("findPw", message);
+                                intent1.putExtra("findPw", messagepPw);
                                 startActivity(intent1);
                                 finish();
                             } else {//로그인 실패시
