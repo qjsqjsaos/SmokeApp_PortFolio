@@ -87,7 +87,7 @@
     <Button
             android:id="@+id/btn_login"
             android:layout_width="@dimen/register_and_textInput"
-            android:layout_height="@dimen/register_and_textInput_height"
+            android:layout_height="@dimen/register_button_height_size"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:background="@drawable/all_btn"
