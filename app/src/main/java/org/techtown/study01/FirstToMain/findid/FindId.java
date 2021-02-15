@@ -91,6 +91,9 @@ public class FindId extends AppCompatActivity {
                                     idSendStart();
                                     Intent intent = new Intent(FindId.this, Id_pw_complete.class);
                                     intent.putExtra("findId", message); //식별 메세지
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                     startActivity(intent);
                                     finish();
                                 }

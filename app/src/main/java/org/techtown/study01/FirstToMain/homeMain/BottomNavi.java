@@ -16,6 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
+import org.techtown.study01.FirstToMain.MaintoEnd.Settings.Settings;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
@@ -23,7 +26,10 @@ import java.lang.reflect.Method;
 
     public class BottomNavi extends AppCompatActivity {
         private BottomNavigationView bottomNavigationView;
-        private HomeMain fragment1;
+        private HomeMain fragment1; //홈메인
+        private HealthCheck fragment2; //상태 변화
+        private Diary fragment3; // 일기
+        private Settings fragment4; //설정
         private static final String TAG = "MyTag"; //로그 찍을때,
 
 
@@ -38,7 +44,12 @@ import java.lang.reflect.Method;
             /**프래그먼트 생성*/
 
         fragment1 = new HomeMain();
+        fragment2 = new HealthCheck();
+        fragment3 = new Diary();
+        fragment4 = new Settings();
 
+
+        /**홈메인 영역 */
             // 일반 로그인
             Intent intent = getIntent();
             String name = intent.getStringExtra("name");
@@ -62,6 +73,11 @@ import java.lang.reflect.Method;
             fragment1.setArguments(bundle);
             Log.d(TAG,"번들 보내기");
 
+
+
+
+
+
         bottomNavigationView = findViewById(R.id.nav_view);
 
 
@@ -77,6 +93,21 @@ import java.lang.reflect.Method;
                 switch (item.getItemId()) {
                     case R.id.home : {
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commitAllowingStateLoss();
+
+                        return true;
+                    }
+                    case R.id.check_health : {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commitAllowingStateLoss();
+
+                        return true;
+                    }
+                    case R.id.diary : {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commitAllowingStateLoss();
+
+                        return true;
+                    }
+                    case R.id.settings : {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment4).commitAllowingStateLoss();
 
                         return true;
                     }

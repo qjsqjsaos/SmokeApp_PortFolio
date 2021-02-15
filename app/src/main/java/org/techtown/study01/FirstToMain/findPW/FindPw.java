@@ -49,6 +49,9 @@ public class FindPw extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FindPw.this, FindId.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 finish();
             }
@@ -105,6 +108,9 @@ public class FindPw extends AppCompatActivity {
                                 String Epw = jsonObject.getString("pw"); //비밀번호 꺼내기
 
                                 Intent intent = new Intent(FindPw.this, AuthforPw.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 intent.putExtra("id", Eid); //데이터베이스에서 가져온 id값
                                 intent.putExtra("pw", Epw); //데이터베이스에서 가져온 pw값
                                 intent.putExtra("authNumber", result);

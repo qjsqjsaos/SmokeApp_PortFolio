@@ -1,16 +1,28 @@
 package org.techtown.study01.FirstToMain.MaintoEnd.Settings;
 
-import android.os.Bundle;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.techtown.study01.FirstToMain.R;
 
-public class Settings extends AppCompatActivity {
+public class Settings extends Fragment {
 
+    private ViewGroup viewGroup;
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        viewGroup = (ViewGroup) inflater.inflate(R.layout.settings, container, false);
+
+        return viewGroup;
+
     }
 }

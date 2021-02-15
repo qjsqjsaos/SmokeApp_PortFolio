@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".findPW.AuthforPw"></activity>
+        <activity android:name=".MaintoEnd.Settings.Settings"></activity>
+        <activity android:name=".findPW.AuthforPw" />
         <activity android:name=".findPW.ChangePw" />
         <activity
             android:name=".register.Terms_Service"

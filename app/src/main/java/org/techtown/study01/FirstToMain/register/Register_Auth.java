@@ -76,7 +76,6 @@ public class Register_Auth extends AppCompatActivity{
                         @Override
                         public void onClick(View v) {
                                 Intent intent = new Intent(Register_Auth.this, Terms_Service.class);
-                                intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                 startActivity(intent);
                         }
@@ -86,7 +85,6 @@ public class Register_Auth extends AppCompatActivity{
                         @Override
                         public void onClick(View v) {
                                 Intent intent = new Intent(Register_Auth.this, Terms_Personal.class);
-                                intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                 startActivity(intent);
                         }

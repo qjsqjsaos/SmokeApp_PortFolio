@@ -56,6 +56,9 @@ public class Id_pw_complete extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Id_pw_complete.this, Login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 finish();
             }

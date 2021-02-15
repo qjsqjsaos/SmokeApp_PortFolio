@@ -6,9 +6,9 @@
     <color name="teal_200">#FF03DAC5</color>
 
     //자주 사용하는 것
-    <color name="baseColor">#ECDFCB</color> //첫시작 색깔
+    <color name="baseColor">#ECDFCB</color> //바탕화면
     <color name="point">#CEC3B2</color> //포인트
-    <color name="background">#EDE9E9</color> //바탕화면 (포인트랑 대비) //버튼색
+    <color name="background">#EDE9E9</color> //명언판 //버튼
     <color name="textColor">#AC9874</color> //글씨색
     <color name="textColor_special">#67523E</color> //더 진한 글씨색
 </resources>

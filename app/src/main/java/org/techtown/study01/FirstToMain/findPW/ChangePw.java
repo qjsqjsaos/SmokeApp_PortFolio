@@ -80,6 +80,9 @@ public class ChangePw extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent1 = new Intent(ChangePw.this, Id_pw_complete.class);
                                 intent1.putExtra("findPw", messagepPw);
+                                intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent1.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 startActivity(intent1);
                                 finish();
                             } else {//로그인 실패시

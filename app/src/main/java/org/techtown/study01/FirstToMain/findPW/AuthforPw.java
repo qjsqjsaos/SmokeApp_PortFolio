@@ -40,6 +40,9 @@ public class AuthforPw extends AppCompatActivity {
                 if(editAuthNumber == AuthNumber){ //넘어온 번호와 입력한 번호가 같으면
                     Toast.makeText(getApplicationContext(),"인증되었습니다.", Toast.LENGTH_SHORT).show();
                     Intent intent1 = new Intent(AuthforPw.this, ChangePw.class);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent1.putExtra("id", id); // 받은 아이디, 비밀번호 다시 넣어서 ChangePw에 전달
                     intent1.putExtra("pw", pw); // 받은 아이디, 비밀번호 다시 넣어서 ChangePw에 전달
                     startActivity(intent1);

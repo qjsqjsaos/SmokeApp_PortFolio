@@ -63,7 +63,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         private EditText idText, passwordText; //아이디 비밀번호 입력
         private Button btn_login;//로그인버튼
         private TextView rg_sign, btn_findId, btn_findPw, btn_google; ; //회원가입버튼, 아이디 비번찾기 버튼
-        private String loginId, loginPwd;//자동 로그인용
+        private String loginId, loginPwd, loginName;//자동 로그인용
         private String Eid, Epw, Ename; //자동로그인 식별용
 
     //파이어베이스 구글 로그인
@@ -88,6 +88,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Login.this, Register.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }
             });
@@ -103,10 +104,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             // 첨엔 값이 없으므로 키값은 원하는 것으로 하시고 값을 null을 줍니다.
             loginId = auto.getString("inputId",null);
             loginPwd = auto.getString("inputPwd",null);
+            loginName = auto.getString("inputName", null);
 
             if(loginId != null && loginPwd != null) { // loginId와 loginPwd에 값이 있으면, 자동 로그인을 실시 한다.
                 if (loginId.length() > 0 && loginPwd.length() > 0) {
-                    Toast.makeText(Login.this, Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Login.this, BottomNavi.class);
                     startActivity(intent);
                     finish();
@@ -140,12 +142,16 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                             SharedPreferences.Editor autoLogin = auto.edit();
                                             autoLogin.putString("inputId", Eid);
                                             autoLogin.putString("inputPwd", Epw);
+                                            autoLogin.putString("inputName", Ename);
                                             autoLogin.commit(); //커밋을 해야지 값이 저장된다.
 
                                             Log.d(TAG, String.valueOf(autoLogin));
 
                                             Toast.makeText(getApplicationContext(), Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(Login.this, BottomNavi.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
                                             intent.putExtra("id", Eid);
                                             intent.putExtra("pw", Epw);
                                             intent.putExtra("name", Ename);
@@ -185,6 +191,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Login.this, FindId.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }
             });
@@ -194,6 +201,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 @Override
                 public void onClick(View v) {
                     Intent intent2 = new Intent(Login.this, FindPw.class);
+                    intent2.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent2);
                 }
             });
@@ -258,8 +266,12 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             Toast.makeText(Login.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(Login.this, BottomNavi.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             intent.putExtra("nickName", account.getDisplayName());
                             intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
+
                             startActivity(intent);
 
 
