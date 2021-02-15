@@ -12,6 +12,7 @@
     !-- 아이디 비밀번호 입력창 눌렀을시에 부동힌트 색깔--!
     <style name="TextLabel" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/textColor_special</item>
     </style>
 
 

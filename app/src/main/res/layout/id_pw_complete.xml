@@ -7,15 +7,15 @@
     android:background="@drawable/start_background">
 
     <Button
+        android:textColor="@color/textColor"
+        android:layout_width="@dimen/find_textInput_Button_width"
+        android:layout_height="@dimen/find_textInput_Button_height"
+        android:background="@drawable/all_btn"
+        android:textSize="@dimen/find_button_text_size"
         android:id="@+id/authButton962"
         style="@style/bold_theme"
-        android:layout_width="@dimen/register_and_textInput"
-        android:layout_height="62dp"
         android:layout_marginTop="36dp"
-        android:background="@drawable/all_btn"
         android:text="로그인 하러 가기"
-        android:textColor="@color/black"
-        android:textSize="@dimen/button_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +36,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:textColor="@color/textColor"
         android:id="@+id/textView354"
-        android:layout_width="@dimen/register_and_textInput"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="자! 이제 금연을 시작해봅시다."
-        android:textSize="@dimen/explain_text"
+        android:textSize="@dimen/find_explain_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"

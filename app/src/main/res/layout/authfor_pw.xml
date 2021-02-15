@@ -8,6 +8,7 @@
 
 
     <TextView
+        android:textColor="@color/textColor"
         android:id="@+id/textView9"
         style="@style/title_name"
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="인증번호 입력"
+        android:text="Enter number"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -24,22 +25,27 @@
 
 
     <TextView
+        android:textColor="@color/textColor"
         android:id="@+id/textView6"
-        android:layout_width="@dimen/register_and_textInput"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:gravity="center"
+        android:textSize="@dimen/find_explain_text"
         android:text="인증번호를 입력해주세요."
-        android:textSize="@dimen/explain_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <EditText
+        android:textColor="@color/textColor_special"
+        android:textColorHint="@color/textColor"
+        android:paddingLeft="@dimen/find_EditText_paddingLeft"
+        android:layout_width="@dimen/find_textInput_Button_width"
+        android:layout_height="@dimen/find_textInput_Button_height"
+        android:textSize="@dimen/find_text_size"
         android:id="@+id/AuthTextEmail22"
-        android:layout_width="@dimen/register_and_textInput"
-        android:layout_height="@dimen/Login_and_textInput_height"
         android:layout_marginTop="36dp"
         android:background="@drawable/round_edittext"
         android:ems="10"
@@ -47,22 +53,21 @@
         android:inputType="number"
         android:maxLength="30"
         android:maxLines="1"
-        android:paddingLeft="@dimen/EditText_paddingLeft"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <Button
+        android:textColor="@color/textColor"
+        android:layout_width="@dimen/find_textInput_Button_width"
+        android:layout_height="@dimen/find_textInput_Button_height"
+        android:background="@drawable/all_btn"
+        android:textSize="@dimen/find_button_text_size"
         android:id="@+id/AuthButton22"
         style="@style/bold_theme"
-        android:layout_width="@dimen/register_and_textInput"
-        android:layout_height="62dp"
         android:layout_marginTop="36dp"
-        android:background="@drawable/all_btn"
         android:text="인증하기"
-        android:textColor="@color/black"
-        android:textSize="@dimen/button_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"

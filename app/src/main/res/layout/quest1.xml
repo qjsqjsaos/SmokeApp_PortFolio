@@ -27,20 +27,20 @@
         android:text="- 금연 서약서 -"
         android:textAllCaps="false"
         android:textIsSelectable="true"
-        android:textSize="20sp"
+        android:textSize="@dimen/pledge_header_text_size"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView46"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/mapo"
         android:gravity="center"
         android:text="당신의 용기에 보답드리겠습니다.\n\n금연하기 앞서 아래 항목을 작성해주세요."
         android:textAllCaps="false"
         android:textIsSelectable="true"
-        android:textSize="17sp"
+        android:textSize="@dimen/pledge_explain_text"
         android:textStyle="bold" />
 
     <TextView
@@ -50,17 +50,17 @@
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="하루 흡연량이 어떻게 되시나요?"
-        android:textSize="18sp" />
+        android:textSize="@dimen/pledge_question_text_size" />
 
     <EditText
         android:id="@+id/dayofciga"
         android:hint="갯수만 적어주세요 ex)15"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/pledge_textInput_width"
+        android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
+        android:layout_height="@dimen/pledge_and_textInput_height"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:background="@drawable/spinner_background"
-        android:gravity="center" />
+        android:background="@drawable/round_edittext" />
 
         <TextView
             android:id="@+id/textView45"
@@ -69,17 +69,18 @@
             android:layout_marginTop="50dp"
             android:gravity="center"
             android:text="평균 담배값은 얼마인가요? (하루 기준)"
-            android:textSize="18sp" />
+            android:textSize="@dimen/pledge_question_text_size" />
 
         <EditText
             android:hint="숫자만 적어주세요 ex)4500"
             android:id="@+id/pay"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
+            android:layout_width="@dimen/pledge_textInput_width"
+            android:layout_height="@dimen/pledge_and_textInput_height"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:background="@drawable/spinner_background"
-            android:gravity="center" />
+            android:background="@drawable/round_edittext"
+             />
 
         <TextView
             android:id="@+id/textView49"
@@ -88,50 +89,51 @@
             android:layout_marginTop="50dp"
             android:gravity="center"
             android:text="금연을 하시는 목적이 무엇인가요? (중요)"
-            android:textSize="18sp" />
+            android:textSize="@dimen/pledge_question_text_size" />
 
         <EditText
             android:id="@+id/editTextTextPersonName2"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/pledge_textInput_width"
+            android:layout_height="@dimen/pledge_and_textInput_height"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:background="@drawable/spinner_background"
+            android:background="@drawable/round_edittext"
             android:hint="1순위"
-            android:inputType="textPersonName"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
+            android:inputType="textPersonName" />
 
         <EditText
             android:hint="2순위"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
             android:id="@+id/editTextTextPersonName4"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/pledge_textInput_width"
+            android:layout_height="@dimen/pledge_and_textInput_height"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:background="@drawable/spinner_background"
+            android:background="@drawable/round_edittext"
             android:inputType="textPersonName" />
 
         <EditText
             android:hint="3순위"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
             android:id="@+id/editTextTextPersonName5"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/pledge_textInput_width"
+            android:layout_height="@dimen/pledge_and_textInput_height"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:background="@drawable/spinner_background"
+            android:background="@drawable/round_edittext"
             android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/startButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/pledge_Button_width"
+            android:layout_height="@dimen/pledge_Button_height"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/all_btn"
-            android:text="금연 시작" />
+            android:text="금연 시작"
+            android:textSize="@dimen/pledge_button_text_size"/>
 
     </LinearLayout>
     </ScrollView>
