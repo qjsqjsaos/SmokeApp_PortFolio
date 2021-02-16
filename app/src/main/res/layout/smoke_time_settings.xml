@@ -19,7 +19,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="45dp"
         android:layout_marginTop="19dp"
         android:orientation="horizontal">
 
@@ -28,15 +28,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3" />
 
-        <EditText
-            android:id="@+id/dateSettings"
+        <TextView
+            style="@style/bold_theme"
+            android:textColor="@color/textColor_special"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:paddingTop="10dp"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
+            android:text="날짜"
             android:layout_weight="1"
-            android:background="@drawable/round_edittext"
-            android:elevation="10dp"
-            android:ems="10"
             android:inputType="textPersonName"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
@@ -45,7 +47,63 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5" />
 
-        <EditText
+        <TextView
+            android:paddingTop="10dp"
+            android:text="시간"
+            style="@style/bold_theme"
+            android:textColor="@color/textColor_special"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:inputType="textPersonName"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3" />
+
+        <TextView
+            style="@style/bold_theme"
+            android:textColor="@color/textColor_special"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:id="@+id/dateSettings"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/round_edittext"
+            android:elevation="10dp"
+            android:inputType="textPersonName"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+
+        <TextView
+            style="@style/bold_theme"
+            android:textColor="@color/textColor_special"
+            android:textSize="16sp"
+            android:gravity="center"
             android:id="@+id/timeSettings"
             android:layout_width="0dp"
             android:layout_height="70dp"
@@ -53,7 +111,6 @@
             android:layout_weight="1"
             android:background="@drawable/round_edittext"
             android:elevation="10dp"
-            android:ems="10"
             android:inputType="textPersonName"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 

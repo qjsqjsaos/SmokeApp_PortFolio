@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ public class HomeMain extends Fragment {
 
     private static final String TAG = "MyTag"; //로그 찍을때,
 
-    Dialog dialog; //dialog 객체
+
 
     @Nullable
     @Override
@@ -86,9 +87,13 @@ public class HomeMain extends Fragment {
         noSmoke_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartStopSmoking_Btn();
+                Smoke_time_settings smoke_time_settings = new Smoke_time_settings(getContext());
+                smoke_time_settings.StartStopSmoking_Btn();
             }
         });
+
+
+
 
 
 
@@ -100,22 +105,7 @@ public class HomeMain extends Fragment {
             }
         });
 
-
-
         return viewGroup;
-    }
-
-    private void StartStopSmoking_Btn() { //다이어로그 띄우는 메서드
-        dialog = new Dialog(getActivity()); //프래그먼트는 컨텍스트를 가지지 않으므로, getActivity를 넣어준다.
-        dialog.setContentView(R.layout.smoke_time_settings);
-
-        //다이아로그 크기 설정하기
-        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = 600; //가로길이
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT; //세로길이
-        dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경투명하게 해서 선 없애기
-        dialog.show(); //띄우기
     }
 
 }

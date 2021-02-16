@@ -6,22 +6,23 @@ import java.util.Date;
 
 public class Calculate_Date { //날짜 차이 구하기
 
-    public void WhatTimeIsItAll() { //전체 다
+    public String WhatTimeIsItAll() { //전체 다
         //현재 시간을 나타내는 메서드
         long now = System.currentTimeMillis();
 
         Date mDate = new Date(now);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String getAll = simpleDateFormat.format(mDate); //스트링 형태로 현재 날짜 시간을 가져옴.
 
+        return getAll;
     }
+
 
     public String WhatTimeIsItDate() { //날짜만
         //현재 시간을 나타내는 메서드
         long now = System.currentTimeMillis();
-
         Date mDate = new Date(now);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String getDay = simpleDateFormat.format(mDate); //스트링 형태로 현재 날짜를 가져옴.
 
         return getDay;
@@ -41,7 +42,7 @@ public class Calculate_Date { //날짜 차이 구하기
     {
 
         try{ // String Type을 Date Type으로 캐스팅하면서 생기는 예외로 인해 여기서 예외처리 해주지 않으면 컴파일러에서 에러가 발생해서 컴파일을 할 수 없다.
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             // date1, date2 두 날짜를 parse()를 통해 Date형으로 변환.
             Date FirstDate = format.parse(date1);  //지정한날(금연 시작날)
             Date SecondDate = format.parse(date2); //현재 날짜
