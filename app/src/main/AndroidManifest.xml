@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MaintoEnd.Settings.Settings"></activity>
         <activity android:name=".findPW.AuthforPw" />
         <activity android:name=".findPW.ChangePw" />
         <activity
@@ -32,9 +31,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MaintoEnd.Special.Ranking"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".MaintoEnd.Special.Diary"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MaintoEnd.HomeMain.Shop"
