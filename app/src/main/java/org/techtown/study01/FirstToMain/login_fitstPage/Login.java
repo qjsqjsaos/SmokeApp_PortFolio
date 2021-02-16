@@ -83,6 +83,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             idText = findViewById(R.id.idText);
             passwordText = findViewById(R.id.passwordText);
 
+            //회원가입 버튼
             rg_sign = findViewById(R.id.rg_sign);
             rg_sign.setOnClickListener(new View.OnClickListener() {
                 @Override

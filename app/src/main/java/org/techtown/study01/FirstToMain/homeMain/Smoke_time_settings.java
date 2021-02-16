@@ -60,6 +60,10 @@ public class Smoke_time_settings extends Dialog {
         date.setOnClickListener(new View.OnClickListener() { //날짜 선택할 때
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
+
+                DatePickerDialog dialog = new DatePickerDialog(getContext(),callbackMethod, 2021, 7, 26); //달력 선택시 기본 설정
+                dialog.show();
                 ShowDate();
             }
         });
@@ -100,14 +104,10 @@ public class Smoke_time_settings extends Dialog {
         callbackMethod = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                date.setText(year + month + dayOfMonth); //년 월 일 순
+                int selectedMonth = month+1; //안드로이드에서는 달은 0부터 1월이라고 해서 이런식으로 1을 더해줘야한다.
+                date.setText(year + "-" + selectedMonth +"-"+ dayOfMonth); //년 월 일 순
             }
         };
-    }
-
-    public void OnClickHandler(View view) { //달력 보여주는 핸들러 (중요)
-        DatePickerDialog dialog = new DatePickerDialog(getContext(),callbackMethod, 2021, 07, 26); //달력 선택시 자동 설정
-        dialog.show();
     }
 
 

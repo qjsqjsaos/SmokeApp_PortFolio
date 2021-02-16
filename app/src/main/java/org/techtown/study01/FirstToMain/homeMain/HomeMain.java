@@ -94,10 +94,6 @@ public class HomeMain extends Fragment {
 
 
 
-
-
-
-
         card.setOnClickListener(new View.OnClickListener() { //프로필 설정
             @Override
             public void onClick(View v) {
