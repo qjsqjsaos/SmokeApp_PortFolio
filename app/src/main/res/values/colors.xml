@@ -9,6 +9,6 @@
     <color name="baseColor">#ECDFCB</color> //바탕화면
     <color name="point">#CEC3B2</color> //포인트
     <color name="background">#EDE9E9</color> //명언판 //버튼
-    <color name="textColor">#AC9874</color> //글씨색
-    <color name="textColor_special">#67523E</color> //더 진한 글씨색
+    <color name="textColor">#AC9874</color> //글씨색 //게이지 안채워진 부분
+    <color name="textColor_special">#67523E</color> //더 진한 글씨색, 게이지 채워진 부분
 </resources>
