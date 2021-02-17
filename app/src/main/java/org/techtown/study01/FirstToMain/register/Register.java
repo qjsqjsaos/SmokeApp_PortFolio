@@ -90,7 +90,7 @@ public class Register extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "잘못된 값입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "잘못된 값입니다1.문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -117,6 +117,7 @@ public class Register extends AppCompatActivity {
                                         .create();
                                 dialog.show();
                                 validate = false;
+                                return;
                             }
 
                         } catch (JSONException e) {
@@ -160,7 +161,7 @@ public class Register extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "잘못된 값입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "잘못된 값입니다2. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -187,6 +188,7 @@ public class Register extends AppCompatActivity {
                                         .create();
                                 dialog.show();
                                 nameCheck = false;
+                                return;
                             }
 
                         } catch (JSONException e) {
@@ -241,6 +243,13 @@ public class Register extends AppCompatActivity {
 
                                                 try {
                                                     if (!dbEmail.equals("")) {
+                                                        new Thread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+
+                                                            }
+                                                        });
+
 
                                                         startLoading(dbEmail); //지메일 호출되게하는 메서드
 
@@ -267,15 +276,15 @@ public class Register extends AppCompatActivity {
                                                                 //emailAuthCount은 종료까지 남은 시간임. 1분 = 60초 되므로,
                                                                 // 분을 나타내기 위해서는 종료까지 남은 총 시간에 60을 나눠주면 그 몫이 분이 된다.
                                                                 // 분을 제외하고 남은 초를 나타내기 위해서는, (총 남은 시간 - (분*60) = 남은 초) 로 하면 된다.
-                                                                mLastClickTime = SystemClock.elapsedRealtime(); //이메일 두번 클릭 방지(5분 쿨타임)
                                                                 timeLimit = true; //인증버튼에 true 값 전달. => 270행
+                                                                mLastClickTime = SystemClock.elapsedRealtime(); //이메일 두번 클릭 방지(5분 쿨타임)
                                                             }
 
                                                             @Override
                                                             public void onFinish() { //시간이 초과 되서 꺼지면 false, 인증되고 꺼지면 true.
                                                                 countView.setText("시간초과 : 다시시도");
-
                                                                 timeLimit = false;
+                                                                return;
                                                             }
 
                                                         }.start();
@@ -290,7 +299,7 @@ public class Register extends AppCompatActivity {
                                                 }
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                                Toast.makeText(getApplicationContext(), "잘못된 값입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "잘못된 값입니다3. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
                                             }
 
                                     }
@@ -345,6 +354,7 @@ public class Register extends AppCompatActivity {
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
+                                Toast.makeText(getApplicationContext(), "돌아가기 후 다시 접속하셔서 시도해 주세요.", Toast.LENGTH_SHORT);
                                 return;
                                 }
                                 else {
@@ -354,6 +364,7 @@ public class Register extends AppCompatActivity {
                                     dialog.show();
                                     countDownTimer.cancel();
                                     countView.setText("인증완료");
+                                    smsNumber.setEnabled(false); //성공 후 수정 불가하게 하기
                                     checkNumberSmtp = true;
                                 }
 
@@ -431,7 +442,7 @@ public class Register extends AppCompatActivity {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Toast.makeText(getApplicationContext(),"잘못된 값입니다. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"잘못된 값입니다4. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
                             }
                         }
                     };
@@ -443,7 +454,7 @@ public class Register extends AppCompatActivity {
                        if (isEmpty(id)) {
                            Toast.makeText(getApplicationContext(), "아이디를 입력해주세요.", Toast.LENGTH_LONG).show();
                            return;
-                       } else if (validate == null || false) {
+                       } else if (!validate == true) {
                            Toast.makeText(getApplicationContext(), "아이디 중복확인을 해주세요.", Toast.LENGTH_LONG).show();
                            return;
                        } else if (isEmpty(pw)) {
@@ -458,7 +469,7 @@ public class Register extends AppCompatActivity {
                        } else if (isEmpty(name)) {
                            Toast.makeText(getApplicationContext(), "닉네임을 입력해주세요.", Toast.LENGTH_LONG).show();
                            return;
-                       }else if (nameCheck == null || false) {
+                       }else if (!nameCheck == true) {
                            Toast.makeText(getApplicationContext(), "닉네임 중복확인을 해주세요.", Toast.LENGTH_LONG).show();
                            return;
                        } else if (isEmpty(email)) {
@@ -467,10 +478,10 @@ public class Register extends AppCompatActivity {
                        } else if (isEmpty(smsnumber)) {
                            Toast.makeText(getApplicationContext(), "인증번호를 입력해주세요.", Toast.LENGTH_LONG).show();
                            return;
-                       } else if (checkNumberSmtp == null) {
+                       } else if (!checkNumberSmtp == true) {
                            Toast.makeText(getApplicationContext(), "인증번호 확인버튼을 눌러주세요.", Toast.LENGTH_LONG).show();
                            return;
-                       } else if (result != keyNumber || timeLimit == false) {
+                       } else if (result != keyNumber || !timeLimit == true) {
                            Toast.makeText(getApplicationContext(), "인증번호가 일치하지않습니다.", Toast.LENGTH_LONG).show();
                            return;
                        }
@@ -514,7 +525,7 @@ public class Register extends AppCompatActivity {
                        return;
                    } catch (Exception e){
                        e.printStackTrace();
-                       Toast.makeText(getApplicationContext(),"잘못된 값입니다. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
+                       Toast.makeText(getApplicationContext(),"올바른 값을 입력해주세요.",Toast.LENGTH_SHORT).show();
                    }
             }
         });
