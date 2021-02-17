@@ -125,6 +125,27 @@
             android:textColor="@color/textColor_special"
             android:textSize="17sp" />
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="320dp"
+                android:layout_height="190dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/wisesay_settings"
+                android:elevation="10dp"
+                android:gravity="center"
+                android:text="수열이가 곧 수열이다 -수열-"
+                android:textColor="@color/textColor_special"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/button2"
             style="@style/bold_theme"
@@ -134,9 +155,18 @@
             android:layout_height="@dimen/find_textInput_Button_height"
             android:background="@drawable/all_btn"
             android:textSize="@dimen/find_button_text_size"
-            android:text="마음의 준비를 하고 금연 시작"
+            android:text="마음의 준비가 되었으면 눌러주세요."
             android:textColor="@color/textColor_special"
             />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="w정지"
+            android:id="@+id/stop" />
+
+
 
 
     </LinearLayout>

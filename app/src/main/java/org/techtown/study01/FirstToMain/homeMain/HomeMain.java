@@ -1,5 +1,6 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -7,6 +8,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Parcelable;
 import android.text.Layout;
 import android.util.Log;
@@ -42,13 +46,16 @@ import java.util.Date;
 //홈 화면
 public class HomeMain extends Fragment {
 
+    //뷰그룹 부분
     private ViewGroup viewGroup;
     private ImageView userView;
     private TextView nameView, dateView;
     private LinearLayout card;
     private Button noSmoke_Btn;
 
+    private static final String TAG = "MyTag"; //로그 찍을때,
 
+    //다이어로그 부분
     private Calculate_Date calculate_date;
     private TextView date, time;
     private Button start_stop_smoking, back;
@@ -56,7 +63,13 @@ public class HomeMain extends Fragment {
     private DatePickerDialog.OnDateSetListener callbackMethod;
     private TimePickerDialog.OnTimeSetListener callbackMethod2;
 
-    private static final String TAG = "MyTag"; //로그 찍을때,
+    //쓰레드 부분
+    private Thread timeThread = null;
+    private Boolean isRunning = true;
+    private TextView TimeTextView; //금연 시간 시 분 초 나타내는 텍스트 뷰
+
+
+
 
 
 
@@ -66,11 +79,14 @@ public class HomeMain extends Fragment {
 
         viewGroup = (ViewGroup) inflater.inflate(R.layout.home_main, container, false);
 
-        userView = viewGroup.findViewById(R.id.userView);
-        nameView = viewGroup.findViewById(R.id.nickName);
-        dateView = viewGroup.findViewById(R.id.noSmoke_date);
-        card = viewGroup.findViewById(R.id.card);
-        noSmoke_Btn = viewGroup.findViewById(R.id.button2);
+        userView = viewGroup.findViewById(R.id.userView); //프로필사진
+        nameView = viewGroup.findViewById(R.id.nickName); //닉네임(프로필)
+        dateView = viewGroup.findViewById(R.id.noSmoke_date); //금연날짜(프로필)
+        card = viewGroup.findViewById(R.id.card); //프로필
+        noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
+
+        TimeTextView = viewGroup.findViewById(R.id.timeTextView); //금연 시간 시 분 초 나타내는 텍스트 뷰
+        Button button = viewGroup.findViewById(R.id.stop);
 
 
         //BottomNavi에서 받은 번들 데이터
@@ -105,6 +121,14 @@ public class HomeMain extends Fragment {
             }
         });
 
+        /**예제로 만든 버튼이므로 수정 요망 , xml과 참조한 버튼도 마찬가지*/
+        button.setOnClickListener(new View.OnClickListener() { //잠시 예제로 만들어둠 (금연 정지)
+            @Override
+            public void onClick(View v) {
+                timeThread.interrupt();
+            }
+        });
+
 
 
         card.setOnClickListener(new View.OnClickListener() { //프로필 설정
@@ -117,7 +141,9 @@ public class HomeMain extends Fragment {
         return viewGroup;
     }
 
-    void StartStopSmoking_Btn() { //다이어로그 띄우는 메서드
+    //////////////////////////////////////////다이어로그 띄우는 메서드(시작)///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    void StartStopSmoking_Btn() {
 
         dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.smoke_time_settings);
@@ -184,6 +210,22 @@ public class HomeMain extends Fragment {
             }
 
         });
+
+        start_stop_smoking.setOnClickListener(new View.OnClickListener() { //금연 시작 버튼
+            @Override
+            public void onClick(View v) {
+                timeThread = new Thread(new timeThread());
+                timeThread.start(); //금연 쓰레드 시작
+                dialog.dismiss(); //다이어로그 닫기
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() { //금연하지 않기 버튼
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
             public static String getMonth(int month) { // 월자 두자리수 만들어주는 메서드
             if(month > 0 && month < 10){
@@ -207,5 +249,60 @@ public class HomeMain extends Fragment {
                 return String.valueOf(time);
             }
         }
+    //////////////////////////////////////////다이어로그 띄우는 메서드(끝)///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    ///////////////////////////////////////// 쓰레드와 핸들러 (시작)///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Handler handler = new Handler(Looper.myLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            int sec = (msg.arg1 / 100) % 60; //초
+            int min = (msg.arg1 / 100) / 60; //분
+            int hour = (msg.arg1 / 100) / 360; //시
+            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
+
+            String result = String.format("%02d:%02d:%02d", hour, min, sec);
+            if (result.equals("00:01:15")) { //시간 지날때마다 기능 구현하기
+                Toast.makeText(getContext(), "1분 15초가 지났습니다.", Toast.LENGTH_SHORT).show(); //예를 든거다.
+            }
+            TimeTextView.setText(result);
+        }
+    };
+
+
+    public class timeThread implements Runnable {
+        @Override
+        public void run() {
+            int i = 0;
+
+            while (true) {
+                while (isRunning) { //일시정지를 누르면 멈춤
+                    Message msg = new Message();
+                    msg.arg1 = i++;
+                    handler.sendMessage(msg);
+
+                    try {
+                        Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable(){
+                            @Override
+                            public void run() {
+                                TimeTextView.setText("");
+                                TimeTextView.setText("00:00:00");
+                            }
+                        });
+                        return; // 인터럽트 받을 경우 return (취소
+                    }
+                }
+            }
+        }
+    }
+
+    ///////////////////////////////////////// 쓰레드와 핸들러 (끝)///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

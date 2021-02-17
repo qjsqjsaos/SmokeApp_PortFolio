@@ -107,18 +107,17 @@ public class Register extends AppCompatActivity {
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
                             if (success) {
+                                validate = true;
                                 dialog = builder.setMessage("사용할 수 있는 아이디입니다.")
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                validate = true;
                             } else {
-
+                                validate = false;
                                 dialog = builder.setMessage("존재하는 아이디입니다.")
                                         .setNegativeButton("확인", null)
                                         .create();
                                 dialog.show();
-                                validate = false;
                                 return;
                             }
 
@@ -178,18 +177,17 @@ public class Register extends AppCompatActivity {
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
                             if (success) {
+                                nameCheck = true;
                                 dialog = builder.setMessage("사용할 수 있는 닉네임입니다.")
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
-                                nameCheck = true;
                             } else {
-
+                                nameCheck = false;
                                 dialog = builder.setMessage("존재하는 닉네임입니다.")
                                         .setNegativeButton("확인", null)
                                         .create();
                                 dialog.show();
-                                nameCheck = false;
                                 return;
                             }
 
@@ -260,6 +258,7 @@ public class Register extends AppCompatActivity {
                                                         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
                                                             @Override
                                                             public void onTick(long millisUntilFinished) { //(300초에서 1초 마다 계속 줄어듬)
+                                                                timeLimit = true;
                                                                 long emailAuthCount = millisUntilFinished / 1000;
                                                                 Log.d("Alex", emailAuthCount + "");
 
@@ -272,14 +271,13 @@ public class Register extends AppCompatActivity {
                                                                 //emailAuthCount은 종료까지 남은 시간임. 1분 = 60초 되므로,
                                                                 // 분을 나타내기 위해서는 종료까지 남은 총 시간에 60을 나눠주면 그 몫이 분이 된다.
                                                                 // 분을 제외하고 남은 초를 나타내기 위해서는, (총 남은 시간 - (분*60) = 남은 초) 로 하면 된다.
-                                                                timeLimit = true; //인증버튼에 true 값 전달. => 270행
                                                                 mLastClickTime = SystemClock.elapsedRealtime(); //이메일 두번 클릭 방지(5분 쿨타임)
                                                             }
 
                                                             @Override
                                                             public void onFinish() { //시간이 초과 되서 꺼지면 false, 인증되고 꺼지면 true.
-                                                                countView.setText("시간초과 : 다시시도");
                                                                 timeLimit = false;
+                                                                countView.setText("시간초과 : 다시시도");
                                                                 return;
                                                             }
 
@@ -354,6 +352,7 @@ public class Register extends AppCompatActivity {
                                 return;
                                 }
                                 else {
+                                    checkNumberSmtp = true;
                                         dialog = builder.setMessage("인증 되었습니다.")
                                             .setPositiveButton("확인", null)
                                             .create();
@@ -361,7 +360,6 @@ public class Register extends AppCompatActivity {
                                     countDownTimer.cancel();
                                     countView.setText("인증완료");
                                     smsNumber.setEnabled(false); //성공 후 수정 불가하게 하기
-                                    checkNumberSmtp = true;
                                 }
 
                             }else if (keyNumber < 1000000 && result != keyNumber) {
