@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -100,7 +101,7 @@ public class HomeMain extends Fragment {
         noSmoke_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              StartStopSmoking_Btn();
+                StartStopSmoking_Btn();
             }
         });
 
@@ -117,8 +118,19 @@ public class HomeMain extends Fragment {
     }
 
     void StartStopSmoking_Btn() { //다이어로그 띄우는 메서드
+
         dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.smoke_time_settings);
+        //다이아로그 크기 설정하기
+        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = 600; //가로길이
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT; //세로길이
+        dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
+        dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경투명하게 해서 선 없애기
+        dialog.show(); //띄우기
+
+        /** 이 아래는 프래그먼트 기능을 넣는다.*/
 
         start_stop_smoking = dialog.findViewById(R.id.button3); //금연하기 버튼
         back = dialog.findViewById(R.id.button4); //금연하지 않기 버튼
@@ -127,10 +139,8 @@ public class HomeMain extends Fragment {
 
         //현재 날짜 시간 가져오기
         calculate_date = new Calculate_Date();
-        String allTimeAndDate = calculate_date.WhatTimeIsItAll(); // 시간 날짜 다가져오기
         String datetoday = calculate_date.WhatTimeIsItDate(); //오늘 날짜 가져오기
         String timenow = calculate_date.WhatTimeIsItTime(); //현재 시간 가져오기
-
 
         if(date != null) {
             date.setText(datetoday); //현재 날짜 기본값
@@ -140,76 +150,62 @@ public class HomeMain extends Fragment {
             time.setText(timenow); // 현재 시간 기본값
         }
 
-        date.setOnClickListener(new View.OnClickListener() { //날짜 선택할 때
+        date.setOnClickListener(new View.OnClickListener() {  //날짜 지정할 수 있는 데이트피커 다이얼로그 나타내기
             @Override
             public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(getContext(),callbackMethod, 2021, 7, 26); //달력 선택시 기본 설정
+                callbackMethod = new DatePickerDialog.OnDateSetListener()
+                {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+                    {
+                        int month = monthOfYear + 1;
+                        date.setText(year + "-" + getMonth(month) + "-" + getDay(dayOfMonth));
+                    }
+                };
+
+                DatePickerDialog dateDialog = new DatePickerDialog(getContext(), callbackMethod, 2021, 7, 26);
+                dateDialog.show();
+            }
+        });
+
+        time.setOnClickListener(new View.OnClickListener() {  //시간 지정할 수 있는 타임피커 다이얼로그 나타내기
+            @Override
+            public void onClick(View v) {
+
+                callbackMethod2 = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        time.setText(getTime(hourOfDay) + " : " + getTime(minute));
+                    }
+                };
+
+                TimePickerDialog dialog = new TimePickerDialog(getContext(), callbackMethod2, 8, 10, true);
                 dialog.show();
-                HomeMain homeMain = new HomeMain();
-                homeMain.ShowDate();
             }
+
         });
-
-        time.setOnClickListener(new View.OnClickListener() { //시간 선택할 때,
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog dialog = new TimePickerDialog(getContext(), callbackMethod2, 7, 7, true); //시간 선택시 기본 설정
-                dialog.show();
-                HomeMain homeMain = new HomeMain();
-                homeMain.ShowTime();
-            }
-        });
-
-        start_stop_smoking.setOnClickListener(new View.OnClickListener() { //금연 시작 버튼
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        back.setOnClickListener(new View.OnClickListener() { //하지 않기 버튼
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-
-        //다이아로그 크기 설정하기
-        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = 600; //가로길이
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT; //세로길이
-        dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
-        dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경투명하게 해서 선 없애기
-        dialog.show(); //띄우기
     }
-
-
-    public void ShowDate() { //달력 선택값 출력해주는 메서드
-        callbackMethod = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                int selectedMonth = month + 1; //안드로이드에서는 달은 0부터 1월이라고 해서 이런식으로 1을 더해줘야한다.
-
-                date.setText(year + "-" + selectedMonth + "-" + dayOfMonth); //년 월 일 순
-
+            public static String getMonth(int month) { // 월자 두자리수 만들어주는 메서드
+            if(month > 0 && month < 10){
+                return "0" + String.valueOf(month);
+            }else {
+                return String.valueOf(month);
             }
+        }
 
-
-        };
-    }
-
-    public void ShowTime() {//시간 선택값 출력해주는 메서드
-        callbackMethod2 = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute)
-            {
-                time.setText(hourOfDay + ":" + minute);
-                String value = time.getText().toString();
-
+        public static String getDay(int day) { // 일자 두자리수 만들어주는 메서드
+            if(day > 0 && day < 10){
+                return "0" + String.valueOf(day);
+            }else {
+                return String.valueOf(day);
             }
-        };
-    }
-
+        }
+        public static String getTime(int time) { // 시간 두자리수 만들어주는 메서드
+            if(time > 0 && time < 10){
+                return "0" + String.valueOf(time);
+            }else {
+                return String.valueOf(time);
+            }
+        }
 }
+
