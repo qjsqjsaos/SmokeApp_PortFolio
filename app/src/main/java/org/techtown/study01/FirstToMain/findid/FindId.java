@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Patterns;
 import android.view.View;
@@ -37,6 +39,7 @@ public class FindId extends AppCompatActivity {
     private Button button;
     private String Eid, email, Eemail; //찾은 아이디 넣을 스트링 객체
     public String message = "아이디찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
+    private Handler handler = new Handler(Looper.myLooper()); //핸들러로 실행하기
 
 
     @Override
@@ -88,7 +91,14 @@ public class FindId extends AppCompatActivity {
                                 Eemail = jsonObject.getString("email");
                                 Eid = jsonObject.getString("id"); //찾는 아이디 값 가져오고
                                 if(email.equals(Eemail)){
-                                    idSendStart();
+
+                                    new Thread(new Runnable() { //쓰레드로 지메일 보내기
+                                        @Override
+                                        public void run() {
+                                            idSendStart();
+                                        }
+                                    });
+
                                     Intent intent = new Intent(FindId.this, Id_pw_complete.class);
                                     intent.putExtra("findId", message); //식별 메세지
                                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -125,19 +135,24 @@ public class FindId extends AppCompatActivity {
 
 
     public void idSendStart()  {
-        //구글 이메일로 smtp 사용해서 인증번호 보내기
-        GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+        handler.post(new Runnable() { // 핸들러 사용하기
+            @Override
+            public void run() {
+                //구글 이메일로 smtp 사용해서 인증번호 보내기
+                GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
                 //GMailSender.sendMail(제목, 본문내용, 받는사람);
 
-        try {
-            gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 아이디를 확인해주세요.", "아이디는 \"" + replaceStar(Eid,5) + "\" 입니다. \n " +
-                    "아이디가 맞는지 확인해 주시고, 궁금하신 점은 'merrygoaround0726@gmail.com' 이메일로 문의주시기 바랍니다. 감사합니다. ", email);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(getApplicationContext(), "이메일로 아이디가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-
+                try {
+                    gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 아이디를 확인해주세요.", "아이디는 \"" + replaceStar(Eid,5) + "\" 입니다. \n " +
+                            "아이디가 맞는지 확인해 주시고, 궁금하신 점은 'merrygoaround0726@gmail.com' 이메일로 문의주시기 바랍니다. 감사합니다. ", email);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(getApplicationContext(), "이메일로 아이디가 전송되었습니다.", Toast.LENGTH_SHORT).show();
             }
+        });
+
+    }
 
     public static String replaceStar(String str, int len){ //아이디 별표시해서 출력
         String returnStr="";

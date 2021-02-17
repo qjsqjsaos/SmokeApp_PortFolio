@@ -4,6 +4,8 @@ package org.techtown.study01.FirstToMain.register;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 
 import android.os.SystemClock;
@@ -44,6 +46,8 @@ public class Register extends AppCompatActivity {
     private final int MILLISINFUTURE = 300 * 1000; //총 시간 (300초 = 5분)
     private final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
     private Long mLastClickTime = 0L; //이메일 버튼 클릭 방지 변수
+
+    private Handler handler = new Handler(Looper.myLooper()); //핸들러로 실행하기(지메일)
 
 
     @Override
@@ -246,12 +250,10 @@ public class Register extends AppCompatActivity {
                                                         new Thread(new Runnable() {
                                                             @Override
                                                             public void run() {
-
+                                                                startLoading(dbEmail);  //지메일 호출되게하는 메서드
                                                             }
-                                                        });
+                                                        }).start();
 
-
-                                                        startLoading(dbEmail); //지메일 호출되게하는 메서드
 
                                                         //타이머 설정
                                                         countView = (TextView) findViewById(R.id.countView);
@@ -530,18 +532,23 @@ public class Register extends AppCompatActivity {
             }
         });
     }
-    public void startLoading(String dbEmail) {
+        public void startLoading(String dbEmail) {
+        handler.post(new Runnable() { //핸들러로 실행하기
+            @Override
+            public void run() {
+                //구글 이메일로 smtp 사용해서 인증번호 보내기
+                GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+                //GMailSender.sendMail(제목, 본문내용, 받는사람);
+                try {
+                    gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : \"" + result + "\" 입니다. \n " +
+                            "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", dbEmail);
+                    Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "이메일 전송 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-        //구글 이메일로 smtp 사용해서 인증번호 보내기
-        GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
-        //GMailSender.sendMail(제목, 본문내용, 받는사람);
-        try {
-            gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : \"" + result + "\" 입니다. \n " +
-                    "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", dbEmail);
-            Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "이메일 전송 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
         }
-    }
 }
