@@ -2,8 +2,6 @@ package org.techtown.study01.FirstToMain.findPW;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Patterns;
 import android.view.View;
@@ -36,7 +34,6 @@ public class FindPw extends AppCompatActivity {
     private Button button, GoId;
     private String Eid, email, id; //찾은 비밀번호 넣을 스트링 객체
     private int result; //랜덤번호
-    private Handler handler = new Handler(Looper.myLooper()); //핸들러로 실행하기
 
 
     @Override
@@ -103,12 +100,8 @@ public class FindPw extends AppCompatActivity {
                             boolean success = jsonObject.getBoolean("success");
 
                             if (success) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        AuthSendStart(email);  //지메일 실행
-                                    }
-                                }).start();
+                                //지메일 실행
+                                AuthSendStart(email);
 
                                 //비밀번호 변경하는 AuthforPw거쳐서 ChangePw로 보내기
                                 String Eid = jsonObject.getString("id"); //아이디 꺼내기
@@ -150,36 +143,32 @@ public class FindPw extends AppCompatActivity {
     }
 
     public void AuthSendStart(String email) { //인증번호를 위한 보내기
-        handler.post(new Runnable() { //핸들러로 실행하기
-            @Override
-            public void run() {
-                StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                        .permitDiskReads()
-                        .permitDiskWrites()
-                        .permitNetwork().build());
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .permitDiskReads()
+                .permitDiskWrites()
+                .permitNetwork().build());
 
 
-                //랜덤 인증번호 (6자)
-                result = (int) (Math.floor(Math.random() * 1000000) + 100000);
-                if (result > 1000000) {
-                    result = result - 100000;
-                }
-
-                //구글 이메일로 smtp 사용해서 인증번호 보내기
-                GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
-                //GMailSender.sendMail(제목, 본문내용, 받는사람);
-                try {
-                    gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 인증번호를 확인해주세요.",
-                            "인증번호는 : \"" + result + "\" 입니다. \n " +
-                                    "인증번호를 입력하시고 확인버튼을 누르시면 비밀번호를 변경하실 수 있습니다.", email); //받는 사람 이메일
-                    Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "비밀번호 찾기 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            //랜덤 인증번호 (6자)
+            result = (int) (Math.floor(Math.random() * 1000000) + 100000);
+            if (result > 1000000) {
+                result = result - 100000;
             }
-        });
+
+            //구글 이메일로 smtp 사용해서 인증번호 보내기
+            GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+            //GMailSender.sendMail(제목, 본문내용, 받는사람);
+            try {
+                gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 인증번호를 확인해주세요.",
+                        "인증번호는 : \"" + result + "\" 입니다. \n " +
+                                "인증번호를 입력하시고 확인버튼을 누르시면 비밀번호를 변경하실 수 있습니다.", email); //받는 사람 이메일
+                Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "비밀번호 찾기 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
     }
 }
