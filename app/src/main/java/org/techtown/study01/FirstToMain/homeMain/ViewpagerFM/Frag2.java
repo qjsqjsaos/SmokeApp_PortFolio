@@ -25,6 +25,6 @@ public class Frag2 extends Fragment {
     }
 
     private void setInit(View _view) {
-        TextView textView = _view.findViewById(R.id.textView);
+        TextView textView = _view.findViewById(R.id.textView); //여기에 각자 텍스트 뷰 참조 가능
     }
 }

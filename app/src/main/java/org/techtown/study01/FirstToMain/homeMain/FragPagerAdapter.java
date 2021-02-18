@@ -8,11 +8,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag2;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag3;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag4;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag5;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag6;
 
 
 public class FragPagerAdapter extends FragmentStateAdapter {
     // Real Fragment Total Count
-    private final int mSetItemCount = 3;
+    private final int mSetItemCount = 6;
 
     public FragPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -27,6 +30,9 @@ public class FragPagerAdapter extends FragmentStateAdapter {
             case 0    : { return new Frag1(); }
             case 1    : { return new Frag2(); }
             case 2    : { return new Frag3(); }
+            case 3    : { return new Frag4(); }
+            case 4    : { return new Frag5(); }
+            case 5    : { return new Frag6(); }
             default   : { return new Frag1(); }
         }
 

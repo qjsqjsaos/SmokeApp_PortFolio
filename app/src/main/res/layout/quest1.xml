@@ -98,31 +98,10 @@
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:background="@drawable/round_edittext"
-            android:hint="1순위"
+            android:hint="30자 이하로 써주세요!"
             android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
             android:inputType="textPersonName" />
 
-        <EditText
-            android:hint="2순위"
-            android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
-            android:id="@+id/editTextTextPersonName4"
-            android:layout_width="@dimen/pledge_textInput_width"
-            android:layout_height="@dimen/pledge_and_textInput_height"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/round_edittext"
-            android:inputType="textPersonName" />
-
-        <EditText
-            android:hint="3순위"
-            android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
-            android:id="@+id/editTextTextPersonName5"
-            android:layout_width="@dimen/pledge_textInput_width"
-            android:layout_height="@dimen/pledge_and_textInput_height"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/round_edittext"
-            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/startButton"

@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment;
 
 import org.techtown.study01.FirstToMain.R;
 
-public class Frag1 extends Fragment {
-    String timer;
+
+public class Frag6 extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_1, container, false );
+        View view = inflater.inflate(R.layout.fragment_6, container, false );
 
         setInit(view);
 
@@ -27,12 +27,6 @@ public class Frag1 extends Fragment {
     }
 
     private void setInit(View _view) {
-        TextView textView = _view.findViewById(R.id.textView847); //여기에 각자 텍스트 뷰 참조 가능
-
-        if(timer != null) {
-            Bundle bundle = getArguments();
-            timer = bundle.getString("setTimer");
-            textView.setText("오늘을 기준으로\n\n" + timer + "시간 째 금연 중");
-        }
+        TextView textView = _view.findViewById(R.id.textView); //여기에 각자 텍스트 뷰 참조 가능
     }
 }

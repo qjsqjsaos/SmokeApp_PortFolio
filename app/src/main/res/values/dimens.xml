@@ -58,8 +58,9 @@
     <dimen name="pledge_Button_width">300dp</dimen> //버튼 가로 사이즈
     <dimen name="pledge_Button_height">70dp</dimen> //버튼 세로 사이즈
 
-
-    <dimen name="pageMargin"         >30dp</dimen>
-    <dimen name="offset"             >30dp</dimen>
+    <!-- 뷰페이저 관련 -->
+    <dimen name="pageMargin">10dp</dimen> //페이지끼리 간격
+    <dimen name="offset">30dp</dimen> //페이지 보이는 정도
+    <dimen name="fragment_width">260dp</dimen> //프래그먼트 가로 길이
 
 </resources>

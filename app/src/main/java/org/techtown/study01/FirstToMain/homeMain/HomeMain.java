@@ -38,6 +38,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
 import java.text.ParseException;
@@ -67,7 +68,9 @@ public class HomeMain extends Fragment {
     //쓰레드 부분
     private Thread timeThread = null;
     private Boolean isRunning = true;
-    private TextView TimeTextView; //금연 시간 시 분 초 나타내는 텍스트 뷰
+
+    //뷰페이저 부분
+    private Frag1 fragment_VP;
 
 
 
@@ -184,6 +187,7 @@ public class HomeMain extends Fragment {
                     {
                         int month = monthOfYear + 1;
                         date.setText(year + "-" + getMonth(month) + "-" + getDay(dayOfMonth));
+
                     }
                 };
 
@@ -208,6 +212,7 @@ public class HomeMain extends Fragment {
             }
 
         });
+
 
         start_stop_smoking.setOnClickListener(new View.OnClickListener() { //금연 시작 버튼
             @Override
@@ -266,7 +271,13 @@ public class HomeMain extends Fragment {
             if (result.equals("00:01:15")) { //시간 지날때마다 기능 구현하기
                 Toast.makeText(getContext(), "1분 15초가 지났습니다.", Toast.LENGTH_SHORT).show(); //예를 든거다.
             }
-            TimeTextView.setText(result);
+            /** result 실시간 시간초이다.*/
+
+            // TODO: 2021-02-18  여기부터 
+            fragment_VP = new Frag1();
+            Bundle bundle = new Bundle();
+            bundle.putString("setTimer", result);
+            fragment_VP.setArguments(bundle);
         }
     };
 
@@ -289,6 +300,8 @@ public class HomeMain extends Fragment {
                         getActivity().runOnUiThread(new Runnable(){
                             @Override
                             public void run() {
+
+                                // TODO: 2021-02-18 여기도 
                                 TimeTextView.setText("");
                                 TimeTextView.setText("00:00:00");
                             }
@@ -311,16 +324,16 @@ public class HomeMain extends Fragment {
     private void setInit() {
 
         /* setup infinity scroll viewpager */
-        ViewPager2 viewPageSetUp = viewGroup.findViewById(R.id.SetupFrg_ViewPage_Info);
+        ViewPager2 viewPageSetUp = viewGroup.findViewById(R.id.SetupFrg_ViewPage_Info); //여기서 뷰페이저를 참조한다.
         FragPagerAdapter SetupPagerAdapter = new FragPagerAdapter(getActivity());
         viewPageSetUp.setAdapter(SetupPagerAdapter);
         viewPageSetUp.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        viewPageSetUp.setOffscreenPageLimit(3);
+        viewPageSetUp.setOffscreenPageLimit(6);
         // 무제한 스크롤 처럼 보이기 위해서는 0페이지 부터가 아니라 1000페이지 부터 시작해서 좌측으로 이동할 경우 999페이지로 이동하여 무제한 처럼 스크롤 되는 것 처럼 표현하기 위함.
         viewPageSetUp.setCurrentItem(1000);
 
-        final float pageMargin = (float) getResources().getDimensionPixelOffset(R.dimen.pageMargin);
-        final float pageOffset = (float) getResources().getDimensionPixelOffset(R.dimen.offset);
+        final float pageMargin = (float) getResources().getDimensionPixelOffset(R.dimen.pageMargin); //페이지끼리 간격
+        final float pageOffset = (float) getResources().getDimensionPixelOffset(R.dimen.offset); //페이지 보이는 정도
 
         viewPageSetUp.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -346,9 +359,6 @@ public class HomeMain extends Fragment {
                 }
             }
         });
-        /* setup infinity scroll viewpager. end */
-
-
 
     }
 

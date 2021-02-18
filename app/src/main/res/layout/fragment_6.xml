@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".homeMain.ViewpagerFM.Frag4">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="@dimen/fragment_width"
         android:layout_height="240dp"
-        android:elevation="10dp"
         android:background="@drawable/wisesay_settings"
+        android:elevation="10dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView842"
+            android:id="@+id/textView89400"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
             android:background="@drawable/viewpage_image_up"
             android:gravity="center"
-            android:text="금연 타이머"
+            android:text="함께 금연해요!"
             android:textColor="@color/textColor_special"
             android:textSize="22sp"
             android:textStyle="bold"
@@ -35,27 +36,27 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
-    <TextView
-        android:id="@+id/textView847"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/viewpage_image_down"
-        android:gravity="center"
-        android:text="오늘을 기준으로\n\n00:00:00 시간 째 금연 중"
-        android:textColor="@color/textColor_special"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
-
+        <TextView
+            android:id="@+id/textView4813"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="6"
+            android:background="@drawable/viewpage_image_down"
+            android:gravity="center"
+            android:text="동기부여는 큰 도움이 됩니다.\n\n클릭해주세요!"
+            android:textColor="@color/textColor_special"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.499" />
 
 
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
