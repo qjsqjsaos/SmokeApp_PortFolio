@@ -33,6 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 
@@ -82,9 +83,9 @@ public class HomeMain extends Fragment {
         card = viewGroup.findViewById(R.id.card); //프로필
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
 
-        TimeTextView = viewGroup.findViewById(R.id.timeTextView); //금연 시간 시 분 초 나타내는 텍스트 뷰
         Button button = viewGroup.findViewById(R.id.stop);
 
+        setInit(); //뷰페이저 실행 메서드
 
         //BottomNavi에서 받은 번들 데이터
         Bundle bundle = this.getArguments();
@@ -301,5 +302,58 @@ public class HomeMain extends Fragment {
 
     ///////////////////////////////////////// 쓰레드와 핸들러 (끝)///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    ///////////////////////////////////////// 뷰페이저(시작)///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    private void setInit() {
+
+        /* setup infinity scroll viewpager */
+        ViewPager2 viewPageSetUp = viewGroup.findViewById(R.id.SetupFrg_ViewPage_Info);
+        FragPagerAdapter SetupPagerAdapter = new FragPagerAdapter(getActivity());
+        viewPageSetUp.setAdapter(SetupPagerAdapter);
+        viewPageSetUp.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        viewPageSetUp.setOffscreenPageLimit(3);
+        // 무제한 스크롤 처럼 보이기 위해서는 0페이지 부터가 아니라 1000페이지 부터 시작해서 좌측으로 이동할 경우 999페이지로 이동하여 무제한 처럼 스크롤 되는 것 처럼 표현하기 위함.
+        viewPageSetUp.setCurrentItem(1000);
+
+        final float pageMargin = (float) getResources().getDimensionPixelOffset(R.dimen.pageMargin);
+        final float pageOffset = (float) getResources().getDimensionPixelOffset(R.dimen.offset);
+
+        viewPageSetUp.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+
+            }
+        });
+        viewPageSetUp.setPageTransformer(new ViewPager2.PageTransformer() {
+            @Override
+            public void transformPage(@NonNull View page, float position) {
+                float offset = position * - (2 * pageOffset + pageMargin);
+                if(-1 > position) {
+                    page.setTranslationX(-offset);
+                } else if(1 >= position) {
+                    float scaleFactor = Math.max(0.7f, 1 - Math.abs(position - 0.14285715f));
+                    page.setTranslationX(offset);
+                    page.setScaleY(scaleFactor);
+                    page.setAlpha(scaleFactor);
+                } else {
+                    page.setAlpha(0f);
+                    page.setTranslationX(offset);
+                }
+            }
+        });
+        /* setup infinity scroll viewpager. end */
+
+
+
+    }
+
+    ///////////////////////////////////////// 뷰페이저(끝)///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 

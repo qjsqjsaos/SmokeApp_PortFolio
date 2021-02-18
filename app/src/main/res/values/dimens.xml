@@ -58,4 +58,8 @@
     <dimen name="pledge_Button_width">300dp</dimen> //버튼 가로 사이즈
     <dimen name="pledge_Button_height">70dp</dimen> //버튼 세로 사이즈
 
+
+    <dimen name="pageMargin"         >30dp</dimen>
+    <dimen name="offset"             >30dp</dimen>
+
 </resources>
