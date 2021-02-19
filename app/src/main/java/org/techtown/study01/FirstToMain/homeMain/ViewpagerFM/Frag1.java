@@ -26,6 +26,7 @@ import static org.techtown.study01.FirstToMain.homeMain.HomeMain.start_stop_smok
 public class Frag1 extends Fragment {
 
     private TextView textView; //타이머 나타내기 위한 텍스트뷰
+    private static final String TAG = "FragValue"; //로그 찍을때,
 
     //쓰레드 부분
     private Thread timeThread = null;
@@ -39,13 +40,15 @@ public class Frag1 extends Fragment {
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
 
+        Bundle bundle = getArguments();
+        Log.d(TAG, String.valueOf(bundle));
+        String timeOk = bundle.getString("timeOk");
+        Log.d(TAG, timeOk);
+        String dateOk = bundle.getString("dateOk");
+        Log.d(TAG, dateOk);
 
 
-        Bundle bundle = this.getArguments();
-        int timeOk = bundle.getInt("time");
-        int dateOk = bundle.getInt("date");
-
-        if (timeOk == 1 && dateOk == 2) { //시간 값이 있을 때, 실행한다.
+        if (timeOk.equals("시간성공") && dateOk.equals("날짜성공")) { //시간 값이 있을 때, 실행한다.
             timeThread = new Thread(new timeThread());
             timeThread.start(); //금연 쓰레드 시작
         } else {
