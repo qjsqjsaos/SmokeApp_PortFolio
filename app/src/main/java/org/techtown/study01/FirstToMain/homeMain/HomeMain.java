@@ -273,7 +273,7 @@ public class HomeMain extends Fragment {
             }
             /** result 실시간 시간초이다.*/
 
-            // TODO: 2021-02-18  여기부터 
+            // TODO: 2021-02-18  여기부터 아마도 어뎁터로 전달 후 에 프래그먼트로 전달해야할 거 같음.
             fragment_VP = new Frag1();
             Bundle bundle = new Bundle();
             bundle.putString("setTimer", result);
@@ -301,7 +301,7 @@ public class HomeMain extends Fragment {
                             @Override
                             public void run() {
 
-                                // TODO: 2021-02-18 여기도 
+                                // TODO: 2021-02-18 여기도
                                 TimeTextView.setText("");
                                 TimeTextView.setText("00:00:00");
                             }
