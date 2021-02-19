@@ -60,17 +60,13 @@ public class HomeMain extends Fragment {
     //다이어로그 부분
     private Calculate_Date calculate_date;
     private TextView date, time;
-    private Button start_stop_smoking, back;
-    private Dialog dialog; //dialog 객체
+    private Button back;
     private DatePickerDialog.OnDateSetListener callbackMethod;
     private TimePickerDialog.OnTimeSetListener callbackMethod2;
 
-    //쓰레드 부분
-    private Thread timeThread = null;
-    private Boolean isRunning = true;
-
-    //뷰페이저 부분
-    private Frag1 fragment_VP;
+    //Frag1으로 이 버튼을 보내기 위해 public static을 달아주었다.
+    public static Button start_stop_smoking;
+    public static Dialog dialog; //dialog 객체
 
 
 
@@ -122,15 +118,6 @@ public class HomeMain extends Fragment {
             }
         });
 
-        /**예제로 만든 버튼이므로 수정 요망 , xml과 참조한 버튼도 마찬가지*/
-        button.setOnClickListener(new View.OnClickListener() { //잠시 예제로 만들어둠 (금연 정지)
-            @Override
-            public void onClick(View v) {
-                timeThread.interrupt();
-            }
-        });
-
-
 
         card.setOnClickListener(new View.OnClickListener() { //프로필 설정
             @Override
@@ -144,7 +131,7 @@ public class HomeMain extends Fragment {
 
     //////////////////////////////////////////다이어로그 띄우는 메서드(시작)///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    void StartStopSmoking_Btn() {
+    public void StartStopSmoking_Btn() {
 
         dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.smoke_time_settings);
@@ -214,15 +201,6 @@ public class HomeMain extends Fragment {
         });
 
 
-        start_stop_smoking.setOnClickListener(new View.OnClickListener() { //금연 시작 버튼
-            @Override
-            public void onClick(View v) {
-                timeThread = new Thread(new timeThread());
-                timeThread.start(); //금연 쓰레드 시작
-                dialog.dismiss(); //다이어로그 닫기
-            }
-        });
-
         back.setOnClickListener(new View.OnClickListener() { //금연하지 않기 버튼
             @Override
             public void onClick(View v) {
@@ -259,59 +237,7 @@ public class HomeMain extends Fragment {
 
     ///////////////////////////////////////// 쓰레드와 핸들러 (시작)///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Handler handler = new Handler(Looper.myLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            int sec = (msg.arg1 / 100) % 60; //초
-            int min = (msg.arg1 / 100) / 60; //분
-            int hour = (msg.arg1 / 100) / 360; //시
-            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
 
-            String result = String.format("%02d:%02d:%02d", hour, min, sec);
-            if (result.equals("00:01:15")) { //시간 지날때마다 기능 구현하기
-                Toast.makeText(getContext(), "1분 15초가 지났습니다.", Toast.LENGTH_SHORT).show(); //예를 든거다.
-            }
-            /** result 실시간 시간초이다.*/
-
-            // TODO: 2021-02-18  여기부터 아마도 어뎁터로 전달 후 에 프래그먼트로 전달해야할 거 같음.
-            fragment_VP = new Frag1();
-            Bundle bundle = new Bundle();
-            bundle.putString("setTimer", result);
-            fragment_VP.setArguments(bundle);
-        }
-    };
-
-
-    public class timeThread implements Runnable {
-        @Override
-        public void run() {
-            int i = 0;
-
-            while (true) {
-                while (isRunning) { //일시정지를 누르면 멈춤
-                    Message msg = new Message();
-                    msg.arg1 = i++;
-                    handler.sendMessage(msg);
-
-                    try {
-                        Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        getActivity().runOnUiThread(new Runnable(){
-                            @Override
-                            public void run() {
-
-                                // TODO: 2021-02-18 여기도
-                                TimeTextView.setText("");
-                                TimeTextView.setText("00:00:00");
-                            }
-                        });
-                        return; // 인터럽트 받을 경우 return (취소
-                    }
-                }
-            }
-        }
-    }
 
     ///////////////////////////////////////// 쓰레드와 핸들러 (끝)///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
