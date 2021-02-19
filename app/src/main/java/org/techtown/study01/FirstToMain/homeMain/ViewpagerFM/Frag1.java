@@ -1,5 +1,6 @@
 package org.techtown.study01.FirstToMain.homeMain.ViewpagerFM;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.BundleCompat;
 import androidx.fragment.app.Fragment;
 
 import org.techtown.study01.FirstToMain.R;
@@ -37,17 +39,18 @@ public class Frag1 extends Fragment {
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
 
-        HomeMain homeMain = new HomeMain(); //홈메인 객체 만들고, 여기서 타이머를 돌리기 위해 만들었다.
-        homeMain.StartStopSmoking_Btn();
-        homeMain.start_stop_smoking.setOnClickListener(new View.OnClickListener() { //홈메인의 금연시작을 가지고 온다. 홈메인에 start_stop_smoking버튼을 가져오기 위해 앞에 public static을 달았다.
-            @Override
-            public void onClick(View v) {
-                timeThread = new Thread(new timeThread());
-                timeThread.start(); //금연 쓰레드 시작
-                HomeMain.dialog.dismiss();  //다이어로그 닫기
-            }
-        });
 
+
+        Bundle bundle = this.getArguments();
+        int timeOk = bundle.getInt("time");
+        int dateOk = bundle.getInt("date");
+
+        if (timeOk == 1 && dateOk == 2) { //시간 값이 있을 때, 실행한다.
+            timeThread = new Thread(new timeThread());
+            timeThread.start(); //금연 쓰레드 시작
+        } else {
+            Toast.makeText(getActivity(), "다시 시도해주세요." , Toast.LENGTH_SHORT).show();
+        }
 
         return view;
 

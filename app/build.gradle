@@ -55,6 +55,7 @@ apply plugin: 'com.google.gms.google-services'
 
 
 dependencies {
+    implementation 'org.greenrobot:eventbus:3.0.0' //이벤트 버스(프래그먼트 데이터를 어디든 전달할 수 있는 라이브러리)
     implementation 'de.hdodenhof:circleimageview:3.1.0' //서클 이미지 뷰(동그란 이미지 뷰)
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'

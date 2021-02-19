@@ -21,7 +21,6 @@ public class FragPagerAdapter extends FragmentStateAdapter {
     private final int mSetItemCount = 6; //화면에 출력될 프래그먼트 개수
 
 
-
     public FragPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }

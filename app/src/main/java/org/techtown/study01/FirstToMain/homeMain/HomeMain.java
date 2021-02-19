@@ -56,6 +56,8 @@ public class HomeMain extends Fragment {
     private Button noSmoke_Btn;
 
     private static final String TAG = "MyTag"; //로그 찍을때,
+    public final int timeOk = 1; //시간타이머 값 성공할 때 값
+    public final int dateOk = 2; //날짜 값 성공할 때 값
 
     //다이어로그 부분
     private Calculate_Date calculate_date;
@@ -67,6 +69,9 @@ public class HomeMain extends Fragment {
     //Frag1으로 이 버튼을 보내기 위해 public static을 달아주었다.
     public static Button start_stop_smoking;
     public static Dialog dialog; //dialog 객체
+
+
+
 
 
 
@@ -198,6 +203,21 @@ public class HomeMain extends Fragment {
                 dialog.show();
             }
 
+        });
+
+        start_stop_smoking.setOnClickListener(new View.OnClickListener() { //금연시작 버튼 눌럿을때,
+            @Override
+            public void onClick(View v) {
+                if(time != null && date !=null){ //time값이 있으면 실행 성공 전달.
+                Frag1 frag1 = new Frag1();
+                Bundle bundle = new Bundle();
+                bundle.putInt("time", 1);  //시간 값
+                bundle.putInt("date", 2); //날짜 값
+                frag1.setArguments(bundle);
+                } else {
+                    return;
+                }
+            }
         });
 
 
