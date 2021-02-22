@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -57,8 +58,7 @@ public class HomeMain extends Fragment {
     private Button noSmoke_Btn;
 
     private static final String TAG = "MyTag"; //로그 찍을때,
-    public String timeOk = "시간성공"; //시간타이머 값 성공할 때 값
-    public String dateOk = "날짜성공"; //날짜 값 성공할 때 값
+    public String timeOk, dateOk; //시간타이머 값 성공할 때 값, //날짜 값 성공할 때 값
 
     //다이어로그 부분
     private Calculate_Date calculate_date;
@@ -91,6 +91,7 @@ public class HomeMain extends Fragment {
         Button button = viewGroup.findViewById(R.id.stop);
 
         setInit(); //뷰페이저 실행 메서드
+
 
         //BottomNavi에서 받은 번들 데이터
         Bundle bundle = this.getArguments();
@@ -211,15 +212,10 @@ public class HomeMain extends Fragment {
             start_stop_smoking.setOnClickListener(new View.OnClickListener() { //금연시작 버튼 눌럿을때,
                 @Override
                 public void onClick(View v) {
-                    if (time != null && date != null) { //time값이 있으면 실행 성공 전달.
-                        Frag1 frag1 = new Frag1();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("timeOk", timeOk);  //시간 값
-                        bundle.putString("dateOk", dateOk); //날짜 값
-                        frag1.setArguments(bundle);
-                    } else {
-                        Toast.makeText(getActivity(), "실패", Toast.LENGTH_SHORT).show();
-                    }
+                        timeOk = time.getText().toString();
+                        dateOk = date.getText().toString();
+
+
                 }
             });
 

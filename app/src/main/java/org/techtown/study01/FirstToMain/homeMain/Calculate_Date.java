@@ -38,7 +38,7 @@ public class Calculate_Date { //날짜 차이 구하기
         return getTime;
     }
 
-    public void calDateBetweenAandB(String date1, String date2) //날짜 차이 구하기 "yyyy-mm-dd HH:mm:ss" 이런 형식으로 넣어야함.
+    public String calDateBetweenAandB(String date1, String date2) //날짜 차이 구하기 "yyyy-mm-dd HH:mm:ss" 이런 형식으로 넣어야함.
     {
 
         try{ // String Type을 Date Type으로 캐스팅하면서 생기는 예외로 인해 여기서 예외처리 해주지 않으면 컴파일러에서 에러가 발생해서 컴파일을 할 수 없다.
@@ -63,5 +63,6 @@ public class Calculate_Date { //날짜 차이 구하기
         {
             // 예외 처리
         }
+        return date1;
     }
 }

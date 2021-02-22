@@ -19,6 +19,7 @@ import androidx.core.app.BundleCompat;
 import androidx.fragment.app.Fragment;
 
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.homeMain.Calculate_Date;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 
 import static org.techtown.study01.FirstToMain.homeMain.HomeMain.start_stop_smoking;
@@ -31,6 +32,7 @@ public class Frag1 extends Fragment {
     //쓰레드 부분
     private Thread timeThread = null;
     private final Boolean isRunning = true;
+    String timeOk, dateOk = null;
 
 
     @Nullable
@@ -39,22 +41,21 @@ public class Frag1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_1, container, false ); //인플레이션하기
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
-
         Bundle bundle = getArguments();
-        Log.d(TAG, String.valueOf(bundle));
-        String timeOk = bundle.getString("timeOk");
-        Log.d(TAG, timeOk);
-        String dateOk = bundle.getString("dateOk");
-        Log.d(TAG, dateOk);
 
+        if(bundle != null) {
 
-        if (timeOk.equals("시간성공") && dateOk.equals("날짜성공")) { //시간 값이 있을 때, 실행한다.
+            Log.d(TAG, String.valueOf(bundle));
+            timeOk = bundle.getString("time");
+            Log.d(TAG, timeOk);
+            dateOk = bundle.getString("date");
+            Log.d(TAG, dateOk);
+
             timeThread = new Thread(new timeThread());
             timeThread.start(); //금연 쓰레드 시작
-        } else {
-            Toast.makeText(getActivity(), "다시 시도해주세요." , Toast.LENGTH_SHORT).show();
-        }
 
+
+        }
         return view;
 
     }
