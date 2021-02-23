@@ -56,6 +56,8 @@ public class HomeMain extends Fragment {
     private ImageView userView;
     private TextView nameView, dateView;
     private LinearLayout card;
+
+    //스태틱을 붙여서 Frag1에서 참조할 수 있게 한다.
     public static Button noSmoke_Btn;
 
     private static final String TAG = "MyTag"; //로그 찍을때,

@@ -11,7 +11,7 @@ public class Calculate_Date { //날짜 차이 구하기
         long now = System.currentTimeMillis();
 
         Date mDate = new Date(now);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String getAll = simpleDateFormat.format(mDate); //스트링 형태로 현재 날짜 시간을 가져옴.
 
         return getAll;
@@ -38,11 +38,12 @@ public class Calculate_Date { //날짜 차이 구하기
         return getTime;
     }
 
-    public String calDateBetweenAandB(String date1, String date2) //날짜 차이 구하기 "yyyy-mm-dd HH:mm:ss" 이런 형식으로 넣어야함.
+    public long calDateBetweenAandB(String date1, String date2) //날짜 차이 구하기 "yyyy-mm-dd HH:mm" 이런 형식으로 넣어야함.
     {
+        long calDateDays = 0;
 
         try{ // String Type을 Date Type으로 캐스팅하면서 생기는 예외로 인해 여기서 예외처리 해주지 않으면 컴파일러에서 에러가 발생해서 컴파일을 할 수 없다.
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             // date1, date2 두 날짜를 parse()를 통해 Date형으로 변환.
             Date FirstDate = format.parse(date1);  //지정한날(금연 시작날)
             Date SecondDate = format.parse(date2); //현재 날짜
@@ -53,16 +54,17 @@ public class Calculate_Date { //날짜 차이 구하기
 
             // Date.getTime() 은 해당날짜를 기준으로1970년 00:00:00 부터 몇 초가 흘렀는지를 반환해준다.
             // 이제 24*60*60*1000(각 시간값에 따른 차이점) 을 나눠주면 일수가 나온다.
-            long calDateDays = calDate / ( 24*60*60*1000);
+            calDateDays = calDate / ( 24*60*60*1000);
 
-            calDateDays = Math.abs(calDateDays);
+            calDateDays = Math.abs(calDateDays); //두 날짜 차이
 
-            System.out.println("두 날짜의 날짜 차이: "+calDateDays);
+
         }
         catch(ParseException e)
         {
             // 예외 처리
         }
-        return date1;
+
+        return calDateDays;
     }
 }

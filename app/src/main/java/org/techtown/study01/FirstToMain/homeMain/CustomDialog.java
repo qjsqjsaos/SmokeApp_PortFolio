@@ -6,10 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -38,33 +35,42 @@ public class CustomDialog extends Dialog {
 
     public static Context context;
     public static CustomDialogListener customDialogListener;
+    public static CustomDialogListener2 customDialogListener2;
 
     public CustomDialog(Context context) {
         super(context);
         this.context = context;
+        dialogStart(); //이 다이얼로그 메서드를 실행될 수 있게 보낸다.
     }
 
 
-    //인터페이스 설정
+    //날짜정보용 인터페이스 설정
     public interface CustomDialogListener{
-        void onPositiveClicked(String date, String time);
-        void onNegativeClicked();
+        void onPositiveClickDate(String date); //날짜정보 Frag1로 보내기
     }
 
-    //호출할 리스너 초기화
+    //시간정보용 인터페이스 설정
+    public interface CustomDialogListener2{
+        void onPositiveClickTime(String time); //시간정보 Frag2로 보내기
+    }
+
+    //호출할 리스너 초기화(날짜정보)
     public void setDialogListener(CustomDialogListener customDialogListener){
         this.customDialogListener = customDialogListener;
     }
 
+    //호출할 리스너 초기화(시간정보)
+    public void setDialogListener2(CustomDialogListener2 customDialogListener2){
+        this.customDialogListener2 = customDialogListener2;
+    }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+    //다이얼로그 안에 버튼에 대한 설정을 할 수 있다.
 
-        Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.smoke_time_settings);
+    public void dialogStart(){
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.smoke_time_settings); //setContentView는 dialog안에 넣는다.
         //다이아로그 크기 설정하기
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
         params.width = 600; //가로길이
@@ -72,11 +78,14 @@ public class CustomDialog extends Dialog {
         dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
         dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경투명하게 해서 선 없애기
+        dialog.show(); //띄우기
 
-        start_stop_smoking = (Button) dialog.findViewById(R.id.button3); //금연하기 버튼
-        back = (Button) dialog.findViewById(R.id.button4); //금연하지 않기 버튼
-        date = (TextView) dialog.findViewById(R.id.dateSettings); //날짜 텍스트뷰
-        time = (TextView) dialog.findViewById(R.id.timeSettings); // 시간 텍스트뷰
+        /** 이 아래는 프래그먼트 기능을 넣는다.*/
+
+        start_stop_smoking = dialog.findViewById(R.id.button3); //금연하기 버튼
+        back = dialog.findViewById(R.id.button4); //금연하지 않기 버튼
+        date =  dialog.findViewById(R.id.dateSettings); //날짜 텍스트뷰
+        time = dialog.findViewById(R.id.timeSettings); // 시간 텍스트뷰
 
         //현재 날짜 시간 가져오기
         calculate_date = new Calculate_Date();
@@ -93,23 +102,6 @@ public class CustomDialog extends Dialog {
 
         //버튼 클릭 리스너 등록
 
-        start_stop_smoking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String dateOk = date.getText().toString();
-                String timeOk = time.getText().toString();
-
-                //인터페이스의 함수를 호출하여 변수에 저장된 값들을 프래그먼트로 전달
-                customDialogListener.onPositiveClicked(dateOk, timeOk);
-            }
-        });
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel();
-            }
-        });
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,10 +133,26 @@ public class CustomDialog extends Dialog {
                 dialog.show();
             }
         });
+        start_stop_smoking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String dateOk = date.getText().toString();
+                String timeOk = time.getText().toString();
 
-        dialog.show(); //띄우기
+                //인터페이스의 함수를 호출하여 변수에 저장된 값들을 프래그먼트로 전달
+                customDialogListener.onPositiveClickDate(dateOk); //Frag1으로 전달
+                customDialogListener2.onPositiveClickTime(timeOk); //Frag2로 전달
+                dialog.dismiss();
 
-        /** 이 아래는 프래그먼트 기능을 넣는다.*/
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
     }
 
