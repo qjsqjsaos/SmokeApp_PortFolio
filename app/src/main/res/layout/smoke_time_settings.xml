@@ -92,7 +92,6 @@
             android:background="@drawable/round_edittext"
             android:elevation="10dp"
             android:inputType="date"
-            android:onClick="showDatePicker"
             android:clickable="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 

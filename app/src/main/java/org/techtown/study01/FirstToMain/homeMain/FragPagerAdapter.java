@@ -15,10 +15,13 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag4;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag5;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag6;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class FragPagerAdapter extends FragmentStateAdapter {
     // Real Fragment Total Count
-    private final int mSetItemCount = 6; //화면에 출력될 프래그먼트 개수
+    private final int mSetItemCount = 6; //화면에 출력될 프래그먼트 개수4
 
 
     public FragPagerAdapter(@NonNull FragmentActivity fragmentActivity) {

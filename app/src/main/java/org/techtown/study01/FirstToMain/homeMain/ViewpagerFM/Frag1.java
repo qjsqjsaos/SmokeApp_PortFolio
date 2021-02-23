@@ -1,6 +1,6 @@
 package org.techtown.study01.FirstToMain.homeMain.ViewpagerFM;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,14 +15,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.BundleCompat;
 import androidx.fragment.app.Fragment;
 
 import org.techtown.study01.FirstToMain.R;
-import org.techtown.study01.FirstToMain.homeMain.Calculate_Date;
+import org.techtown.study01.FirstToMain.homeMain.CustomDialog;
+import org.techtown.study01.FirstToMain.homeMain.FragPagerAdapter;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
-
-import static org.techtown.study01.FirstToMain.homeMain.HomeMain.start_stop_smoking;
 
 public class Frag1 extends Fragment {
 
@@ -32,7 +30,8 @@ public class Frag1 extends Fragment {
     //쓰레드 부분
     private Thread timeThread = null;
     private final Boolean isRunning = true;
-    String timeOk, dateOk = null;
+    public String myDate, myTime = null;//홈메인에서 받아온 데이트값과 타임값
+
 
 
     @Nullable
@@ -41,24 +40,35 @@ public class Frag1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_1, container, false ); //인플레이션하기
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
-        Bundle bundle = getArguments();
 
-        if(bundle != null) {
+       HomeMain homeMain = new HomeMain();
+       homeMain.noSmoke_Btn.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               CustomDialog dialog = new CustomDialog(getActivity());
+               dialog.setDialogListener(new CustomDialog.CustomDialogListener() {
+                   @Override
+                   public void onPositiveClicked(String date, String time) {
+                       textView.setText(date);
+                       Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
+                       dialog.cancel();
+                   }
 
-            Log.d(TAG, String.valueOf(bundle));
-            timeOk = bundle.getString("time");
-            Log.d(TAG, timeOk);
-            dateOk = bundle.getString("date");
-            Log.d(TAG, dateOk);
+                   @Override
+                   public void onNegativeClicked() {
+                       Toast.makeText(getContext(), "꺼짐", Toast.LENGTH_SHORT).show();
+                       dialog.cancel();
+                   }
+               });
 
-            timeThread = new Thread(new timeThread());
-            timeThread.start(); //금연 쓰레드 시작
+               dialog.show();
+           }
+       });
 
-
-        }
         return view;
-
     }
+
+
 
     Handler handler = new Handler(Looper.myLooper()) { //실시간 타이머를 출력해주는 핸들러
         @Override
@@ -77,6 +87,7 @@ public class Frag1 extends Fragment {
 
         }
     };
+
 
 
     public class timeThread implements Runnable { //타이머 쓰레드
