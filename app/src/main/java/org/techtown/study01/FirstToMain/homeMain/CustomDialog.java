@@ -35,7 +35,6 @@ public class CustomDialog extends Dialog {
 
     public static Context context;
     public static CustomDialogListener customDialogListener;
-    public static CustomDialogListener2 customDialogListener2;
 
     public CustomDialog(Context context) {
         super(context);
@@ -44,26 +43,15 @@ public class CustomDialog extends Dialog {
     }
 
 
-    //날짜정보용 인터페이스 설정
+    //인터페이스 설정
     public interface CustomDialogListener{
-        void onPositiveClickDate(String date); //날짜정보 Frag1로 보내기
+        void onPositiveClicked(String date, String time); //확인버튼만 정보 전달할 수 있음.
     }
 
-    //시간정보용 인터페이스 설정
-    public interface CustomDialogListener2{
-        void onPositiveClickTime(String time); //시간정보 Frag2로 보내기
-    }
-
-    //호출할 리스너 초기화(날짜정보)
+    //호출할 리스너 초기화
     public void setDialogListener(CustomDialogListener customDialogListener){
         this.customDialogListener = customDialogListener;
     }
-
-    //호출할 리스너 초기화(시간정보)
-    public void setDialogListener2(CustomDialogListener2 customDialogListener2){
-        this.customDialogListener2 = customDialogListener2;
-    }
-
 
 
     //다이얼로그 안에 버튼에 대한 설정을 할 수 있다.
@@ -140,8 +128,7 @@ public class CustomDialog extends Dialog {
                 String timeOk = time.getText().toString();
 
                 //인터페이스의 함수를 호출하여 변수에 저장된 값들을 프래그먼트로 전달
-                customDialogListener.onPositiveClickDate(dateOk); //Frag1으로 전달
-                customDialogListener2.onPositiveClickTime(timeOk); //Frag2로 전달
+                customDialogListener.onPositiveClicked(dateOk, timeOk);
                 dialog.dismiss();
 
             }

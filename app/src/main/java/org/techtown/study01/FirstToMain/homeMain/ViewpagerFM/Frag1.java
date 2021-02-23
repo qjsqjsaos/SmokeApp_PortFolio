@@ -56,16 +56,17 @@ public class Frag1 extends Fragment {
                dialog.setDialogListener(new CustomDialog.CustomDialogListener() {
 
                    @Override
-                   public void onPositiveClickDate(String date) { //금연하기 버튼을 누르게 되면 실행된다.
-
+                   public void onPositiveClicked(String date, String time) {
                        Calculate_Date calculate_date = new Calculate_Date();
                        String dateNow = calculate_date.WhatTimeIsItDate(); //현재 날짜
                        finallyDate = calculate_date.calDateBetweenAandB(date, dateNow); //날 차이 구하기 (지정날짜, 현재날짜)
 
+                       // TODO: 2021-02-23 시간 계산 구하는 법 알아보고 , Frag2로 데이터 전달법 알아보기 
+
                        timeThread = new Thread(new timeThread());
                        timeThread.start();
                    }
-
+                   
                });
 
                dialog.show();
@@ -82,7 +83,8 @@ public class Frag1 extends Fragment {
         public void handleMessage(Message msg) {
             int sec = (msg.arg1 / 100) % 60; //초
             int min = (msg.arg1 / 100) / 60; //분
-            int hour = (msg.arg1 % 3600 ) % 24; //시
+            int hour = (msg.arg1 / 100) / 360; //시
+            int day = (msg.arg1 / 100) / 3600; //하루
 
             //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
 
