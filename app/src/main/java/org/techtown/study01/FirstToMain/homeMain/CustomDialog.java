@@ -15,6 +15,8 @@ import android.widget.TimePicker;
 
 import org.techtown.study01.FirstToMain.R;
 
+import java.text.ParseException;
+
 
 public class CustomDialog extends Dialog {
 
@@ -44,7 +46,7 @@ public class CustomDialog extends Dialog {
 
     //인터페이스 설정
     public interface CustomDialogListener{
-        void onPositiveClicked(String date, String time); //확인버튼만 정보 전달할 수 있음.
+        void onPositiveClicked(String date, String time) throws ParseException; //확인버튼만 정보 전달할 수 있음.
     }
 
     //호출할 리스너 초기화
@@ -112,7 +114,7 @@ public class CustomDialog extends Dialog {
                 callbackMethod2 = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        time.setText(getTime(hourOfDay) + " : " + getTime(minute));
+                        time.setText(getTime(hourOfDay) + ":" + getTime(minute));
                     }
                 };
 
@@ -127,7 +129,11 @@ public class CustomDialog extends Dialog {
                 String timeOk = time.getText().toString();
 
                 //인터페이스의 함수를 호출하여 변수에 저장된 값들을 프래그먼트로 전달
-                customDialogListener.onPositiveClicked(dateOk, timeOk);
+                try {
+                    customDialogListener.onPositiveClicked(dateOk, timeOk);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 dialog.dismiss();
 
             }

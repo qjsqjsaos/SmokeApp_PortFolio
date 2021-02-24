@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.Calculate_Date;
@@ -23,6 +24,7 @@ import org.techtown.study01.FirstToMain.homeMain.CustomDialog;
 import org.techtown.study01.FirstToMain.homeMain.FragPagerAdapter;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,7 +39,11 @@ public class Frag1 extends Fragment {
     private final Boolean isRunning = true;
 
     //금연한지 얼마나 됬는지 날짜 값
-    long finallyDate;
+    String finallyDate;
+    String finallyTime;
+
+    //뷰모델(라이브데이타) Frag2로 실시간 전달하기
+    private SharedViewModel sharedViewModel;
 
 
     @Nullable
@@ -57,10 +63,20 @@ public class Frag1 extends Fragment {
                    @Override
                    public void onPositiveClicked(String date, String time) {
                        Calculate_Date calculate_date = new Calculate_Date();
+                       Log.d("차이", date);
+                       Log.d("차이", time);
                        String dateNow = calculate_date.WhatTimeIsItDate(); //현재 날짜
-                       finallyDate = calculate_date.calDateBetweenAandB(date, dateNow); //날 차이 구하기 (지정날짜, 현재날짜)
+                       String timeNow = calculate_date.WhatTimeIsItTime(); //현재 시간
+                       Log.d("차이", dateNow);
+                       Log.d("차이", timeNow);
+                       finallyDate = String.valueOf(calculate_date.calDateBetweenAandB(date, dateNow)); //날 차이 구하기 (지정날짜, 현재날짜)
+                       finallyTime = calculate_date.calTimeBetweenAandB(time, timeNow); //시간 차이 구하기(지정시간, 현재시간)
 
-                       // TODO: 2021-02-23 시간 계산 구하는 법 알아보고 , Frag2로 데이터 전달법 알아보기 
+                       Log.d("차이", finallyDate);
+                       Log.d("차이", finallyTime);
+
+
+
 
                        timeThread = new Thread(new timeThread());
                        timeThread.start();
@@ -78,19 +94,22 @@ public class Frag1 extends Fragment {
     Handler handler = new Handler(Looper.myLooper()) { //실시간 날짜를 출력해주는 핸들러
         @Override
         public void handleMessage(Message msg) {
+
+
             int sec = (msg.arg1 / 100) % 60; //초
             int min = (msg.arg1 / 100) / 60; //분
-            int hour = (msg.arg1 / 100) / 360; //시
-            int day = (msg.arg1 / 100) / 3600; //하루
+            int hour = (msg.arg1 / 100) / 3600; //시
+            int day = (msg.arg1 / 100) / 86400; //하루
 
             //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
 
             String result = String.format("%02d:%02d:%02d", hour, min, sec);
+            String oneDay = String.format("%01d", day);
 
 
             /** result 실시간 시간초이다.*/
             textView.setText("오늘을 기준으로\n\n" + result + "시간 째 금연 중"); //타이머 실시간 표시
-
+            sharedViewModel.setLiveData(oneDay);
         }
     };
 
@@ -105,7 +124,7 @@ public class Frag1 extends Fragment {
                 while (isRunning) { //일시정지를 누르면 멈춤
                     Message msg = new Message();
                     msg.arg1 = i++;
-                    handler.sendMessage(msg); //인자 넣기(186행)
+                    handler.sendMessage(msg); //인자 넣기(
 
                     try {
                         Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
@@ -123,6 +142,14 @@ public class Frag1 extends Fragment {
                 }
             }
         }
+    }
+
+    //onCreateView에서 리턴해준 View(rootView)를 가지고 있다.
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
 }
