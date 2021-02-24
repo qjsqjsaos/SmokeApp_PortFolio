@@ -36,7 +36,7 @@ public class Frag1 extends Fragment {
     private final Boolean isRunning = true;
 
     //금연한지 얼마나 됬는지 날짜 값
-    private String finallyDate;
+    private long finallyDate;
     private long finallyTime;
 
     //뷰모델(라이브데이타) Frag2로 실시간 전달하기
@@ -66,20 +66,17 @@ public class Frag1 extends Fragment {
                        Log.d("1값", time); // 타임 피커로 입력한 날짜
 
 
-
                        String dateNow = calculate_date.WhatTimeIsItDate(); //현재 날짜
                        String timeNow = calculate_date.WhatTimeIsItTime(); //현재 시간
                        Log.d("2값", dateNow); //현재 날짜
                        Log.d("2값", timeNow); // 현재 시간
 
-                       finallyDate = String.valueOf(calculate_date.calDateBetweenAandB(date, dateNow)); //날 차이 구하기 (지정날짜, 현재날짜)
-                       finallyTime = calculate_date.calTimeBetweenAandB(time, timeNow); //시간 차이 구하기(지정시간, 현재시간)
+                       finallyDate = calculate_date.calDateBetweenAandB(date, dateNow); //날 차이 구하기 (지정날짜, 현재날짜)
+                       finallyTime = calculate_date.calTimeBetweenAandB(time, timeNow); //시간 차이 구하기(지정시간, 현재시간) //초로 리턴해 온다.
 
-                       Log.d("3값", finallyDate);
+                       Log.d("3값", String.valueOf(finallyDate));
                        Log.d("3값", String.valueOf(finallyTime));
 
-                       // TODO: 2021-02-24 일단 초로 변형해서 시간 지정 후 타이머가 흘러가게 성공했다.
-                       // TODO: 2021-02-24 문제는 분이랑 시간은 아직 해결이 되지 않았다. 
                        // TODO: 2021-02-24 날짜도 해결해야한다. 이것들을 해결하고, 라이브데이터로 넘기고, 프로그레스바로 넘어간다. 
 
                        timeThread = new Thread(new timeThread());
@@ -100,21 +97,24 @@ public class Frag1 extends Fragment {
         @Override
         public void handleMessage(Message msg) {
 
-                int sec = (msg.arg1 / 100) % 60; //초
-                int min = (msg.arg1 / 100) / 60; //분
-                int hour = (msg.arg1 / 100) / 3600 % 24; //시
-//                int day = (msg.arg1 / 100) / 86400; //하루
+            //(msg.arg1 / 100) 이 1초이다. 1초는 1000단위이므로,
+            //int min = (msg.arg1 / 100) / 60 같은 경우는 1/60이니까 분이다. (시간도 마찬가지)
+            int sec = (msg.arg1 / 100) % 60; //초
+            int min = (msg.arg1 / 100) / 60 % 60; //분
+            int hour = (msg.arg1 / 100) / 3600 % 24; //시
+            int day = (msg.arg2 / 100) / 86400; //하루
 
                 String result = String.format("%02d:%02d:%02d", hour, min, sec);
                 Log.d("4값", result);
 
-//                String oneDay = String.format("%02d", day);
+                String oneDay = String.format("%d", day);
+                Log.d("원데이", oneDay);
 
                 /** result 실시간 시간초이다.*/
                 textView.setText("오늘을 기준으로\n\n" + result + "시간 째 금연 중"); //타이머 실시간 표시
 
 
-//            sharedViewModel.setLiveData((int) realDate); //ViewModel을 통해서 Frag2로 보내기 위해 Livedata에 oneDay를 보낸다.
+            sharedViewModel.setLiveData(oneDay); //ViewModel을 통해서 Frag2로 보내기 위해 Livedata에 oneDay를 보낸다.
 
         }
     };
@@ -127,11 +127,13 @@ public class Frag1 extends Fragment {
         @Override
         public void run() {
             int i = (int) finallyTime; //여기에 몇 초인지 넣어야 그 때부터 타이머가 시작된다.
-
+            int day = (int) finallyDate; //여기에는 날짜를 넣는데, 마찬가지로 초 형식으로 넣는다.
+            Log.d("뭐야", String.valueOf(day));
             while (true) {
                 while (isRunning) { //일시정지를 누르면 멈춤
                         Message msg = new Message();
                         msg.arg1 = i++;
+                        msg.arg2 = day++;
                         handler.sendMessage(msg); //인자 넣기(
                     try {
                         Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
