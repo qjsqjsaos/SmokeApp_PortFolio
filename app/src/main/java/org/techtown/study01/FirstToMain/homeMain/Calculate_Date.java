@@ -1,10 +1,14 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-public class Calculate_Date { //날짜 차이 구하기
+public class Calculate_Date {
+    private String lastDiff; //날짜 차이 구하기
 
     public String WhatTimeIsItAll() { //전체 다
         //현재 시간을 나타내는 메서드
@@ -32,7 +36,7 @@ public class Calculate_Date { //날짜 차이 구하기
         //현재 시간을 나타내는 메서드
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         String getTime = simpleDateFormat.format(mDate); //스트링 형태로 현재 시간을 가져옴.
 
         return getTime;
@@ -66,25 +70,14 @@ public class Calculate_Date { //날짜 차이 구하기
         return calDateDays;
     }
 
-    public String calTimeBetweenAandB(String time1, String time2)
-    {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-
-        Date d1 = null;
-        Date d2 = null;
-        try {
-            d1 = format.parse(time1);
-            d2 = format.parse(time2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-// Get msec from each, and subtract.
+    public long calTimeBetweenAandB(String time1, String time2) throws ParseException {
+        SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
+        Date d1 = f.parse(time1);
+        Date d2 = f.parse(time2);
         long diff = d2.getTime() - d1.getTime();
-        long diffMinutes = diff / (60 * 1000) % 60;
-        long diffHours = diff / (60 * 60 * 1000);
-        String lastDiff = Math.abs(diffHours) + ":" + Math.abs(diffMinutes); //Math.abs는 절댓값이다.
-        return lastDiff;
+        long last = diff/10;
+
+        return last;
     }
 
 }

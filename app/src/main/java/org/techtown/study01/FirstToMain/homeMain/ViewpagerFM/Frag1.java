@@ -1,6 +1,5 @@
 package org.techtown.study01.FirstToMain.homeMain.ViewpagerFM;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,9 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +18,9 @@ import androidx.lifecycle.ViewModelProvider;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.Calculate_Date;
 import org.techtown.study01.FirstToMain.homeMain.CustomDialog;
-import org.techtown.study01.FirstToMain.homeMain.FragPagerAdapter;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,11 +36,13 @@ public class Frag1 extends Fragment {
     private final Boolean isRunning = true;
 
     //금연한지 얼마나 됬는지 날짜 값
-    String finallyDate;
-    String finallyTime;
+    private String finallyDate;
+    private long finallyTime;
 
     //뷰모델(라이브데이타) Frag2로 실시간 전달하기
     private SharedViewModel sharedViewModel;
+
+    private String lastDiff;
 
 
     @Nullable
@@ -61,27 +60,33 @@ public class Frag1 extends Fragment {
                dialog.setDialogListener(new CustomDialog.CustomDialogListener() {
 
                    @Override
-                   public void onPositiveClicked(String date, String time) {
+                   public void onPositiveClicked(String date, String time) throws ParseException { //지정된 날짜, 지정된 시간
                        Calculate_Date calculate_date = new Calculate_Date();
-                       Log.d("차이", date);
-                       Log.d("차이", time);
+                       Log.d("1값", date); //데이트피커로 입력한 날짜
+                       Log.d("1값", time); // 타임 피커로 입력한 날짜
+
+
+
                        String dateNow = calculate_date.WhatTimeIsItDate(); //현재 날짜
                        String timeNow = calculate_date.WhatTimeIsItTime(); //현재 시간
-                       Log.d("차이", dateNow);
-                       Log.d("차이", timeNow);
+                       Log.d("2값", dateNow); //현재 날짜
+                       Log.d("2값", timeNow); // 현재 시간
+
                        finallyDate = String.valueOf(calculate_date.calDateBetweenAandB(date, dateNow)); //날 차이 구하기 (지정날짜, 현재날짜)
                        finallyTime = calculate_date.calTimeBetweenAandB(time, timeNow); //시간 차이 구하기(지정시간, 현재시간)
 
-                       Log.d("차이", finallyDate);
-                       Log.d("차이", finallyTime);
+                       Log.d("3값", finallyDate);
+                       Log.d("3값", String.valueOf(finallyTime));
 
-
-
+                       // TODO: 2021-02-24 일단 초로 변형해서 시간 지정 후 타이머가 흘러가게 성공했다.
+                       // TODO: 2021-02-24 문제는 분이랑 시간은 아직 해결이 되지 않았다. 
+                       // TODO: 2021-02-24 날짜도 해결해야한다. 이것들을 해결하고, 라이브데이터로 넘기고, 프로그레스바로 넘어간다. 
 
                        timeThread = new Thread(new timeThread());
                        timeThread.start();
+
                    }
-                   
+
                });
            }
        });
@@ -95,37 +100,39 @@ public class Frag1 extends Fragment {
         @Override
         public void handleMessage(Message msg) {
 
+                int sec = (msg.arg1 / 100) % 60; //초
+                int min = (msg.arg1 / 100) / 60; //분
+                int hour = (msg.arg1 / 100) / 3600 % 24; //시
+//                int day = (msg.arg1 / 100) / 86400; //하루
 
-            int sec = (msg.arg1 / 100) % 60; //초
-            int min = (msg.arg1 / 100) / 60; //분
-            int hour = (msg.arg1 / 100) / 3600; //시
-            int day = (msg.arg1 / 100) / 86400; //하루
+                String result = String.format("%02d:%02d:%02d", hour, min, sec);
+                Log.d("4값", result);
 
-            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
+//                String oneDay = String.format("%02d", day);
 
-            String result = String.format("%02d:%02d:%02d", hour, min, sec);
-            String oneDay = String.format("%01d", day);
+                /** result 실시간 시간초이다.*/
+                textView.setText("오늘을 기준으로\n\n" + result + "시간 째 금연 중"); //타이머 실시간 표시
 
 
-            /** result 실시간 시간초이다.*/
-            textView.setText("오늘을 기준으로\n\n" + result + "시간 째 금연 중"); //타이머 실시간 표시
-            sharedViewModel.setLiveData(oneDay);
+//            sharedViewModel.setLiveData((int) realDate); //ViewModel을 통해서 Frag2로 보내기 위해 Livedata에 oneDay를 보낸다.
+
         }
     };
 
 
 
-    public class timeThread implements Runnable { //타이머 쓰레드
+
+    public class timeThread implements Runnable {
+         //타이머 쓰레드
         @Override
         public void run() {
-            int i = 0; //타이머 시작 여기다 시분초 넣고
+            int i = (int) finallyTime; //여기에 몇 초인지 넣어야 그 때부터 타이머가 시작된다.
 
             while (true) {
                 while (isRunning) { //일시정지를 누르면 멈춤
-                    Message msg = new Message();
-                    msg.arg1 = i++;
-                    handler.sendMessage(msg); //인자 넣기(
-
+                        Message msg = new Message();
+                        msg.arg1 = i++;
+                        handler.sendMessage(msg); //인자 넣기(
                     try {
                         Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
                     } catch (InterruptedException e) {

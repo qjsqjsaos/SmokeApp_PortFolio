@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 
 import org.techtown.study01.FirstToMain.R;
 
+import java.sql.Time;
 import java.text.ParseException;
 
 
@@ -114,7 +115,8 @@ public class CustomDialog extends Dialog {
                 callbackMethod2 = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        time.setText(getTime(hourOfDay) + ":" + getTime(minute));
+                        time.setText(getTime(hourOfDay) + ":" + getTime(minute) + ":00");
+
                     }
                 };
 
