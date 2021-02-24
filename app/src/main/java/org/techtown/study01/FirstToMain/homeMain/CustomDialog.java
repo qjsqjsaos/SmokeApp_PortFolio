@@ -20,7 +20,6 @@ public class CustomDialog extends Dialog {
 
 
     private static final String TAG = "MyTag"; //로그 찍을때,
-    public String timeOk, dateOk; //시간타이머 값 성공할 때 값, //날짜 값 성공할 때 값
 
     //다이어로그 부분
     public static Calculate_Date calculate_date;

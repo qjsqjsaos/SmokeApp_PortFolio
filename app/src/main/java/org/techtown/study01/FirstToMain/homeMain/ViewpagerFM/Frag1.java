@@ -35,7 +35,6 @@ public class Frag1 extends Fragment {
     //쓰레드 부분
     private Thread timeThread = null;
     private final Boolean isRunning = true;
-    public String myDate, myTime = null;//홈메인에서 받아온 데이트값과 타임값
 
     //금연한지 얼마나 됬는지 날짜 값
     long finallyDate;
@@ -68,8 +67,6 @@ public class Frag1 extends Fragment {
                    }
                    
                });
-
-               dialog.show();
            }
        });
 
@@ -93,8 +90,6 @@ public class Frag1 extends Fragment {
 
             /** result 실시간 시간초이다.*/
             textView.setText("오늘을 기준으로\n\n" + result + "시간 째 금연 중"); //타이머 실시간 표시
-
-
 
         }
     };
