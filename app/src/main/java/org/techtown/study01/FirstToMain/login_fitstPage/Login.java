@@ -115,9 +115,6 @@ public class Login extends AppCompatActivity {
 
                                         Toast.makeText(getApplicationContext(), Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(Login.this, BottomNavi.class);
-
-                                        /**여기는 첫 입장한 사람이 quest1로 이동해야 하기 때문에 이 방법 알면 Bottom으로 가는 길 quest로 가는 길을 알아낸다. */
-//                                        Intent intent = new Intent(Login.this, Quest1.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.

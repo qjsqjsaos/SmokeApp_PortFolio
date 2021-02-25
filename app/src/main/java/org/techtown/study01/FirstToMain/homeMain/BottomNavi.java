@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -16,6 +17,7 @@ import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
 import org.techtown.study01.FirstToMain.MaintoEnd.Settings.Settings;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 
 
     public class BottomNavi extends AppCompatActivity {
@@ -41,12 +43,14 @@ import org.techtown.study01.FirstToMain.R;
         fragment2 = new HealthCheck();
         fragment3 = new Diary();
         fragment4 = new Settings();
+        Frag1 frag1 = new Frag1();
 
 
         /**홈메인 영역 */
             // 일반 로그인
             Intent intent = getIntent();
             String name = intent.getStringExtra("name");
+            String id = intent.getStringExtra("id");
             Log.d(TAG,"일반로그인");
 
 
@@ -57,6 +61,10 @@ import org.techtown.study01.FirstToMain.R;
             Log.d("bundle", String.valueOf(bundle));
             fragment1.setArguments(bundle);
             Log.d(TAG,"번들 보내기");
+
+            Bundle bundle2 = new Bundle();
+            bundle2.putString("id", id);
+            frag1.setArguments(bundle2);
 
 
 

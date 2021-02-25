@@ -121,7 +121,6 @@ public class FindId extends AppCompatActivity {
             }
         });
     }
-    // TODO: 2021-02-12 이거 해결하기
 
 
     public void idSendStart()  {
