@@ -52,8 +52,8 @@ import org.techtown.study01.FirstToMain.findid.FindId;
 import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 import org.techtown.study01.FirstToMain.register.Register;
-
-
+import org.techtown.study01.FirstToMain.register.Register_Auth;
+import org.techtown.study01.FirstToMain.start.Quest1;
 
 
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -88,7 +88,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             rg_sign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Login.this, Register.class);
+                    Intent intent = new Intent(Login.this, Register_Auth.class); //개인정보이용동의로 이동
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }
@@ -107,14 +107,14 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             loginPwd = auto.getString("inputPwd",null);
             loginName = auto.getString("inputName", null);
 
-            if(loginId != null && loginPwd != null) { // loginId와 loginPwd에 값이 있으면, 자동 로그인을 실시 한다.
-                if (loginId.length() > 0 && loginPwd.length() > 0) {
-                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Login.this, BottomNavi.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
+//            if(loginId != null && loginPwd != null) { // loginId와 loginPwd에 값이 있으면, 자동 로그인을 실시 한다.
+//                if (loginId.length() > 0 && loginPwd.length() > 0) {
+//                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(Login.this, BottomNavi.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//            }
 
 
             if(loginId == null && loginPwd == null) { //값이 없으면(초기 상태) 로그인 성공시 값을 넣어준다.

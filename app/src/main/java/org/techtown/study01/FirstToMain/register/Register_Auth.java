@@ -46,15 +46,21 @@ public class Register_Auth extends AppCompatActivity{
                                 }
                         });
 
-                button.setOnClickListener(new View.OnClickListener() {
+                button.setOnClickListener(new View.OnClickListener() { //동의 후 회원가입 버튼
                         @Override
                         public void onClick(View v) {
                                 try {
                                         if (check1.isChecked() && check2.isChecked()) { //1번 2번 눌렀을 경우 참
                                                 Intent intent = new Intent(Register_Auth.this, Register.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                                 startActivity(intent);
                                         } else if (check1.isChecked() && check2.isChecked() && checkBoxAll.isChecked()) { //전체선택 1번 2번 눌렀을 경우 참
                                                 Intent intent = new Intent(Register_Auth.this, Register.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                                 startActivity(intent);
                                         } else if(!check1.isChecked() && !check2.isChecked() && !checkBoxAll.isChecked()){ //다 클릭 안했을 때 참
                                                 Toast.makeText(getApplicationContext(), "항목을 체크해주세요.", Toast.LENGTH_SHORT).show();

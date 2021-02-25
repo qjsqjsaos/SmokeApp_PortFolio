@@ -43,10 +43,9 @@ public class Frag1 extends Fragment {
     //뷰모델(라이브데이타) Frag2로 실시간 전달하기
     private SharedViewModel sharedViewModel;
 
-    /** 이건 예시이므로 숫자만 지운다.*/
     //Quest1에서 가져온 담배 핀 횟수와 비용 EditText
-    private int cigaCount = 10;
-    private double cigaCost = 4500.00; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
+    private int cigaCount = 0;
+    private double cigaCost = 0; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
 
     //하루를 기준으로 피는 담배양을 하루 24시간으로 나눈 시간. ex) 하루에 10개비를 피면 2시간 24분 마다 핀것이다. 여기서 2시간 24분의 값을 초로 나타낸 것이다.
     private int last_cigaCount;
@@ -58,12 +57,11 @@ public class Frag1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_1, container, false ); //인플레이션하기
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
-
-        /** 이건 Quest1 완성 시키고 푼다*/
+        데이터베이스에서 꺼내온다.
         //질문 액티비티를 참조해서 담배 핀 횟수와 비용 정보를 가져온다.
-//        Quest1 quest1 = new Quest1();
-//        cigaCount = Integer.parseInt(quest1.cigaCount.getText().toString());
-//        cigaCost = Integer.parseInt(quest1.cigaPay.getText().toString());
+        Quest1 quest1 = new Quest1();
+        cigaCount = Integer.parseInt(quest1.cigaCount.getText().toString());
+        cigaCost = Integer.parseInt(quest1.cigaPay.getText().toString());
 
         //하루 담배량 계산
         last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
@@ -89,6 +87,7 @@ public class Frag1 extends Fragment {
                        Log.d("1값", time); // 타임 피커로 입력한 날짜
 
 
+
                        String dateNow = calculate_date.WhatTimeIsItDate(); //현재 날짜
                        String timeNow = calculate_date.WhatTimeIsItTime(); //현재 시간
                        Log.d("2값", dateNow); //현재 날짜
@@ -100,7 +99,7 @@ public class Frag1 extends Fragment {
                        Log.d("3값", String.valueOf(finallyDate));
                        Log.d("3값", String.valueOf(finallyTime));
 
-                       // TODO: 2021-02-24 날짜도 해결해야한다. 이것들을 해결하고, 라이브데이터로 넘기고, 프로그레스바로 넘어간다. 
+                       // TODO: 2021-02-24 뷰페이저 손 보고 프로그레스바로 넘어간다.
                        // TODO: 2021-02-25 아래 쓰레드 리턴 봐보기 
                        timeThread = new Thread(new timeThread());
                        timeThread.start(); //쓰레드실행
@@ -133,7 +132,7 @@ public class Frag1 extends Fragment {
             //스트링 열로 포맷한다.
             String result = String.format("%02d:%02d:%02d", hour, min, sec);
 
-            Log.d("4값", result);
+            Log.d("리절트", result);
             Log.d("데이", String.valueOf(day));
             Log.d("타임", String.valueOf(ciga_Time));
             Log.d("머니", String.valueOf(ciga_Money));

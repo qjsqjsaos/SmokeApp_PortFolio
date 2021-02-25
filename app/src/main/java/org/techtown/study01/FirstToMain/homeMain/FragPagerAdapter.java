@@ -3,6 +3,7 @@ package org.techtown.study01.FirstToMain.homeMain;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -21,7 +22,8 @@ import java.util.List;
 
 public class FragPagerAdapter extends FragmentStateAdapter {
     // Real Fragment Total Count
-    private final int mSetItemCount = 6; //화면에 출력될 프래그먼트 개수4
+    private final int mSetItemCount = 6; //화면에 출력될 프래그먼트 개수
+
 
 
     public FragPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
@@ -55,7 +57,7 @@ public class FragPagerAdapter extends FragmentStateAdapter {
     }
 
     @Override
-    public int getItemCount() {
-        return Integer.MAX_VALUE;
+    public int getItemCount() { //화면에 나오는 갯수 설정
+        return 6; //여기서 무한 스크롤을 원하면 Integer.Max_Value를 해준다.
     }
 }
