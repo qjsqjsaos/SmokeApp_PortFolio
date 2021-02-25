@@ -44,8 +44,8 @@ public class Frag1 extends Fragment {
     private SharedViewModel sharedViewModel;
 
     //Quest1에서 가져온 담배 핀 횟수와 비용 EditText
-    private long cigaCount = 0;
-    private long cigaCost = 0; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
+    private long cigaCount = 1;
+    private long cigaCost = 1; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
 
     //하루를 기준으로 피는 담배양을 하루 24시간으로 나눈 시간. ex) 하루에 10개비를 피면 2시간 24분 마다 핀것이다. 여기서 2시간 24분의 값을 초로 나타낸 것이다.
     private long last_cigaCount;
@@ -58,10 +58,10 @@ public class Frag1 extends Fragment {
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
 
-        //질문 액티비티를 참조해서 담배 핀 횟수와 비용 정보를 가져온다.
-        Quest1 quest1 = new Quest1();
-        cigaCount = Integer.parseInt(quest1.cigaCount.getText().toString());
-        cigaCost = Integer.parseInt(quest1.cigaPay.getText().toString());
+//        //질문 액티비티를 참조해서 담배 핀 횟수와 비용 정보를 가져온다.
+//        Quest1 quest1 = new Quest1();
+//        cigaCount = Integer.parseInt(quest1.cigaCount.getText().toString());
+//        cigaCost = Integer.parseInt(quest1.cigaPay.getText().toString());
 
         //하루 담배량 계산
         last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.

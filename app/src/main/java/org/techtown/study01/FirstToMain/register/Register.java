@@ -30,7 +30,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
+import org.techtown.study01.FirstToMain.start.Quest1;
 
 import java.util.regex.Pattern;
 
@@ -48,6 +50,9 @@ public class Register extends AppCompatActivity {
     private final int MILLISINFUTURE = 300 * 1000; //총 시간 (300초 = 5분)
     private final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
     private Long mLastClickTime = 0L; //이메일 버튼 클릭 방지 변수
+
+    String nstime = "널", nsdate = "널", cigacount = "널", cigapay = "널", goal = "널"; //이 값들은 후에 Quest1에서 넣어줄 값이다.
+
 
 
     @Override
@@ -427,7 +432,11 @@ public class Register extends AppCompatActivity {
                                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        finish();
+                                                        Intent intent = new Intent(Register.this, Login.class);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
+                                                        startActivity(intent);
                                                     }
                                                 })
                                                 .create()
@@ -518,7 +527,8 @@ public class Register extends AppCompatActivity {
                            return;
                        } else {
                            //모든 값이 다 있으면 DB에 저장하는 메소드 실행
-                           RegisterRequest register = new RegisterRequest(id, pw, name, email, responseListener);
+                           RegisterRequest register = new RegisterRequest(id, pw, name, email, nstime, nsdate,
+                                   cigacount, cigapay, goal, responseListener);
                            RequestQueue queue = Volley.newRequestQueue(Register.this);
                            queue.add(register);
 

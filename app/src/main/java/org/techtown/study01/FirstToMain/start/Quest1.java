@@ -60,10 +60,12 @@ public class Quest1 extends AppCompatActivity {
                 cPay = cigaPay.getText().toString();
                 cGoal = goalText.getText().toString();
 
-
+                /** 이 부분 Login부분이랑 번갈아 가면서 확인 할 것.*/
                 //로그인으로 부터 id가져오기 (이걸로 판별해서 위에 3개의 값을 다 입력할 것이다)
-                Intent intent = getIntent();
-                String Eid = intent.getStringExtra("id");
+//                Intent intent = getIntent();
+//                String Eid = intent.getStringExtra("id");
+
+                String Eid = "qjsqjsaos";
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -117,7 +119,7 @@ public class Quest1 extends AppCompatActivity {
                     }
 
                     //담배 갯수 유효성
-                    else if (!Pattern.matches("^[0-9]*$", (CharSequence) cigaCount)) {
+                    else if (!Pattern.matches("^[0-9]*$", cCount)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(Quest1.this);
                         dialog = builder.setMessage("숫자만 입력해주세요!")
                                 .setPositiveButton("확인", null)
@@ -127,7 +129,7 @@ public class Quest1 extends AppCompatActivity {
                     }
 
                     //담배값 유효성
-                    else if (!Pattern.matches("^[0-9]*$", (CharSequence) cigaPay)) {
+                    else if (!Pattern.matches("^[0-9]*$", cPay)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(Quest1.this);
                         dialog = builder.setMessage("숫자만 입력해주세요!")
                                 .setPositiveButton("확인", null)

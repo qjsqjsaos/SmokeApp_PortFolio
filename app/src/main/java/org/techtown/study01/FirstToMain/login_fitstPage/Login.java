@@ -72,14 +72,14 @@ public class Login extends AppCompatActivity {
         loginPwd = auto.getString("inputPwd", null);
         loginName = auto.getString("inputName", null);
 
-            if(loginId != null && loginPwd != null) { // loginId와 loginPwd에 값이 있으면, 자동 로그인을 실시 한다.
-                if (loginId.length() > 0 && loginPwd.length() > 0) {
-                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Login.this, BottomNavi.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
+//            if(loginId != null && loginPwd != null) { // loginId와 loginPwd에 값이 있으면, 자동 로그인을 실시 한다.
+//                if (loginId.length() > 0 && loginPwd.length() > 0) {
+//                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(Login.this, BottomNavi.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//            }
 
 
         if (loginId == null && loginPwd == null) { //값이 없으면(초기 상태) 로그인 성공시 값을 넣어준다.
