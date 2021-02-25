@@ -38,11 +38,11 @@ public class Frag3 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        sharedViewModel.getLiveDataCost().observe(getViewLifecycleOwner(), new Observer<Double>() {
+        sharedViewModel.getLiveDataCost().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
-            public void onChanged(Double aDouble) {
+            public void onChanged(Long aLong) {
                 DecimalFormat format = new DecimalFormat("###,###.##"); // 콤마 표시를 해준다(예 123123 => 123,123
-                textView.setText(format.format(aDouble) + "원");
+                textView.setText(format.format(aLong) + "원");
             }
         });
 

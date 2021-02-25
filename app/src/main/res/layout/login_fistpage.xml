@@ -151,26 +151,6 @@
 
     </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="19dp"
-            android:orientation="horizontal">
-
-            <com.shobhitpuri.custombuttons.GoogleSignInButton
-                android:background="@drawable/all_btn"
-                android:id="@+id/btn_google"
-                android:layout_width="@dimen/Login_btn_width"
-                android:layout_height="@dimen/Login_btn_height"
-                android:fontFamily="@font/robotmedium"
-                android:layout_centerInParent="true"
-                android:text="@string/google_sign_up"
-                app:isDarkTheme="false" />
-
-
-        </LinearLayout>
-
 
     </LinearLayout>
 </ScrollView>

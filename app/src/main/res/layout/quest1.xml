@@ -55,6 +55,9 @@
     <EditText
         android:id="@+id/dayofciga"
         android:hint="갯수만 적어주세요 ex)15"
+        android:inputType="number"
+        android:maxLength="4"
+        android:maxLines="1"
         android:layout_width="@dimen/pledge_textInput_width"
         android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
         android:layout_height="@dimen/pledge_and_textInput_height"
@@ -73,6 +76,9 @@
 
         <EditText
             android:hint="숫자만 적어주세요 ex)4500"
+            android:maxLength="6"
+            android:maxLines="1"
+            android:inputType="number"
             android:id="@+id/pay"
             android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
             android:layout_width="@dimen/pledge_textInput_width"
@@ -92,15 +98,17 @@
             android:textSize="@dimen/pledge_question_text_size" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName2"
+            android:id="@+id/TextViewGoal"
             android:layout_width="@dimen/pledge_textInput_width"
             android:layout_height="@dimen/pledge_and_textInput_height"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
+            android:maxLength="30"
+            android:maxLines="1"
             android:background="@drawable/round_edittext"
             android:hint="30자 이하로 써주세요!"
             android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
-            android:inputType="textPersonName" />
+            android:inputType="text" />
 
 
         <Button

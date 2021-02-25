@@ -1,52 +1,28 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Parcelable;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
+
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.room.paging.LimitOffsetDataSource;
+
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.bumptech.glide.Glide;
 
 import org.techtown.study01.FirstToMain.R;
-import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
-import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 //홈 화면
 public class HomeMain extends Fragment {
@@ -87,25 +63,12 @@ public class HomeMain extends Fragment {
         Log.d(TAG, "번들가져오고");
 
         String name = bundle.getString("name");
-        String nickName = bundle.getString("nickName");
-        String photoUrl = bundle.getString("photoUrl");
         Log.d(TAG,"번들 메세지들 다 가져옴");
 
-
-        if(nickName != null && photoUrl != null){ //구글 로그인
-            nameView.setText(nickName); //닉네임으로 이름바꿔주기
-            Log.d(TAG, nickName);
-            /** dateView.setText();*/ //여기는 금연 설정할 때 값 받아올 때 넣어야함.!!!!!!!!!!!!!
-
-            Glide.with(this).load(photoUrl).circleCrop().into(userView); //프로필 url(photoUrl)을 이미지 뷰에 세팅
-            Log.d(TAG, photoUrl);
-
-        } else if(name != null) { //일반 로그인
+       if(name != null) { //일반 로그인
             nameView.setText(name); //닉네임으로 이름바꿔주기
             Log.d(TAG, name);
         }
-
-
 
         return viewGroup;
     }

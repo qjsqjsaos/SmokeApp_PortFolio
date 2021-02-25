@@ -44,12 +44,12 @@ public class Frag1 extends Fragment {
     private SharedViewModel sharedViewModel;
 
     //Quest1에서 가져온 담배 핀 횟수와 비용 EditText
-    private int cigaCount = 0;
-    private double cigaCost = 0; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
+    private long cigaCount = 0;
+    private long cigaCost = 0; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
 
     //하루를 기준으로 피는 담배양을 하루 24시간으로 나눈 시간. ex) 하루에 10개비를 피면 2시간 24분 마다 핀것이다. 여기서 2시간 24분의 값을 초로 나타낸 것이다.
-    private int last_cigaCount;
-    private double last_cigaCost;
+    private long last_cigaCount;
+    private long last_cigaCost;
 
     @Nullable
     @Override
@@ -57,7 +57,7 @@ public class Frag1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_1, container, false ); //인플레이션하기
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
-        데이터베이스에서 꺼내온다.
+
         //질문 액티비티를 참조해서 담배 핀 횟수와 비용 정보를 가져온다.
         Quest1 quest1 = new Quest1();
         cigaCount = Integer.parseInt(quest1.cigaCount.getText().toString());
@@ -125,8 +125,8 @@ public class Frag1 extends Fragment {
             int min = (msg.arg1 / 100) / 60 % 60; //분
             int hour = (msg.arg1 / 100) / 3600 % 24; //시
             int day = (msg.arg2 / 100) / 86400; //하루
-            int ciga_Time = (msg.arg2 / 100) / last_cigaCount; //담배를 피지 않은 횟수
-            double ciga_Money = (msg.arg2 / 100) * last_cigaCost; //지금껏 아낀 비용
+            long ciga_Time = (msg.arg2 / 100) / last_cigaCount; //담배를 피지 않은 횟수
+            long ciga_Money = (msg.arg2 / 100) * last_cigaCost; //지금껏 아낀 비용
 
 
             //스트링 열로 포맷한다.
@@ -144,7 +144,7 @@ public class Frag1 extends Fragment {
 
             sharedViewModel.setLiveData(day); //ViewModel을 통해서 Frag2로 보내기 위해 Livedata에 oneDay를 보낸다.
 
-            sharedViewModel.setLiveDataInt(ciga_Time); //ViewModel을 통해서 Frag5로 보내기 위해 Livedata에 ciga_Time 보낸다.
+            sharedViewModel.setLiveDataCount(ciga_Time); //ViewModel을 통해서 Frag5로 보내기 위해 Livedata에 ciga_Time 보낸다.
 
             sharedViewModel.setLiveDataCost(ciga_Money); //ViewModel을 통해서 Frag3로 보내기 위해 Livedata에 ciga_Money 보낸다.
         }

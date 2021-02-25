@@ -1,31 +1,22 @@
     package org.techtown.study01.FirstToMain.homeMain;
 
-import android.app.Activity;
-import android.app.VoiceInteractor;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.SurfaceControl;
-import android.view.View;
-import android.widget.Toast;
 
-import com.firebase.ui.auth.viewmodel.RequestCodes;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
+
 
 import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
 import org.techtown.study01.FirstToMain.MaintoEnd.Settings.Settings;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
 import org.techtown.study01.FirstToMain.R;
-import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
-import java.lang.reflect.Method;
 
     public class BottomNavi extends AppCompatActivity {
         private BottomNavigationView bottomNavigationView;
@@ -58,25 +49,14 @@ import java.lang.reflect.Method;
             String name = intent.getStringExtra("name");
             Log.d(TAG,"일반로그인");
 
-            //구글로그인
-
-            String name2 = intent.getStringExtra("nickName");
-            Log.d(TAG,"구글로그인 닉네임 성공");
-            String photo = intent.getStringExtra("photoUrl");
-            Log.d(TAG,"구글로그인 프로필사진 성공");
-
 
             //데이터 보내기
             Bundle bundle = new Bundle();
             bundle.putString("name", name);
-            bundle.putString("nickName", name2);
-            bundle.putString("photoUrl", photo);
 
             Log.d("bundle", String.valueOf(bundle));
             fragment1.setArguments(bundle);
             Log.d(TAG,"번들 보내기");
-
-
 
 
 

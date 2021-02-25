@@ -22,7 +22,7 @@ public class Startbutton extends AppCompatActivity {
 
 
         //"끊어 보자" 버튼 클릭 시 로그인 페이지나, 홈 화면으로 이동
-        Button imageButton = (Button) findViewById(R.id.btn_login);
+        Button imageButton = (Button) findViewById(R.id.goStart);
         imageButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -439,6 +439,7 @@ public class Register extends AppCompatActivity {
                                             .setPositiveButton("다시 시도", null)
                                             .create()
                                             .show();
+                                    return;
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
