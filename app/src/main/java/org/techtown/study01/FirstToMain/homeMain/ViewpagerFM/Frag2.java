@@ -21,6 +21,8 @@ import org.techtown.study01.FirstToMain.homeMain.CustomDialog;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
+
 public class Frag2 extends Fragment {
 
     private SharedViewModel sharedViewModel;
@@ -41,10 +43,11 @@ public class Frag2 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        sharedViewModel.getLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+        sharedViewModel.getLiveData().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(String s) {
-                textView.setText("벌써 "+ s +"일이 되었어요!");
+            public void onChanged(Integer integer) {
+                DecimalFormat format = new DecimalFormat("###,###"); // 콤마 표시를 해준다(예 123123 => 123,123
+                textView.setText("벌써 "+ format.format(integer) +"일이 되었어요!");
             }
         });
     }

@@ -63,8 +63,8 @@ public class Calculate_Date {
 
     public long calTimeBetweenAandB(String time1, String time2) throws ParseException {
         SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
-        Date d1 = f.parse(time1);
-        Date d2 = f.parse(time2);
+        Date d1 = f.parse(time1); //지정한 시간
+        Date d2 = f.parse(time2); //현재 시간
         long diff = d2.getTime() - d1.getTime();
         long lastDiff = diff/10; //연산 후에는 0이 하나 더 추가되어, 이렇게 10으로 나누어 준다.
         Log.d("디프", String.valueOf(d2));
