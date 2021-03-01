@@ -51,7 +51,7 @@ public class Calculate_Date {
 
             // Date로 변환된 두 날짜를 계산한 뒤 그 리턴값으로 long type 변수를 초기화 하고 있다.
             // 연산결과 -950400000. long type 으로 return 된다.
-            long calDate = SecondDate.getTime() - FirstDate.getTime();
+            long calDate = (SecondDate.getTime() - FirstDate.getTime()) * 1L;
             //연산 후에는 0이 하나 더 추가되어, 이렇게 10으로 나누어 준다.
             Log.d("칼데이트", String.valueOf(FirstDate));
             Log.d("칼데이트", String.valueOf(SecondDate));
@@ -64,12 +64,10 @@ public class Calculate_Date {
         Date d1 = f.parse(time1); //지정한 시간
         Date d2 = f.parse(time2); //현재 시간
         long diff = d2.getTime() - d1.getTime();
-        long lastDiff = diff/10; //연산 후에는 0이 하나 더 추가되어, 이렇게 10으로 나누어 준다.
         Log.d("디프", String.valueOf(d2));
         Log.d("디프", String.valueOf(d1));
         Log.d("디프", String.valueOf(diff));
-        Log.d("디프", String.valueOf(lastDiff));
-        return lastDiff;
+        return diff;
     }
 
 }
