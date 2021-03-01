@@ -133,13 +133,10 @@ public class Frag1 extends Fragment {
                         Log.d("1값", date); //데이트피커로 입력한 날짜
                         Log.d("1값", time); // 타임 피커로 입력한 날짜
 
-
-                        String dateNow = calculate_date.WhatTimeIsItDate(); //현재 날짜
                         String timeNow = calculate_date.WhatTimeIsItTime(); //현재 시간
-                        Log.d("2값", dateNow); //현재 날짜
                         Log.d("2값", timeNow); // 현재 시간
 
-                        finallyDate = calculate_date.calDateBetweenAandB(date, dateNow); //날 차이 구하기 (지정날짜, 현재날짜)
+                        finallyDate = calculate_date.calDateBetweenAandB(date); //날 차이 구하기 (지정날짜만 넣기
                         finallyTime = calculate_date.calTimeBetweenAandB(time, timeNow); //시간 차이 구하기(지정시간, 현재시간) //초로 리턴해 온다.
 
                         Log.d("3값", String.valueOf(finallyDate));
@@ -149,12 +146,12 @@ public class Frag1 extends Fragment {
                         // TODO: 2021-02-25 아래 쓰레드 리턴 봐보기
 
                         //하루 담배량 계산
-                        last_cigaCount = 86400 / cigaCount * 1L; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
+                        last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
                         Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
                         Log.d("시가카운트", String.valueOf(cigaCount));
 
                         //하루 담배값 계산
-                        last_cigaCost = cigaCost / 86400 * 1L; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+                        last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
                         Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
                         Log.d("시가코스트", String.valueOf(cigaCost));
 
@@ -184,14 +181,17 @@ public class Frag1 extends Fragment {
             long sec = (msg.arg1 / 100) % 60; //초
             long min = (msg.arg1 / 100) / 60 % 60; //분
             long hour = (msg.arg1 / 100) / 3600 % 24; //시
-            long day = (msg.arg2 / 1000 * 1L) / 86400; //하루
-            long ciga_Time = (msg.arg2 / 1000 * 1L) / last_cigaCount; //담배를 피지 않은 횟수
-            double ciga_Money = (msg.arg2 / 1000 * 1L) * last_cigaCost; //지금껏 아낀 비용
+            long day = msg.arg2 / (24*60*60*1000);//하루 todo ok
+            long ciga_Time = (msg.arg2  / 1000) / last_cigaCount; //담배를 피지 않은 횟수
+            double ciga_Money = (msg.arg2 / 1000) * last_cigaCost; //지금껏 아낀 비용
+
+            // TODO: 2021-03-01 원인 발견 msg.arg2에 최댓값이 있었음. 무한대로 넣을 거 찾아봐야함 
 
 
             //스트링 열로 포맷한다.
             String result = String.format("%02d:%02d:%02d", hour, min, sec);
 
+            Log.d("진짜", String.valueOf(msg.arg2));
             Log.d("리절트", result);
             Log.d("데이", String.valueOf(day));
             Log.d("타임", String.valueOf(ciga_Time));
@@ -217,9 +217,10 @@ public class Frag1 extends Fragment {
          //타이머 쓰레드
         @Override
         public void run() {
-            long i = finallyTime * 1L; //여기에 몇 초인지 넣어야 그 때부터 타이머가 시작된다.
+            long i = finallyTime; //여기에 몇 초인지 넣어야 그 때부터 타이머가 시작된다.
             long day = finallyDate * 1L; //여기에는 날짜를 넣는데, 마찬가지로 초 형식으로 넣는다.
-            Log.d("뭐야", String.valueOf(day));
+            Log.d("나", String.valueOf(i));
+            Log.d("나", String.valueOf(day));
             while (true) {
                 while (isRunning) { //일시정지를 누르면 멈춤
                         Message msg = new Message();

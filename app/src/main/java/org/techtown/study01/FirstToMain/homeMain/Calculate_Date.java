@@ -4,8 +4,10 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Calculate_Date {
 
@@ -41,22 +43,40 @@ public class Calculate_Date {
         return getTime;
     }
 
-    public long calDateBetweenAandB(String date1, String date2) throws ParseException //날짜 차이 구하기 "yyyy-mm-dd HH:mm" 이런 형식으로 넣어야함.
-    {
+    public long calDateBetweenAandB(String another) throws ParseException //날짜 차이 구하기 "yyyy-mm-dd HH:mm" 이런 형식으로 넣어야함.
+    {   //another는 지정날짜
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            // date1, date2 두 날짜를 parse()를 통해 Date형으로 변환.
-            Date FirstDate = format.parse(date1);  //지정한날(금연 시작날)
-            Date SecondDate = format.parse(date2); //현재 날짜
+        //데이트포맷(일수로 구할거니깐 dd까지만 있으면됨)
+        SimpleDateFormat todaySdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+        //한국기준 날짜
+        Calendar calendar = Calendar.getInstance();
+        Date date = new Date(calendar.getTimeInMillis());
+        todaySdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+        String todayDate = todaySdf.format(date);
+        //오늘 타임스탬프(데이트포맷으로 저장했다고 치고 그걸 타임스탬프로 바꿔보는 작업)
+        long todayTimestamp = todaySdf.parse(todayDate).getTime();
+        Date date2 = new Date(todayTimestamp);
+        String todayDate2 = todaySdf.format(date2);
 
-            // Date로 변환된 두 날짜를 계산한 뒤 그 리턴값으로 long type 변수를 초기화 하고 있다.
-            // 연산결과 -950400000. long type 으로 return 된다.
-            long calDate = (SecondDate.getTime() - FirstDate.getTime()) * 1L;
-            //연산 후에는 0이 하나 더 추가되어, 이렇게 10으로 나누어 준다.
-            Log.d("칼데이트", String.valueOf(FirstDate));
-            Log.d("칼데이트", String.valueOf(SecondDate));
-            Log.d("칼데이트", String.valueOf(calDate));
-            return calDate;
+        //지정날짜
+        String differentDate = another;
+        long nextdayTimestamp = todaySdf.parse(differentDate).getTime();
+
+        long difference = todayTimestamp- nextdayTimestamp;
+        long last_diff = difference/10;
+        System.out.println("오늘날짜 => "+todayDate2);
+        System.out.println("다른날짜 => "+differentDate);
+        System.out.println("differentTimestamp 타임스탬프=> "+todayTimestamp);
+        System.out.println("todayTimestamp 타임스탬프=> "+todayTimestamp);
+        System.out.println("일수차=> "  +  difference/ (24*60*60*1000));
+
+
+        Log.d("알려줘", String.valueOf(difference));
+        Log.d("알려줘", String.valueOf(last_diff));
+        Log.d("알려줘", todayDate2);
+        Log.d("알려줘", differentDate);
+
+        return difference;
     }
 
     public long calTimeBetweenAandB(String time1, String time2) throws ParseException {
