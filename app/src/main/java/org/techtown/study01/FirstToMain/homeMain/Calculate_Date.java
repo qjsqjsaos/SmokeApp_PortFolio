@@ -52,13 +52,11 @@ public class Calculate_Date {
             // Date로 변환된 두 날짜를 계산한 뒤 그 리턴값으로 long type 변수를 초기화 하고 있다.
             // 연산결과 -950400000. long type 으로 return 된다.
             long calDate = SecondDate.getTime() - FirstDate.getTime();
-            long lastCalDate = calDate/10; //연산 후에는 0이 하나 더 추가되어, 이렇게 10으로 나누어 준다.
+            //연산 후에는 0이 하나 더 추가되어, 이렇게 10으로 나누어 준다.
             Log.d("칼데이트", String.valueOf(FirstDate));
             Log.d("칼데이트", String.valueOf(SecondDate));
             Log.d("칼데이트", String.valueOf(calDate));
-            Log.d("칼데이트", String.valueOf(lastCalDate));
-
-            return lastCalDate;
+            return calDate;
     }
 
     public long calTimeBetweenAandB(String time1, String time2) throws ParseException {

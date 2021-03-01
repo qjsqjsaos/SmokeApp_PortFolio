@@ -1,6 +1,7 @@
 package org.techtown.study01.FirstToMain.homeMain.ViewpagerFM;
 
 import android.os.Bundle;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -90,7 +91,7 @@ public class Frag1 extends Fragment {
                           Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
 
                           //하루 담배값 계산
-                          last_cigaCost = (cigaCost / 86400); //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+                          last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
                           Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
 
                           timeThread = new Thread(new timeThread());
@@ -153,7 +154,7 @@ public class Frag1 extends Fragment {
                         Log.d("시가카운트", String.valueOf(cigaCount));
 
                         //하루 담배값 계산
-                        last_cigaCost = (cigaCost / 86400); //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+                        last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
                         Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
                         Log.d("시가코스트", String.valueOf(cigaCost));
 
@@ -180,12 +181,12 @@ public class Frag1 extends Fragment {
 
             //(msg.arg1 / 100) 이 1초이다. 1초는 1000단위이므로,
             //int min = (msg.arg1 / 100) / 60 같은 경우는 1/60이니까 분이다. (시간도 마찬가지)
-            long sec = (msg.arg1 / 100L) % 60; //초
-            long min = (msg.arg1 / 100L) / 60 % 60; //분
-            long hour = (msg.arg1 / 100L) / 3600 % 24; //시
-            long day = (msg.arg2 / 100L) / 86400; //하루
-            long ciga_Time = (msg.arg2 / 100) / last_cigaCount; //담배를 피지 않은 횟수
-            double ciga_Money = (msg.arg2 / 100) * last_cigaCost; //지금껏 아낀 비용
+            long sec = (msg.arg1 / 100) % 60; //초
+            long min = (msg.arg1 / 100) / 60 % 60; //분
+            long hour = (msg.arg1 / 100) / 3600 % 24; //시
+            long day = (msg.arg2 / 1000) / 86400; //하루
+            long ciga_Time = (msg.arg2 / 1000) / last_cigaCount; //담배를 피지 않은 횟수
+            double ciga_Money = (msg.arg2 / 1000) * last_cigaCost; //지금껏 아낀 비용
 
 
             //스트링 열로 포맷한다.
