@@ -10,7 +10,7 @@ import java.util.Map;
 public class ChangePwRequest extends StringRequest {
 
     //서버 url 설정(php파일 연동)
-    final static  private String URL="http://qjsqjsaos.dothome.co.kr/upDatepw.php";
+    final static  private String URL="http://ec2-3-35-9-74.ap-northeast-2.compute.amazonaws.com/upDatepw.php";
     private Map<String,String> map;
 
     public ChangePwRequest(String Eid, String newpw, Response.Listener<String>listener){

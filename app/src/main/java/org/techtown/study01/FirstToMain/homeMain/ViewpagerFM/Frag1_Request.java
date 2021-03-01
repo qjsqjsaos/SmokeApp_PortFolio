@@ -4,13 +4,15 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
+import org.techtown.study01.FirstToMain.homeMain.HomeMain;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Frag1_Request extends StringRequest {
 
     // 서버 URL 설정 (PHP 파일 연동)
-    final static private String URL = "http://qjsqjsaos.dothome.co.kr/frag1_request.php"; //호스팅 주소 + php
+    final static private String URL = "http://ec2-3-35-9-74.ap-northeast-2.compute.amazonaws.com/frag1_request.php"; //호스팅 주소 + php
     private Map<String, String> map;
 
 

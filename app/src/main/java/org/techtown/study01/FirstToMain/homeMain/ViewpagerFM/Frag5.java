@@ -41,9 +41,9 @@ public class Frag5 extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedViewModel.getLiveDataCount().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
-            public void onChanged(Long aLong) {
+            public void onChanged(Long Longa) {
                 DecimalFormat format = new DecimalFormat("###,###"); // 콤마 표시를 해준다(예 123123 => 123,123
-                textView.setText(format.format(aLong) + "개비 가량 됩니다!");
+                textView.setText(format.format(Longa) + "개비 가량 됩니다!");
             }
         });
 

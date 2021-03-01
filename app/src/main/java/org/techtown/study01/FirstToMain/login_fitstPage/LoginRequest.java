@@ -12,7 +12,7 @@ import java.util.Map;
 public class LoginRequest extends StringRequest {
 
     // 서버 URL 설정 (PHP 파일 연동)
-    final static private String URL = "http://qjsqjsaos.dothome.co.kr/Login.php"; //호스팅 주소 + php
+    final static private String URL = "http://ec2-3-35-9-74.ap-northeast-2.compute.amazonaws.com/Login.php"; //호스팅 주소 + php
     private Map<String, String> map;
 
 

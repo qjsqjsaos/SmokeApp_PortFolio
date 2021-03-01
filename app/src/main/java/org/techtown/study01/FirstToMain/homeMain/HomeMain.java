@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,15 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 
 
 //홈 화면
@@ -36,8 +45,9 @@ public class HomeMain extends Fragment {
     //스태틱을 붙여서 Frag1에서 참조할 수 있게 한다.
     public static Button noSmoke_Btn;
 
-    private static final String TAG = "MyTag"; //로그 찍을때,
+    public static String id;
 
+    private static final String TAG = "MyTag"; //로그 찍을때,
 
 
 
@@ -63,6 +73,7 @@ public class HomeMain extends Fragment {
         Log.d(TAG, "번들가져오고");
 
         String name = bundle.getString("name");
+        id = bundle.getString("id");
         Log.d(TAG,"번들 메세지들 다 가져옴");
 
        if(name != null) { //일반 로그인
@@ -72,7 +83,6 @@ public class HomeMain extends Fragment {
 
         return viewGroup;
     }
-
 
 
     private void setInit() {

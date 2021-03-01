@@ -151,7 +151,7 @@ public class CustomDialog extends Dialog {
     }
 
     public static String getMonth(int month) { // 월자 두자리수 만들어주는 메서드
-        if(month > 0 && month < 10){
+        if(month >= 0 && month < 10){
             return "0" + String.valueOf(month);
         }else {
             return String.valueOf(month);
@@ -159,14 +159,14 @@ public class CustomDialog extends Dialog {
     }
 
     public static String getDay(int day) { // 일자 두자리수 만들어주는 메서드
-        if(day > 0 && day < 10){
+        if(day >= 0 && day < 10){
             return "0" + String.valueOf(day);
         }else {
             return String.valueOf(day);
         }
     }
     public static String getTime(int time) { // 시간 두자리수 만들어주는 메서드
-        if(time > 0 && time < 10){
+        if(time >= 0 && time < 10){
             return "0" + String.valueOf(time);
         }else {
             return String.valueOf(time);

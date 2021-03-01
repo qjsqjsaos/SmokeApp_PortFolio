@@ -72,14 +72,16 @@ public class Login extends AppCompatActivity {
         loginPwd = auto.getString("inputPwd", null);
         loginName = auto.getString("inputName", null);
 
-//            if(loginId != null && loginPwd != null) { // loginId와 loginPwd에 값이 있으면, 자동 로그인을 실시 한다.
-//                if (loginId.length() > 0 && loginPwd.length() > 0) {
-//                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(Login.this, BottomNavi.class);
-//                    startActivity(intent);
-//                    finish();
-//                }
-//            }
+            if(loginId != null && loginPwd != null) { // loginId와 loginPwd에 값이 있으면, 자동 로그인을 실시 한다.
+                if (loginId.length() > 0 && loginPwd.length() > 0) {
+                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Login.this, BottomNavi.class);
+                    intent.putExtra("id", loginId);
+                    intent.putExtra("name", loginName);
+                    startActivity(intent);
+                    finish();
+                }
+            }
 
 
         if (loginId == null && loginPwd == null) { //값이 없으면(초기 상태) 로그인 성공시 값을 넣어준다.
@@ -88,6 +90,8 @@ public class Login extends AppCompatActivity {
                 public void onClick(View view) {
                     String id = idText.getText().toString();
                     String pw = passwordText.getText().toString();
+
+
 
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
 
@@ -103,15 +107,17 @@ public class Login extends AppCompatActivity {
                                     Epw = jsonObject.getString("pw");
                                     Ename = jsonObject.getString("name");
 
-                                    if (id.equals(Eid) && pw.equals(Epw)) {
-                                        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-                                        SharedPreferences.Editor autoLogin = auto.edit();
-                                        autoLogin.putString("inputId", Eid);
-                                        autoLogin.putString("inputPwd", Epw);
-                                        autoLogin.putString("inputName", Ename);
-                                        autoLogin.commit(); //커밋을 해야지 값이 저장된다.
+                                    SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                                    SharedPreferences.Editor autoLogin = auto.edit();
+                                    autoLogin.putString("inputId", Eid);
+                                    autoLogin.putString("inputPwd", Epw);
+                                    autoLogin.putString("inputName", Ename);
+                                    autoLogin.commit(); //커밋을 해야지 값이 저장된다.
 
-                                        Log.d(TAG, String.valueOf(autoLogin));
+                                    Log.d(TAG, String.valueOf(autoLogin));
+
+                                    if (id.equals(Eid) && pw.equals(Epw)) {
+
 
                                         Toast.makeText(getApplicationContext(), Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(Login.this, BottomNavi.class);
@@ -119,10 +125,10 @@ public class Login extends AppCompatActivity {
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
                                         intent.putExtra("id", Eid);
-                                        intent.putExtra("pw", Epw);
                                         intent.putExtra("name", Ename);
 
-                                        Log.d(TAG, "기본 로그인 정보 인텐트로 넘기기");
+
+                                        Log.d("이름", Ename);
 
                                         startActivity(intent);
                                         finish();

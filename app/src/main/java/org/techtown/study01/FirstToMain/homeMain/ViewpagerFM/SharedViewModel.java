@@ -7,15 +7,15 @@ import androidx.lifecycle.ViewModel;
 //라이브데이타 클래스 만들기
 
 public class SharedViewModel extends ViewModel {
-    //int용 Frag2용 //금연할 일 수
-    private MutableLiveData<Integer> liveData = new MutableLiveData<>();
+    //Long용 Frag2용 //금연할 일 수
+    private MutableLiveData<Long> liveData = new MutableLiveData<>();
 
-    public LiveData<Integer> getLiveData(){
+    public LiveData<Long> getLiveData(){
         return liveData;
     }
 
-    public void setLiveData(Integer integer){
-        liveData.setValue(integer);
+    public void setLiveData(Long longa){
+        liveData.setValue(longa);
     }
 
 
@@ -32,15 +32,15 @@ public class SharedViewModel extends ViewModel {
 
 
 
-    //Long용 Frag3용 //금연하면서 안 핀 담배 갯수
-    private MutableLiveData<Long> liveDataCost = new MutableLiveData<>();
+    //Long용 Frag3용 //금연하면서 생긴돈
+    private MutableLiveData<Double> liveDataCost = new MutableLiveData<>();
 
-    public LiveData<Long> getLiveDataCost(){
+    public LiveData<Double> getLiveDataCost(){
         return liveDataCost;
     }
 
-    public void setLiveDataCost(Long longb){
-        liveDataCost.setValue(longb);
+    public void setLiveDataCost(Double longa){
+        liveDataCost.setValue(longa);
     }
 
 

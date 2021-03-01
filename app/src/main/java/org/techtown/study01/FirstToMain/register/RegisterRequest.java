@@ -12,13 +12,13 @@ import java.util.Map;
 public class RegisterRequest extends StringRequest {
 
     // 서버 URL 설정 (PHP 파일 연동)
-    final static private String URL = "http://qjsqjsaos.dothome.co.kr/Register.php"; //호스팅 주소 + php
+    final static private String URL = "http://ec2-3-35-9-74.ap-northeast-2.compute.amazonaws.com/register.php"; //호스팅 주소 + php
     private Map<String, String> map;
 
 
 
     public RegisterRequest(String id, String pw, String name, String email,
-                           String nstime, String nsdate, String cigacount, String cigapay,
+                           long nstime, long nsdate, long cigacount, double cigapay,
                            String goal, Response.Listener<String> listener) { //문자형태로 보낸다는 뜻
         super(Method.POST, URL, listener, null);
         map = new HashMap<>();
@@ -27,10 +27,10 @@ public class RegisterRequest extends StringRequest {
         map.put("pw", pw);
         map.put("name", name);
         map.put("email", email);
-        map.put("nstime", nstime);
-        map.put("nsdate", nsdate);
-        map.put("cigacount", cigacount);
-        map.put("cigapay", cigapay);
+        map.put("nstime", nstime+"");
+        map.put("nsdate", nsdate+"");
+        map.put("cigacount", cigacount+"");
+        map.put("cigapay", cigapay+"");
         map.put("goal", goal);
 
     }

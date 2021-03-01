@@ -25,14 +25,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".start.Quest1"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".start.first_page_loading"
             android:screenOrientation="portrait" />
@@ -45,7 +38,7 @@
         <activity
             android:name=".homeMain.BottomNavi"
             android:label="@string/title_activity_bottom_navi"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".register.Register"
             android:screenOrientation="portrait" />
@@ -64,7 +57,11 @@
         <activity
             android:name=".login_fitstPage.Login"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data

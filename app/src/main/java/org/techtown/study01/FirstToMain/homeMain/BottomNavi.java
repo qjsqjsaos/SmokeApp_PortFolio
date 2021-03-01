@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -13,11 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
 import org.techtown.study01.FirstToMain.MaintoEnd.Settings.Settings;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 
 
     public class BottomNavi extends AppCompatActivity {
@@ -27,6 +34,8 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
         private Diary fragment3; // 일기
         private Settings fragment4; //설정
         private static final String TAG = "MyTag"; //로그 찍을때,
+
+        private String id;
 
 
 
@@ -43,28 +52,24 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
         fragment2 = new HealthCheck();
         fragment3 = new Diary();
         fragment4 = new Settings();
-        Frag1 frag1 = new Frag1();
 
 
         /**홈메인 영역 */
             // 일반 로그인
             Intent intent = getIntent();
             String name = intent.getStringExtra("name");
-            String id = intent.getStringExtra("id");
+            id = intent.getStringExtra("id");
             Log.d(TAG,"일반로그인");
 
 
             //데이터 보내기
             Bundle bundle = new Bundle();
             bundle.putString("name", name);
+            bundle.putString("id", id);
 
             Log.d("bundle", String.valueOf(bundle));
             fragment1.setArguments(bundle);
             Log.d(TAG,"번들 보내기");
-
-            Bundle bundle2 = new Bundle();
-            bundle2.putString("id", id);
-            frag1.setArguments(bundle2);
 
 
 
@@ -110,5 +115,7 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 
 
     }
+
+
 
 }
