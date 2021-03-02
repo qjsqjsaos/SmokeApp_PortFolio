@@ -15,13 +15,12 @@ public class Frag_ondestroy extends StringRequest {
 
 
 
-    public Frag_ondestroy(long finallyTime, long finallyDate, long cigaCount,
+    public Frag_ondestroy(String datetime, long cigaCount,
                           double cigaCost, String Eid, Response.Listener<String> listener) { //문자형태로 보낸다는 뜻
         super(Method.POST, URL, listener, null);
 
         map = new HashMap<>();
-        map.put("nstime", finallyTime+"");
-        map.put("nsdate", finallyDate+"");
+        map.put("datetime", datetime);
         map.put("cigacount", cigaCount+"");
         map.put("cigapay", cigaCost+"");
         map.put("Eid",Eid);

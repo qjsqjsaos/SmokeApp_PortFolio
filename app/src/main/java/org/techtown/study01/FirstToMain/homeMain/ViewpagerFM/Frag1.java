@@ -1,5 +1,6 @@
 package org.techtown.study01.FirstToMain.homeMain.ViewpagerFM;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -44,20 +45,22 @@ public class Frag1 extends Fragment {
     //금연한지 얼마나 됬는지 날짜 값
     public static long finallyDateTime;
 
-    public  static long finallyTime;//임시
-    public  static  long finallyDate; //임시
-
     //뷰모델(라이브데이타) Frag2로 실시간 전달하기
     private SharedViewModel sharedViewModel;
 
     //Quest1에서 가져온 담배 핀 횟수와 비용 EditText
-    public static long cigaCount = 5;
-    public static double cigaCost = 5000; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
+    /** 이 카운트와 코스트는 다음에 값 전달하기*/
+    public static long cigaCount;
+    public static double cigaCost; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
 
     //하루를 기준으로 피는 담배양을 하루 24시간으로 나눈 시간. ex) 하루에 10개비를 피면 2시간 24분 마다 핀것이다. 여기서 2시간 24분의 값을 초로 나타낸 것이다.
     public static long last_cigaCount;
     public static double last_cigaCost;
-    String Eid;
+    private String Eid;
+
+
+    //중요 지정했던 시간이다. 디비에 넣었다가 뺄 때, 몇초 지났는지 구별해주는 시간이다.
+    public static String dateTime;
 
 
 
@@ -67,62 +70,9 @@ public class Frag1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_1, container, false ); //인플레이션하기
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
-        HomeMain homeMain = new HomeMain();
-        Eid = homeMain.id;
-
-
-//      if(homeMain.id != null) { //로그인하고 아이디가 넘겨오면, "0"으로 표시한다.
-//
-//          Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
-//
-//              @Override
-//              public void onResponse(String response) {
-//                  try {
-//                      JSONObject jsonObject = new JSONObject(response);
-//                      boolean success = jsonObject.getBoolean("success");
-//
-//                      if (success) {
-//
-//                          finallyTime = Long.parseLong(jsonObject.getString("nstime")); // 데이터베이스에서 받아온 금연한 시간
-//                          finallyDate = Long.parseLong(jsonObject.getString("nsdate")); // 데이터베이스에서 받아온 금연한 시간
-//                          cigaCount = Long.parseLong(jsonObject.getString("cigacount")); // 데이터베이스에서 받아온 금연한 시간
-//                          cigaCost = Long.parseLong(jsonObject.getString("cigapay")); // 데이터베이스에서 받아온 금연한 시간
-//
-//                          //하루 담배량 계산
-//                          last_cigaCount = 86400 / cigaCount * 1L; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
-//                          Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
-//
-//                          //하루 담배값 계산
-//                          last_cigaCost = cigaCost / 86400 * 1L; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
-//                          Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
-//
-//                          timeThread = new Thread(new timeThread());
-//                          timeThread.start(); //쓰레드실행
-//
-//                      } else {//실패
-//                          return;
-//                      }
-//
-//
-//                  } catch (JSONException e) {
-//                      e.printStackTrace();
-//                      Toast.makeText(getContext(), "Frag1 오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-//                      return;
-//                  } catch (Exception e) {
-//                      e.printStackTrace();
-//                  }
-//              }
-//          };
-//
-//          Frag1_Request frag1_request = new Frag1_Request(Eid, responseListener);
-//          RequestQueue queue = Volley.newRequestQueue(getContext());
-//          queue.add(frag1_request);
-//      }
-
-
-
+       HomeMain homeMain = new HomeMain();
+        /** 금연하기 버튼을 클릭하고나서 금연시간 정하기*/
         //다이얼로그 금연하기와 돌아가기 버튼을 눌렀을때, Frag1에서에 액션을 정할 수 있다.
-
         homeMain.noSmoke_Btn.setOnClickListener(new View.OnClickListener() { //홈메인에 있는 버튼을 가져와서 클릭한다.
             @Override
             public void onClick(View v) {
@@ -133,10 +83,10 @@ public class Frag1 extends Fragment {
                     public void onPositiveClicked(String date, String time) throws ParseException { //지정된 날짜, 지정된 시간
                         Calculate_Date calculate_date = new Calculate_Date();
 
-                        String dateTime = date +" "+ time; // 데이트랑 시간 합치기
+                        dateTime = date +" "+ time; // 지정된 날짜와 데이트 시간 합치기
                         Log.d("3값", dateTime);
 
-                        finallyDateTime = calculate_date.calDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜만 넣기
+                        finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
 
                         Log.d("3값", String.valueOf(finallyDateTime));
 
@@ -162,8 +112,6 @@ public class Frag1 extends Fragment {
             }
         });
 
-
-
         return view;
     }
 
@@ -176,11 +124,13 @@ public class Frag1 extends Fragment {
 
             //(msg.arg1 / 100) 이 1초이다. 1초는 1000단위이므로,
             //int min = (msg.arg1 / 100) / 60 같은 경우는 1/60이니까 분이다. (시간도 마찬가지)
-            
             //쓰레드에서 번들정보 가져오기
             Bundle bundle = msg.getData();
             long dateTime = bundle.getLong("dateTime");
             Log.d("데이트타임", String.valueOf(dateTime));
+
+            //타이머가 86400000 이 있으면 백의 자리에서 증감이 일어남 그래서,
+            // dataTime에 0을 붙여서 천의 자리부터 숫자가 증가하게 만들어 올바른 타이머 동작을 구현했다.
             long datatime_last = Long.parseLong(dateTime+"0");
             Log.d("마지막데트", String.valueOf(datatime_last));
             /////////////////////////////////////
@@ -222,7 +172,7 @@ public class Frag1 extends Fragment {
          //타이머 쓰레드
         @Override
         public void run() {
-            long dateTime = finallyDateTime; //여기에는 날짜를 넣는데, 마찬가지로 초 형식으로 넣는다.
+            long dateTime = finallyDateTime; //여기에는 날짜와 시간을 넣는데, 마찬가지로 초 형식으로 넣는다.
             Log.d("나", String.valueOf(dateTime));
             Log.d("나", String.valueOf(finallyDateTime));
             while (true) {
@@ -265,10 +215,14 @@ public class Frag1 extends Fragment {
 
     }
 
-    @Override
-    public void onPause() { //종료 될 때 디비 값으로 저장한다.
-        super.onPause();
+    @Override //프래그먼트가 액티비티와 연결될 때 호출됨/ 이 때 디비에서 아이디에 맞게 자료를 가져온다.
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
 
+        /** 로그인 하고나서 아이디를 통해 내 정보 불러오기*/
+        HomeMain homeMain = new HomeMain();
+        Eid = homeMain.id;
+        Log.d("이아이디", String.valueOf(Eid));
 
         Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
 
@@ -279,17 +233,35 @@ public class Frag1 extends Fragment {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {
-                        Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
+                        dateTime = jsonObject.getString("datetime");
+                        Log.d("디비정보", dateTime);
+                        cigaCount = jsonObject.getLong("cigacount"); // 데이터베이스에서 받아온 금연한 시간
+                        Log.d("디비정보", String.valueOf(cigaCount));
+                        cigaCost = jsonObject.getLong("cigapay"); // 데이터베이스에서 받아온 금연한 시간
+                        Log.d("디비정보", String.valueOf(cigaCost));
+
+                        Calculate_Date calculate_date = new Calculate_Date();
+
+                        finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
+
+                        //하루 담배량 계산
+                        last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
+                        Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
+
+                        //하루 담배값 계산
+                        last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+                        Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
+
+                        timeThread = new Thread(new timeThread());
+                        timeThread.start(); //쓰레드실행
 
                     } else {//실패
-                        Toast.makeText(getContext(), "오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "디비오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
                     return;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -297,13 +269,10 @@ public class Frag1 extends Fragment {
             }
         };
 
-        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(finallyTime, finallyDate, cigaCount, cigaCost, Eid, responseListener);
+        Frag1_Request frag1_request = new Frag1_Request(Eid, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(frag_ondestroy);
-
-        Log.d("뭐야", String.valueOf(finallyTime +"/"+ finallyDate+"/" + cigaCount+"/" + cigaCost+"/" + Eid));
+        queue.add(frag1_request);
     }
-
 }
 
 

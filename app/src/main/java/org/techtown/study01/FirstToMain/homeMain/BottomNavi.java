@@ -115,7 +115,58 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 
 
     }
+        @Override
+        public void onPause() { //또 다른 액티비티를 시작하려고 할 때 디비에 값이 저장된다.
+            super.onPause();
+            SaveValueToDB();
+        }
+
+        @Override //액티비티가 사용자에게 더 이상 보이지 않을 때 디비에 값이 저장된다.
+        protected void onStop() {
+            super.onStop();
+            SaveValueToDB();
+        }
+
+        @Override //액티비티가 소멸되어 없어지기 전에 디비에 값이 저장된다.
+        protected void onDestroy() {
+            super.onDestroy();
+            SaveValueToDB();
+        }
+
+        //디비에 값이 저장되는 메서드
+        private void SaveValueToDB() {
+            Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
+
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
+
+                        if (success) {
+                            Toast.makeText(getApplication(), "성공", Toast.LENGTH_SHORT).show();
+
+                        } else {//실패
+                            Toast.makeText(getApplication(), "오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplication(), "디비오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
 
-}
+            //Frag1에서 가져온 public static 준 변수들을 액티비티가 꺼질때마다 디비에 저장하게 만든다.
+            Frag_ondestroy frag_ondestroy = new Frag_ondestroy(Frag1.dateTime, Frag1.cigaCount, Frag1.cigaCost, HomeMain.id, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(getApplication());
+            queue.add(frag_ondestroy);
+
+            Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + id);
+        }
+    }

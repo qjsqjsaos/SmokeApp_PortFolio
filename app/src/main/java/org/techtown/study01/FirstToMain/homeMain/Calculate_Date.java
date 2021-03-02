@@ -43,7 +43,8 @@ public class Calculate_Date {
         return getTime;
     }
 
-    public long calDateBetweenAandB(String another) throws ParseException //날짜 차이 구하기 "yyyy-mm-dd HH:mm:ss" 이런 형식으로 넣어야함.
+    //날짜와 시간 차이 구하기/ 타이머용
+    public long calTimeDateBetweenAandB(String another) throws ParseException //날짜 차이 구하기 "yyyy-mm-dd HH:mm:ss" 이런 형식으로 넣어야함.
     {   //another는 지정날짜
 
         //데이트포맷(일수로 구할거니깐 dd까지만 있으면됨)
@@ -62,14 +63,13 @@ public class Calculate_Date {
         String differentDate = another;
         long nextdayTimestamp = todaySdf.parse(differentDate).getTime();
 
-        long difference = todayTimestamp- nextdayTimestamp;
-        long last_diff = difference/10;
+        long difference = todayTimestamp - nextdayTimestamp;
+        long last_diff = difference/10; //타이머 오차가 생겨 10으로 나눠주어서 맞추었다.
         System.out.println("오늘날짜 => "+todayDate2);
         System.out.println("다른날짜 => "+differentDate);
         System.out.println("differentTimestamp 타임스탬프=> "+todayTimestamp);
         System.out.println("todayTimestamp 타임스탬프=> "+todayTimestamp);
         System.out.println("일수차=> "  +  difference/ (24*60*60*1000));
-
 
         Log.d("알려줘", String.valueOf(difference));
         Log.d("알려줘", String.valueOf(last_diff));
