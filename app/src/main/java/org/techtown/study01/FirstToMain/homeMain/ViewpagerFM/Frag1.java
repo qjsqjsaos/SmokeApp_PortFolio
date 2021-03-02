@@ -61,7 +61,7 @@ public class Frag1 extends Fragment {
 
 
     //중요 지정했던 시간이다. 디비에 넣었다가 뺄 때, 몇초 지났는지 구별해주는 시간이다.
-    public static String dateTime;
+    public static String dateTime = null;
 
     private HomeMain homeMain;
 
@@ -74,6 +74,8 @@ public class Frag1 extends Fragment {
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
         startNoSmokingButton(); //금연하기 버튼
+        homeMain.noSmoke_Btn.setVisibility(VISIBLE);
+        homeMain.stop_Btn.setVisibility(GONE);
 
         return view;
     }
@@ -206,6 +208,11 @@ public class Frag1 extends Fragment {
                                 Frag3.textView3.setText("0원");
                                 Frag5.textView5.setText(""); //한번 빈칸으로 초기화시켜주기
                                 Frag5.textView5.setText("0개비");
+
+                                ///값 초기화(db로 보내기)
+                                Frag1.dateTime = "0";
+                                cigaCount = 0;
+                                cigaCost = 0;
                             }
                         });
                         return; // 인터럽트 받을 경우 return (취소
@@ -311,6 +318,8 @@ public class Frag1 extends Fragment {
         timeThread = new Thread(new timeThread());
         timeThread.start(); //쓰레드실행
     }
+
+
 }
 
 

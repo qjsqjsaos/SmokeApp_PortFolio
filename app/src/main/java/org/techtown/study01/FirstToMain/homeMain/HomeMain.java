@@ -53,11 +53,6 @@ public class HomeMain extends Fragment {
     private static final String TAG = "MyTag"; //로그 찍을때,
 
 
-    //여기서는 디비에 모든 값을 0으로 초기화 해준다.
-    private String dateTime = "0";
-    private long cigaCount = 0, cigaCost = 0;
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,7 +99,6 @@ public class HomeMain extends Fragment {
                    public void onClick(View v) {
                        noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
                        stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
-                       SaveValueToDB_HomeVersion(); //디비에 모든 값 0으로 저장하기
                        Frag1.timeThread.interrupt();//쓰레드 취소하기(Frag1)
                        giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
                    }
@@ -160,41 +154,6 @@ public class HomeMain extends Fragment {
     ///////////////////////////////////////// 뷰페이저(끝)///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void SaveValueToDB_HomeVersion() {
-        Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
-
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-
-                    if (success) {
-                        Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
-
-                    } else {//실패
-                        Toast.makeText(getContext(), "오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "디비오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-                    return;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        //Frag1에서 가져온 public static 준 변수들을 액티비티가 꺼질때마다 디비에 저장하게 만든다.
-        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(dateTime, cigaCount, cigaCost, id, responseListener);
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(frag_ondestroy);
-
-        Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + id);
-    }
 
 }
 
