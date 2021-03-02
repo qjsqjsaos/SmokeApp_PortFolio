@@ -178,12 +178,18 @@ public class Frag1 extends Fragment {
 
             //(msg.arg1 / 100) 이 1초이다. 1초는 1000단위이므로,
             //int min = (msg.arg1 / 100) / 60 같은 경우는 1/60이니까 분이다. (시간도 마찬가지)
-            long sec = (msg.arg1 / 100) % 60; //초
-            long min = (msg.arg1 / 100) / 60 % 60; //분
-            long hour = (msg.arg1 / 100) / 3600 % 24; //시
-            long day = msg.arg2 / (24*60*60*1000);//하루 todo ok
-            long ciga_Time = (msg.arg2  / 1000) / last_cigaCount; //담배를 피지 않은 횟수
-            double ciga_Money = (msg.arg2 / 1000) * last_cigaCost; //지금껏 아낀 비용
+            
+            //쓰레드에서 번들정보 가져오기
+            Bundle bundle = msg.getData();
+            long intTime = bundle.getLong("inttime");
+            long intDay = bundle.getLong("intday");
+            /////////////////////////////////////
+            long sec = (intTime / 100) % 60; //초
+            long min = (intTime / 100) / 60 % 60; //분
+            long hour = (intTime / 100) / 3600 % 24; //시
+            long day = intDay / (24*60*60*1000);//하루 todo ok
+            long ciga_Time = (intDay/1000) / last_cigaCount; //담배를 피지 않은 횟수
+            double ciga_Money = (intDay/1000) * last_cigaCost; //지금껏 아낀 비용
 
             // TODO: 2021-03-01 원인 발견 msg.arg2에 최댓값이 있었음. 무한대로 넣을 거 찾아봐야함 
 
@@ -217,16 +223,21 @@ public class Frag1 extends Fragment {
          //타이머 쓰레드
         @Override
         public void run() {
-            long i = finallyTime; //여기에 몇 초인지 넣어야 그 때부터 타이머가 시작된다.
+            long time = finallyTime; //여기에 몇 초인지 넣어야 그 때부터 타이머가 시작된다.
             long day = finallyDate * 1L; //여기에는 날짜를 넣는데, 마찬가지로 초 형식으로 넣는다.
-            Log.d("나", String.valueOf(i));
+            Log.d("나", String.valueOf(time));
             Log.d("나", String.valueOf(day));
             while (true) {
-                while (isRunning) { //일시정지를 누르면 멈춤
-                        Message msg = new Message();
-                        msg.arg1 = (int) i++;
-                        msg.arg2 = (int) day++;
-                        handler.sendMessage(msg); //인자 넣기(
+                while (isRunning) { //반복문으로 반복하기
+                    //메세지에 번들정보 담아서 보내기
+                        time++;
+                        day++;
+                        Message msg = handler.obtainMessage();
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("inttime", time);
+                        bundle.putLong("intday", day);
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
                     try {
                         Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
                     } catch (InterruptedException e) {
