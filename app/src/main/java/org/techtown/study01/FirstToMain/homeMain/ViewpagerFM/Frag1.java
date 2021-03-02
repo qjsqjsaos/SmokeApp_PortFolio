@@ -101,9 +101,6 @@ public class Frag1 extends Fragment {
 
                         Log.d("3값", String.valueOf(finallyDateTime));
 
-                        // TODO: 2021-02-24 뷰페이저 손 보고 프로그레스바로 넘어간다.
-                        // TODO: 2021-02-25 아래 쓰레드 리턴 봐보기
-
                         //하루 담배량 계산
                         last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
                         Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
@@ -249,7 +246,8 @@ public class Frag1 extends Fragment {
                         JSONObject jsonObject = new JSONObject(response);
                         boolean success = jsonObject.getBoolean("success");
 
-                        if (success) {
+                        if (success) { //우선 디비 접속이 성공하면, 정보들은 가져온다.
+
                             dateTime = jsonObject.getString("datetime");
                             Log.d("디비정보", dateTime);
                             cigaCount = jsonObject.getLong("cigacount"); // 데이터베이스에서 받아온 금연한 시간
@@ -257,24 +255,17 @@ public class Frag1 extends Fragment {
                             cigaCost = jsonObject.getLong("cigapay"); // 데이터베이스에서 받아온 금연한 시간
                             Log.d("디비정보", String.valueOf(cigaCost));
 
-                            Calculate_Date calculate_date = new Calculate_Date();
 
-                            finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
 
-                            //하루 담배량 계산
-                            last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
-                            Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
+                            if(dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
+                                /** 임시로 일단 값주기*/
+                                cigaCount = 5;
+                                cigaCost = 5000;
+                                startThreadShow(); //프래그먼트 켜질때 쓰레드
 
-                            //하루 담배값 계산
-                            last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
-                            Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
-
-                            //버튼 가리고 나타내기(금연버튼)
-                            homeMain.noSmoke_Btn.setVisibility(GONE);
-                            homeMain.stop_Btn.setVisibility(VISIBLE);
-
-                            timeThread = new Thread(new timeThread());
-                            timeThread.start(); //쓰레드실행
+                            }else{//아니면 원래 내 아이디 값 가져와서 실행.
+                                startThreadShow(); //프래그먼트 켜질때 쓰레드
+                            }
 
                         } else {//실패
                             return;
@@ -299,6 +290,26 @@ public class Frag1 extends Fragment {
             homeMain.stop_Btn.setVisibility(GONE);
 
         }
+    }
+
+    private void startThreadShow() throws ParseException {
+        Calculate_Date calculate_date = new Calculate_Date();
+        finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
+
+        //하루 담배량 계산
+        last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
+        Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
+
+        //하루 담배값 계산
+        last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+        Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
+
+        //버튼 가리고 나타내기(금연버튼)
+        homeMain.noSmoke_Btn.setVisibility(GONE);
+        homeMain.stop_Btn.setVisibility(VISIBLE);
+
+        timeThread = new Thread(new timeThread());
+        timeThread.start(); //쓰레드실행
     }
 }
 
