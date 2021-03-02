@@ -43,11 +43,11 @@ public class Calculate_Date {
         return getTime;
     }
 
-    public long calDateBetweenAandB(String another) throws ParseException //날짜 차이 구하기 "yyyy-mm-dd HH:mm" 이런 형식으로 넣어야함.
+    public long calDateBetweenAandB(String another) throws ParseException //날짜 차이 구하기 "yyyy-mm-dd HH:mm:ss" 이런 형식으로 넣어야함.
     {   //another는 지정날짜
 
         //데이트포맷(일수로 구할거니깐 dd까지만 있으면됨)
-        SimpleDateFormat todaySdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+        SimpleDateFormat todaySdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
         //한국기준 날짜
         Calendar calendar = Calendar.getInstance();
         Date date = new Date(calendar.getTimeInMillis());
@@ -76,18 +76,7 @@ public class Calculate_Date {
         Log.d("알려줘", todayDate2);
         Log.d("알려줘", differentDate);
 
-        return difference;
-    }
-
-    public long calTimeBetweenAandB(String time1, String time2) throws ParseException {
-        SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
-        Date d1 = f.parse(time1); //지정한 시간
-        Date d2 = f.parse(time2); //현재 시간
-        long diff = d2.getTime() - d1.getTime();
-        Log.d("디프", String.valueOf(d2));
-        Log.d("디프", String.valueOf(d1));
-        Log.d("디프", String.valueOf(diff));
-        return diff;
+        return last_diff;
     }
 
 }

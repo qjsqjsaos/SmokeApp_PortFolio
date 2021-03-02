@@ -42,8 +42,10 @@ public class Frag1 extends Fragment {
     private final Boolean isRunning = true;
 
     //금연한지 얼마나 됬는지 날짜 값
-    public static long finallyDate;
-    public static long finallyTime;
+    public static long finallyDateTime;
+
+    public  static long finallyTime;//임시
+    public  static  long finallyDate; //임시
 
     //뷰모델(라이브데이타) Frag2로 실시간 전달하기
     private SharedViewModel sharedViewModel;
@@ -69,53 +71,53 @@ public class Frag1 extends Fragment {
         Eid = homeMain.id;
 
 
-      if(homeMain.id != null) { //로그인하고 아이디가 넘겨오면, "0"으로 표시한다.
-
-          Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
-
-              @Override
-              public void onResponse(String response) {
-                  try {
-                      JSONObject jsonObject = new JSONObject(response);
-                      boolean success = jsonObject.getBoolean("success");
-
-                      if (success) {
-
-                          finallyTime = Long.parseLong(jsonObject.getString("nstime")); // 데이터베이스에서 받아온 금연한 시간
-                          finallyDate = Long.parseLong(jsonObject.getString("nsdate")); // 데이터베이스에서 받아온 금연한 시간
-                          cigaCount = Long.parseLong(jsonObject.getString("cigacount")); // 데이터베이스에서 받아온 금연한 시간
-                          cigaCost = Long.parseLong(jsonObject.getString("cigapay")); // 데이터베이스에서 받아온 금연한 시간
-
-                          //하루 담배량 계산
-                          last_cigaCount = 86400 / cigaCount * 1L; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
-                          Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
-
-                          //하루 담배값 계산
-                          last_cigaCost = cigaCost / 86400 * 1L; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
-                          Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
-
-                          timeThread = new Thread(new timeThread());
-                          timeThread.start(); //쓰레드실행
-
-                      } else {//실패
-                          return;
-                      }
-
-
-                  } catch (JSONException e) {
-                      e.printStackTrace();
-                      Toast.makeText(getContext(), "Frag1 오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-                      return;
-                  } catch (Exception e) {
-                      e.printStackTrace();
-                  }
-              }
-          };
-
-          Frag1_Request frag1_request = new Frag1_Request(Eid, responseListener);
-          RequestQueue queue = Volley.newRequestQueue(getContext());
-          queue.add(frag1_request);
-      }
+//      if(homeMain.id != null) { //로그인하고 아이디가 넘겨오면, "0"으로 표시한다.
+//
+//          Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
+//
+//              @Override
+//              public void onResponse(String response) {
+//                  try {
+//                      JSONObject jsonObject = new JSONObject(response);
+//                      boolean success = jsonObject.getBoolean("success");
+//
+//                      if (success) {
+//
+//                          finallyTime = Long.parseLong(jsonObject.getString("nstime")); // 데이터베이스에서 받아온 금연한 시간
+//                          finallyDate = Long.parseLong(jsonObject.getString("nsdate")); // 데이터베이스에서 받아온 금연한 시간
+//                          cigaCount = Long.parseLong(jsonObject.getString("cigacount")); // 데이터베이스에서 받아온 금연한 시간
+//                          cigaCost = Long.parseLong(jsonObject.getString("cigapay")); // 데이터베이스에서 받아온 금연한 시간
+//
+//                          //하루 담배량 계산
+//                          last_cigaCount = 86400 / cigaCount * 1L; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
+//                          Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
+//
+//                          //하루 담배값 계산
+//                          last_cigaCost = cigaCost / 86400 * 1L; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+//                          Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
+//
+//                          timeThread = new Thread(new timeThread());
+//                          timeThread.start(); //쓰레드실행
+//
+//                      } else {//실패
+//                          return;
+//                      }
+//
+//
+//                  } catch (JSONException e) {
+//                      e.printStackTrace();
+//                      Toast.makeText(getContext(), "Frag1 오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+//                      return;
+//                  } catch (Exception e) {
+//                      e.printStackTrace();
+//                  }
+//              }
+//          };
+//
+//          Frag1_Request frag1_request = new Frag1_Request(Eid, responseListener);
+//          RequestQueue queue = Volley.newRequestQueue(getContext());
+//          queue.add(frag1_request);
+//      }
 
 
 
@@ -130,17 +132,13 @@ public class Frag1 extends Fragment {
                     @Override
                     public void onPositiveClicked(String date, String time) throws ParseException { //지정된 날짜, 지정된 시간
                         Calculate_Date calculate_date = new Calculate_Date();
-                        Log.d("1값", date); //데이트피커로 입력한 날짜
-                        Log.d("1값", time); // 타임 피커로 입력한 날짜
 
-                        String timeNow = calculate_date.WhatTimeIsItTime(); //현재 시간
-                        Log.d("2값", timeNow); // 현재 시간
+                        String dateTime = date +" "+ time; // 데이트랑 시간 합치기
+                        Log.d("3값", dateTime);
 
-                        finallyDate = calculate_date.calDateBetweenAandB(date); //날 차이 구하기 (지정날짜만 넣기
-                        finallyTime = calculate_date.calTimeBetweenAandB(time, timeNow); //시간 차이 구하기(지정시간, 현재시간) //초로 리턴해 온다.
+                        finallyDateTime = calculate_date.calDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜만 넣기
 
-                        Log.d("3값", String.valueOf(finallyDate));
-                        Log.d("3값", String.valueOf(finallyTime));
+                        Log.d("3값", String.valueOf(finallyDateTime));
 
                         // TODO: 2021-02-24 뷰페이저 손 보고 프로그레스바로 넘어간다.
                         // TODO: 2021-02-25 아래 쓰레드 리턴 봐보기
@@ -181,17 +179,18 @@ public class Frag1 extends Fragment {
             
             //쓰레드에서 번들정보 가져오기
             Bundle bundle = msg.getData();
-            long intTime = bundle.getLong("inttime");
-            long intDay = bundle.getLong("intday");
+            long dateTime = bundle.getLong("dateTime");
+            Log.d("데이트타임", String.valueOf(dateTime));
+            long datatime_last = Long.parseLong(dateTime+"0");
+            Log.d("마지막데트", String.valueOf(datatime_last));
             /////////////////////////////////////
-            long sec = (intTime / 100) % 60; //초
-            long min = (intTime / 100) / 60 % 60; //분
-            long hour = (intTime / 100) / 3600 % 24; //시
-            long day = intDay / (24*60*60*1000);//하루 todo ok
-            long ciga_Time = (intDay/1000) / last_cigaCount; //담배를 피지 않은 횟수
-            double ciga_Money = (intDay/1000) * last_cigaCost; //지금껏 아낀 비용
+            long sec = (datatime_last / 1000) % 60; //초
+            long min = (datatime_last / 1000) / 60 % 60; //분
+            long hour = (datatime_last / 1000) / 3600 % 24; //시
+            long day = datatime_last / (24*60*60*1000);//하루
+            long ciga_Time = (datatime_last/1000) / last_cigaCount; //담배를 피지 않은 횟수
+            double ciga_Money = (datatime_last/1000) * last_cigaCost; //지금껏 아낀 비용
 
-            // TODO: 2021-03-01 원인 발견 msg.arg2에 최댓값이 있었음. 무한대로 넣을 거 찾아봐야함 
 
 
             //스트링 열로 포맷한다.
@@ -223,19 +222,16 @@ public class Frag1 extends Fragment {
          //타이머 쓰레드
         @Override
         public void run() {
-            long time = finallyTime; //여기에 몇 초인지 넣어야 그 때부터 타이머가 시작된다.
-            long day = finallyDate * 1L; //여기에는 날짜를 넣는데, 마찬가지로 초 형식으로 넣는다.
-            Log.d("나", String.valueOf(time));
-            Log.d("나", String.valueOf(day));
+            long dateTime = finallyDateTime; //여기에는 날짜를 넣는데, 마찬가지로 초 형식으로 넣는다.
+            Log.d("나", String.valueOf(dateTime));
+            Log.d("나", String.valueOf(finallyDateTime));
             while (true) {
                 while (isRunning) { //반복문으로 반복하기
                     //메세지에 번들정보 담아서 보내기
-                        time++;
-                        day++;
+                        dateTime++;
                         Message msg = handler.obtainMessage();
                         Bundle bundle = new Bundle();
-                        bundle.putLong("inttime", time);
-                        bundle.putLong("intday", day);
+                        bundle.putLong("dateTime", dateTime);
                         msg.setData(bundle);
                         handler.sendMessage(msg);
                     try {
