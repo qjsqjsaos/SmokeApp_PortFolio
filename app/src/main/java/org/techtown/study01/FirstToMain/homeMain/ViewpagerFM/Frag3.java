@@ -20,14 +20,14 @@ import java.text.DecimalFormat;
 public class Frag3 extends Fragment {
 
     private SharedViewModel sharedViewModel;
-    private TextView textView;
+    public static TextView textView3;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_3, container, false );
 
-        textView = view.findViewById(R.id.textView5848);
+        textView3 = view.findViewById(R.id.textView5848);
 
         return view;
 
@@ -42,7 +42,7 @@ public class Frag3 extends Fragment {
             @Override
             public void onChanged(Double Longa) {
                 DecimalFormat format = new DecimalFormat("###,###,###,###,###,###,###,###.##"); // 콤마 표시를 해준다(예 123123 => 123,123
-                textView.setText(format.format(Longa) + "원");
+                textView3.setText(format.format(Longa) + "원");
             }
         });
 

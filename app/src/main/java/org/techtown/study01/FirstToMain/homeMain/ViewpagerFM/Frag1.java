@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,12 +25,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.Calculate_Date;
-import org.techtown.study01.FirstToMain.homeMain.CustomDialog;
+import org.techtown.study01.FirstToMain.homeMain.GiveUpNoSmoking_Dialog;
+import org.techtown.study01.FirstToMain.homeMain.StartNoSmoking_Dialog;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 
 import java.text.ParseException;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class Frag1 extends Fragment {
 
@@ -39,7 +40,7 @@ public class Frag1 extends Fragment {
     private static final String TAG = "FragValue"; //로그 찍을때,
 
     //쓰레드 부분
-    private Thread timeThread = null;
+    public static Thread timeThread = null;
     private final Boolean isRunning = true;
 
     //금연한지 얼마나 됬는지 날짜 값
@@ -62,6 +63,8 @@ public class Frag1 extends Fragment {
     //중요 지정했던 시간이다. 디비에 넣었다가 뺄 때, 몇초 지났는지 구별해주는 시간이다.
     public static String dateTime;
 
+    private HomeMain homeMain;
+
 
 
     @Nullable
@@ -70,14 +73,22 @@ public class Frag1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_1, container, false ); //인플레이션하기
         textView = view.findViewById(R.id.textView847); //타이머 나타내기 위한 텍스트뷰 참조
 
-       HomeMain homeMain = new HomeMain();
+        startNoSmokingButton(); //금연하기 버튼
+
+        return view;
+    }
+
+
+    private void startNoSmokingButton() {
+        homeMain = new HomeMain();
+
         /** 금연하기 버튼을 클릭하고나서 금연시간 정하기*/
         //다이얼로그 금연하기와 돌아가기 버튼을 눌렀을때, Frag1에서에 액션을 정할 수 있다.
         homeMain.noSmoke_Btn.setOnClickListener(new View.OnClickListener() { //홈메인에 있는 버튼을 가져와서 클릭한다.
             @Override
             public void onClick(View v) {
-                CustomDialog dialog = new CustomDialog(getContext());
-                dialog.setDialogListener(new CustomDialog.CustomDialogListener() {
+                StartNoSmoking_Dialog dialog = new StartNoSmoking_Dialog(getContext());
+                dialog.setDialogListener(new StartNoSmoking_Dialog.CustomDialogListener() {
 
                     @Override
                     public void onPositiveClicked(String date, String time) throws ParseException { //지정된 날짜, 지정된 시간
@@ -103,6 +114,9 @@ public class Frag1 extends Fragment {
                         Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
                         Log.d("시가코스트", String.valueOf(cigaCost));
 
+                        homeMain.noSmoke_Btn.setVisibility(GONE);
+                        homeMain.stop_Btn.setVisibility(VISIBLE);
+
                         timeThread = new Thread(new timeThread());
                         timeThread.start(); //쓰레드실행
 
@@ -111,11 +125,7 @@ public class Frag1 extends Fragment {
                 });
             }
         });
-
-        return view;
     }
-
-
 
 
     Handler handler = new Handler(Looper.myLooper()) { //실시간 날짜를 출력해주는 핸들러
@@ -190,13 +200,18 @@ public class Frag1 extends Fragment {
                         e.printStackTrace();
                         getActivity().runOnUiThread(new Runnable(){
                             @Override
-                            public void run() {
-                                textView.setText("");
+                            public void run() { //취소 되고 나서, 실행 여기다가 적기
+                                textView.setText(""); //한번 빈칸으로 초기화시켜주기
                                 textView.setText("00:00:00");
+                                Frag2.textView2.setText(""); //한번 빈칸으로 초기화시켜주기
+                                Frag2.textView2.setText("0일");
+                                Frag3.textView3.setText(""); //한번 빈칸으로 초기화시켜주기
+                                Frag3.textView3.setText("0원");
+                                Frag5.textView5.setText(""); //한번 빈칸으로 초기화시켜주기
+                                Frag5.textView5.setText("0개비");
                             }
                         });
                         return; // 인터럽트 받을 경우 return (취소
-                        /** 이 부분 참고 할 것 return할때는 취소 할때나 다름 없으므로, 자세히 볼것**/ 
                     }
                 }
             }
@@ -220,58 +235,70 @@ public class Frag1 extends Fragment {
         super.onAttach(context);
 
         /** 로그인 하고나서 아이디를 통해 내 정보 불러오기*/
-        HomeMain homeMain = new HomeMain();
+        homeMain = new HomeMain();
         Eid = homeMain.id;
         Log.d("이아이디", String.valueOf(Eid));
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
+        if (Eid != null) {
 
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
+            Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
 
-                    if (success) {
-                        dateTime = jsonObject.getString("datetime");
-                        Log.d("디비정보", dateTime);
-                        cigaCount = jsonObject.getLong("cigacount"); // 데이터베이스에서 받아온 금연한 시간
-                        Log.d("디비정보", String.valueOf(cigaCount));
-                        cigaCost = jsonObject.getLong("cigapay"); // 데이터베이스에서 받아온 금연한 시간
-                        Log.d("디비정보", String.valueOf(cigaCost));
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
 
-                        Calculate_Date calculate_date = new Calculate_Date();
+                        if (success) {
+                            dateTime = jsonObject.getString("datetime");
+                            Log.d("디비정보", dateTime);
+                            cigaCount = jsonObject.getLong("cigacount"); // 데이터베이스에서 받아온 금연한 시간
+                            Log.d("디비정보", String.valueOf(cigaCount));
+                            cigaCost = jsonObject.getLong("cigapay"); // 데이터베이스에서 받아온 금연한 시간
+                            Log.d("디비정보", String.valueOf(cigaCost));
 
-                        finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
+                            Calculate_Date calculate_date = new Calculate_Date();
 
-                        //하루 담배량 계산
-                        last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
-                        Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
+                            finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
 
-                        //하루 담배값 계산
-                        last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
-                        Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
+                            //하루 담배량 계산
+                            last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
+                            Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
 
-                        timeThread = new Thread(new timeThread());
-                        timeThread.start(); //쓰레드실행
+                            //하루 담배값 계산
+                            last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+                            Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
 
-                    } else {//실패
+                            //버튼 가리고 나타내기(금연버튼)
+                            homeMain.noSmoke_Btn.setVisibility(GONE);
+                            homeMain.stop_Btn.setVisibility(VISIBLE);
+
+                            timeThread = new Thread(new timeThread());
+                            timeThread.start(); //쓰레드실행
+
+                        } else {//실패
+                            return;
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                         return;
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return;
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        };
+            };
 
-        Frag1_Request frag1_request = new Frag1_Request(Eid, responseListener);
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(frag1_request);
+            Frag1_Request frag1_request = new Frag1_Request(Eid, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            queue.add(frag1_request);
+        }else {
+            //만약 로그인 유저가 아니면 버튼은 금연하기 버튼이 보이고, 금연 중지버튼은 사라진다.
+            homeMain.noSmoke_Btn.setVisibility(VISIBLE);
+            homeMain.stop_Btn.setVisibility(GONE);
+
+        }
     }
 }
 

@@ -32,6 +32,9 @@ import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 
 //홈 화면
 public class HomeMain extends Fragment {
@@ -42,8 +45,8 @@ public class HomeMain extends Fragment {
     private TextView nameView, dateView;
     private LinearLayout card;
 
-    //스태틱을 붙여서 Frag1에서 참조할 수 있게 한다.
-    public static Button noSmoke_Btn;
+    //스태틱을 붙여서 Frag1에서 참조할 수 있게 한다. //금연하기 버튼과 취소버튼
+    public static Button noSmoke_Btn, stop_Btn;
 
     public static String id;
 
@@ -62,8 +65,7 @@ public class HomeMain extends Fragment {
         dateView = viewGroup.findViewById(R.id.noSmoke_date); //금연날짜(프로필)
         card = viewGroup.findViewById(R.id.card); //프로필
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
-
-        Button button = viewGroup.findViewById(R.id.stop);
+        stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
 
         setInit(); //뷰페이저 실행 메서드
 
@@ -80,6 +82,32 @@ public class HomeMain extends Fragment {
             nameView.setText(name); //닉네임으로 이름바꿔주기
             Log.d(TAG, name);
         }
+
+       //금연 취소 눌렀을 때,
+       stop_Btn.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) { //다이얼로그 띄우고,
+               GiveUpNoSmoking_Dialog giveUpNoSmoking_dialog = new GiveUpNoSmoking_Dialog(getContext());
+               giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
+                   @Override
+                   public void onClick(View v) {
+                       giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                   }
+               });
+
+               giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
+                   @Override
+                   public void onClick(View v) {
+                       noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
+                       stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
+                       Frag1.timeThread.interrupt();//쓰레드 취소하기(Frag1)
+                       giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                   }
+               });
+
+           }
+       });
+
 
         return viewGroup;
     }

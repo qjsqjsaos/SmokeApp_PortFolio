@@ -1,9 +1,6 @@
 package org.techtown.study01.FirstToMain.homeMain.ViewpagerFM;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,24 +13,20 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.techtown.study01.FirstToMain.R;
-import org.techtown.study01.FirstToMain.homeMain.Calculate_Date;
-import org.techtown.study01.FirstToMain.homeMain.CustomDialog;
-import org.techtown.study01.FirstToMain.homeMain.HomeMain;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 
 public class Frag2 extends Fragment {
 
     private SharedViewModel sharedViewModel;
-    private TextView textView;
+    public static TextView textView2;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_2, container, false );
 
-        textView = view.findViewById(R.id.textView8287);
+        textView2 = view.findViewById(R.id.textView8287);
 
        return view;
     }
@@ -47,7 +40,7 @@ public class Frag2 extends Fragment {
             @Override
             public void onChanged(Long Longa) {
                 DecimalFormat format = new DecimalFormat("###,###,###,###,###,###,###,###"); // 콤마 표시를 해준다(예 123123 => 123,123
-                textView.setText("벌써 "+ format.format(Longa) +"일이 되었어요!");
+                textView2.setText("벌써 "+ format.format(Longa) +"일이 되었어요!");
             }
         });
     }

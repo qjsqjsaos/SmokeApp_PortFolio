@@ -19,7 +19,7 @@ import java.sql.Time;
 import java.text.ParseException;
 
 
-public class CustomDialog extends Dialog {
+public class StartNoSmoking_Dialog extends Dialog {
 
 
     private static final String TAG = "MyTag"; //로그 찍을때,
@@ -38,7 +38,7 @@ public class CustomDialog extends Dialog {
     public static Context context;
     public static CustomDialogListener customDialogListener;
 
-    public CustomDialog(Context context) {
+    public StartNoSmoking_Dialog(Context context) {
         super(context);
         this.context = context;
         dialogStart(); //이 다이얼로그 메서드를 실행될 수 있게 보낸다.

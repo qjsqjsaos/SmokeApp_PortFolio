@@ -143,10 +143,10 @@
 
 
         <Button
+            android:layout_marginTop="19dp"
             android:id="@+id/button2"
             style="@style/bold_theme"
             android:layout_gravity="center"
-            android:layout_marginTop="19dp"
             android:layout_width="@dimen/find_textInput_Button_width"
             android:layout_height="@dimen/find_textInput_Button_height"
             android:background="@drawable/all_btn"
@@ -155,14 +155,18 @@
             android:textColor="@color/textColor_special"
             />
 
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="w정지"
-            android:id="@+id/stop" />
-
-
+            <Button
+                android:id="@+id/ns_stop"
+                style="@style/bold_theme"
+                android:layout_gravity="center"
+                android:layout_marginTop="19dp"
+                android:layout_width="@dimen/find_textInput_Button_width"
+                android:layout_height="@dimen/find_textInput_Button_height"
+                android:background="@drawable/all_btn"
+                android:textSize="@dimen/find_button_text_size"
+                android:text="다시 시작할래요. ㅠㅠ"
+                android:textColor="@color/textColor_special"
+            />
 
 
     </LinearLayout>
