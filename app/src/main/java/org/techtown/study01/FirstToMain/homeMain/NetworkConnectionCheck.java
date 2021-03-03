@@ -57,14 +57,12 @@ public class NetworkConnectionCheck extends ConnectivityManager.NetworkCallback 
     public void onAvailable(@NonNull Network network) {
         super.onAvailable(network);
         // 네트워크가 연결되었을 때 할 동작
-        Toast.makeText(this.context, "인터넷이 연결되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onLost(@NonNull Network network) {
         super.onLost(network);
         // 네트워크 연결이 끊겼을 때 할 동작
-        Toast.makeText(this.context, "접속이 원활하지 않습니다. 잠시 후 다시 접속해주세요.ㅜㅜ", Toast.LENGTH_LONG).show();
         timeThread = new Thread(new timeThread());
         timeThread.start(); //쓰레드실행
 

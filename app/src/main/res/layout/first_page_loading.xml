@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:background="@drawable/start_background"
-    tools:context=".start.First_page_loading">
+    tools:context=".start.First_page_loading"
+    android:orientation="vertical">
+
+
 
     <TextView
+        android:id="@+id/textView32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-60dp"
+        android:fontFamily="@font/mapo"
+        android:gravity="center"
+        android:text="내가 좋아서 피는게 아니라,\n\n끊지 못해서 피는 게 맞습니다."
+        android:textAllCaps="false"
+        android:textIsSelectable="false"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/imageView2"
+        android:layout_width="136dp"
+        android:layout_height="318dp"
+        android:src="@drawable/smokeimage" />
+
+    <TextView
+        android:layout_marginTop="-60dp"
         android:id="@+id/textView33"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="59dp"
         android:fontFamily="@font/mapo"
         android:gravity="center"
@@ -17,40 +42,7 @@
         android:textAllCaps="false"
         android:textIsSelectable="true"
         android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.688" />
+        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView32"
-        android:layout_width="0dp"
-        android:layout_height="59dp"
-        android:fontFamily="@font/mapo"
-        android:gravity="center"
-        android:text="내가 좋아서 피는게 아니라,\n\n끊지 못해서 피는 게 맞습니다."
-        android:textAllCaps="false"
-        android:textIsSelectable="false"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.303" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="136dp"
-        android:layout_height="318dp"
-        android:layout_marginTop="204dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/smokeimage" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -33,6 +33,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,8 +96,7 @@ public class HomeMain extends Fragment {
            public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
               String wiseValue = wiseView.getText().toString();
                if(wiseValue.equals("오류")){
-                   BottomNavi bottomNavi = new BottomNavi();
-                   bottomNavi.saveValueToDB(); //디비에 값을 저장하고,
+                   saveValueToDB2(); //디비에 값을 저장하고,
                    popupLoading(); //firstloding창으로 이동하고,
                    BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
                }
@@ -200,6 +200,42 @@ public class HomeMain extends Fragment {
 
     }
 
+    //디비에 값이 저장되는 메서드
+    public void saveValueToDB2() {
+        Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+
+                    if (success) {
+                        Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
+
+                    } else {//실패
+                        Toast.makeText(getContext(), "오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "디비오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        //Frag1에서 가져온 public static 준 변수들을 액티비티가 꺼질때마다 디비에 저장하게 만든다.
+        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(Frag1.dateTime, Frag1.cigaCount, Frag1.cigaCost, HomeMain.id, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(frag_ondestroy);
+
+        Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + id);
+    }
 
 }
 

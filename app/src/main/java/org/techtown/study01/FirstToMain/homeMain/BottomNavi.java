@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.controls.templates.ControlTemplate;
@@ -63,6 +65,17 @@ import java.text.ParseException;
         Intent serviceIntent = new Intent(this,MyService.class);
         startService(serviceIntent);
 
+
+            //네트워크가 즉, 데이터가 없는 인터넷이 없는 상태에서 접속하면, firstloading창 보여주기
+            ConnectivityManager connManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //23버전부터 사용가능
+                Network network = connManager.getActiveNetwork();
+
+                if(network == null){ //인터넷 연결이 안되어있으면,
+                    popupIntent2(); //firstloading창으로 이동하고,
+                    finish(); //액티비티 전부 종료.
+                }
+            }
 
 
             /**프래그먼트 생성*/
@@ -180,6 +193,14 @@ import java.text.ParseException;
             queue.add(frag_ondestroy);
 
             Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + id);
+        }
+
+        public void popupIntent2(){ // 만약 인터넷이 연결이 되어 있지 않으면 인텐트를 한다.
+            Intent intent = new Intent(BottomNavi.this, First_page_loading.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
+            startActivity(intent);
         }
 
     }
