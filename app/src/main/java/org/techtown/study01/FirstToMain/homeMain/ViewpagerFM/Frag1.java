@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -280,9 +281,11 @@ public class Frag1 extends Fragment {
 
 
                     } catch (JSONException e) {
+                        Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.1", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                         return;
                     } catch (Exception e) {
+                        Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.2", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -291,11 +294,8 @@ public class Frag1 extends Fragment {
             Frag1_Request frag1_request = new Frag1_Request(Eid, responseListener);
             RequestQueue queue = Volley.newRequestQueue(getContext());
             queue.add(frag1_request);
-        }else {
-            //만약 로그인 유저가 아니면 버튼은 금연하기 버튼이 보이고, 금연 중지버튼은 사라진다.
-            homeMain.noSmoke_Btn.setVisibility(VISIBLE);
-            homeMain.stop_Btn.setVisibility(GONE);
-
+        }else{
+            Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.3", Toast.LENGTH_SHORT).show();
         }
     }
 

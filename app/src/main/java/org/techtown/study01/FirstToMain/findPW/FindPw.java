@@ -157,7 +157,7 @@ public class FindPw extends AppCompatActivity {
             }
 
             //구글 이메일로 smtp 사용해서 인증번호 보내기
-            GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+            GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694!@");
             //GMailSender.sendMail(제목, 본문내용, 받는사람);
             try {
                 gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 인증번호를 확인해주세요.",

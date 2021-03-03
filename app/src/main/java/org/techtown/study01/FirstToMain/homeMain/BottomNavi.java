@@ -115,22 +115,15 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 
 
     }
-        @Override
-        public void onPause() { //또 다른 액티비티를 시작하려고 할 때 디비에 값이 저장된다.
-            super.onPause();
-            SaveValueToDB();
-        }
-
-        @Override //액티비티가 사용자에게 더 이상 보이지 않을 때 디비에 값이 저장된다.
-        protected void onStop() {
-            super.onStop();
-            SaveValueToDB();
-        }
 
         @Override //액티비티가 소멸되어 없어지기 전에 디비에 값이 저장된다.
         protected void onDestroy() {
             super.onDestroy();
-            SaveValueToDB();
+            try{
+                SaveValueToDB();
+            }catch (Exception e){ //혹시나 인터넷 연결이 끊어졌을때,
+                Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+            }
         }
 
         //디비에 값이 저장되는 메서드

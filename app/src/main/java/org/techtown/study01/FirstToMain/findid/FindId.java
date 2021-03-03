@@ -125,7 +125,7 @@ public class FindId extends AppCompatActivity {
 
     public void idSendStart()  {
         //구글 이메일로 smtp 사용해서 인증번호 보내기
-        GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694");
+        GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694!@");
                 //GMailSender.sendMail(제목, 본문내용, 받는사람);
 
         try {
