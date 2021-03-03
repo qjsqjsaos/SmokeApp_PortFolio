@@ -1,11 +1,19 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import android.widget.ImageView;
@@ -31,6 +39,7 @@ import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
+import org.techtown.study01.FirstToMain.start.First_page_loading;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -48,6 +57,9 @@ public class HomeMain extends Fragment {
     //스태틱을 붙여서 Frag1에서 참조할 수 있게 한다. //금연하기 버튼과 취소버튼
     public static Button noSmoke_Btn, stop_Btn;
 
+    //NetworkConnectionCheck 참조할 수 있게 한다.
+    public static TextView wiseView;
+
     public static String id;
 
     private static final String TAG = "MyTag"; //로그 찍을때,
@@ -62,9 +74,34 @@ public class HomeMain extends Fragment {
         userView = viewGroup.findViewById(R.id.userView); //프로필사진
         nameView = viewGroup.findViewById(R.id.nickName); //닉네임(프로필)
         dateView = viewGroup.findViewById(R.id.noSmoke_date); //금연날짜(프로필)
+        wiseView = viewGroup.findViewById(R.id.text_wisesay); //명언액자
         card = viewGroup.findViewById(R.id.card); //프로필
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
+
+        //텍스트뷰 글씨가 바뀔 때 호출한다.
+       wiseView.addTextChangedListener(new TextWatcher() {
+           @Override
+           public void beforeTextChanged(CharSequence s, int start, int count, int after) { //텍스트가 바뀌기전
+
+           }
+
+           @Override
+           public void onTextChanged(CharSequence s, int start, int before, int count) { //텍스트가 바뀌는 중일 때,
+
+           }
+
+           @Override
+           public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
+              String wiseValue = wiseView.getText().toString();
+               if(wiseValue.equals("오류")){
+                   BottomNavi bottomNavi = new BottomNavi();
+                   bottomNavi.saveValueToDB(); //디비에 값을 저장하고,
+                   popupLoading(); //firstloding창으로 이동하고,
+                   BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
+               }
+           }
+       });
 
         setInit(); //뷰페이저 실행 메서드
 
@@ -153,6 +190,15 @@ public class HomeMain extends Fragment {
 
     ///////////////////////////////////////// 뷰페이저(끝)///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void popupLoading(){ // 만약 인터넷이 연결이 되어 있지 않으면 인텐트를 한다.
+        Intent intent = new Intent(getContext(), First_page_loading.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
+        startActivity(intent);
+
+    }
 
 
 }

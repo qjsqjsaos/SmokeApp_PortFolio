@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import org.techtown.study01.FirstToMain.R;
 
-public class first_page_loading extends AppCompatActivity {
+public class First_page_loading extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

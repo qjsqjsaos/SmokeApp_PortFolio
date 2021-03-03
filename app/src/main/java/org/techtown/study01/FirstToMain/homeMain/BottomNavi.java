@@ -1,9 +1,18 @@
     package org.techtown.study01.FirstToMain.homeMain;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Network;
+import android.os.Build;
 import android.os.Bundle;
+import android.service.controls.templates.ControlTemplate;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -14,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -25,6 +35,9 @@ import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
+import org.techtown.study01.FirstToMain.start.First_page_loading;
+
+import java.text.ParseException;
 
 
     public class BottomNavi extends AppCompatActivity {
@@ -37,13 +50,19 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 
         private String id;
 
+        public static BottomNavi bottomNavi;
 
 
-
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navi);
+
+        //서비스실행 (인터넷이 연결되어 있는지 아닌지 확인해준다.(NetworkConnectionCheck -> MyService -> BottomNavi)) 항상 실행중
+        Intent serviceIntent = new Intent(this,MyService.class);
+        startService(serviceIntent);
+
 
 
             /**프래그먼트 생성*/
@@ -120,14 +139,14 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
         protected void onDestroy() {
             super.onDestroy();
             try{
-                SaveValueToDB();
+                saveValueToDB();
             }catch (Exception e){ //혹시나 인터넷 연결이 끊어졌을때,
                 Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
             }
         }
 
         //디비에 값이 저장되는 메서드
-        private void SaveValueToDB() {
+        public void saveValueToDB() {
             Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
 
                 @Override
@@ -162,4 +181,5 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 
             Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + id);
         }
+
     }

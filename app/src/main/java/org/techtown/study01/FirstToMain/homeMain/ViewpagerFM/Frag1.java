@@ -97,6 +97,10 @@ public class Frag1 extends Fragment {
                     public void onPositiveClicked(String date, String time) throws ParseException { //지정된 날짜, 지정된 시간
                         Calculate_Date calculate_date = new Calculate_Date();
 
+                        /** 임시로 일단 값주기*/
+                        cigaCount = 5;
+                        cigaCost = 5000;
+
                         dateTime = date +" "+ time; // 지정된 날짜와 데이트 시간 합치기
                         Log.d("3값", dateTime);
 
@@ -266,9 +270,7 @@ public class Frag1 extends Fragment {
 
 
                             if(dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
-                                /** 임시로 일단 값주기*/
-                                cigaCount = 5;
-                                cigaCost = 5000;
+
                                 startThreadShow(); //프래그먼트 켜질때 쓰레드
 
                             }else{//아니면 원래 내 아이디 값 가져와서 실행.
@@ -302,6 +304,9 @@ public class Frag1 extends Fragment {
     private void startThreadShow() throws ParseException {
         Calculate_Date calculate_date = new Calculate_Date();
         finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
+        /** 임시로 일단 값주기*/
+        cigaCount = 5;
+        cigaCost = 5000;
 
         //하루 담배량 계산
         last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
