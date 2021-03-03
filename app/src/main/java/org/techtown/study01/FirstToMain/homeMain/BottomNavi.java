@@ -29,17 +29,13 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
 import org.techtown.study01.FirstToMain.MaintoEnd.Settings.Settings;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
 import org.techtown.study01.FirstToMain.R;
-import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
-import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
+
 import org.techtown.study01.FirstToMain.start.First_page_loading;
 
-import java.text.ParseException;
 
 
     public class BottomNavi extends AppCompatActivity {
@@ -148,52 +144,6 @@ import java.text.ParseException;
 
     }
 
-        @Override //액티비티가 소멸되어 없어지기 전에 디비에 값이 저장된다.
-        protected void onDestroy() {
-            super.onDestroy();
-            try{
-                saveValueToDB();
-            }catch (Exception e){ //혹시나 인터넷 연결이 끊어졌을때,
-                Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        //디비에 값이 저장되는 메서드
-        public void saveValueToDB() {
-            Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
-
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        boolean success = jsonObject.getBoolean("success");
-
-                        if (success) {
-                            Toast.makeText(getApplication(), "성공", Toast.LENGTH_SHORT).show();
-
-                        } else {//실패
-                            Toast.makeText(getApplication(), "오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplication(), "디비오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-                        return;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-
-            //Frag1에서 가져온 public static 준 변수들을 액티비티가 꺼질때마다 디비에 저장하게 만든다.
-            Frag_ondestroy frag_ondestroy = new Frag_ondestroy(Frag1.dateTime, Frag1.cigaCount, Frag1.cigaCost, HomeMain.id, responseListener);
-            RequestQueue queue = Volley.newRequestQueue(getApplication());
-            queue.add(frag_ondestroy);
-
-            Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + id);
-        }
 
         public void popupIntent2(){ // 만약 인터넷이 연결이 되어 있지 않으면 인텐트를 한다.
             Intent intent = new Intent(BottomNavi.this, First_page_loading.class);

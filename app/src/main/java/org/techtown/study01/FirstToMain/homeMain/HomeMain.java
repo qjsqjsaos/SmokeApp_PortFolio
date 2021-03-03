@@ -65,6 +65,10 @@ public class HomeMain extends Fragment {
 
     private static final String TAG = "MyTag"; //로그 찍을때,
 
+    private String dateTime = "0";
+    private long cigaCount = 0;
+    private double cigaCost = 0;
+
 
     @Nullable
     @Override
@@ -96,7 +100,6 @@ public class HomeMain extends Fragment {
            public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
               String wiseValue = wiseView.getText().toString();
                if(wiseValue.equals("오류")){
-                   saveValueToDB2(); //디비에 값을 저장하고,
                    popupLoading(); //firstloding창으로 이동하고,
                    BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
                }
@@ -134,6 +137,7 @@ public class HomeMain extends Fragment {
                giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
                    @Override
                    public void onClick(View v) {
+                       saveValueToDB2(); //디비에 값 0으로 초기화
                        noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
                        stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
                        Frag1.timeThread.interrupt();//쓰레드 취소하기(Frag1)
@@ -211,7 +215,8 @@ public class HomeMain extends Fragment {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {
-                        Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
+
+                        //디비에 저장했음.
 
                     } else {//실패
                         Toast.makeText(getContext(), "오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
@@ -229,13 +234,15 @@ public class HomeMain extends Fragment {
             }
         };
 
-        //Frag1에서 가져온 public static 준 변수들을 액티비티가 꺼질때마다 디비에 저장하게 만든다.
-        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(Frag1.dateTime, Frag1.cigaCount, Frag1.cigaCost, HomeMain.id, responseListener);
+        //모두 취소된 값 0으로 저장
+        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(dateTime, cigaCount, cigaCost, id, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(frag_ondestroy);
 
-        Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + id);
+        Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + HomeMain.id);
     }
+
+
 
 }
 

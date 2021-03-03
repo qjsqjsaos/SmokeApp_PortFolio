@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity {
 
             if(loginId != null && loginPwd != null) { // loginId와 loginPwd에 값이 있으면, 자동 로그인을 실시 한다.
                 if (loginId.length() > 0 && loginPwd.length() > 0) {
-                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(Login.this, loginName + "님 환영합니다.", Toast.LENGTH_SHORT).show(); 보류
                     Intent intent = new Intent(Login.this, BottomNavi.class);
                     intent.putExtra("id", loginId);
                     intent.putExtra("name", loginName);

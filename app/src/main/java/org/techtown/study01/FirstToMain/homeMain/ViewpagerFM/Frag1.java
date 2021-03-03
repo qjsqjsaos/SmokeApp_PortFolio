@@ -121,6 +121,8 @@ public class Frag1 extends Fragment {
                         homeMain.noSmoke_Btn.setVisibility(GONE);
                         homeMain.stop_Btn.setVisibility(VISIBLE);
 
+                        saveValueToDB(); //디비에 저장
+
                         timeThread = new Thread(new timeThread());
                         timeThread.start(); //쓰레드실행
 
@@ -200,27 +202,23 @@ public class Frag1 extends Fragment {
                         handler.sendMessage(msg);
                     try {
                         Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException e) { //인터럽트(취소 받을 경우)
                         e.printStackTrace();
                         getActivity().runOnUiThread(new Runnable(){
                             @Override
                             public void run() { //취소 되고 나서, 실행 여기다가 적기
                                 textView.setText(""); //한번 빈칸으로 초기화시켜주기
-                                textView.setText("00:00:00");
+                                textView.setText("오늘을 기준으로\n\n00:00:00 시간 째 금연 중");
                                 Frag2.textView2.setText(""); //한번 빈칸으로 초기화시켜주기
-                                Frag2.textView2.setText("0일");
+                                Frag2.textView2.setText("벌써 000일이 되었어요!");
                                 Frag3.textView3.setText(""); //한번 빈칸으로 초기화시켜주기
                                 Frag3.textView3.setText("0원");
                                 Frag5.textView5.setText(""); //한번 빈칸으로 초기화시켜주기
-                                Frag5.textView5.setText("0개비");
+                                Frag5.textView5.setText("0개비 가량 됩니다!");
 
-                                ///값 초기화(db로 보내기)
-                                Frag1.dateTime = "0";
-                                cigaCount = 0;
-                                cigaCost = 0;
                             }
                         });
-                        return; // 인터럽트 받을 경우 return (취소
+                        return; // 인터럽트 받을 경우 return (취소)
                     }
                 }
             }
@@ -322,6 +320,44 @@ public class Frag1 extends Fragment {
 
         timeThread = new Thread(new timeThread());
         timeThread.start(); //쓰레드실행
+    }
+
+    //디비에 값이 저장되는 메서드
+    public void saveValueToDB() {
+        Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+
+                    if (success) {
+
+                        //디비 저장하기성공
+
+                    } else {//실패
+                        Toast.makeText(getContext(), "오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "디비오류입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        //Frag1에서 가져온 public static 준 변수들을 액티비티가 꺼질때마다 디비에 저장하게 만든다.
+        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(Frag1.dateTime, Frag1.cigaCount, Frag1.cigaCost, HomeMain.id, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(frag_ondestroy);
+
+        Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + HomeMain.id);
     }
 
 
