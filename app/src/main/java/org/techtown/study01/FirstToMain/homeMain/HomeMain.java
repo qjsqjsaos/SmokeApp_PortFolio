@@ -27,6 +27,9 @@ import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 
@@ -40,7 +43,10 @@ import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
 import org.techtown.study01.FirstToMain.start.First_page_loading;
+
+import java.text.DecimalFormat;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -52,8 +58,10 @@ public class HomeMain extends Fragment {
     //뷰그룹 부분
     private ViewGroup viewGroup;
     private ImageView userView;
-    private TextView nameView, dateView;
+    private TextView nameView;
     private LinearLayout card;
+
+    public static TextView dateView, d_dayView; //프로필에 디데이날짜와 금연날짜이다. 금연시작버튼이나, 다이얼로그안에 금연취소버튼을 누를시 변동한다. 이 값은 Frag1으로 가서 초기화된다.
 
     //스태틱을 붙여서 Frag1에서 참조할 수 있게 한다. //금연하기 버튼과 취소버튼
     public static Button noSmoke_Btn, stop_Btn;
@@ -69,6 +77,9 @@ public class HomeMain extends Fragment {
     private long cigaCount = 0;
     private double cigaCost = 0;
 
+    //저장 뷰모델
+    private SharedViewModel sharedViewModel;
+
 
     @Nullable
     @Override
@@ -79,32 +90,44 @@ public class HomeMain extends Fragment {
         userView = viewGroup.findViewById(R.id.userView); //프로필사진
         nameView = viewGroup.findViewById(R.id.nickName); //닉네임(프로필)
         dateView = viewGroup.findViewById(R.id.noSmoke_date); //금연날짜(프로필)
+        d_dayView = viewGroup.findViewById(R.id.D_dayView);
         wiseView = viewGroup.findViewById(R.id.text_wisesay); //명언액자
         card = viewGroup.findViewById(R.id.card); //프로필
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
 
+        /** 프로필을 클릭했을 때, 이름과 사진 변경 가능*/
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+            }
+        });
+
+
         //텍스트뷰 글씨가 바뀔 때 호출한다.
-       wiseView.addTextChangedListener(new TextWatcher() {
-           @Override
-           public void beforeTextChanged(CharSequence s, int start, int count, int after) { //텍스트가 바뀌기전
+        wiseView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { //텍스트가 바뀌기전
 
-           }
+            }
 
-           @Override
-           public void onTextChanged(CharSequence s, int start, int before, int count) { //텍스트가 바뀌는 중일 때,
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { //텍스트가 바뀌는 중일 때,
 
-           }
+            }
 
-           @Override
-           public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
-              String wiseValue = wiseView.getText().toString();
-               if(wiseValue.equals("오류")){
-                   popupLoading(); //firstloding창으로 이동하고,
-                   BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
-               }
-           }
-       });
+            @Override
+            public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
+                String wiseValue = wiseView.getText().toString();
+                if (wiseValue.equals("오류")) {
+                    popupLoading(); //firstloding창으로 이동하고,
+                    BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
+                }
+            }
+        });
 
         setInit(); //뷰페이저 실행 메서드
 
@@ -115,38 +138,38 @@ public class HomeMain extends Fragment {
 
         String name = bundle.getString("name");
         id = bundle.getString("id");
-        Log.d(TAG,"번들 메세지들 다 가져옴");
+        Log.d(TAG, "번들 메세지들 다 가져옴");
 
-       if(name != null) { //일반 로그인
+        if (name != null) { //일반 로그인
             nameView.setText(name); //닉네임으로 이름바꿔주기
             Log.d(TAG, name);
         }
 
-       //금연 취소 눌렀을 때,
-       stop_Btn.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) { //다이얼로그 띄우고,
-               GiveUpNoSmoking_Dialog giveUpNoSmoking_dialog = new GiveUpNoSmoking_Dialog(getContext());
-               giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
-                   @Override
-                   public void onClick(View v) {
-                       giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
-                   }
-               });
+        //금연 취소 눌렀을 때,
+        stop_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //다이얼로그 띄우고,
+                GiveUpNoSmoking_Dialog giveUpNoSmoking_dialog = new GiveUpNoSmoking_Dialog(getContext());
+                giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
+                    @Override
+                    public void onClick(View v) {
+                        giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                    }
+                });
 
-               giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
-                   @Override
-                   public void onClick(View v) {
-                       saveValueToDB2(); //디비에 값 0으로 초기화
-                       noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
-                       stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
-                       Frag1.timeThread.interrupt();//쓰레드 취소하기(Frag1)
-                       giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
-                   }
-               });
+                giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
+                    @Override
+                    public void onClick(View v) {
+                        saveValueToDB2(); //디비에 값 0으로 초기화
+                        noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
+                        stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
+                        Frag1.timeThread.interrupt();//쓰레드 취소하기(Frag1)
+                        giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                    }
+                });
 
-           }
-       });
+            }
+        });
 
 
         return viewGroup;
@@ -175,10 +198,10 @@ public class HomeMain extends Fragment {
         viewPageSetUp.setPageTransformer(new ViewPager2.PageTransformer() {
             @Override
             public void transformPage(@NonNull View page, float position) {
-                float offset = position * - (2 * pageOffset + pageMargin);
-                if(-1 > position) {
+                float offset = position * -(2 * pageOffset + pageMargin);
+                if (-1 > position) {
                     page.setTranslationX(-offset);
-                } else if(1 >= position) {
+                } else if (1 >= position) {
                     float scaleFactor = Math.max(0.7f, 1 - Math.abs(position - 0.14285715f));
                     page.setTranslationX(offset);
                     page.setScaleY(scaleFactor);
@@ -195,7 +218,7 @@ public class HomeMain extends Fragment {
     ///////////////////////////////////////// 뷰페이저(끝)///////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void popupLoading(){ // 만약 인터넷이 연결이 되어 있지 않으면 인텐트를 한다.
+    public void popupLoading() { // 만약 인터넷이 연결이 되어 있지 않으면 인텐트를 한다.
         Intent intent = new Intent(getContext(), First_page_loading.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
@@ -242,7 +265,35 @@ public class HomeMain extends Fragment {
         Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + HomeMain.id);
     }
 
+    /**
+     * SharedViewModel 값 받아서 사용하기
+     **/
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //프로필에 디데이값 넣어주기
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedViewModel.getLiveData().observe(getViewLifecycleOwner(), new Observer<Long>() {
+            @Override
+            public void onChanged(Long Longa) {
+                DecimalFormat format = new DecimalFormat("###,###,###,###,###,###,###,###"); // 콤마 표시를 해준다(예 123123 => 123,123
+                d_dayView.setText("D+" + format.format(Longa));
+                Log.d("디데이", String.valueOf(Longa));
 
 
+
+            }
+        });
+
+        //프로필에 날짜값 넣어주기
+        sharedViewModel.getstartDate().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String str) {
+                dateView.setText(str);
+                Log.d("날짜짜짜", String.valueOf(str));
+            }
+        });
+    }
 }
 

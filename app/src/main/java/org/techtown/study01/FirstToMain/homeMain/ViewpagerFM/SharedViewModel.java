@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 //라이브데이타 클래스 만들기
 
 public class SharedViewModel extends ViewModel {
-    //Long용 Frag2용 //금연할 일 수
+    //Long용 Frag2용, HomeMain용 //금연한 일 수
     private MutableLiveData<Long> liveData = new MutableLiveData<>();
 
     public LiveData<Long> getLiveData(){
@@ -17,6 +17,7 @@ public class SharedViewModel extends ViewModel {
     public void setLiveData(Long longa){
         liveData.setValue(longa);
     }
+
 
 
     //Long용 Frag5용 //금연하면서 안 핀 담배 갯수
@@ -43,5 +44,17 @@ public class SharedViewModel extends ViewModel {
         liveDataCost.setValue(longa);
     }
 
+
+
+    //String용 HomeMain용 //금연 시작 날짜
+    private MutableLiveData<String> startDate = new MutableLiveData<>();
+
+    public LiveData<String> getstartDate(){
+        return startDate;
+    }
+
+    public void setstartDate(String str){
+        startDate.setValue(str);
+    }
 
 }

@@ -118,8 +118,10 @@ public class Frag1 extends Fragment {
                         Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
                         Log.d("시가코스트", String.valueOf(cigaCost));
 
-                        homeMain.noSmoke_Btn.setVisibility(GONE);
-                        homeMain.stop_Btn.setVisibility(VISIBLE);
+                        homeMain.noSmoke_Btn.setVisibility(GONE); //금연버튼을 비활성화
+                        homeMain.stop_Btn.setVisibility(VISIBLE); //취소버튼을 활성화
+
+                        sharedViewModel.setstartDate(dateTime); //금연 시작날짜 SharedViewModel에 값 입력하기(HomeMain에 보내기 위함.)
 
                         saveValueToDB(); //디비에 저장
 
@@ -202,7 +204,7 @@ public class Frag1 extends Fragment {
                         handler.sendMessage(msg);
                     try {
                         Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
-                    } catch (InterruptedException e) { //인터럽트(취소 받을 경우)
+                    } catch (InterruptedException e) { //인터럽트(취소 받을 경우) 한마디로 Bottomnavi에 있는 다이얼로그에서 금연 취소버튼을 눌렀을때이다.
                         e.printStackTrace();
                         getActivity().runOnUiThread(new Runnable(){
                             @Override
@@ -215,7 +217,8 @@ public class Frag1 extends Fragment {
                                 Frag3.textView3.setText("0원");
                                 Frag5.textView5.setText(""); //한번 빈칸으로 초기화시켜주기
                                 Frag5.textView5.setText("0개비 가량 됩니다!");
-
+                                HomeMain.dateView.setText("금연날짜");
+                                HomeMain.d_dayView.setText("D+");
                             }
                         });
                         return; // 인터럽트 받을 경우 return (취소)

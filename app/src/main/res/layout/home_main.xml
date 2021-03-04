@@ -85,24 +85,34 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.8"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:padding="5dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp" />
 
                     <TextView
-                        android:textColor="@color/textColor"
+                        android:id="@+id/D_dayView"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:gravity="bottom"
                         android:layout_gravity="left"
+                        android:gravity="center"
                         android:text="D+0"
+                        android:textColor="@color/textColor"
                         android:textSize="20sp" />
 
                 </LinearLayout>
@@ -142,8 +152,12 @@
                  />
 
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="30dp" />
+
+
         <Button
-            android:layout_marginTop="19dp"
             android:id="@+id/button2"
             style="@style/bold_theme"
             android:layout_gravity="center"
@@ -159,7 +173,7 @@
                 android:id="@+id/ns_stop"
                 style="@style/bold_theme"
                 android:layout_gravity="center"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="-60dp"
                 android:layout_width="@dimen/find_textInput_Button_width"
                 android:layout_height="@dimen/find_textInput_Button_height"
                 android:background="@drawable/all_btn"
@@ -167,6 +181,10 @@
                 android:text="다시 시작할래요. ㅠㅠ"
                 android:textColor="@color/textColor_special"
             />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="30dp" />
 
 
     </LinearLayout>
