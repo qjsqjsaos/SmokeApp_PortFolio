@@ -29,11 +29,14 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
 import org.techtown.study01.FirstToMain.MaintoEnd.Settings.Settings;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
 import org.techtown.study01.FirstToMain.R;
 
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1_Request;
 import org.techtown.study01.FirstToMain.start.First_page_loading;
 
 import static android.view.View.GONE;
@@ -59,7 +62,9 @@ import static android.view.View.VISIBLE;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navi);
 
-        //서비스실행 (인터넷이 연결되어 있는지 아닌지 확인해준다.(NetworkConnectionCheck -> MyService -> BottomNavi)) 항상 실행중
+
+
+            //서비스실행 (인터넷이 연결되어 있는지 아닌지 확인해준다.(NetworkConnectionCheck -> MyService -> BottomNavi)) 항상 실행중
         Intent serviceIntent = new Intent(this,MyService.class);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){ //api level 26부터
             this.startForegroundService(serviceIntent); //이 메서드를 쓰고 그게아니면,
@@ -160,4 +165,8 @@ import static android.view.View.VISIBLE;
             startActivity(intent);
         }
 
-    }
+        /** 로그인 하고나서 아이디를 통해 내 정보 불러오고 그의 맞게 버튼 호출*/
+
+
+        }
+

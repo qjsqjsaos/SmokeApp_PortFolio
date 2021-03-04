@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,6 +38,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
@@ -105,6 +107,23 @@ public class HomeMain extends Fragment {
     public static double last_cigaCost;
 
 
+    /** 다른 프래그먼트로 이동 시 쓰레드 종료(어차피 돌아오면 다시 켜짐)*/
+    @Override
+    public void onStop() { //프래그먼트가 안 보일때 호출
+        super.onStop();
+        if (dateTime != null) {
+            if (!dateTime.equals("0")) { //타이머 실행이 안될 때 전환시 쓰레드 끄기
+                timeThread.interrupt();
+            }
+        }
+    }
+
+    /** 앱이 맨 처음 실행될 때, 아이디값을 통해 정보를 가져온다.*/
+    @Override
+    public void onStart() { //프래그먼트가 처음 보일때 호출
+        super.onStart();
+        idcheckandButton(); //아이디를 토대로 버튼정보가져오기
+    }
 
     @Nullable
     @Override
@@ -121,7 +140,8 @@ public class HomeMain extends Fragment {
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
 
-            startNoSmokingButton();
+
+            startNoSmokingButton(); //금연시작 버튼
 
             /** 프로필을 클릭했을 때, 이름과 사진 변경 가능*/
             card.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +221,7 @@ public class HomeMain extends Fragment {
 
             return viewGroup;
     }
+
 
 
 
@@ -382,6 +403,7 @@ public class HomeMain extends Fragment {
         viewPageSetUp.setAdapter(SetupPagerAdapter);
         viewPageSetUp.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         viewPageSetUp.setOffscreenPageLimit(5); //좌우로 몇개까지 미리로딩하고 싶냐는 말이다. ex)1페이지에 있을때 나머지 2, 3, 4, 5, 6 페이지가 미리로딩된다는 뜻이다.
+        viewPageSetUp.setSaveEnabled(false);
 
         final float pageMargin = (float) getResources().getDimensionPixelOffset(R.dimen.pageMargin); //페이지끼리 간격
         final float pageOffset = (float) getResources().getDimensionPixelOffset(R.dimen.offset); //페이지 보이는 정도
@@ -463,7 +485,7 @@ public class HomeMain extends Fragment {
         Frag_ondestroy frag_ondestroy = new Frag_ondestroy(svalue, value, value, id, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(frag_ondestroy);
-        Log.d("뭐야", dateTime + "/" + cigaCount + "/" + cigaCost + "/" + HomeMain.id);
+        Log.d("뭐야", svalue + "/" + value + "/" + HomeMain.id);
     }
 
 
@@ -505,14 +527,8 @@ public class HomeMain extends Fragment {
     }
 
 
-
-
     /** 로그인 하고나서 아이디를 통해 내 정보 불러오고 그의 맞게 버튼 호출*/
-
-    @Override //프래그먼트가 액티비티와 연결될 때 호출됨/ 이 때 디비에서 아이디에 맞게 자료를 가져온다.
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
+    public void idcheckandButton(){
         if (id != null) {
 
             Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
@@ -531,14 +547,13 @@ public class HomeMain extends Fragment {
                             if(dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
                                 //금연버튼 활성화
                                 noSmoke_Btn.setVisibility(VISIBLE);
-                               stop_Btn.setVisibility(GONE);
-                                startThreadShow();
-
+                                stop_Btn.setVisibility(GONE);
+                                //쓰레드 실행안함.
                             }else{
                                 //금연 취소버튼 활성화
                                 noSmoke_Btn.setVisibility(GONE);
-                               stop_Btn.setVisibility(VISIBLE);
-                                startThreadShow();
+                                stop_Btn.setVisibility(VISIBLE);
+                                startThreadShow(); //쓰레드 실행
                             }
 
                         } else {//실패
@@ -547,11 +562,9 @@ public class HomeMain extends Fragment {
 
 
                     } catch (JSONException e) {
-                        Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.1", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                         return;
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.2", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -560,10 +573,9 @@ public class HomeMain extends Fragment {
             Frag1_Request frag1_request = new Frag1_Request(id, responseListener);
             RequestQueue queue = Volley.newRequestQueue(getContext());
             queue.add(frag1_request);
-        }else{
-            Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.3", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     /** 따로 만든 시작 쓰레드*/
@@ -585,6 +597,7 @@ public class HomeMain extends Fragment {
         timeThread = new Thread(new timeThread());
         timeThread.start(); //쓰레드실행
     }
+
 
 }
 

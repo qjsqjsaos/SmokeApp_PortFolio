@@ -2,6 +2,7 @@ package org.techtown.study01.FirstToMain.homeMain;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import org.jetbrains.annotations.NotNull;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag2;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag3;
@@ -23,6 +25,7 @@ import java.util.List;
 public class FragPagerAdapter extends FragmentStateAdapter {
     // Real Fragment Total Count
     private final int mSetItemCount = 6; //화면에 출력될 프래그먼트 개수
+
 
 
 
@@ -46,6 +49,7 @@ public class FragPagerAdapter extends FragmentStateAdapter {
         }
 
     }
+
 
     public int getRealPosition(int _iPosition){
         return _iPosition % mSetItemCount;

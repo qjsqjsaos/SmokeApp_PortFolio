@@ -66,7 +66,7 @@ public class Frag1 extends Fragment {
         sharedViewModel.getstartDate().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String str) {
-                textView.setText("오늘을 기준으로\n\n" + str + "시간 째 금연 중" +"일이 되었어요!");
+                textView.setText("오늘을 기준으로\n\n" + str + "시간 째 금연 중");
             }
         });
     }
