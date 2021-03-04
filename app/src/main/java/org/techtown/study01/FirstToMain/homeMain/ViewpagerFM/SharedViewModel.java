@@ -46,7 +46,7 @@ public class SharedViewModel extends ViewModel {
 
 
 
-    //String용 HomeMain용 //금연 시작 날짜
+    //String용 Frag1용 //금연 시작 날짜
     private MutableLiveData<String> startDate = new MutableLiveData<>();
 
     public LiveData<String> getstartDate(){

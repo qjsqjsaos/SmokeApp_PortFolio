@@ -61,7 +61,12 @@ import static android.view.View.VISIBLE;
 
         //서비스실행 (인터넷이 연결되어 있는지 아닌지 확인해준다.(NetworkConnectionCheck -> MyService -> BottomNavi)) 항상 실행중
         Intent serviceIntent = new Intent(this,MyService.class);
-        startService(serviceIntent);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){ //api level 26부터
+            this.startForegroundService(serviceIntent); //이 메서드를 쓰고 그게아니면,
+        }else{
+            this.startService(serviceIntent); //이것을 쓴다.
+        }
+
 
 
             //네트워크가 즉, 데이터가 없는 인터넷이 없는 상태에서 접속하면, firstloading창 보여주기

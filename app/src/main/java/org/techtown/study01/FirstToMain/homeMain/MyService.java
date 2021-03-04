@@ -1,14 +1,39 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 public class MyService extends Service {
 
     NetworkConnectionCheck networkConnectionCheck;
     public MyService() {
+
+    }
+
+    //////////////////////////////////////알림 채널 만들기
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onCreate() {
+        String CHANNEL_ID = "channel_1";
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Android test",
+                NotificationManager.IMPORTANCE_LOW);
+
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
+                .createNotificationChannel(channel);
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("")
+                .setContentText("").build();
+        startForeground(2, notification);
     }
 
     @Override
