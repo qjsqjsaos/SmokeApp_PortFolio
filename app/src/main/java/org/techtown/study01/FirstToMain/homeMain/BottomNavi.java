@@ -36,6 +36,8 @@ import org.techtown.study01.FirstToMain.R;
 
 import org.techtown.study01.FirstToMain.start.First_page_loading;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 
     public class BottomNavi extends AppCompatActivity {

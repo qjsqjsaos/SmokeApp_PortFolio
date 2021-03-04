@@ -137,7 +137,6 @@ public class StartNoSmoking_Dialog extends Dialog {
                     e.printStackTrace();
                 }
                 dialog.dismiss();
-
             }
         });
 

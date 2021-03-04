@@ -173,7 +173,6 @@
                 android:id="@+id/ns_stop"
                 style="@style/bold_theme"
                 android:layout_gravity="center"
-                android:layout_marginTop="-60dp"
                 android:layout_width="@dimen/find_textInput_Button_width"
                 android:layout_height="@dimen/find_textInput_Button_height"
                 android:background="@drawable/all_btn"

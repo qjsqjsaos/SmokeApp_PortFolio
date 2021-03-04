@@ -1,6 +1,7 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -42,14 +43,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1_Request;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
 import org.techtown.study01.FirstToMain.start.First_page_loading;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static org.techtown.study01.FirstToMain.homeMain.StartNoSmoking_Dialog.calculate_date;
+import static org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1.dateTimeT;
 
 
 //홈 화면
@@ -96,83 +102,85 @@ public class HomeMain extends Fragment {
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
 
-        /** 프로필을 클릭했을 때, 이름과 사진 변경 가능*/
-        card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
 
+            /** 프로필을 클릭했을 때, 이름과 사진 변경 가능*/
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
-
-
-        //텍스트뷰 글씨가 바뀔 때 호출한다.
-        wiseView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { //텍스트가 바뀌기전
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { //텍스트가 바뀌는 중일 때,
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
-                String wiseValue = wiseView.getText().toString();
-                if (wiseValue.equals("오류")) {
-                    popupLoading(); //firstloding창으로 이동하고,
-                    BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
                 }
-            }
-        });
-
-        setInit(); //뷰페이저 실행 메서드
+            });
 
 
-        //BottomNavi에서 받은 번들 데이터
-        Bundle bundle = this.getArguments();
-        Log.d(TAG, "번들가져오고");
 
-        String name = bundle.getString("name");
-        id = bundle.getString("id");
-        Log.d(TAG, "번들 메세지들 다 가져옴");
+            //텍스트뷰 글씨가 바뀔 때 호출한다.
+            wiseView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { //텍스트가 바뀌기전
 
-        if (name != null) { //일반 로그인
-            nameView.setText(name); //닉네임으로 이름바꿔주기
-            Log.d(TAG, name);
-        }
+                }
 
-        //금연 취소 눌렀을 때,
-        stop_Btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { //다이얼로그 띄우고,
-                GiveUpNoSmoking_Dialog giveUpNoSmoking_dialog = new GiveUpNoSmoking_Dialog(getContext());
-                giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
-                    @Override
-                    public void onClick(View v) {
-                        giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { //텍스트가 바뀌는 중일 때,
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
+                    String wiseValue = wiseView.getText().toString();
+                    if (wiseValue.equals("오류")) {
+                        popupLoading(); //firstloding창으로 이동하고,
+                        BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
                     }
-                });
+                }
+            });
 
-                giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
-                    @Override
-                    public void onClick(View v) {
-                        saveValueToDB2(); //디비에 값 0으로 초기화
-                        noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
-                        stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
-                        Frag1.timeThread.interrupt();//쓰레드 취소하기(Frag1)
-                        giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
-                    }
-                });
+            setInit(); //뷰페이저 실행 메서드
 
+
+            //BottomNavi에서 받은 번들 데이터
+            Bundle bundle = this.getArguments();
+            Log.d(TAG, "번들가져오고");
+
+            String name = bundle.getString("name");
+            id = bundle.getString("id");
+            Log.d(TAG, "번들 메세지들 다 가져옴");
+
+            if (name != null) { //일반 로그인
+                nameView.setText(name); //닉네임으로 이름바꿔주기
+                Log.d(TAG, name);
             }
-        });
+
+            //금연 취소 눌렀을 때,
+            stop_Btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) { //다이얼로그 띄우고,
+                    GiveUpNoSmoking_Dialog giveUpNoSmoking_dialog = new GiveUpNoSmoking_Dialog(getContext());
+                    giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
+                        @Override
+                        public void onClick(View v) {
+                            giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                        }
+                    });
+
+                    giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
+                        @Override
+                        public void onClick(View v) {
+                            saveValueToDB2(); //디비에 값 0으로 초기화
+                            noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
+                            stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
+                            Frag1.timeThread.interrupt();//쓰레드 취소하기(Frag1)
+                            giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                        }
+                    });
+
+                }
+            });
 
 
-        return viewGroup;
+            return viewGroup;
+
     }
 
 
@@ -262,7 +270,7 @@ public class HomeMain extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(frag_ondestroy);
 
-        Log.d("뭐야", Frag1.dateTime + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + HomeMain.id);
+        Log.d("뭐야", dateTimeT + "/" + Frag1.cigaCount + "/" + Frag1.cigaCost + "/" + HomeMain.id);
     }
 
     /**
@@ -295,5 +303,64 @@ public class HomeMain extends Fragment {
             }
         });
     }
+
+    @Override //프래그먼트가 액티비티와 연결될 때 호출됨/ 이 때 디비에서 아이디에 맞게 자료를 가져온다.
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        /** 로그인 하고나서 아이디를 통해 내 정보 불러오고 그의 맞게 버튼 호출*/
+
+        if (id != null) {
+
+            Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
+
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean success = jsonObject.getBoolean("success");
+
+                        if (success) { //우선 디비 접속이 성공하면, 정보들은 가져온다.
+
+                            dateTimeT = jsonObject.getString("datetime");
+                            Log.d("디비정보", dateTimeT);
+
+                            if(dateTimeT.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
+                                //금연버튼 활성화
+                                noSmoke_Btn.setVisibility(VISIBLE);
+                               stop_Btn.setVisibility(GONE);
+
+
+                            }else{
+                                //금연 취소버튼 활성화
+                                noSmoke_Btn.setVisibility(GONE);
+                               stop_Btn.setVisibility(VISIBLE);
+
+                            }
+
+                        } else {//실패
+                            return;
+                        }
+
+
+                    } catch (JSONException e) {
+                        Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.1", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        return;
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.2", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            Frag1_Request frag1_request = new Frag1_Request(id, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            queue.add(frag1_request);
+        }else{
+            Toast.makeText(getContext(), "인터넷 연결 후 다시 접속해주세요.3", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
 
