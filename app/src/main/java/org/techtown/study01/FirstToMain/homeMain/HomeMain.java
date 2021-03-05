@@ -87,6 +87,9 @@ public class HomeMain extends Fragment {
     //저장 뷰모델
     private SharedViewModel sharedViewModel;
 
+    //프로필
+    private String newName; //새로운 이름
+
 
     /////////////////////Frag1이였던 것//////////////////////////
 
@@ -187,6 +190,7 @@ public class HomeMain extends Fragment {
                 profile_dialog.apply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
                         applyProFile(); //프로필 바꾸기 메서드 실행
                         profile_dialog.dialog.dismiss(); //다이얼로그닫기
                     }
@@ -246,7 +250,7 @@ public class HomeMain extends Fragment {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {  //새로운 이름 입력하기
-                         nameView.setText(Profile_Dialog.newName);
+                         nameView.setText(newName);
                         // TODO: 2021-03-05 여기부터 다시 이름 입력이 안됨 
                         }else {
 
@@ -262,9 +266,12 @@ public class HomeMain extends Fragment {
             }
         };
 
-        ApplyProFile applyProFile = new ApplyProFile(id, Profile_Dialog.newName, responseListener);
+        ApplyProFile applyProFile = new ApplyProFile(id, newName, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(applyProFile);
+        
+        Log.d("아디가뭐야", id);
+        Log.d("아디가뭐야", newName);
     }
 
 
@@ -593,8 +600,15 @@ public class HomeMain extends Fragment {
 
                         if (success) { //우선 디비 접속이 성공하면, 정보들은 가져온다.
 
+                            //시간가져오기
                             dateTime = jsonObject.getString("datetime");
                             Log.d("디비정보", dateTime);
+
+                            //이름가져오기
+                            newName = jsonObject.getString("name");
+                            Log.d("디비정보", newName);
+
+                            nameView.setText(newName);
 
                             if(dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
                                 //금연버튼 활성화

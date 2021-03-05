@@ -47,9 +47,6 @@ import static android.view.View.VISIBLE;
     public class BottomNavi extends AppCompatActivity {
         private BottomNavigationView bottomNavigationView;
         private HomeMain fragment1; //홈메인
-        private HealthCheck fragment2; //상태 변화
-        private Diary fragment3; // 일기
-        private Settings fragment4; //설정
         private static final String TAG = "MyTag"; //로그 찍을때,
 
         private String id;
@@ -90,9 +87,6 @@ import static android.view.View.VISIBLE;
             /**프래그먼트 생성*/
 
         fragment1 = new HomeMain();
-        fragment2 = new HealthCheck();
-        fragment3 = new Diary();
-        fragment4 = new Settings();
 
 
         /**홈메인 영역 */

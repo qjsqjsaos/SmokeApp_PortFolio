@@ -19,7 +19,6 @@ public class Profile_Dialog extends Dialog {
 
     public static EditText changedName; //이름바꾸기 에딧텍스트
 
-    public static String newName; //새로운 이름 입력을 가져온 것 //null값 방지 Home.name 넣어주기
 
     //프로필 변경하기
 
@@ -42,8 +41,6 @@ public class Profile_Dialog extends Dialog {
         cancelprofile = dialog.findViewById(R.id.cancel_profile); //취소
 
         changedName.setText(HomeMain.name); //이름 입력란에 원래 이름 넣기(바뀌기 전 이름)
-        newName = changedName.getText().toString(); //새로바꾼이름
-
     }
 
 }
