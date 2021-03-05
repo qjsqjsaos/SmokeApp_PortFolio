@@ -107,21 +107,17 @@ public class HomeMain extends Fragment {
     public static double last_cigaCost;
 
 
-    /** 다른 프래그먼트로 이동 시 쓰레드 종료(어차피 돌아오면 다시 켜짐)*/
+    /** 앱 종료시 쓰레드 종료(어차피 돌아오면 다시 켜짐)*/
     @Override
-    public void onStop() { //프래그먼트가 안 보일때 호출
-        super.onStop();
-        if (dateTime != null) {
-            if (!dateTime.equals("0")) { //타이머 실행이 안될 때 전환시 쓰레드 끄기
-                timeThread.interrupt();
-            }
-        }
+    public void onPause() { //앱을 잠시 일시정시할 때 타이머 종료// 중첩 방지
+        super.onPause();
+        timeThread.interrupt(); //쓰레드 종료
     }
 
     /** 앱이 맨 처음 실행될 때, 아이디값을 통해 정보를 가져온다.*/
     @Override
-    public void onStart() { //프래그먼트가 처음 보일때 호출
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         idcheckandButton(); //아이디를 토대로 버튼정보가져오기
     }
 
@@ -150,6 +146,8 @@ public class HomeMain extends Fragment {
 
                 }
             });
+
+
 
 
 
@@ -249,6 +247,13 @@ public class HomeMain extends Fragment {
 
                         finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
 
+
+                        //문자를 지우는 함수다. dateTime에서 시간만 지우고 날짜만 출력한 값이다.
+                        StringBuffer origin = new StringBuffer(dateTime);
+                        StringBuffer justDate = origin.delete(10,19);
+                        Log.d("저스트", String.valueOf(justDate));
+                        dateView.setText(justDate); //날짜 프로필에다가 넣어주기 //금연 시작 날짜
+
                         Log.d("3값", String.valueOf(finallyDateTime));
 
                         //하루 담배량 계산
@@ -326,7 +331,9 @@ public class HomeMain extends Fragment {
 
             sharedViewModel.setLiveDataCost(ciga_Money); //ViewModel을 통해서 Frag3로 보내기 위해 Livedata에 ciga_Money 보낸다.
 
-            //데이랑 시간 입력
+            d_dayView.setText("D+" + day); //몇일 됬는지 디데이로 프로필에 표기된다.
+
+
 
         }
     };
@@ -553,7 +560,7 @@ public class HomeMain extends Fragment {
                                 //금연 취소버튼 활성화
                                 noSmoke_Btn.setVisibility(GONE);
                                 stop_Btn.setVisibility(VISIBLE);
-                                startThreadShow(); //쓰레드 실행
+                                startThreadShow(dateTime); //쓰레드 실행
                             }
 
                         } else {//실패
@@ -579,8 +586,9 @@ public class HomeMain extends Fragment {
 
 
     /** 따로 만든 시작 쓰레드*/
-    private void startThreadShow() throws ParseException {
+    private void startThreadShow(String dateTime) throws ParseException {
         Calculate_Date calculate_date = new Calculate_Date();
+
         finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
         /** 임시로 일단 값주기*/
         cigaCount = 5;
@@ -593,6 +601,12 @@ public class HomeMain extends Fragment {
         //하루 담배값 계산
         last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
         Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
+
+
+        StringBuffer origin = new StringBuffer(dateTime);
+        StringBuffer justDate = origin.delete(10,19);
+        Log.d("저스트", String.valueOf(justDate));
+        dateView.setText(justDate); //날짜 프로필에다가 넣어주기 //금연 시작 날짜
 
         timeThread = new Thread(new timeThread());
         timeThread.start(); //쓰레드실행

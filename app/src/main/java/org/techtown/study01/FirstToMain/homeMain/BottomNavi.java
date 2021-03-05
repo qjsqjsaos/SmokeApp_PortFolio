@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 
 import org.json.JSONException;
@@ -118,41 +119,117 @@ import static android.view.View.VISIBLE;
 
 
 
-        /**제일 처음 띄워주는 프래그먼트*/
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commitAllowingStateLoss();
+            /**제일 처음 띄워주는 프래그먼트*/
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment1, "home")
+                    .commitAllowingStateLoss();
 
-        /**아이콘 선택시 원하는 프래그먼트가 띄워지게 하기*/
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                /**각 탭에 아이디의 따라 다르게 띄워주기*/
-                switch (item.getItemId()) {
-                    case R.id.home : {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commitAllowingStateLoss();
+            /**아이콘 선택시 원하는 프래그먼트가 띄워지게 하기*/ /** 프래그먼트 replace(탭 이동시 새로생성)을 방지하기위해 add와 hide, show를 이용하여, 한 번만 뜨게 만들도록 하였다.*/
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    /**각 탭에 아이디의 따라 다르게 띄워주기*/
+                    FragmentManager fragmentManager = getSupportFragmentManager();
 
-                        return true;
+                    switch (item.getItemId()) {
+                        case R.id.home : {
+                            if (fragmentManager.findFragmentByTag("home") != null) {
+                                //프래그먼트가 존재한다면 보여준다.
+                                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("home")).commit();
+                            } else {
+                                //존재하지 않는다면 프래그먼트를 매니저에 추가
+                                fragmentManager.beginTransaction().add(R.id.container, new HomeMain(), "home").commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("health") != null) {
+                                //다른프래그먼트가 보이면 가려준다.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("health")).commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("diary") != null) {
+                                //다른프래그먼트가 보이면 가려준다.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("diary")).commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("settings") != null) {
+                                //다른프래그먼트가 보이면 가려준다.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("settings")).commit();
+                            }
+                            return true;
+                        }
+                        case R.id.check_health : {
+
+                            if (fragmentManager.findFragmentByTag("health") != null) {
+                                //if the fragment exists, show it.
+                                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("health")).commit();
+                            } else {
+                                //if the fragment does not exist, add it to fragment manager.
+                                fragmentManager.beginTransaction().add(R.id.container, new HealthCheck(), "health").commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("home") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("diary") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("diary")).commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("settings") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("settings")).commit();
+                            }
+                            return true;
+                        }
+                        case R.id.diary : {
+
+                            if (fragmentManager.findFragmentByTag("diary") != null) {
+                                //if the fragment exists, show it.
+                                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("diary")).commit();
+                            } else {
+                                //if the fragment does not exist, add it to fragment manager.
+                                fragmentManager.beginTransaction().add(R.id.container, new Diary(), "diary").commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("home") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("health") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("health")).commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("settings") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("settings")).commit();
+                            }
+
+                            return true;
+                        }
+                        case R.id.settings : {
+
+                            if (fragmentManager.findFragmentByTag("settings") != null) {
+                                //if the fragment exists, show it.
+                                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("settings")).commit();
+                            } else {
+                                //if the fragment does not exist, add it to fragment manager.
+                                fragmentManager.beginTransaction().add(R.id.container, new Settings(), "settings").commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("home") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("health") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("health")).commit();
+                            }
+                            if (fragmentManager.findFragmentByTag("diary") != null) {
+                                //if the other fragment is visible, hide it.
+                                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("diary")).commit();
+                            }
+
+                            return true;
+                        }
+
+                        default:return false;
                     }
-                    case R.id.check_health : {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment2).commitAllowingStateLoss();
-
-                        return true;
-                    }
-                    case R.id.diary : {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment3).commitAllowingStateLoss();
-
-                        return true;
-                    }
-                    case R.id.settings : {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment4).commitAllowingStateLoss();
-
-                        return true;
-                    }
-
-                    default:return false;
                 }
-            }
-        });
-
+            });
 
     }
 
@@ -164,9 +241,5 @@ import static android.view.View.VISIBLE;
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
             startActivity(intent);
         }
-
-        /** 로그인 하고나서 아이디를 통해 내 정보 불러오고 그의 맞게 버튼 호출*/
-
-
-        }
+    }
 
