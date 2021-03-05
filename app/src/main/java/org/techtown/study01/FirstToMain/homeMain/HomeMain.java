@@ -76,6 +76,7 @@ public class HomeMain extends Fragment {
     public static TextView wiseView;
 
     public static String id;
+    public static String name;
 
     //쓰레드 부분
     public static Thread timeThread = null;
@@ -139,18 +140,6 @@ public class HomeMain extends Fragment {
 
             startNoSmokingButton(); //금연시작 버튼
 
-            /** 프로필을 클릭했을 때, 이름과 사진 변경 가능*/
-            card.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
-
-
-
-
             //텍스트뷰 글씨가 바뀔 때 호출한다.
             wiseView.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -180,7 +169,7 @@ public class HomeMain extends Fragment {
             Bundle bundle = this.getArguments();
             Log.d(TAG, "번들가져오고");
 
-            String name = bundle.getString("name");
+            name = bundle.getString("name");
             id = bundle.getString("id");
             Log.d(TAG, "번들 메세지들 다 가져옴");
 
@@ -188,6 +177,30 @@ public class HomeMain extends Fragment {
                 nameView.setText(name); //닉네임으로 이름바꿔주기
                 Log.d(TAG, name);
             }
+
+
+        /** 프로필을 클릭했을 때, 이름과 사진 변경 가능*/
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Profile_Dialog profile_dialog = new Profile_Dialog(getContext());
+                profile_dialog.apply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        applyProFile(); //프로필 바꾸기 메서드 실행
+                        profile_dialog.dialog.dismiss(); //다이얼로그닫기
+                    }
+                });
+
+                profile_dialog.cancelprofile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        profile_dialog.dialog.dismiss(); //다이얼로그닫기
+                    }
+                });
+            }
+        });
+
 
             //금연 취소 눌렀을 때,
             stop_Btn.setOnClickListener(new View.OnClickListener() {
@@ -220,7 +233,39 @@ public class HomeMain extends Fragment {
             return viewGroup;
     }
 
+    /**프로필 바꾸기(적용) 메서드*/
 
+    private void applyProFile() {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+
+                    if (success) {  //새로운 이름 입력하기
+                         nameView.setText(Profile_Dialog.newName);
+                        // TODO: 2021-03-05 여기부터 다시 이름 입력이 안됨 
+                        }else {
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        ApplyProFile applyProFile = new ApplyProFile(id, Profile_Dialog.newName, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(applyProFile);
+    }
 
 
     /** 금연하기 버튼을 클릭하고나서 금연시간 정하기*/

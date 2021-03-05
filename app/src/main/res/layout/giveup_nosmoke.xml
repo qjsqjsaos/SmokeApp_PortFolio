@@ -13,25 +13,25 @@
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="괜찮아요. 까짓 거 다시 도전하죠."
+        android:text="괜찮아요."
         android:textColor="@color/textColor"
         android:textStyle="bold" />
 <ScrollView
+    android:fillViewport="true"
     android:layout_width="match_parent"
     android:layout_height="400dp">
     <LinearLayout
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="match_parent">
     <TextView
-        android:layout_gravity="center"
-        android:textAlignment="center"
-        android:layout_width="350dp"
+        android:background="@drawable/all_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="@color/textColor"
-        android:text="한 번에 끊는 게 말이 안 됩니다.\n 단 번에 끊는 사람이 엄청난 거지.\n 우리 모두 다 엄청날 수는 없어요.\n 저 또한 금연 도전만 해도\n100번은 넘어갈 겁니다.\n그런데 우리는 이미 금연 시작할 때부터\n 힘들 거란 거... 알았잖아요.\n  만만한 게 아닙니다.\n강요하지 않습니다.\n언제든지 기다리겠습니다.\n다시 마음이 잡힐 때 그때 와주세요.\n강제로 해봐야 오래가지 않습니다.\n약간에 마음이 바뀌셨다면 \n'그래 좀만 더 해보자' 버튼을 눌러주세요.\n'그래 지금 해봤자 오래가지 않을거야' 라고\n생각하시면 '금연 포기' 버튼을 눌러주세요.\n 잊지 마세요. 중요한 건 실패가 아니라,\n\다시 도전하는 것입니다.\n\n당신은 실패한게 아닙니다\n'GMAN'이 응원합니다.\n\n"/>
+        android:text="\n\n한 번에 끊는 게 말이 안 됩니다.\n\n단 번에 끊는 사람이 엄청난 거지.강요하지 않습니다.\n\n언제든지 기다리겠습니다.\n\n다시 마음이 잡힐 때 그때 와주세요.\n\n강제로 해봐야 오래가지 않습니다.\n\n약간에 마음이 바뀌셨다면 \n\n'그래 좀만 더 해보자' 버튼을 눌러주세요.\n\n'그래 지금 해봤자 오래가지 않을거야' 라고\n\n생각하시면 '금연 포기' 버튼을 눌러주세요.\n\n잊지 마세요. 중요한 건 실패가 아니라,\n\n다시 도전하는 것입니다.\n\n당신은 실패한게 아닙니다\n\n'GMAN'이 응원합니다.\n\n"/>
     </LinearLayout>
 </ScrollView>
     <Button
@@ -53,6 +53,7 @@
         android:layout_height="@dimen/find_textInput_Button_height"
         android:layout_gravity="center"
         android:layout_marginTop="36dp"
+        android:layout_marginBottom="36dp"
         android:background="@drawable/all_btn"
         android:text="그래 좀만 더 해보자."
         android:textColor="@color/textColor"

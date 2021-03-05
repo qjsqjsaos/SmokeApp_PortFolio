@@ -1,6 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_radius">
+
+    <TextView
+        style="@style/title_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="프로필 설정"
+        android:textColor="@color/textColor"
+        android:textStyle="bold" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/user" />
+
+    <Button
+        android:id="@+id/changeProfile"
+        style="@style/bold_theme"
+        android:layout_width="200dp"
+        android:layout_height="@dimen/find_textInput_Button_height"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/all_btn"
+        android:text="프로필 사진 변경"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/find_button_text_size" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        style="@style/bold_theme"
+        android:textColor="@color/textColor_special"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:text="닉네임 변경"
+        android:inputType="textPersonName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="@color/textColor"
+        android:text="닉네임은 한글, 영어, 숫자(2~10)글자 입니다."/>
+
+
+    <EditText
+
+        android:id="@+id/editchangeName"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/round_edittext"
+        android:layout_width="200dp"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:paddingLeft="@dimen/register_EditText_paddingLeft"
+        android:singleLine="true"
+        android:textSize="@dimen/register_hint_size"
+        android:textColor="@color/textColor_special"
+        android:layout_height="@dimen/register_and_textInput_height"
+        android:textColorHint="@color/textColor" />
+
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
+
+        <Button
+            android:id="@+id/changeApply"
+            style="@style/bold_theme"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/find_textInput_Button_height"
+            android:layout_gravity="center"
+            android:background="@drawable/all_btn"
+            android:text="적용하기"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/find_button_text_size" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
+
+        <Button
+            android:id="@+id/cancel_profile"
+            style="@style/bold_theme"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/find_textInput_Button_height"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:background="@drawable/all_btn"
+            android:text="취소하기"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/find_button_text_size" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"/>
+
 
 </LinearLayout>
