@@ -19,7 +19,7 @@ public class MyService extends Service {
 
     }
 
-    //////////////////////////////////////알림 채널 만들기
+    //////////////////////////////////////알림 채널 만들기///////////
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate() {
