@@ -4,6 +4,9 @@ package org.techtown.study01.FirstToMain.homeMain;
 import android.content.Context;
 import android.content.Intent;
 
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -182,7 +185,7 @@ public class HomeMain extends Fragment {
             }
 
 
-        /** 프로필을 클릭했을 때, 이름과 사진 변경 가능*/
+        /** 프로필을 클릭했을 때, 이름 변경 가능*/
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,6 +224,10 @@ public class HomeMain extends Fragment {
                     giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
                         @Override
                         public void onClick(View v) {
+
+
+
+
                             int value = 0;
                             String svalue = "0";
                             saveValueToDB(value, svalue); //디비에 값 0으로 초기화

@@ -33,7 +33,6 @@ public class NetworkConnectionCheck extends ConnectivityManager.NetworkCallback 
     private Context context;
     private NetworkRequest networkRequest;
     private ConnectivityManager connectivityManager;
-    private Dialog dialog;
     public static Thread timeThread = null;
 
     public NetworkConnectionCheck(Context context){
@@ -57,6 +56,24 @@ public class NetworkConnectionCheck extends ConnectivityManager.NetworkCallback 
     public void onAvailable(@NonNull Network network) {
         super.onAvailable(network);
         // 네트워크가 연결되었을 때 할 동작
+    }
+
+    @Override
+    public void onLosing(@NonNull Network network, int maxMsToLive) {
+        super.onLosing(network, maxMsToLive);
+        Toast.makeText(context, "1", Toast.LENGTH_SHORT).show();
+        timeThread = new Thread(new timeThread());
+        timeThread.start(); //쓰레드실행
+    }
+
+
+
+    @Override
+    public void onUnavailable() {
+        super.onUnavailable();
+        Toast.makeText(context, "5", Toast.LENGTH_SHORT).show();
+        timeThread = new Thread(new timeThread());
+        timeThread.start(); //쓰레드실행
     }
 
     @Override

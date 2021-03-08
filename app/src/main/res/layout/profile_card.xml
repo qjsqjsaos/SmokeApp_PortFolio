@@ -17,6 +17,7 @@
         android:textStyle="bold" />
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageView"
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
         android:layout_width="100dp"
