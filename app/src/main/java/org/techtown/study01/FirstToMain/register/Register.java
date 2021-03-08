@@ -3,6 +3,7 @@ package org.techtown.study01.FirstToMain.register;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -30,7 +31,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.findid.FindId;
 import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
+import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 import org.techtown.study01.FirstToMain.start.Quest1;
 
@@ -57,6 +60,9 @@ public class Register extends AppCompatActivity {
     String goal = "입력해주세요!"; //이 값들은 후에 Quest1에서 넣어줄 값이다.
 
 
+    //로딩창 띄우기
+    private Loading_Dialog loading_dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,7 @@ public class Register extends AppCompatActivity {
         check_id_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadingStart(); //로딩창띄우기
                 String id = Eid.getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
 
@@ -90,6 +97,7 @@ public class Register extends AppCompatActivity {
                                 .setPositiveButton("확인", null)
                                 .create();
                         dialog.show();
+                        loading_dialog.cancel(); //로딩창 닫기
                         return;
                     }
                     //아이디 유효성
@@ -98,10 +106,12 @@ public class Register extends AppCompatActivity {
                                 .setPositiveButton("확인", null)
                                 .create();
                         dialog.show();
+                        loading_dialog.cancel(); //로딩창 닫기
                         return;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    loading_dialog.cancel(); //로딩창 닫기
                     Toast.makeText(getApplicationContext(), "잘못된 값입니다1.문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
 
                 }
@@ -122,17 +132,20 @@ public class Register extends AppCompatActivity {
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
+                                loading_dialog.cancel(); //로딩창 닫기
                             } else {
                                 validate = false;
                                 dialog = builder.setMessage("존재하는 아이디입니다.")
                                         .setNegativeButton("확인", null)
                                         .create();
                                 dialog.show();
+                                loading_dialog.cancel(); //로딩창 닫기
                                 return;
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            loading_dialog.cancel(); //로딩창 닫기
                         }
                     }
                 };
@@ -149,7 +162,7 @@ public class Register extends AppCompatActivity {
         sendName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                loadingStart(); //로딩창띄우기
                 String dbname = Ename.getText().toString(); // mysql에서 이름 가져오기
                 AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
 
@@ -160,6 +173,7 @@ public class Register extends AppCompatActivity {
                                 .setPositiveButton("확인", null)
                                 .create();
                         dialog.show();
+                        loading_dialog.cancel(); //로딩창 닫기
                         return;
                     }
                     //닉네임 유효성
@@ -168,12 +182,14 @@ public class Register extends AppCompatActivity {
                                 .setPositiveButton("확인", null)
                                 .create();
                         dialog.show();
+                        loading_dialog.cancel(); //로딩창 닫기
                         return;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    loading_dialog.cancel(); //로딩창 닫기
                     Toast.makeText(getApplicationContext(), "잘못된 값입니다2. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-
+                    return;
                 }
 
 
@@ -192,18 +208,22 @@ public class Register extends AppCompatActivity {
                                         .setPositiveButton("확인", null)
                                         .create();
                                 dialog.show();
+                                loading_dialog.cancel(); //로딩창 닫기
                             } else {
                                 nameCheck = false;
                                 dialog = builder.setMessage("존재하는 닉네임입니다.")
                                         .setNegativeButton("확인", null)
                                         .create();
                                 dialog.show();
+                                loading_dialog.cancel(); //로딩창 닫기
                                 return;
                             }
 
                         } catch (JSONException e) {
+                            loading_dialog.cancel(); //로딩창 닫기
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(), "닉네임 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     }
                 };
@@ -224,9 +244,8 @@ public class Register extends AppCompatActivity {
         sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadingStart(); //로딩창 띄우기
                 String dbEmail = Eemail.getText().toString(); //이메일 중복체크용
-
-
                 Response.Listener<String> responseListener = new Response.Listener<String>() { //결과 리스너 생성 (이메일 중복체크)
                     @Override
                     public void onResponse(String response) {
@@ -237,7 +256,7 @@ public class Register extends AppCompatActivity {
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
                             if (success) { // 만약 중복이 아니면
-
+                                loading_dialog.cancel(); //로딩창 닫기
                                 if (SystemClock.elapsedRealtime() - mLastClickTime > 300000) { //5분 동안 타이머
                                     switch (v.getId()) {
                                         case R.id.sendEmail:
@@ -294,16 +313,21 @@ public class Register extends AppCompatActivity {
                                                         }.start();
 
                                                     }else{
+                                                        loading_dialog.cancel(); //로딩창 닫기
                                                     Toast.makeText(getApplicationContext(), "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show();
                                                     return;
                                                     }
                                                 } catch (Exception e) {
+                                                    loading_dialog.cancel(); //로딩창 닫기
                                                     e.printStackTrace();
                                                     Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                                    return;
                                                 }
                                             } catch (Exception e) {
                                                 e.printStackTrace();
+                                                loading_dialog.cancel(); //로딩창 닫기
                                                 Toast.makeText(getApplicationContext(), "잘못된 값입니다3. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                                                return;
                                             }
 
                                     }
@@ -311,16 +335,17 @@ public class Register extends AppCompatActivity {
 
 
                             } else {
-
                                 dialog = builder.setMessage("존재하는 이메일입니다.")
                                         .setNegativeButton("확인", null)
                                         .create();
                                 dialog.show();
+                                loading_dialog.cancel(); //로딩창 닫기
                                 return;
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            loading_dialog.cancel(); //로딩창 닫기
                             Toast.makeText(getApplicationContext(), "이메일 중복 오류, 문의 바랍니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -411,6 +436,7 @@ public class Register extends AppCompatActivity {
         join_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadingStart(); //로딩창 띄우기
                 //EditText에서 입력받은값 변수에 저장
                 String id = Eid.getText().toString();
                 String pw = Epw.getText().toString();
@@ -444,6 +470,7 @@ public class Register extends AppCompatActivity {
                                                 })
                                                 .create()
                                                 .show();
+                                                loading_dialog.cancel(); //로딩창 닫기
                                 } else {
                                     //등록 실패 했을때 실패 다이얼로그 출력
                                     AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
@@ -451,10 +478,12 @@ public class Register extends AppCompatActivity {
                                             .setPositiveButton("다시 시도", null)
                                             .create()
                                             .show();
+                                    loading_dialog.cancel(); //로딩창 닫기
                                     return;
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                loading_dialog.cancel(); //로딩창 닫기
                                 Toast.makeText(getApplicationContext(),"잘못된 값입니다4. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -466,36 +495,47 @@ public class Register extends AppCompatActivity {
                    try {
                        if (isEmpty(id)) {
                            Toast.makeText(getApplicationContext(), "아이디를 입력해주세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (!validate == true) {
                            Toast.makeText(getApplicationContext(), "아이디 중복확인을 해주세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (isEmpty(pw)) {
                            Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (isEmpty(pwc)) {
                            Toast.makeText(getApplicationContext(), "비밀번호를 확인하세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (!pw.equals(pwc)) {
                            Toast.makeText(getApplicationContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (isEmpty(name)) {
                            Toast.makeText(getApplicationContext(), "닉네임을 입력해주세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        }else if (!nameCheck == true) {
                            Toast.makeText(getApplicationContext(), "닉네임 중복확인을 해주세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (isEmpty(email)) {
                            Toast.makeText(getApplicationContext(), "이메일을 입력해주세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (isEmpty(smsnumber)) {
                            Toast.makeText(getApplicationContext(), "인증번호를 입력해주세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (!checkNumberSmtp == true) {
                            Toast.makeText(getApplicationContext(), "인증번호 확인버튼을 눌러주세요.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else if (result != keyNumber || !timeLimit == true) {
                            Toast.makeText(getApplicationContext(), "인증번호가 일치하지않습니다.", Toast.LENGTH_LONG).show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        }
 
@@ -506,6 +546,7 @@ public class Register extends AppCompatActivity {
                                    .setPositiveButton("확인", null)
                                    .create();
                            dialog.show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        }
 
@@ -516,6 +557,7 @@ public class Register extends AppCompatActivity {
                                    .setPositiveButton("확인", null)
                                    .create();
                            dialog.show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        }
 
@@ -527,6 +569,7 @@ public class Register extends AppCompatActivity {
                                    .setPositiveButton("확인", null)
                                    .create();
                            dialog.show();
+                           loading_dialog.cancel(); //로딩창 닫기
                            return;
                        } else {
                            //모든 값이 다 있으면 DB에 저장하는 메소드 실행
@@ -534,11 +577,11 @@ public class Register extends AppCompatActivity {
                                    cigacount, cigapay, goal, responseListener);
                            RequestQueue queue = Volley.newRequestQueue(Register.this);
                            queue.add(register);
-
                        }
                        return;
                    } catch (Exception e){
                        e.printStackTrace();
+                       loading_dialog.cancel(); //로딩창 닫기
                        Toast.makeText(getApplicationContext(),"올바른 값을 입력해주세요.",Toast.LENGTH_SHORT).show();
                    }
             }
@@ -557,4 +600,12 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "이메일 전송 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
                 }
             }
+
+    /**로딩창 띄우기 */
+    public void loadingStart(){
+        loading_dialog = new Loading_Dialog(Register.this);
+        loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading_dialog.show();
+    }
 }

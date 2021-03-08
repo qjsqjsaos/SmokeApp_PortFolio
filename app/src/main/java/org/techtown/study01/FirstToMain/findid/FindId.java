@@ -2,6 +2,7 @@ package org.techtown.study01.FirstToMain.findid;
 
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 
@@ -27,6 +28,7 @@ import org.json.JSONException;
 
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.study01.FirstToMain.register.GMailSender;
 
 public class FindId extends AppCompatActivity {
@@ -37,6 +39,10 @@ public class FindId extends AppCompatActivity {
     private Button button;
     private String Eid, email, Eemail; //찾은 아이디 넣을 스트링 객체
     public String message = "아이디찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
+
+
+    //로딩창 띄우기
+    private Loading_Dialog loading_dialog;
 
 
     @Override
@@ -55,6 +61,7 @@ public class FindId extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 email = editText.getText().toString(); //입력한 이메일 가져오기
+                loadingStart(); //로딩창 띄우기
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(FindId.this);
 
@@ -65,6 +72,7 @@ public class FindId extends AppCompatActivity {
                                 .setPositiveButton("확인", null)
                                 .create();
                         dialog.show();
+                        loading_dialog.cancel(); //로딩창 닫기
                         return;
                     }
                     //이메일 유효성
@@ -73,6 +81,7 @@ public class FindId extends AppCompatActivity {
                                 .setPositiveButton("확인", null)
                                 .create();
                         dialog.show();
+                       loading_dialog.cancel(); //로딩창 닫기
                         return;
                     }
 
@@ -85,10 +94,12 @@ public class FindId extends AppCompatActivity {
                             boolean success = jsonObject.getBoolean("success");
 
                             if (success) {
+
                                 Eemail = jsonObject.getString("email");
                                 Eid = jsonObject.getString("id"); //찾는 아이디 값 가져오고
                                 if(email.equals(Eemail)){
                                     idSendStart();
+                                    loading_dialog.cancel(); //로딩창 닫기
                                     Intent intent = new Intent(FindId.this, Id_pw_complete.class);
                                     intent.putExtra("findId", message); //식별 메세지
                                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -100,6 +111,7 @@ public class FindId extends AppCompatActivity {
 
 
                             } else {//로그인 실패시
+                                loading_dialog.cancel(); //로딩창 닫기
                                 Toast.makeText(getApplicationContext(), "이메일을 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -108,8 +120,10 @@ public class FindId extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(), "이메일 오류 1, 문의부탁드립니다.", Toast.LENGTH_SHORT).show();
+                            loading_dialog.cancel(); //로딩창 닫기
                             return;
                         } catch (Exception e) {
+                            loading_dialog.cancel(); //로딩창 닫기
                             e.printStackTrace();
                         }
                     }
@@ -145,5 +159,13 @@ public class FindId extends AppCompatActivity {
             else returnStr=returnStr+"*";
         }
         return returnStr;
+    }
+
+    /**로딩창 띄우기 */
+    public void loadingStart(){
+        loading_dialog = new Loading_Dialog(FindId.this);
+        loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading_dialog.show();
     }
 }

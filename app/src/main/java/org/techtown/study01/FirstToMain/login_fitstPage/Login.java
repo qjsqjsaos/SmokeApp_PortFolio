@@ -5,6 +5,7 @@ package org.techtown.study01.FirstToMain.login_fitstPage;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.findPW.FindPw;
 import org.techtown.study01.FirstToMain.findid.FindId;
 import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
+import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.study01.FirstToMain.register.Register_Auth;
 import org.techtown.study01.FirstToMain.start.Quest1;
 
@@ -39,6 +41,9 @@ public class Login extends AppCompatActivity {
     private String loginId, loginPwd, loginName;//자동 로그인용
     private String Eid, Epw, Ename; //자동로그인 식별용
 
+
+    //로딩창 띄우기
+    private Loading_Dialog loading_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +93,9 @@ public class Login extends AppCompatActivity {
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    loadingStart();
                     String id = idText.getText().toString();
                     String pw = passwordText.getText().toString();
-
-
 
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
 
@@ -102,7 +106,6 @@ public class Login extends AppCompatActivity {
                                 boolean success = jsonObject.getBoolean("success");
 
                                 if (success) {//로그인 성공시
-
                                     Eid = jsonObject.getString("id");
                                     Epw = jsonObject.getString("pw");
                                     Ename = jsonObject.getString("name");
@@ -132,17 +135,20 @@ public class Login extends AppCompatActivity {
 
                                         startActivity(intent);
                                         finish();
+                                        loading_dialog.cancel(); //로딩창 닫기
 
                                         Log.d(TAG, "자동 로그인 값 저장");
                                     }
 
                                 } else {//로그인 실패시
+                                    loading_dialog.cancel(); //로딩창 닫기
                                     Toast.makeText(getApplicationContext(), "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                loading_dialog.cancel(); //로딩창 닫기
                                 Toast.makeText(getApplicationContext(), "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -179,7 +185,13 @@ public class Login extends AppCompatActivity {
                 startActivity(intent2);
             }
         });
+    }
 
-
+    /**로딩창 띄우기 */
+    public void loadingStart(){
+        loading_dialog = new Loading_Dialog(Login.this);
+        loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading_dialog.show();
     }
 }

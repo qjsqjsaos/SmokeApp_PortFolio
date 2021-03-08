@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.techtown.study01.FirstToMain">
-
     <!-- 인터넷 접속 권한 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 인터넷 접속이 되어있는지 안되있는지 식별하기 위한 권한 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 인터넷 포그라운드 권한 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <!-- 카메라와 갤러리 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 접속이 되어있는지 안되있는지 식별하기 위한 권한 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 인터넷 포그라운드 권한 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 카메라와 갤러리 권한 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -21,10 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".homeMain.Loading_Dialog"></activity>
+
         <service
             android:name=".homeMain.MyService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity android:name=".findPW.AuthforPw" />
         <activity android:name=".findPW.ChangePw" />

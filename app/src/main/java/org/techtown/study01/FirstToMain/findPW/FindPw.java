@@ -1,6 +1,7 @@
 package org.techtown.study01.FirstToMain.findPW;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Patterns;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.findid.FindId;
 import org.techtown.study01.FirstToMain.findid.IdEmailCheck_for_pw;
+import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.study01.FirstToMain.register.GMailSender;
 
 import java.util.regex.Pattern;
@@ -34,6 +36,9 @@ public class FindPw extends AppCompatActivity {
     private Button button, GoId;
     private String Eid, email, id; //찾은 비밀번호 넣을 스트링 객체
     private int result; //랜덤번호
+
+    //로딩창 띄우기
+    private Loading_Dialog loading_dialog;
 
 
     @Override
@@ -66,6 +71,7 @@ public class FindPw extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadingStart();//로딩창 띄우기
                 id = idForPwText.getText().toString(); //입력한 아이디 가져오기
                 email = emailForPwText.getText().toString(); //입력한 이메일 가져오기
                 AlertDialog.Builder builder = new AlertDialog.Builder(FindPw.this);
@@ -76,18 +82,21 @@ public class FindPw extends AppCompatActivity {
                             .setPositiveButton("확인", null)
                             .create();
                     dialog.show();
+                    loading_dialog.cancel(); //로딩창 닫기
                     return;
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     dialog = builder.setMessage("이메일 형식을 지켜주세요.")
                             .setPositiveButton("확인", null)
                             .create();
                     dialog.show();
+                    loading_dialog.cancel(); //로딩창 닫기
                     return;
                 } else if (!Pattern.matches("^[0-9_a-zA-Z]{4,20}$", id)) {
                     dialog = builder.setMessage("아이디 형식을 지켜주세요.")
                             .setPositiveButton("확인", null)
                             .create();
                     dialog.show();
+                    loading_dialog.cancel(); //로딩창 닫기
                     return;
                 }
 
@@ -102,7 +111,6 @@ public class FindPw extends AppCompatActivity {
                             if (success) {
                                 //지메일 실행
                                 AuthSendStart(email);
-
                                 //비밀번호 변경하는 AuthforPw거쳐서 ChangePw로 보내기
                                 String Eid = jsonObject.getString("id"); //아이디 꺼내기
                                 String Epw = jsonObject.getString("pw"); //비밀번호 꺼내기
@@ -117,7 +125,10 @@ public class FindPw extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
 
+                                loading_dialog.cancel(); //로딩창 닫기
+
                             } else {//로그인 실패시
+                                loading_dialog.cancel(); //로딩창 닫기
                                 Toast.makeText(getApplicationContext(), "아이디/이메일을 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -125,10 +136,12 @@ public class FindPw extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            loading_dialog.cancel(); //로딩창 닫기
                             Toast.makeText(getApplicationContext(), "이메일 오류 1, 문의부탁드립니다.", Toast.LENGTH_SHORT).show();
                             return;
                         } catch (Exception e) {
                             e.printStackTrace();
+                            loading_dialog.cancel(); //로딩창 닫기
                             Toast.makeText(getApplicationContext(), "이메일 오류 1, 문의부탁드립니다.", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -170,5 +183,13 @@ public class FindPw extends AppCompatActivity {
                 return;
             }
 
+    }
+
+    /**로딩창 띄우기 */
+    public void loadingStart(){
+        loading_dialog = new Loading_Dialog(FindPw.this);
+        loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading_dialog.show();
     }
 }

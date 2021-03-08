@@ -58,20 +58,12 @@ public class NetworkConnectionCheck extends ConnectivityManager.NetworkCallback 
         // 네트워크가 연결되었을 때 할 동작
     }
 
-    @Override
-    public void onLosing(@NonNull Network network, int maxMsToLive) {
-        super.onLosing(network, maxMsToLive);
-        Toast.makeText(context, "1", Toast.LENGTH_SHORT).show();
-        timeThread = new Thread(new timeThread());
-        timeThread.start(); //쓰레드실행
-    }
-
-
 
     @Override
     public void onUnavailable() {
         super.onUnavailable();
-        Toast.makeText(context, "5", Toast.LENGTH_SHORT).show();
+        //호출에 지정된 시간 초과 시간 내에 네트워크를 찾을 수 없을 때,
+        Toast.makeText(context, "네트워크를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
         timeThread = new Thread(new timeThread());
         timeThread.start(); //쓰레드실행
     }

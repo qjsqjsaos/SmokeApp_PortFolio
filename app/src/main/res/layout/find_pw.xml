@@ -20,7 +20,7 @@
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="Find Password by email"
+        android:text="비밀번호 찾기"
         android:textColor="@color/textColor"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

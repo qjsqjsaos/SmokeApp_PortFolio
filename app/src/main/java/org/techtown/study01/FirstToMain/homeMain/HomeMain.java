@@ -4,6 +4,7 @@ package org.techtown.study01.FirstToMain.homeMain;
 import android.content.Context;
 import android.content.Intent;
 
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.Build;
@@ -93,6 +94,10 @@ public class HomeMain extends Fragment {
     //프로필
     private String newName; //새로운 이름
 
+    //로딩중 다이얼로그
+
+    Loading_Dialog loading_dialog;
+
 
     /////////////////////Frag1이였던 것//////////////////////////
 
@@ -125,6 +130,7 @@ public class HomeMain extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        loadingStart();//로딩창 보여주기
         idcheckandButton(); //아이디를 토대로 버튼정보가져오기
     }
 
@@ -192,7 +198,8 @@ public class HomeMain extends Fragment {
                 Profile_Dialog profile_dialog = new Profile_Dialog(getContext());
                 profile_dialog.apply.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v) { //적용하기 누를 때
+                        loadingStart();//로딩창 보여주기
                         newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
                         applyProFile(); //프로필 바꾸기 메서드 실행
                         profile_dialog.dialog.dismiss(); //다이얼로그닫기
@@ -224,16 +231,13 @@ public class HomeMain extends Fragment {
                     giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
                         @Override
                         public void onClick(View v) {
-
-
-
-
+                            loadingStart();//로딩창 보여주기
                             int value = 0;
                             String svalue = "0";
                             saveValueToDB(value, svalue); //디비에 값 0으로 초기화
                             noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
                             stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
-                            timeThread.interrupt();//쓰레드 취소하기(Frag1)
+                            timeThread.interrupt();//쓰레드 취소하기
                             giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
                         }
                     });
@@ -258,6 +262,7 @@ public class HomeMain extends Fragment {
 
                     if (success) {  //새로운 이름 입력하기
                          nameView.setText(newName);
+                         loading_dialog.cancel(); //로딩창 닫기
                         // TODO: 2021-03-05 여기부터 다시 이름 입력이 안됨 
                         }else {
 
@@ -529,6 +534,8 @@ public class HomeMain extends Fragment {
 
                     if (success) {
 
+                        loading_dialog.cancel(); //디비에 저장하면 로딩창 끄기
+
                         //디비에 저장했음.
 
                     } else {//실패
@@ -607,6 +614,8 @@ public class HomeMain extends Fragment {
 
                         if (success) { //우선 디비 접속이 성공하면, 정보들은 가져온다.
 
+                            loading_dialog.cancel(); //접속성공하면 로딩창 끄기
+
                             //시간가져오기
                             dateTime = jsonObject.getString("datetime");
                             Log.d("디비정보", dateTime);
@@ -630,6 +639,7 @@ public class HomeMain extends Fragment {
                             }
 
                         } else {//실패
+                            Toast.makeText(getContext(), "인터넷 접속이 원활하지 않습니다. 값이 저장되거나 불러오기 어렵습니다.", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -678,6 +688,11 @@ public class HomeMain extends Fragment {
         timeThread.start(); //쓰레드실행
     }
 
-
+    public void loadingStart(){
+        loading_dialog = new Loading_Dialog(getContext());
+        loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading_dialog.show();
+    }
 }
 
