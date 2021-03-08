@@ -32,6 +32,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -53,9 +54,11 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag3;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag5;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
+import org.techtown.study01.FirstToMain.register.Register;
 import org.techtown.study01.FirstToMain.start.First_page_loading;
 
 import java.text.ParseException;
+import java.util.regex.Pattern;
 
 import static android.view.View.GONE;
 
@@ -68,7 +71,7 @@ public class HomeMain extends Fragment {
     //뷰그룹 부분
     private ViewGroup viewGroup;
     private ImageView userView;
-    private TextView nameView;
+    public static TextView nameView;
     private LinearLayout card;
 
     public static TextView dateView, d_dayView; //프로필에 디데이날짜와 금연날짜이다. 금연시작버튼이나, 다이얼로그안에 금연취소버튼을 누를시 변동한다. 이 값은 Frag1으로 가서 초기화된다.
@@ -91,12 +94,12 @@ public class HomeMain extends Fragment {
     //저장 뷰모델
     private SharedViewModel sharedViewModel;
 
-    //프로필
-    private String newName; //새로운 이름
 
     //로딩중 다이얼로그
 
     Loading_Dialog loading_dialog;
+
+    private AlertDialog dialog; //알림 다이아로그
 
 
     /////////////////////Frag1이였던 것//////////////////////////
@@ -200,16 +203,15 @@ public class HomeMain extends Fragment {
                     @Override
                     public void onClick(View v) { //적용하기 누를 때
                         loadingStart();//로딩창 보여주기
-                        newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
-                        applyProFile(); //프로필 바꾸기 메서드 실행
-                        profile_dialog.dialog.dismiss(); //다이얼로그닫기
+                        String newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
+                        applyProFile(newName); //프로필 바꾸기 메서드 실행
                     }
                 });
 
                 profile_dialog.cancelprofile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        profile_dialog.dialog.dismiss(); //다이얼로그닫기
+                        Profile_Dialog.dialog.dismiss(); //다이얼로그닫기
                     }
                 });
             }
@@ -248,9 +250,21 @@ public class HomeMain extends Fragment {
             return viewGroup;
     }
 
-    /**프로필 바꾸기(적용) 메서드*/
+    /**프로필 바꾸기(적용) 메서드
+     * @param newName*/
 
-    private void applyProFile() {
+    private void applyProFile(String newName) {
+
+        //우선 닉네임 형식에 맞는지
+        if (!Pattern.matches("^[가-힣a-zA-Z0-9_]{2,10}$", newName)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            dialog = builder.setMessage("닉네임 형식을 지켜주세요.")
+                    .setPositiveButton("확인", null)
+                    .create();
+            dialog.show();
+            loading_dialog.cancel(); //로딩창 닫기
+            return;
+        }
 
         Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
 
@@ -263,6 +277,7 @@ public class HomeMain extends Fragment {
                     if (success) {  //새로운 이름 입력하기
                          nameView.setText(newName);
                          loading_dialog.cancel(); //로딩창 닫기
+                        Profile_Dialog.dialog.dismiss(); //다이얼로그닫기
                         // TODO: 2021-03-05 여기부터 다시 이름 입력이 안됨 
                         }else {
 
@@ -621,7 +636,7 @@ public class HomeMain extends Fragment {
                             Log.d("디비정보", dateTime);
 
                             //이름가져오기
-                            newName = jsonObject.getString("name");
+                            String newName = jsonObject.getString("name");
                             Log.d("디비정보", newName);
 
                             nameView.setText(newName);
@@ -640,14 +655,17 @@ public class HomeMain extends Fragment {
 
                         } else {//실패
                             Toast.makeText(getContext(), "인터넷 접속이 원활하지 않습니다. 값이 저장되거나 불러오기 어렵습니다.", Toast.LENGTH_SHORT).show();
+                            loading_dialog.cancel(); //접속성공하면 로딩창 끄기
                             return;
                         }
 
 
                     } catch (JSONException e) {
+                        loading_dialog.cancel(); //접속성공하면 로딩창 끄기
                         e.printStackTrace();
                         return;
                     } catch (Exception e) {
+                        loading_dialog.cancel(); //접속성공하면 로딩창 끄기
                         e.printStackTrace();
                     }
                 }
@@ -691,6 +709,7 @@ public class HomeMain extends Fragment {
     public void loadingStart(){
         loading_dialog = new Loading_Dialog(getContext());
         loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.setCancelable(false); //뒤로가기방지
         loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loading_dialog.show();
     }

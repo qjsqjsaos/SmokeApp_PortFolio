@@ -189,6 +189,7 @@ public class FindPw extends AppCompatActivity {
     public void loadingStart(){
         loading_dialog = new Loading_Dialog(FindPw.this);
         loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.setCancelable(false); //뒤로가기방지
         loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loading_dialog.show();
     }

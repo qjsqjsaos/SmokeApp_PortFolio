@@ -89,13 +89,18 @@ public class Login extends AppCompatActivity {
             }
 
 
-        if (loginId == null && loginPwd == null) { //값이 없으면(초기 상태) 로그인 성공시 값을 넣어준다.
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    loadingStart();
+                    loadingStart(); //로딩창띄우기
                     String id = idText.getText().toString();
                     String pw = passwordText.getText().toString();
+
+                    if(id.isEmpty() || pw.isEmpty()){
+                        loading_dialog.cancel(); //로딩창 닫기
+                        Toast.makeText(getApplicationContext(), "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
 
@@ -116,11 +121,12 @@ public class Login extends AppCompatActivity {
                                     autoLogin.putString("inputPwd", Epw);
                                     autoLogin.putString("inputName", Ename);
                                     autoLogin.commit(); //커밋을 해야지 값이 저장된다.
+                                    loading_dialog.cancel(); //로딩창 닫기
 
                                     Log.d(TAG, String.valueOf(autoLogin));
 
                                     if (id.equals(Eid) && pw.equals(Epw)) {
-
+                                        loadingStart();
 
                                         Toast.makeText(getApplicationContext(), Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(Login.this, BottomNavi.class);
@@ -160,7 +166,6 @@ public class Login extends AppCompatActivity {
 
                 }
             });
-        }
 
 
         btn_findId = (TextView) findViewById(R.id.tv_id);
@@ -191,6 +196,7 @@ public class Login extends AppCompatActivity {
     public void loadingStart(){
         loading_dialog = new Loading_Dialog(Login.this);
         loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.setCancelable(false); //뒤로가기방지
         loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loading_dialog.show();
     }
