@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -25,14 +26,11 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 public class Profile_Dialog extends Dialog {
 
-    private CircleImageView profileImage; //프로필 이미지
+    static CircleImageView profileImage; //프로필 이미지
     public static Dialog dialog; //dialog 객체
-    public static Button apply, cancelprofile;
+    public static Button apply, cancelprofile, change_btn;
 
     public static EditText changedName; //이름바꾸기 에딧텍스트
-
-    private Button change_btn; //프로필 변경 버튼
-
 
     //프로필 변경하기
 

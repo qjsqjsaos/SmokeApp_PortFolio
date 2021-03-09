@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -60,6 +62,8 @@ import org.techtown.study01.FirstToMain.start.First_page_loading;
 import java.text.ParseException;
 import java.util.regex.Pattern;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 
 import static android.view.View.VISIBLE;
@@ -67,6 +71,9 @@ import static android.view.View.VISIBLE;
 
 //홈 화면
 public class HomeMain extends Fragment {
+
+    //프로필 사진 요청코드
+    private static final int REQUEST_CODE = 0;
 
     //뷰그룹 부분
     private ViewGroup viewGroup;
@@ -122,11 +129,13 @@ public class HomeMain extends Fragment {
     public static double last_cigaCost;
 
 
-    /** 앱 종료시 쓰레드 종료(어차피 돌아오면 다시 켜짐)*/
+    /** 앱 종료시 쓰레드가 종료할 때만 쓰레드 종료(어차피 돌아오면 다시 켜짐)*/
     @Override
     public void onPause() { //앱을 잠시 일시정시할 때 타이머 종료// 중첩 방지
         super.onPause();
-        timeThread.interrupt(); //쓰레드 종료
+        if(timeThread.isAlive()) { //쓰레드가 살아있을 때만 쓰레드를 종료하자
+            timeThread.interrupt(); //쓰레드 종료
+        }
     }
 
     /** 앱이 맨 처음 실행될 때, 아이디값을 통해 정보를 가져온다.*/
@@ -135,6 +144,25 @@ public class HomeMain extends Fragment {
         super.onResume();
         loadingStart();//로딩창 보여주기
         idcheckandButton(); //아이디를 토대로 버튼정보가져오기
+    }
+
+
+    /** 프로필 사진 갤러리에 요청시에 값을 여기서 받고 프로필 사진란에 이미지를 넣어준다.*/
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    Uri uri = data.getData();
+                    Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage);
+                } catch (Exception e) {
+
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(getContext(), "사진 선택 취소", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Nullable
@@ -199,15 +227,30 @@ public class HomeMain extends Fragment {
             @Override
             public void onClick(View v) {
                 Profile_Dialog profile_dialog = new Profile_Dialog(getContext());
+
+                profile_dialog.change_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //인텐트를 통해 갤러리로 요청코드 보내기
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(intent, REQUEST_CODE);
+                    }
+                });
+
+                //적용하기 누를 때
                 profile_dialog.apply.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) { //적용하기 누를 때
+                    public void onClick(View v) {
                         loadingStart();//로딩창 보여주기
+
                         String newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
                         applyProFile(newName); //프로필 바꾸기 메서드 실행
                     }
                 });
 
+                //취소 누를때
                 profile_dialog.cancelprofile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -218,6 +261,8 @@ public class HomeMain extends Fragment {
         });
 
 
+
+
             //금연 취소 눌렀을 때,
             stop_Btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -226,7 +271,7 @@ public class HomeMain extends Fragment {
                     giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
                         @Override
                         public void onClick(View v) {
-                            giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                            GiveUpNoSmoking_Dialog.dialog.dismiss(); //다이아로그 닫기
                         }
                     });
 
@@ -240,7 +285,7 @@ public class HomeMain extends Fragment {
                             noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
                             stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
                             timeThread.interrupt();//쓰레드 취소하기
-                            giveUpNoSmoking_dialog.dialog.dismiss(); //다이아로그 닫기
+                            GiveUpNoSmoking_Dialog.dialog.dismiss(); //다이아로그 닫기
                         }
                     });
 
