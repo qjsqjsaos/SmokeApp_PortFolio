@@ -7,8 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 인터넷 포그라운드 권한 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"

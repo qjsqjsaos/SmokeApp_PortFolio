@@ -1,19 +1,28 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.Uri;
+import android.net.UrlQuerySanitizer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,6 +46,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.loader.content.CursorLoader;
 import androidx.viewpager2.widget.ViewPager2;
 
 
@@ -44,6 +54,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -57,8 +68,10 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag5;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
 import org.techtown.study01.FirstToMain.register.Register;
+import org.techtown.study01.FirstToMain.register.RegisterRequest;
 import org.techtown.study01.FirstToMain.start.First_page_loading;
 
+import java.net.URL;
 import java.text.ParseException;
 import java.util.regex.Pattern;
 
@@ -77,7 +90,7 @@ public class HomeMain extends Fragment {
 
     //뷰그룹 부분
     private ViewGroup viewGroup;
-    private ImageView userView;
+    public static ImageView userView;
     public static TextView nameView;
     private LinearLayout card;
 
@@ -108,6 +121,12 @@ public class HomeMain extends Fragment {
 
     private AlertDialog dialog; //알림 다이아로그
 
+    private Uri uri; //프로필 사진 자료
+
+
+    //Profile_Dialog에 보낼 이미지스트링 자료. (프로필 사진)
+    static String profileImgtrue;
+
 
     /////////////////////Frag1이였던 것//////////////////////////
 
@@ -133,9 +152,9 @@ public class HomeMain extends Fragment {
     @Override
     public void onPause() { //앱을 잠시 일시정시할 때 타이머 종료// 중첩 방지
         super.onPause();
-        if(timeThread.isAlive()) { //쓰레드가 살아있을 때만 쓰레드를 종료하자
-            timeThread.interrupt(); //쓰레드 종료
-        }
+//        if(timeThread.isAlive()) { //쓰레드가 살아있을 때만 쓰레드를 종료하자
+//            timeThread.interrupt(); //쓰레드 종료
+//        }
     }
 
     /** 앱이 맨 처음 실행될 때, 아이디값을 통해 정보를 가져온다.*/
@@ -154,7 +173,7 @@ public class HomeMain extends Fragment {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
-                    Uri uri = data.getData();
+                    uri = data.getData();
                     Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage);
                 } catch (Exception e) {
 
@@ -227,7 +246,6 @@ public class HomeMain extends Fragment {
             @Override
             public void onClick(View v) {
                 Profile_Dialog profile_dialog = new Profile_Dialog(getContext());
-
                 profile_dialog.change_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -244,9 +262,11 @@ public class HomeMain extends Fragment {
                     @Override
                     public void onClick(View v) {
                         loadingStart();//로딩창 보여주기
+                        changeProfileImageToDB(); //변경된 프로필 이미지 서버로 보내기
+                        Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
 
                         String newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
-                        applyProFile(newName); //프로필 바꾸기 메서드 실행
+                        applyProFile(newName); //프로필 바꾸기 메서드 실행(이름만)
                     }
                 });
 
@@ -295,7 +315,46 @@ public class HomeMain extends Fragment {
             return viewGroup;
     }
 
-    /**프로필 바꾸기(적용) 메서드
+    /**프로필 바꾸기(적용버튼 사진만만) 메서드*/
+
+    private void changeProfileImageToDB() {
+
+        //프로필 이미지를 드로어블로 얻어오고 이 드로어블을 bitmap으로 변환한다.
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+
+                    if (success) {  //새로운 이름 입력하기
+
+                        Toast.makeText(getContext(), "등록", Toast.LENGTH_SHORT).show();
+
+                    }else {
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Profile_Img_Check profile_img_check = new Profile_Img_Check(id, uri, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(profile_img_check);
+
+        Log.d("비트맵", String.valueOf(uri));
+    }
+
+    /**프로필 바꾸기(적용버튼 이름만) 메서드
      * @param newName*/
 
     private void applyProFile(String newName) {
@@ -345,7 +404,6 @@ public class HomeMain extends Fragment {
         Log.d("아디가뭐야", id);
         Log.d("아디가뭐야", newName);
     }
-
 
     /** 금연하기 버튼을 클릭하고나서 금연시간 정하기*/
 
@@ -685,6 +743,11 @@ public class HomeMain extends Fragment {
                             Log.d("디비정보", newName);
 
                             nameView.setText(newName);
+
+                            //프로필 사진 가져오기
+                            profileImgtrue = jsonObject.getString("profileimage");
+                            Glide.with(getContext()).load(profileImgtrue).into(userView); //글라이드로 들어올때 서버에서 프로필 사진 가져오기
+
 
                             if(dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
                                 //금연버튼 활성화

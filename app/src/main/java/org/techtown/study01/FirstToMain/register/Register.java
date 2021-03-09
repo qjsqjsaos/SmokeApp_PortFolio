@@ -54,6 +54,7 @@ public class Register extends AppCompatActivity {
     private final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
     private Long mLastClickTime = 0L; //이메일 버튼 클릭 방지 변수
 
+    String profileimage = "0";
     String datetime = "0";
     long cigacount = 0;
     double cigapay = 0;
@@ -574,7 +575,7 @@ public class Register extends AppCompatActivity {
                        } else {
                            //모든 값이 다 있으면 DB에 저장하는 메소드 실행
                            RegisterRequest register = new RegisterRequest(id, pw, name, email, datetime,
-                                   cigacount, cigapay, goal, responseListener);
+                                   cigacount, cigapay, goal, profileimage, responseListener);
                            RequestQueue queue = Volley.newRequestQueue(Register.this);
                            queue.add(register);
                        }
