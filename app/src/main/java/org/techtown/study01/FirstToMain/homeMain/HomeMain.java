@@ -67,6 +67,7 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag3;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag5;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
+import org.techtown.study01.FirstToMain.register.NameRequest;
 import org.techtown.study01.FirstToMain.register.Register;
 import org.techtown.study01.FirstToMain.register.RegisterRequest;
 import org.techtown.study01.FirstToMain.start.First_page_loading;
@@ -94,7 +95,7 @@ public class HomeMain extends Fragment {
     public static TextView nameView;
     private LinearLayout card;
 
-    public static TextView dateView, d_dayView; //프로필에 디데이날짜와 금연날짜이다. 금연시작버튼이나, 다이얼로그안에 금연취소버튼을 누를시 변동한다. 이 값은 Frag1으로 가서 초기화된다.
+    public static TextView dateView; //프로필에 디데이날짜와 금연날짜이다. 금연시작버튼이나, 다이얼로그안에 금연취소버튼을 누를시 변동한다. 이 값은 Frag1으로 가서 초기화된다.
 
     //스태틱을 붙여서 Frag1에서 참조할 수 있게 한다. //금연하기 버튼과 취소버튼
     public static Button noSmoke_Btn, stop_Btn;
@@ -113,6 +114,10 @@ public class HomeMain extends Fragment {
 
     //저장 뷰모델
     private SharedViewModel sharedViewModel;
+
+
+    //닉네임 중복체크
+    boolean nameCheck = false;
 
 
     //로딩중 다이얼로그
@@ -135,7 +140,9 @@ public class HomeMain extends Fragment {
     public static long finallyDateTime;
 
     //Quest1에서 가져온 담배 핀 횟수와 비용 EditText
-    /** 이 카운트와 코스트는 다음에 값 전달하기*/
+    /**
+     * 이 카운트와 코스트는 다음에 값 전달하기
+     */
     public static long cigaCount;
     public static double cigaCost; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
 
@@ -148,16 +155,20 @@ public class HomeMain extends Fragment {
     public static double last_cigaCost;
 
 
-    /** 앱 종료시 쓰레드가 종료할 때만 쓰레드 종료(어차피 돌아오면 다시 켜짐)*/
+    /**
+     * 앱 종료시 쓰레드가 종료할 때만 쓰레드 종료(어차피 돌아오면 다시 켜짐)
+     */
     @Override
     public void onPause() { //앱을 잠시 일시정시할 때 타이머 종료// 중첩 방지
         super.onPause();
-//        if(timeThread.isAlive()) { //쓰레드가 살아있을 때만 쓰레드를 종료하자
-//            timeThread.interrupt(); //쓰레드 종료
-//        }
+        if (finallyDateTime > 0) { //쓰레드가 살아있을 때만 쓰레드를 종료하자
+            timeThread.interrupt(); //쓰레드 종료
+        }
     }
 
-    /** 앱이 맨 처음 실행될 때, 아이디값을 통해 정보를 가져온다.*/
+    /**
+     * 앱이 맨 처음 실행될 때, 아이디값을 통해 정보를 가져온다.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -166,7 +177,9 @@ public class HomeMain extends Fragment {
     }
 
 
-    /** 프로필 사진 갤러리에 요청시에 값을 여기서 받고 프로필 사진란에 이미지를 넣어준다.*/
+    /**
+     * 프로필 사진 갤러리에 요청시에 값을 여기서 받고 프로필 사진란에 이미지를 넣어준다.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -174,12 +187,13 @@ public class HomeMain extends Fragment {
             if (resultCode == RESULT_OK) {
                 try {
                     uri = data.getData();
-                    Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage);
+                    Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기
+                    changeProfileImageToDB(); //변경된 프로필 이미지 서버로 보내기
+                    Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
                 } catch (Exception e) {
 
                 }
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(getContext(), "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -193,52 +207,51 @@ public class HomeMain extends Fragment {
         userView = viewGroup.findViewById(R.id.userView); //프로필사진
         nameView = viewGroup.findViewById(R.id.nickName); //닉네임(프로필)
         dateView = viewGroup.findViewById(R.id.noSmoke_date); //금연날짜(프로필)
-        d_dayView = viewGroup.findViewById(R.id.D_dayView);
         wiseView = viewGroup.findViewById(R.id.text_wisesay); //명언액자
         card = viewGroup.findViewById(R.id.card); //프로필
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
 
 
-            startNoSmokingButton(); //금연시작 버튼
+        startNoSmokingButton(); //금연시작 버튼
 
-            //텍스트뷰 글씨가 바뀔 때 호출한다.
-            wiseView.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { //텍스트가 바뀌기전
+        //텍스트뷰 글씨가 바뀔 때 호출한다.
+        wiseView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { //텍스트가 바뀌기전
 
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) { //텍스트가 바뀌는 중일 때,
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
-                    String wiseValue = wiseView.getText().toString();
-                    if (wiseValue.equals("오류")) {
-                        popupLoading(); //firstloding창으로 이동하고,
-                        BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
-                    }
-                }
-            });
-
-            setInit(); //뷰페이저 실행 메서드
-
-
-            //BottomNavi에서 받은 번들 데이터
-            Bundle bundle = this.getArguments();
-            Log.d(TAG, "번들가져오고");
-
-            name = bundle.getString("name");
-            id = bundle.getString("id");
-            Log.d(TAG, "번들 메세지들 다 가져옴");
-
-            if (name != null) { //일반 로그인
-                nameView.setText(name); //닉네임으로 이름바꿔주기
-                Log.d(TAG, name);
             }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { //텍스트가 바뀌는 중일 때,
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { //텍스트가 바뀌고 난 후
+                String wiseValue = wiseView.getText().toString();
+                if (wiseValue.equals("오류")) {
+                    popupLoading(); //firstloding창으로 이동하고,
+                    BottomNavi.bottomNavi.finish(); //그 후에 뒤로가기 방지를 위해 아래있는 Bottomnavi를 없애준다.
+                }
+            }
+        });
+
+        setInit(); //뷰페이저 실행 메서드
+
+
+        //BottomNavi에서 받은 번들 데이터
+        Bundle bundle = this.getArguments();
+        Log.d(TAG, "번들가져오고");
+
+        name = bundle.getString("name");
+        id = bundle.getString("id");
+        Log.d(TAG, "번들 메세지들 다 가져옴");
+
+        if (name != null) { //일반 로그인
+            nameView.setText(name); //닉네임으로 이름바꿔주기
+            Log.d(TAG, name);
+        }
 
 
         /** 프로필을 클릭했을 때, 이름 변경 가능*/
@@ -261,12 +274,19 @@ public class HomeMain extends Fragment {
                 profile_dialog.apply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        loadingStart();//로딩창 보여주기
-                        changeProfileImageToDB(); //변경된 프로필 이미지 서버로 보내기
-                        Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
-
-                        String newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
-                        applyProFile(newName); //프로필 바꾸기 메서드 실행(이름만)
+                        //만약 처음에 글씨가 그대로라면 적용하기를 누를 때 중복확인 상관없이 값 적용,
+                        //하지만 닉네임이 처음 글씨와 다를 경우 중복체크 및 나머지 메서드 실행
+                        String changeValue = Profile_Dialog.changedName.getText().toString();
+                        loading_dialog.show(); //로딩창 띄우기
+                        if (Profile_Dialog.NN.equals(changeValue)) {
+                            Profile_Dialog.dialog.dismiss(); //다이어로그닫기
+                            loading_dialog.dismiss(); //로딩창 닫기
+                        }
+                        if (!Profile_Dialog.NN.equals(changeValue)) {
+                            String newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
+                            Log.d("궁금2", newName);
+                            nickNameCheck(newName); //이름 중복체크
+                        }
                     }
                 });
 
@@ -281,41 +301,41 @@ public class HomeMain extends Fragment {
         });
 
 
+        //금연 취소 눌렀을 때,
+        stop_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //다이얼로그 띄우고,
+                GiveUpNoSmoking_Dialog giveUpNoSmoking_dialog = new GiveUpNoSmoking_Dialog(getContext());
+                giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
+                    @Override
+                    public void onClick(View v) {
+                        GiveUpNoSmoking_Dialog.dialog.dismiss(); //다이아로그 닫기
+                    }
+                });
 
+                giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
+                    @Override
+                    public void onClick(View v) {
+                        loadingStart();//로딩창 보여주기
+                        int value = 0;
+                        String svalue = "0";
+                        saveValueToDB(value, svalue); //디비에 값 0으로 초기화
+                        noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
+                        stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
+                        timeThread.interrupt();//쓰레드 취소하기
+                        GiveUpNoSmoking_Dialog.dialog.dismiss(); //다이아로그 닫기
+                    }
+                });
 
-            //금연 취소 눌렀을 때,
-            stop_Btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) { //다이얼로그 띄우고,
-                    GiveUpNoSmoking_Dialog giveUpNoSmoking_dialog = new GiveUpNoSmoking_Dialog(getContext());
-                    giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
-                        @Override
-                        public void onClick(View v) {
-                            GiveUpNoSmoking_Dialog.dialog.dismiss(); //다이아로그 닫기
-                        }
-                    });
+            }
+        });
 
-                    giveUpNoSmoking_dialog.NSNO.setOnClickListener(new View.OnClickListener() { //금연 포기 버튼을 누르면,
-                        @Override
-                        public void onClick(View v) {
-                            loadingStart();//로딩창 보여주기
-                            int value = 0;
-                            String svalue = "0";
-                            saveValueToDB(value, svalue); //디비에 값 0으로 초기화
-                            noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
-                            stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
-                            timeThread.interrupt();//쓰레드 취소하기
-                            GiveUpNoSmoking_Dialog.dialog.dismiss(); //다이아로그 닫기
-                        }
-                    });
-
-                }
-            });
-
-            return viewGroup;
+        return viewGroup;
     }
 
-    /**프로필 바꾸기(적용버튼 사진만만) 메서드*/
+    /**
+     * 프로필 바꾸기(적용버튼 사진만만) 메서드
+     */
 
     private void changeProfileImageToDB() {
 
@@ -328,15 +348,6 @@ public class HomeMain extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean("success");
-
-                    if (success) {  //새로운 이름 입력하기
-
-                        Toast.makeText(getContext(), "등록", Toast.LENGTH_SHORT).show();
-
-                    }else {
-
-                    }
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -354,8 +365,12 @@ public class HomeMain extends Fragment {
         Log.d("비트맵", String.valueOf(uri));
     }
 
-    /**프로필 바꾸기(적용버튼 이름만) 메서드
-     * @param newName*/
+
+    /**
+     * 프로필 바꾸기(적용버튼 이름만) 메서드
+     *
+     * @param newName
+     */
 
     private void applyProFile(String newName) {
 
@@ -379,11 +394,10 @@ public class HomeMain extends Fragment {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {  //새로운 이름 입력하기
-                         nameView.setText(newName);
-                         loading_dialog.cancel(); //로딩창 닫기
+                        nameView.setText(newName);
+                        loading_dialog.cancel(); //로딩창 닫기
                         Profile_Dialog.dialog.dismiss(); //다이얼로그닫기
-                        // TODO: 2021-03-05 여기부터 다시 이름 입력이 안됨 
-                        }else {
+                    } else {
 
                     }
 
@@ -400,12 +414,14 @@ public class HomeMain extends Fragment {
         ApplyProFile applyProFile = new ApplyProFile(id, newName, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(applyProFile);
-        
+
         Log.d("아디가뭐야", id);
         Log.d("아디가뭐야", newName);
     }
 
-    /** 금연하기 버튼을 클릭하고나서 금연시간 정하기*/
+    /**
+     * 금연하기 버튼을 클릭하고나서 금연시간 정하기
+     */
 
     public void startNoSmokingButton() {
 
@@ -424,7 +440,7 @@ public class HomeMain extends Fragment {
                         cigaCount = 5;
                         cigaCost = 5000;
 
-                        dateTime = date +" "+ time; // 지정된 날짜와 데이트 시간 합치기
+                        dateTime = date + " " + time; // 지정된 날짜와 데이트 시간 합치기
                         Log.d("3값", dateTime);
 
                         finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
@@ -432,7 +448,7 @@ public class HomeMain extends Fragment {
 
                         //문자를 지우는 함수다. dateTime에서 시간만 지우고 날짜만 출력한 값이다.
                         StringBuffer origin = new StringBuffer(dateTime);
-                        StringBuffer justDate = origin.delete(10,19);
+                        StringBuffer justDate = origin.delete(10, 19);
                         Log.d("저스트", String.valueOf(justDate));
                         dateView.setText(justDate); //날짜 프로필에다가 넣어주기 //금연 시작 날짜
 
@@ -465,9 +481,9 @@ public class HomeMain extends Fragment {
     }
 
 
-
-
-    /** 타이머 핸들러*/
+    /**
+     * 타이머 핸들러
+     */
     Handler handler = new Handler(Looper.myLooper()) { //실시간 날짜를 출력해주는 핸들러
         @Override
         public void handleMessage(Message msg) {
@@ -481,16 +497,15 @@ public class HomeMain extends Fragment {
 
             //타이머가 86400000 이 있으면 백의 자리에서 증감이 일어남 그래서,
             // dataTime에 0을 붙여서 천의 자리부터 숫자가 증가하게 만들어 올바른 타이머 동작을 구현했다.
-            long datatime_last = Long.parseLong(dateTime+"0");
+            long datatime_last = Long.parseLong(dateTime + "0");
             Log.d("마지막데트", String.valueOf(datatime_last));
             /////////////////////////////////////
             long sec = (datatime_last / 1000) % 60; //초
             long min = (datatime_last / 1000) / 60 % 60; //분
             long hour = (datatime_last / 1000) / 3600 % 24; //시
-            long day = datatime_last / (24*60*60*1000);//하루
-            long ciga_Time = (datatime_last/1000) / last_cigaCount; //담배를 피지 않은 횟수
-            double ciga_Money = (datatime_last/1000) * last_cigaCost; //지금껏 아낀 비용
-
+            long day = datatime_last / (24 * 60 * 60 * 1000);//하루
+            long ciga_Time = (datatime_last / 1000) / last_cigaCount; //담배를 피지 않은 횟수
+            double ciga_Money = (datatime_last / 1000) * last_cigaCost; //지금껏 아낀 비용
 
 
             //스트링 열로 포맷한다.
@@ -503,7 +518,6 @@ public class HomeMain extends Fragment {
             Log.d("머니", String.valueOf(ciga_Money));
 
 
-
             /** result는 실시간 시간초이다./ oneday는 실시간 날짜이다.*/
             sharedViewModel.setstartDate(result); //타이머 실시간 표시
 
@@ -513,18 +527,13 @@ public class HomeMain extends Fragment {
 
             sharedViewModel.setLiveDataCost(ciga_Money); //ViewModel을 통해서 Frag3로 보내기 위해 Livedata에 ciga_Money 보낸다.
 
-            d_dayView.setText("D+" + day); //몇일 됬는지 디데이로 프로필에 표기된다.
-
-
-
         }
     };
 
 
-
-
-
-    /** 타이머 쓰레드*/
+    /**
+     * 타이머 쓰레드
+     */
     public class timeThread implements Runnable {
         //타이머 쓰레드
         @Override
@@ -545,7 +554,7 @@ public class HomeMain extends Fragment {
                         Thread.sleep(10); //혹시나 멈췄을 경우를 대비해 0.01초마다 쓰레드실행
                     } catch (InterruptedException e) { //인터럽트(취소 받을 경우) 한마디로 Bottomnavi에 있는 다이얼로그에서 금연 취소버튼을 눌렀을때이다.
                         e.printStackTrace();
-                        getActivity().runOnUiThread(new Runnable(){
+                        getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() { //취소 되고 나서, 실행 여기다가 적기
                                 Frag1.textView.setText(""); //한번 빈칸으로 초기화시켜주기
@@ -557,7 +566,6 @@ public class HomeMain extends Fragment {
                                 Frag5.textView5.setText(""); //한번 빈칸으로 초기화시켜주기
                                 Frag5.textView5.setText("0개비 가량 됩니다!");
                                 dateView.setText("금연날짜");
-                                HomeMain.d_dayView.setText("D+");
                             }
                         });
                         return; // 인터럽트 받을 경우 return (취소)
@@ -568,7 +576,9 @@ public class HomeMain extends Fragment {
     }
 
 
-    /** 뷰모델 저장소 다른 프래그먼트로 값을 전달한다.*/
+    /**
+     * 뷰모델 저장소 다른 프래그먼트로 값을 전달한다.
+     */
     //onCreateView에서 리턴해준 View(rootView)를 가지고 있다.
     //저장된 뷰가 반환된 직후에 호출됩니다.
     @Override
@@ -582,8 +592,9 @@ public class HomeMain extends Fragment {
     }
 
 
-
-    /** 뷰페이저 2 실행하기*/
+    /**
+     * 뷰페이저 2 실행하기
+     */
     private void setInit() {
 
         /* setup infinity scroll viewpager */
@@ -625,9 +636,9 @@ public class HomeMain extends Fragment {
     }
 
 
-
-
-    /** 퍼스트 페이지 로딩 페이지 띄우기 (인터넷 연결 안될시에)*/
+    /**
+     * 퍼스트 페이지 로딩 페이지 띄우기 (인터넷 연결 안될시에)
+     */
 
     public void popupLoading() { // 만약 인터넷이 연결이 되어 있지 않으면 인텐트를 한다.
         Intent intent = new Intent(getContext(), First_page_loading.class);
@@ -639,7 +650,9 @@ public class HomeMain extends Fragment {
     }
 
 
-    /** 금연을 포기하여 0으로 저장되는 곳*/
+    /**
+     * 금연을 포기하여 0으로 저장되는 곳
+     */
 
     public void saveValueToDB(int value, String svalue) {
         Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
@@ -680,7 +693,9 @@ public class HomeMain extends Fragment {
     }
 
 
-    /** 버튼을 누른 값이 저장되는 곳 0이 아님*/
+    /**
+     * 버튼을 누른 값이 저장되는 곳 0이 아님
+     */
     public void saveValueToDB2() {
         Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
 
@@ -718,8 +733,10 @@ public class HomeMain extends Fragment {
     }
 
 
-    /** 로그인 하고나서 아이디를 통해 내 정보 불러오고 그의 맞게 버튼 호출*/
-    public void idcheckandButton(){
+    /**
+     * 로그인 하고나서 아이디를 통해 내 정보 불러오고 그의 맞게 버튼 호출
+     */
+    public void idcheckandButton() {
         if (id != null) {
 
             Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
@@ -749,12 +766,12 @@ public class HomeMain extends Fragment {
                             Glide.with(getContext()).load(profileImgtrue).into(userView); //글라이드로 들어올때 서버에서 프로필 사진 가져오기
 
 
-                            if(dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
+                            if (dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
                                 //금연버튼 활성화
                                 noSmoke_Btn.setVisibility(VISIBLE);
                                 stop_Btn.setVisibility(GONE);
                                 //쓰레드 실행안함.
-                            }else{
+                            } else {
                                 //금연 취소버튼 활성화
                                 noSmoke_Btn.setVisibility(GONE);
                                 stop_Btn.setVisibility(VISIBLE);
@@ -786,8 +803,9 @@ public class HomeMain extends Fragment {
     }
 
 
-
-    /** 따로 만든 시작 쓰레드*/
+    /**
+     * 따로 만든 시작 쓰레드
+     */
     private void startThreadShow(String dateTime) throws ParseException {
         Calculate_Date calculate_date = new Calculate_Date();
 
@@ -806,7 +824,7 @@ public class HomeMain extends Fragment {
 
 
         StringBuffer origin = new StringBuffer(dateTime);
-        StringBuffer justDate = origin.delete(10,19);
+        StringBuffer justDate = origin.delete(10, 19);
         Log.d("저스트", String.valueOf(justDate));
         dateView.setText(justDate); //날짜 프로필에다가 넣어주기 //금연 시작 날짜
 
@@ -814,12 +832,50 @@ public class HomeMain extends Fragment {
         timeThread.start(); //쓰레드실행
     }
 
-    public void loadingStart(){
+    public void loadingStart() {
         loading_dialog = new Loading_Dialog(getContext());
         loading_dialog.setCanceledOnTouchOutside(false);
         loading_dialog.setCancelable(false); //뒤로가기방지
         loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loading_dialog.show();
     }
+
+    public void nickNameCheck(String dbname) {
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() { //결과 리스너 생성 (중복체크)
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+
+                    boolean success = jsonResponse.getBoolean("success");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    if (success) {
+                        nameCheck = true;
+                        applyProFile(dbname); //프로필 이름 새로 저장
+                    } else {
+                        nameCheck = false;
+                        dialog = builder.setMessage("존재하는 닉네임입니다.")
+                                .setNegativeButton("확인", null)
+                                .create();
+                        dialog.show();
+                        loading_dialog.cancel(); //로딩창 닫기
+                        return;
+                    }
+
+                } catch (JSONException e) {
+                    loading_dialog.cancel(); //로딩창 닫기
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "닉네임 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        };
+        NameRequest nameRequest = new NameRequest(dbname, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(nameRequest);
+    }
+
 }
 

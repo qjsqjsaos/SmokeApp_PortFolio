@@ -30,7 +30,7 @@
                 android:elevation="10dp"
                 android:id="@+id/card"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
                 android:background="@drawable/all_btn"
                 android:clickable="false"
                 android:orientation="horizontal"
@@ -39,6 +39,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:orientation="vertical"
                     android:padding="5dp">
 
@@ -71,6 +72,8 @@
                         android:text="이름"
                         android:textSize="20sp" />
 
+
+
                     <TextView
                         android:textColor="@color/textColor"
                         android:id="@+id/noSmoke_date"
@@ -81,39 +84,6 @@
                         android:text="금연시작날짜"
                         android:textSize="20sp" />
 
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_weight="0.8"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:padding="5dp"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text=""
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/D_dayView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="left"
-                        android:gravity="center"
-                        android:text="D+0"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp" />
 
                 </LinearLayout>
 

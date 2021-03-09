@@ -34,6 +34,8 @@ public class Profile_Dialog extends Dialog {
 
     public static EditText changedName; //이름바꾸기 에딧텍스트
 
+    static String NN; //이름값이 바뀌었는지 아닌지 식별
+
     //프로필 변경하기
 
     public Profile_Dialog(@NonNull Context context) {
@@ -55,7 +57,7 @@ public class Profile_Dialog extends Dialog {
         cancelprofile = dialog.findViewById(R.id.cancel_profile); //취소
         change_btn = dialog.findViewById(R.id.changeProfile); //프로필 이미지 변경 버튼
 
-        String NN = HomeMain.nameView.getText().toString(); //원래이름 가져오기
+        NN = HomeMain.nameView.getText().toString(); //원래이름 가져오기
         Profile_Dialog.changedName.setText(NN); //이름 입력란에 원래 이름 넣기(바뀌기 전 이름)
         Glide.with(getContext()).load(HomeMain.profileImgtrue).into(profileImage);
     }
