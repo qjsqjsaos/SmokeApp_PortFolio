@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 인터넷 포그라운드 권한 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+
+        <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
+        <uses-library android:name="sooyeol" android:required="false"/>
 
         <activity android:name=".homeMain.Loading_Dialog"
             tools:ignore="Instantiatable"></activity>
