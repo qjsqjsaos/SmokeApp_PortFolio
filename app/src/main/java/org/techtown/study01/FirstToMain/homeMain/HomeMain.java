@@ -66,6 +66,7 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1_Request;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag2;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag3;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag5;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag7;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
 import org.techtown.study01.FirstToMain.register.NameRequest;
@@ -584,6 +585,8 @@ public class HomeMain extends Fragment {
                                 Frag5.textView5.setText(""); //한번 빈칸으로 초기화시켜주기
                                 Frag5.textView5.setText("0개비 가량 됩니다!");
                                 dateView.setText("금연날짜");
+
+                                Frag7.rankImg.setImageResource(0); //Frag7 이미지 없애기
 
                                 //프로그레스 값 초기화
                                 if(HealthCheck.pgb1 != null) {
