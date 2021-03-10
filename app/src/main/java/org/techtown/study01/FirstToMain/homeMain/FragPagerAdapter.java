@@ -17,6 +17,7 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag3;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag4;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag5;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag6;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag7;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class FragPagerAdapter extends FragmentStateAdapter {
     // Real Fragment Total Count
-    private final int mSetItemCount = 6; //화면에 출력될 프래그먼트 개수
+    private final int mSetItemCount = 7; //화면에 출력될 프래그먼트 개수
 
 
 
@@ -44,7 +45,8 @@ public class FragPagerAdapter extends FragmentStateAdapter {
             case 2    : { return new Frag3(); }
             case 3    : { return new Frag4(); }
             case 4    : { return new Frag5(); }
-            case 5    : { return new Frag6(); }
+            case 5    : { return new Frag7(); }
+            case 6    : { return new Frag6(); }
             default   : { return new Frag1(); } //기본으로 나와있는 프래그먼트
         }
 
@@ -62,6 +64,6 @@ public class FragPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() { //화면에 나오는 갯수 설정
-        return 6; //여기서 무한 스크롤을 원하면 Integer.Max_Value를 해준다.
+        return 7; //여기서 무한 스크롤을 원하면 Integer.Max_Value를 해준다.
     }
 }

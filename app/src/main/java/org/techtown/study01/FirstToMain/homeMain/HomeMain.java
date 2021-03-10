@@ -193,7 +193,7 @@ public class HomeMain extends Fragment {
                 } catch (Exception e) {
 
                 }
-            } else if (resultCode == RESULT_CANCELED) {
+            } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
             }
         }
     }
@@ -332,6 +332,12 @@ public class HomeMain extends Fragment {
 
         return viewGroup;
     }
+
+
+
+
+
+
 
     /**
      * 프로필 바꾸기(적용버튼 사진만만) 메서드
@@ -602,7 +608,7 @@ public class HomeMain extends Fragment {
         FragPagerAdapter SetupPagerAdapter = new FragPagerAdapter(getActivity());
         viewPageSetUp.setAdapter(SetupPagerAdapter);
         viewPageSetUp.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        viewPageSetUp.setOffscreenPageLimit(5); //좌우로 몇개까지 미리로딩하고 싶냐는 말이다. ex)1페이지에 있을때 나머지 2, 3, 4, 5, 6 페이지가 미리로딩된다는 뜻이다.
+        viewPageSetUp.setOffscreenPageLimit(6); //좌우로 몇개까지 미리로딩하고 싶냐는 말이다. ex)5라고 입력시 1페이지에 있을때 나머지 2, 3, 4, 5, 6 페이지가 미리로딩된다는 뜻이다.
         viewPageSetUp.setSaveEnabled(false);
 
         final float pageMargin = (float) getResources().getDimensionPixelOffset(R.dimen.pageMargin); //페이지끼리 간격
@@ -822,7 +828,7 @@ public class HomeMain extends Fragment {
         last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
         Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
 
-
+        //스트링열 원하는 부분 제거
         StringBuffer origin = new StringBuffer(dateTime);
         StringBuffer justDate = origin.delete(10, 19);
         Log.d("저스트", String.valueOf(justDate));

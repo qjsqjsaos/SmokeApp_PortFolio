@@ -49,6 +49,8 @@ import static android.view.View.VISIBLE;
         private HomeMain fragment1; //홈메인
         private static final String TAG = "MyTag"; //로그 찍을때,
 
+        public static Loading_Dialog loading_dialog_BN; //바텀나비 로딩창
+
         private String id;
 
         public static BottomNavi bottomNavi;
@@ -149,6 +151,7 @@ import static android.view.View.VISIBLE;
                             return true;
                         }
                         case R.id.check_health : {
+
 
                             if (fragmentManager.findFragmentByTag("health") != null) {
                                 //if the fragment exists, show it.

@@ -63,4 +63,8 @@
     <dimen name="offset">30dp</dimen> //페이지 보이는 정도
     <dimen name="fragment_width">260dp</dimen> //프래그먼트 가로 길이
 
+    <!-- 건강체크 관련 -->
+    <dimen name="health_text_size">14sp</dimen> //텍스트 크기
+
+
 </resources>
