@@ -59,6 +59,7 @@ import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1_Request;
@@ -514,6 +515,8 @@ public class HomeMain extends Fragment {
             double ciga_Money = (datatime_last / 1000) * last_cigaCost; //지금껏 아낀 비용
 
 
+
+
             //스트링 열로 포맷한다.
             String result = String.format("%02d:%02d:%02d", hour, min, sec);
 
@@ -524,14 +527,23 @@ public class HomeMain extends Fragment {
             Log.d("머니", String.valueOf(ciga_Money));
 
 
-            /** result는 실시간 시간초이다./ oneday는 실시간 날짜이다.*/
+
+
+
+
+            /** 실시간 데이터들 뷰모델로 각 프래그먼트로 전달*/
             sharedViewModel.setstartDate(result); //타이머 실시간 표시
 
             sharedViewModel.setLiveData(day); //ViewModel을 통해서 Frag2 Homemain으로 보내기 위해 Livedata에 oneDay를 보낸다.
 
-            sharedViewModel.setLiveDataCount(ciga_Time); //ViewModel을 통해서 Frag5로 보내기 위해 Livedata에 ciga_Time 보낸다.
+            sharedViewModel.setLiveDataCount(ciga_Time); //ViewModel을 통해서 Frag5로 보내기 위해 Livedata에 ciga_Time를 보낸다.
 
-            sharedViewModel.setLiveDataCost(ciga_Money); //ViewModel을 통해서 Frag3로 보내기 위해 Livedata에 ciga_Money 보낸다.
+            sharedViewModel.setLiveDataCost(ciga_Money); //ViewModel을 통해서 Frag3로 보내기 위해 Livedata에 ciga_Money를 보낸다.
+
+            //setmax에 int형으로 밖에 못넣어서 1000으로 나눈다 => 0이 하나도 안붙어있는 숫자로만 전달
+            long healthSecond = (datatime_last / 1000);
+            Log.d("헬스세컨드", String.valueOf(healthSecond));
+            sharedViewModel.sethaelthSecond(healthSecond); //ViewModel을 통해서 HealthCheck과 Frag7로 보내기 위해 Livedata에 datatime을 보낸다.
 
         }
     };
@@ -572,6 +584,28 @@ public class HomeMain extends Fragment {
                                 Frag5.textView5.setText(""); //한번 빈칸으로 초기화시켜주기
                                 Frag5.textView5.setText("0개비 가량 됩니다!");
                                 dateView.setText("금연날짜");
+
+                                //프로그레스 값 초기화
+                                if(HealthCheck.pgb1 != null) {
+                                    HealthCheck.pgb1.setProgress(0);
+                                    HealthCheck.pgb2.setProgress(0);
+                                    HealthCheck.pgb3.setProgress(0);
+                                    HealthCheck.pgb4.setProgress(0);
+                                    HealthCheck.pgb5.setProgress(0);
+                                    HealthCheck.pgb6.setProgress(0);
+                                    HealthCheck.pgb7.setProgress(0);
+                                    HealthCheck.pgb8.setProgress(0);
+                                    HealthCheck.pgb9.setProgress(0);
+                                    HealthCheck.pgb10.setProgress(0);
+                                    HealthCheck.pgb11.setProgress(0);
+                                    HealthCheck.pgb12.setProgress(0);
+                                    HealthCheck.pgb13.setProgress(0);
+                                    HealthCheck.pgb14.setProgress(0);
+                                    HealthCheck.pgb15.setProgress(0);
+                                    HealthCheck.pgb16.setProgress(0);
+                                    HealthCheck.pgb17.setProgress(0);
+                                    HealthCheck.pgb18.setProgress(0);
+                                }
                             }
                         });
                         return; // 인터럽트 받을 경우 return (취소)

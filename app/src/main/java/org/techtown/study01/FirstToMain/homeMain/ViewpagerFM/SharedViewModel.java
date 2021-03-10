@@ -57,4 +57,17 @@ public class SharedViewModel extends ViewModel {
         startDate.setValue(str);
     }
 
+
+
+    //Long용 HealthCheck, Frag7용 //금연 시간 초
+    private MutableLiveData<Long> haelthSecond = new MutableLiveData<>();
+
+    public LiveData<Long> gethaelthSecond(){
+        return haelthSecond;
+    }
+
+    public void sethaelthSecond(Long longa){
+        haelthSecond.setValue(longa);
+    }
+
 }
