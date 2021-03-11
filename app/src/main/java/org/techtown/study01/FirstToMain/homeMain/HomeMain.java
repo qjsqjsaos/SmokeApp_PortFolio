@@ -65,6 +65,7 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1_Request;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag2;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag3;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag4;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag5;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag7;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
@@ -134,7 +135,6 @@ public class HomeMain extends Fragment {
 
     //Profile_Dialog에 보낼 이미지스트링 자료. (프로필 사진)
     static String profileImgtrue;
-
 
     /////////////////////Frag1이였던 것//////////////////////////
 
@@ -336,10 +336,6 @@ public class HomeMain extends Fragment {
 
         return viewGroup;
     }
-
-
-
-
 
 
 
@@ -833,6 +829,9 @@ public class HomeMain extends Fragment {
                             profileImgtrue = jsonObject.getString("profileimage");
                             Glide.with(getContext()).load(profileImgtrue).into(userView); //글라이드로 들어올때 서버에서 프로필 사진 가져오기
 
+                            //목표 가져오기
+                            String goal = jsonObject.getString("goal");
+                            Frag4.newGoalText.setText(goal);
 
                             if (dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
                                 //금연버튼 활성화

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_radius">
+
+    <TextView
+        android:id="@+id/textView8843"
+        style="@style/title_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="담배를 끊는 이유가 무엇인가요?"
+        android:textColor="@color/textColor"
+        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    <EditText
+        android:id="@+id/inputGoal"
+        android:background="@drawable/round_edittext"
+        android:layout_width="0dp"
+        android:layout_weight="6"
+        android:maxLines="3"
+        android:maxLength="30"
+        android:padding="5dp"
+        android:hint="30자 이하로 입력해주세요."
+        android:layout_height="200dp"
+        android:gravity="center" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/apply2"
+        style="@style/bold_theme"
+        android:layout_width="200dp"
+        android:layout_height="@dimen/find_textInput_Button_height"
+        android:layout_gravity="center"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/all_btn"
+        android:text="금연 목적 지정"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/find_button_text_size" />
+
+    <Button
+        android:id="@+id/cancelP"
+        style="@style/bold_theme"
+        android:layout_width="200dp"
+        android:layout_height="@dimen/find_textInput_Button_height"
+        android:layout_gravity="center"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/all_btn"
+        android:text="취소"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/find_button_text_size" />
+
+
+</LinearLayout>
