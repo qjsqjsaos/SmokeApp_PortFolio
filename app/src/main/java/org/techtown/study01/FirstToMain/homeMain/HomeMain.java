@@ -96,6 +96,7 @@ public class HomeMain extends Fragment {
     public static ImageView userView;
     public static TextView nameView;
     private LinearLayout card;
+    public static ImageView rank; //프로필 랭크 이미지
 
     public static TextView dateView; //프로필에 디데이날짜와 금연날짜이다. 금연시작버튼이나, 다이얼로그안에 금연취소버튼을 누를시 변동한다. 이 값은 Frag1으로 가서 초기화된다.
 
@@ -213,6 +214,7 @@ public class HomeMain extends Fragment {
         card = viewGroup.findViewById(R.id.card); //프로필
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
+        rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
 
 
         startNoSmokingButton(); //금연시작 버튼
@@ -587,8 +589,31 @@ public class HomeMain extends Fragment {
                                 dateView.setText("금연날짜");
                                 Frag7.rankImg.setImageResource(0); //Frag7 이미지 없애기
                                 Frag7.rankText.setText(""); //Frag7 빈칸만들기
+                                rank.setImageResource(0); //프로필 이미지도 없애기
 
-                                //프로그레스 값 초기화
+                                //HealthCheck이미지 값 초기화
+                                if(HealthCheck.i1 != null){
+                                    HealthCheck.i1.setImageResource(0);
+                                    HealthCheck.i2.setImageResource(0);
+                                    HealthCheck.i3.setImageResource(0);
+                                    HealthCheck.i4.setImageResource(0);
+                                    HealthCheck.i5.setImageResource(0);
+                                    HealthCheck.i6.setImageResource(0);
+                                    HealthCheck.i7.setImageResource(0);
+                                    HealthCheck.i8.setImageResource(0);
+                                    HealthCheck.i9.setImageResource(0);
+                                    HealthCheck.i10.setImageResource(0);
+                                    HealthCheck.i11.setImageResource(0);
+                                    HealthCheck.i12.setImageResource(0);
+                                    HealthCheck.i13.setImageResource(0);
+                                    HealthCheck.i14.setImageResource(0);
+                                    HealthCheck.i15.setImageResource(0);
+                                    HealthCheck.i16.setImageResource(0);
+                                    HealthCheck.i17.setImageResource(0);
+                                    HealthCheck.i18.setImageResource(0);
+                                    HealthCheck.i19.setImageResource(0);
+                                }
+                                //HealthCheck프로그레스 값 초기화
                                 if(HealthCheck.pgb1 != null) {
                                     HealthCheck.pgb1.setProgress(0);
                                     HealthCheck.pgb2.setProgress(0);
@@ -608,6 +633,7 @@ public class HomeMain extends Fragment {
                                     HealthCheck.pgb16.setProgress(0);
                                     HealthCheck.pgb17.setProgress(0);
                                     HealthCheck.pgb18.setProgress(0);
+                                    HealthCheck.pgb19.setProgress(0);
                                 }
                             }
                         });
