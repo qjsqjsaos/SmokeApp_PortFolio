@@ -216,6 +216,10 @@ public class HomeMain extends Fragment {
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
 
+        WiseSay_List wiseSay_list = new WiseSay_List();
+        String WS = wiseSay_list.WiseArray(0);
+        wiseView.setText(WS);
+
 
         startNoSmokingButton(); //금연시작 버튼
 

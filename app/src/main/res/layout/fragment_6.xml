@@ -7,7 +7,7 @@
     tools:context=".homeMain.ViewpagerFM.Frag4">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/ShareLayout"
         android:layout_width="@dimen/fragment_width"
         android:layout_height="240dp"
         android:background="@drawable/wisesay_settings"

@@ -53,8 +53,6 @@ public class HealthCheck extends Fragment {
 
         viewGroup = (ViewGroup) inflater.inflate(R.layout.health_check, container, false);
 
-        TextView textView = viewGroup.findViewById(R.id.textView18);
-
         findProgressandImageView(); //프로그레스바와 이미지뷰 참조하기
 
         return viewGroup;

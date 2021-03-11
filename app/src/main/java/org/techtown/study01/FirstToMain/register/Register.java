@@ -593,7 +593,7 @@ public class Register extends AppCompatActivity {
                 GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694!@");
                 //GMailSender.sendMail(제목, 본문내용, 받는사람);
                 try {
-                    gMailSender.sendMail("금연투게더 인증번호 입니다.", "인증번호는 : \"" + result + "\" 입니다. \n " +
+                    gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 아이디를 확인해주세요.", "인증번호는 : \"" + result + "\" 입니다. \n " +
                             "인증번호를 입력하시고 확인버튼을 누르시면 회원가입이 완료됩니다.", dbEmail);
                     Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
