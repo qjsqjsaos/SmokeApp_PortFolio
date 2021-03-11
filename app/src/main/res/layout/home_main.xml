@@ -112,6 +112,7 @@
         <TextView
             android:id="@+id/text_wisesay"
             android:layout_width="300dp"
+            android:padding="13dp"
             android:layout_height="190dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
@@ -119,7 +120,7 @@
             android:elevation="10dp"
             android:fontFamily="@font/mapo"
             android:gravity="center"
-            android:text="수열이가 곧 수열이다 -수열-"
+            android:text="안녕하세요아안녕하세요아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아\n\n- 수열 -"
             android:textColor="@color/textColor_special"
             android:textSize="17sp" />
 

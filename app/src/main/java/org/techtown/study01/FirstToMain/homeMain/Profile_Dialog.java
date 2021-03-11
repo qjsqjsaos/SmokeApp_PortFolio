@@ -44,7 +44,7 @@ public class Profile_Dialog extends Dialog {
         dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.profile_card);
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = 600; //가로길이
+        params.width = WindowManager.LayoutParams.MATCH_PARENT; //가로길이
         params.height = WindowManager.LayoutParams.WRAP_CONTENT; //세로길이
         dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
         dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);

@@ -217,9 +217,11 @@ public class HomeMain extends Fragment {
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
 
         WiseSay_List wiseSay_list = new WiseSay_List();
-        String WS = wiseSay_list.WiseArray(0); //여기에 랜덤숫자 만들어서 넣기
+        String WS = wiseSay_list.WiseArray(5); //여기에 랜덤숫자 만들어서 넣기
         wiseView.setText(WS);
 
+        // TODO: 2021-03-11 여기부터시작 
+        
 
         startNoSmokingButton(); //금연시작 버튼
 
@@ -245,9 +247,7 @@ public class HomeMain extends Fragment {
             }
         });
 
-        int i = 0;
 
-        /
 
         setInit(); //뷰페이저 실행 메서드
 

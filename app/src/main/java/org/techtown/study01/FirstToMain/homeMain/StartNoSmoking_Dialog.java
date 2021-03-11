@@ -63,7 +63,7 @@ public class StartNoSmoking_Dialog extends Dialog {
         dialog.setContentView(R.layout.smoke_time_settings); //setContentView는 dialog안에 넣는다.
         //다이아로그 크기 설정하기
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = 600; //가로길이
+        params.width = WindowManager.LayoutParams.MATCH_PARENT; //가로길이
         params.height = WindowManager.LayoutParams.WRAP_CONTENT; //세로길이
         dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
         dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
