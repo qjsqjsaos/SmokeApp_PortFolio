@@ -544,10 +544,9 @@ public class HomeMain extends Fragment {
             sharedViewModel.setLiveDataCost(ciga_Money); //ViewModel을 통해서 Frag3로 보내기 위해 Livedata에 ciga_Money를 보낸다.
 
             //setmax에 int형으로 밖에 못넣어서 1000으로 나눈다 => 0이 하나도 안붙어있는 숫자로만 전달
-            long healthSecond = (datatime_last / 1000);
+            long healthSecond = (datatime_last / 1000) * 1L;
             Log.d("헬스세컨드", String.valueOf(healthSecond));
             sharedViewModel.sethaelthSecond(healthSecond); //ViewModel을 통해서 HealthCheck과 Frag7로 보내기 위해 Livedata에 datatime을 보낸다.
-
         }
     };
 
@@ -559,7 +558,7 @@ public class HomeMain extends Fragment {
         //타이머 쓰레드
         @Override
         public void run() {
-            long dateTime = finallyDateTime; //여기에는 날짜와 시간을 넣는데, 마찬가지로 초 형식으로 넣는다.
+            long dateTime = finallyDateTime * 1L; //여기에는 날짜와 시간을 넣는데, 마찬가지로 초 형식으로 넣는다.
             Log.d("나", String.valueOf(dateTime));
             Log.d("나", String.valueOf(finallyDateTime));
             while (true) {
