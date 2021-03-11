@@ -585,8 +585,8 @@ public class HomeMain extends Fragment {
                                 Frag5.textView5.setText(""); //한번 빈칸으로 초기화시켜주기
                                 Frag5.textView5.setText("0개비 가량 됩니다!");
                                 dateView.setText("금연날짜");
-
                                 Frag7.rankImg.setImageResource(0); //Frag7 이미지 없애기
+                                Frag7.rankText.setText(""); //Frag7 빈칸만들기
 
                                 //프로그레스 값 초기화
                                 if(HealthCheck.pgb1 != null) {
