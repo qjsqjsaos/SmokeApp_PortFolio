@@ -216,8 +216,14 @@ public class HomeMain extends Fragment {
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
 
+
+
+
+        /**명언 랜덤 추출기 */
+        int randomNumber = (int) (Math.random()*999); // 0~999중에서 랜덤 숫자 추출
+        Log.d("랜덤넘버", String.valueOf(randomNumber));
         WiseSay_List wiseSay_list = new WiseSay_List();
-        String WS = wiseSay_list.WiseArray(414); //여기에 랜덤숫자 만들어서 넣기
+        String WS = wiseSay_list.WiseArray(randomNumber); //여기에 랜덤숫자 만들어서 넣기
         wiseView.setText(WS);
 
         // TODO: 2021-03-11 여기부터시작 

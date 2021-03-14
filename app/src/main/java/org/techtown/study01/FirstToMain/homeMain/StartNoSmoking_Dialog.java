@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -63,8 +64,9 @@ public class StartNoSmoking_Dialog extends Dialog {
         dialog.setContentView(R.layout.smoke_time_settings); //setContentView는 dialog안에 넣는다.
         //다이아로그 크기 설정하기
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT; //가로길이
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT; //세로길이
+        DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
+        params.width = (int) (dm.widthPixels * 0.8); //가로길이
+        params.height = (int) (dm.heightPixels * 0.95); //세로길이
         dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
         dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경투명하게 해서 선 없애기
