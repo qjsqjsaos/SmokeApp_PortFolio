@@ -66,7 +66,7 @@ public class StartNoSmoking_Dialog extends Dialog {
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
         DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
         params.width = (int) (dm.widthPixels * 0.8); //가로길이
-        params.height = (int) (dm.heightPixels * 0.95); //세로길이
+        params.height = (int) (dm.heightPixels * 0.82); //세로길이
         dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
         dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경투명하게 해서 선 없애기

@@ -40,7 +40,7 @@ public class GiveUpNoSmoking_Dialog extends Dialog {
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
         //비율에 따라 나타내기
         DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
-        params.width = (int) (dm.widthPixels * 0.8); //가로길이
+        params.width = (int) (dm.widthPixels * 0.85); //가로길이
         params.height = (int) (dm.heightPixels * 0.95); //세로길이
 
         dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
