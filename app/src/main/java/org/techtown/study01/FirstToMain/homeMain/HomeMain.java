@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -75,6 +77,7 @@ import org.techtown.study01.FirstToMain.register.Register;
 import org.techtown.study01.FirstToMain.register.RegisterRequest;
 import org.techtown.study01.FirstToMain.start.First_page_loading;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.regex.Pattern;
@@ -188,18 +191,68 @@ public class HomeMain extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+
+                uri = data.getData();
+                Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기
+                Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
+
                 try {
-                    uri = data.getData();
-                    Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기
-                    changeProfileImageToDB(); //변경된 프로필 이미지 서버로 보내기
-                    Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
+                    ImageDecoder.Source source = ImageDecoder.createSource(getActivity().getContentResolver(), uri);
+                    Bitmap bitmap = ImageDecoder.decodeBitmap(source);
+                    bitmap = resize(bitmap);
+                    String image = bitmapToByteArray(bitmap);
+                    changeProfileImageToDB(image); //변경된 프로필 이미지 서버로 보내기
+
                 } catch (Exception e) {
 
                 }
+
+
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
             }
         }
     }
+
+    public String bitmapToByteArray(Bitmap bitmap) {
+        String image = "";
+        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream) ;
+        byte[] byteArray = stream.toByteArray() ;
+        image = "&image=" + byteArrayToBinaryString(byteArray);
+        return image;
+    }
+
+    public static String byteArrayToBinaryString(byte[] b) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < b.length; ++i) {
+            sb.append(byteToBinaryString(b[i]));
+        } return sb.toString(); }
+
+    public static String byteToBinaryString(byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for (int bit = 0; bit < 8; bit++) {
+            if (((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        }
+        return sb.toString();
+    }
+
+    private Bitmap resize(Bitmap bm){
+        Configuration config=getResources().getConfiguration();
+        if(config.smallestScreenWidthDp>=800)
+            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
+        else if(config.smallestScreenWidthDp>=600)
+            bm = Bitmap.createScaledBitmap(bm, 300, 180, true);
+        else if(config.smallestScreenWidthDp>=400)
+            bm = Bitmap.createScaledBitmap(bm, 200, 120, true);
+        else if(config.smallestScreenWidthDp>=360)
+            bm = Bitmap.createScaledBitmap(bm, 180, 108, true);
+        else
+            bm = Bitmap.createScaledBitmap(bm, 160, 96, true);
+        return bm;
+    }
+
 
     @Nullable
     @Override
@@ -355,11 +408,11 @@ public class HomeMain extends Fragment {
 
     /**
      * 프로필 바꾸기(적용버튼 사진만만) 메서드
+     * @param image
      */
 
-    private void changeProfileImageToDB() {
+    private void changeProfileImageToDB(String image) {
 
-        //프로필 이미지를 드로어블로 얻어오고 이 드로어블을 bitmap으로 변환한다.
 
         Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
 
@@ -378,7 +431,7 @@ public class HomeMain extends Fragment {
             }
         };
 
-        Profile_Img_Check profile_img_check = new Profile_Img_Check(id, uri, responseListener);
+        Profile_Img_Check profile_img_check = new Profile_Img_Check(id, image, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(profile_img_check);
 
@@ -838,6 +891,8 @@ public class HomeMain extends Fragment {
                             Log.d("디비정보", newName);
 
                             nameView.setText(newName);
+
+
 
                             //프로필 사진 가져오기
                             profileImgtrue = jsonObject.getString("profileimage");

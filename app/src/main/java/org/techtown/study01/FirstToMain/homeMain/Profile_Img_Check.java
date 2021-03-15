@@ -17,12 +17,12 @@ public class Profile_Img_Check extends StringRequest  {
     final static  private String URL="http://ec2-3-35-9-74.ap-northeast-2.compute.amazonaws.com/profileimg.php";
     private Map<String,String> map;
 
-    public Profile_Img_Check(String id, Uri profileimg, Response.Listener<String>listener){
+    public Profile_Img_Check(String id, String profileimg, Response.Listener<String>listener){
         super(Method.POST,URL,listener,null);
 
         map=new HashMap<>();
         map.put("id", id);
-        map.put("profileimg", profileimg+"");
+        map.put("profileimg", profileimg);
     }
 
     @Override
