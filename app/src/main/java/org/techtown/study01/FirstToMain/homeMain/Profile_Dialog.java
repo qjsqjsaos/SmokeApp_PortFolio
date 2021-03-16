@@ -29,7 +29,7 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 public class Profile_Dialog extends Dialog {
 
-    static CircleImageView profileImage; //프로필 이미지
+    public static CircleImageView profileImage; //프로필 이미지
     public static Dialog dialog; //dialog 객체
     public static Button apply, cancelprofile, change_btn;
 
@@ -61,7 +61,7 @@ public class Profile_Dialog extends Dialog {
 
         NN = HomeMain.nameView.getText().toString(); //원래이름 가져오기
         Profile_Dialog.changedName.setText(NN); //이름 입력란에 원래 이름 넣기(바뀌기 전 이름)
-        Glide.with(getContext()).load(HomeMain.profileImgtrue).into(profileImage);
+//        Glide.with(getContext()).load().into(profileImage); //다이얼로그 선택 전 이미지
     }
 
 }

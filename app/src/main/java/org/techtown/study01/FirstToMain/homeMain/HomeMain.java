@@ -59,6 +59,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -91,8 +92,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -149,12 +152,7 @@ public class HomeMain extends Fragment {
 
     private Uri uri; //프로필 사진 자료
 
-
-    //Profile_Dialog에 보낼 이미지스트링 자료. (프로필 사진)
-    static String profileImgtrue;
-
     /////////////////////Frag1이였던 것//////////////////////////
-
 
     //금연한지 얼마나 됬는지 날짜 값
     public static long finallyDateTime;
@@ -207,11 +205,13 @@ public class HomeMain extends Fragment {
             if (resultCode == RESULT_OK) {
 
                 uri = data.getData();
+                Log.d("유알", String.valueOf(uri));
                 Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기
                 Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
                 //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
 
-                createProfile_Photo();
+                createProfile_Photo(uri);
+
 
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
                 Toast.makeText(getContext(), "이미지 불러오기 실패", Toast.LENGTH_SHORT).show();
@@ -222,26 +222,26 @@ public class HomeMain extends Fragment {
     // TODO: 2021-03-16 여기부터 파이어베이스 이미지 불러오기는 알았지만, 저장하는 법을 알아내야한다. 
 
     /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제
-     * @param
-     * @param */
-    private void createProfile_Photo() {
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://nosmokingtogetherapp.appspot.com"); //파이어베이스 주소 넣기 //스토리지 인스턴스를 만들고,
-        StorageReference storageRef = storage.getReference();//스토리지를 참조한다
-        Bitmap bitmap = ((BitmapDrawable) userView.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = storageRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getContext(), "실패", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+     * @param uri */
+    private void createProfile_Photo(Uri uri) {
+        //storage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        //Unique한 파일명을 만들자.
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
+        Date now = new Date();
+        String filename = formatter.format(now) + ".jpg";
+        //storage 주소와 폴더 파일명을 지정해 준다.
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://nosmokingtogetherapp.appspot.com").child("toolbar_images/" + filename);
+        //올라가거라...
+        storageRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                Toast.makeText(getContext(), " 실패", Toast.LENGTH_SHORT).show();
             }
         });
     }

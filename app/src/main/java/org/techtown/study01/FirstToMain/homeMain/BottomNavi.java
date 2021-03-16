@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -33,6 +34,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.storage.FileDownloadTask;
@@ -61,11 +63,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.techtown.study01.FirstToMain.homeMain.Profile_Dialog.profileImage;
 
 
-    public class BottomNavi extends AppCompatActivity {
+public class BottomNavi extends AppCompatActivity {
         private BottomNavigationView bottomNavigationView;
         private HomeMain fragment1; //홈메인
         private static final String TAG = "MyTag"; //로그 찍을때,
@@ -79,6 +84,8 @@ import static android.view.View.VISIBLE;
         FirebaseRemoteConfig remoteConfig;
         long newAppVersion = 1;
         static long toolbarImgCount = 15;
+
+
 
 
 
@@ -318,6 +325,7 @@ import static android.view.View.VISIBLE;
 
         /**이미지 다운로드해서 가져오기 메서드 */
         private void downloadImg() {
+
             FirebaseStorage storage = FirebaseStorage.getInstance("gs://nosmokingtogetherapp.appspot.com"); //파이어베이스 주소 넣기 //스토리지 인스턴스를 만들고,
             StorageReference storageRef = storage.getReference();//스토리지를 참조한다
             storageRef.child("toolbar_images/toolbar_0.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
