@@ -210,7 +210,7 @@ public class HomeMain extends Fragment {
                 Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
                 //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
 
-                createProfile_Photo(uri);
+                createProfile_Photo();
 
 
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
@@ -219,29 +219,31 @@ public class HomeMain extends Fragment {
         }
     }
 
-    // TODO: 2021-03-16 여기부터 파이어베이스 이미지 불러오기는 알았지만, 저장하는 법을 알아내야한다. 
-
-    /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제
-     * @param uri */
-    private void createProfile_Photo(Uri uri) {
+    // TODO: 2021-03-16 우선 파이어베이스 저장하는 법 두번째 성공
+    /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제 */
+    private void createProfile_Photo() {
         //storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        //Unique한 파일명을 만들자.
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
-        Date now = new Date();
-        String filename = formatter.format(now) + ".jpg";
-        //storage 주소와 폴더 파일명을 지정해 준다.
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://nosmokingtogetherapp.appspot.com").child("toolbar_images/" + filename);
-        //올라가거라...
-        storageRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        StorageReference storageRef = storage.getReference();
+        //파일명을 만들자.
+        String filename = "dasjdijiejdsivids.jpg";
+        Uri file = uri;
+        Log.d("유알", String.valueOf(file));
+        //여기서 원하는 이름 넣어준다. (filename 넣어주기)
+        StorageReference riversRef = storageRef.child("toolbar_images/" + filename);
+        UploadTask uploadTask = riversRef.putFile(file);
+
+// Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnCanceledListener(new OnCanceledListener() {
-            @Override
-            public void onCanceled() {
-                Toast.makeText(getContext(), " 실패", Toast.LENGTH_SHORT).show();
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
             }
         });
     }
