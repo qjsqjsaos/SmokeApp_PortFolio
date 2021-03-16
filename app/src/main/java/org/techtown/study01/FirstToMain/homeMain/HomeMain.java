@@ -64,6 +64,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -207,76 +208,44 @@ public class HomeMain extends Fragment {
 
                 uri = data.getData();
                 Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기
-//                Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
+                Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
+                //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
 
-                try {
-                    ImageDecoder.Source source = ImageDecoder.createSource(getActivity().getContentResolver(), uri); //소스 만들고,(디코딩)
-                    Bitmap bitmap = ImageDecoder.decodeBitmap(source); //비트맵에 넣어준다.
-                    Log.d("첫확인", String.valueOf(uri));
-                    Log.d("첫확인", String.valueOf(source));
-                    bitmap = resize(bitmap); //사이즈 조정
-                    Drawable dd = bitmap2Drawable(bitmap);
-                    userView.setImageDrawable(dd);
-                    String image = bitmapToByteArray(bitmap);
-                    Log.d("첫확인", String.valueOf(bitmap));
-                    changeProfileImageToDB(image); //변경된 프로필 이미지 서버로 보내기
-                    Log.d("첫확인", image);
-                } catch (Exception e) {
-
-                }
-
+                createProfile_Photo();
 
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
+                Toast.makeText(getContext(), "이미지 불러오기 실패", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    // TODO: 2021-03-16 여기부터 파이어베이스 이미지 불러오기는 알았지만, 저장하는 법을 알아내야한다. 
 
-    /**비트맵을 바이너리 바이트배열로 바꾸어주는 메서드 */
-    public String bitmapToByteArray(Bitmap bitmap) {
-        String image = "";
-        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream) ;
-        byte[] byteArray = stream.toByteArray() ;
-        image = "&image=" + byteArrayToBinaryString(byteArray);
-        return image;
-    }
+    /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제
+     * @param
+     * @param */
+    private void createProfile_Photo() {
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://nosmokingtogetherapp.appspot.com"); //파이어베이스 주소 넣기 //스토리지 인스턴스를 만들고,
+        StorageReference storageRef = storage.getReference();//스토리지를 참조한다
+        Bitmap bitmap = ((BitmapDrawable) userView.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
 
-    /**바이너리 바이트 배열을 스트링으로 바꾸어주는 메서드 */
-    public static String byteArrayToBinaryString(byte[] b) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < b.length; ++i) {
-            sb.append(byteToBinaryString(b[i])); //스트링을 바이너리 바이트로 바꾼다.
-        }
-        return sb.toString();
-    }
-
-    /**바이너리 바이트를 스트링으로 바꾸어주는 메서드 */
-    public static String byteToBinaryString(byte n) {
-        StringBuilder sb = new StringBuilder("00000000");
-        for (int bit = 0; bit < 8; bit++) {
-            if (((n >> bit) & 1) > 0) {
-                sb.setCharAt(7 - bit, '1');
+        UploadTask uploadTask = storageRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getContext(), "실패", Toast.LENGTH_SHORT).show();
             }
-        }
-        return sb.toString();
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getContext(), "성공", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    /**프로필 사진 비트맵 사이즈 자동 조정 메서드 */
-    public Bitmap resize(Bitmap bm){
-        Configuration config=getResources().getConfiguration();
-        if(config.smallestScreenWidthDp>=800)
-            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
-        else if(config.smallestScreenWidthDp>=600)
-            bm = Bitmap.createScaledBitmap(bm, 300, 180, true);
-        else if(config.smallestScreenWidthDp>=400)
-            bm = Bitmap.createScaledBitmap(bm, 200, 120, true);
-        else if(config.smallestScreenWidthDp>=360)
-            bm = Bitmap.createScaledBitmap(bm, 180, 108, true);
-        else
-            bm = Bitmap.createScaledBitmap(bm, 160, 96, true);
-        return bm;
-    }
 
 
     @Nullable
@@ -916,33 +885,7 @@ public class HomeMain extends Fragment {
 
                             nameView.setText(newName); //이름 넣기
 
-
-                            //프로필 사진 가져오기
-                            Bitmap getBlob;
-                            String va = jsonObject.getString("profileimage");
-                            Log.d("제발이미지2", va);
-                            getBlob = StringToBitmap(va);
-                            Log.d("제발이미지2", String.valueOf(getBlob));
-                            userView.setImageBitmap(getBlob);
-
-
-
-
-
-//                            Log.d("제발이미지1", profileImgtrue);
-//                            //byte형식으로 변환 한 후 드로어블로 바꾸어서 이미지뷰에 setImageDrawable해준다.
-//                            byte[] b = binaryStringToByteArray(profileImgtrue); //바이트 배열 형식 변환
-//                            Log.d("제발이미지2", String.valueOf(b));
-//                            Drawable drawable = bytes2Drawable(b);
-//                            Log.d("제발이미지3", String.valueOf(drawable));
-//                            testImage.setImageDrawable(drawable);
-
-
-
-//                            Glide.with(getContext()).load(profileuri).into(userView); //글라이드로 들어올때 서버에서 프로필 사진 가져오기
-
-
-
+                            //이미지는 파이어베이스에서 가져온다.
 
                             //목표 가져오기
                             String goal = jsonObject.getString("goal");
@@ -983,64 +926,6 @@ public class HomeMain extends Fragment {
             queue.add(frag1_request);
         }
     }
-
-
-
-    /** 스트링을 바이너리 바이트 배열로 바꿔주기*/
-    public static byte[] binaryStringToByteArray(String s) {
-        int count = s.length() / 8;
-        byte[] b = new byte[count];
-        for (int i = 1; i < count; ++i) {
-            String t = s.substring((i - 1) * 8, i * 8);
-            b[i - 1] = binaryStringToByte(t); //스트링을 바이너리 바이트로 바꾼다.
-        }
-        return b;
-    }
-
-    /** 스트링을 바이너리 바이트로 바꿔주기*/
-    public static byte binaryStringToByte(String s) {
-        byte ret = 0, total = 0;
-        for (int i = 0; i < 8; ++i) {
-            ret = (s.charAt(7 - i) == '1') ? (byte) (1 << i) : 0;
-            total = (byte) (ret | total);
-        }
-        return total;
-    }
-
-    public static Bitmap StringToBitmap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);// String 화 된 이미지를  base64방식으로 인코딩하여 byte배열을 만듬
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);//byte배열을 bitmapfactory 메소드를 이용하여 비트맵으로 바꿔준다.
-            return bitmap;//만들어진 bitmap을 return
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
-
-
-    public Drawable bytes2Drawable(byte[] b) {
-        Bitmap bitmap = bytes2Bitmap(b);
-        return bitmap2Drawable(bitmap);
-    }
-
-    public static Bitmap bytes2Bitmap(byte[] b) {
-        if (b.length != 0) {
-            return BitmapFactory.decodeByteArray(b, 0, b.length);
-        }
-
-        return null;
-    }
-
-    public static Drawable bitmap2Drawable(Bitmap bitmap) {
-        @SuppressWarnings("deprecation")
-        BitmapDrawable bd = new BitmapDrawable(bitmap);
-        Drawable d = (Drawable) bd;
-        return d;
-    }
-
-
 
     /**
      * 따로 만든 시작 쓰레드

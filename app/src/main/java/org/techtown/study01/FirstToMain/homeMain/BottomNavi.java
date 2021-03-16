@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -306,42 +307,38 @@ import static android.view.View.VISIBLE;
             File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/toolbar_images"); //이미지를 저장할 수 있는 디렉토리
             //구분할 수 있게 /toolbar_images폴더에 넣어준다.
             //이 파일안에 저 디렉토리가 있는지 확인
-            if(!file.isDirectory()){ //디렉토리가 없으면,
+            if (!file.isDirectory()) { //디렉토리가 없으면,
                 file.mkdir(); //디렉토리를 만든다.
             }
             List<File> toolbarImgList = new ArrayList<>(); //파일 리스트를 만든다.
             toolbarImgList.addAll(new ArrayList<>(Arrays.asList(file.listFiles())));
 
-            //이미지 가져오기
-            FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
-            StorageReference storageRef = storage.getReference(); //스토리지를 참조한다.
-            downloadImg(storageRef); //이미지 다운로드해서 가져오기 메서드
-
+            downloadImg(); //이미지 다운로드해서 가져오기 메서드
         }
-        /**이미지 다운로드해서 가져오기 메서드 */
-        private void downloadImg(StorageReference storageRef) {
-            String fileName = "toolbar_" + "0" + ".jpg"; //toobar_0.jpg   //파일 이름
-            File fileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/toolbar_images"); //파일 경로
-            final File download = new File(fileDir, fileName); //경로와 파일 이름을 넣어준다.
-            //이제 어디서가져올건지 정해준다.
-            StorageReference downloadRef = storageRef
-                    .child("toolbar_images/" + "toolbar_" + "0" + ".jpg"); //toolbar_images/toolbar_0.jpg를 가르키는 것이다.
-            //여기까지 다운로드를 받는 부분
 
-            downloadRef.getFile(download).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+        /**이미지 다운로드해서 가져오기 메서드 */
+        private void downloadImg() {
+            FirebaseStorage storage = FirebaseStorage.getInstance("gs://nosmokingtogetherapp.appspot.com"); //파이어베이스 주소 넣기 //스토리지 인스턴스를 만들고,
+            StorageReference storageRef = storage.getReference();//스토리지를 참조한다
+            storageRef.child("toolbar_images/toolbar_0.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) { //다운로드 되었을때,
-                    Log.e("onSuccess", download.getPath()); //잘 나오는 지 경로 보기
-                    HomeMain.userView.s;
+                public void onSuccess(Uri uri) {
+                    //이미지 로드 성공시
+                    if(uri != null) {
+                        Glide.with(getApplicationContext())
+                                .load(uri)
+                                .into(HomeMain.userView); //프로필사진에 사진 넣기
+                    }else{
+                        Toast.makeText(getApplicationContext(), "프로필 사진 불러오기 실패", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
-                public void onFailure(@NonNull Exception exception) { //다운로드 실패시
-
-                    Toast.makeText(getApplicationContext(), "ddss", Toast.LENGTH_SHORT).show();
+                public void onFailure(@NonNull Exception exception) {
+                    //이미지 로드 실패시
+                    Toast.makeText(getApplicationContext(), "프로필 사진 불러오기 실패", Toast.LENGTH_SHORT).show();
                 }
             });
-        //만들어지고 나서 오른쪽에 Device File Explorer로 들어가서 sdcard를 들어가면, 폴더가 잘 만들어졌는지 확인하면 된다.
         }
 
         private void getRemoteConfig() {
