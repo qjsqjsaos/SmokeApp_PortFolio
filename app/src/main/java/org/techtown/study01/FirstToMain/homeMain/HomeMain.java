@@ -63,6 +63,7 @@ import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -153,7 +154,7 @@ public class HomeMain extends Fragment {
 
     private AlertDialog dialog; //알림 다이아로그
 
-    private Uri uri; //프로필 사진 자료
+    public static Uri uri; //프로필 사진 자료
 
     /////////////////////Frag1이였던 것//////////////////////////
 
@@ -175,8 +176,7 @@ public class HomeMain extends Fragment {
     public static long last_cigaCount;
     public static double last_cigaCost;
 
-
-
+    public static Uri dialogwithUri;
 
     /**
      * 앱 종료시 쓰레드가 종료할 때만 쓰레드 종료(어차피 돌아오면 다시 켜짐)
@@ -197,7 +197,8 @@ public class HomeMain extends Fragment {
         super.onResume();
         loadingStart();//로딩창 보여주기
         idcheckandButton(); //아이디를 토대로 버튼정보가져오기
-    }
+
+        }
 
 
     /**
@@ -210,13 +211,12 @@ public class HomeMain extends Fragment {
             if (resultCode == RESULT_OK) {
 
                 uri = data.getData();
+                dialogwithUri = uri; //uri넣고, dialog로 보내기
                 Log.d("유알", String.valueOf(uri));
-                Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기
-                Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
+                Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기(일시적임)
+                Glide.with(getContext()).load(uri).into(userView); //프로필 사진 이미지 넣기(일시적임)
                 //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
-
                 createProfile_Photo_and_Delete();
-
 
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
                 Toast.makeText(getContext(), "이미지 불러오기 실패", Toast.LENGTH_SHORT).show();
@@ -228,8 +228,8 @@ public class HomeMain extends Fragment {
     /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제 */
     private void createProfile_Photo_and_Delete() {
         //storage
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
+        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
+        StorageReference storageRef = storage.getReference();//스토리지를 참조한다
         //파일명을 만들자.
         String filename = "profile" + num + ".jpg";  //ex) profile1.jpg 로그인하는 사람에 따라 그에 식별값에 맞는 프로필 사진 가져오기
         Uri file = uri;
@@ -266,6 +266,37 @@ public class HomeMain extends Fragment {
         });
     }
 
+
+    // TODO: 2021-03-16 존나 중요!! 파이어베이스 이미지 (시작할때 프로필 가져오기)
+    /**프로필 이미지 (파이어베이스 스토리지에서 가져오기) */
+    private void getFireBaseProfileImage(int num) {
+        //우선 디렉토리 파일 하나만든다.
+        File file = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img"); //이미지를 저장할 수 있는 디렉토리
+        //구분할 수 있게 /toolbar_images폴더에 넣어준다.
+        //이 파일안에 저 디렉토리가 있는지 확인
+        if (!file.isDirectory()) { //디렉토리가 없으면,
+            file.mkdir(); //디렉토리를 만든다.
+        }
+        downloadImg(num); //이미지 다운로드해서 가져오기 메서드
+    }
+
+    /**이미지 다운로드해서 가져오기 메서드 */
+    private void downloadImg(int num) {
+        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고, //다운로드는 주소를 넣는다.
+        StorageReference storageRef = storage.getReference();//스토리지를 참조한다
+        storageRef.child("profile_img/" + "profile" + num + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d("오냐오냐", String.valueOf(uri));
+                Glide.with(getContext()).load(uri).into(userView);
+                dialogwithUri = uri; //첫 다이얼로그 프로필 보여주기
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
+    }
 
 
     @Nullable
@@ -909,6 +940,7 @@ public class HomeMain extends Fragment {
                             //여기서는 식별값으로 num을 가져온다.
                             num = jsonObject.getInt("num");
                             Log.d("디비정보", String.valueOf(num));
+                            getFireBaseProfileImage(num); //파이어베이스 프로필 사진 가져오기
 
                             //목표 가져오기
                             String goal = jsonObject.getString("goal");

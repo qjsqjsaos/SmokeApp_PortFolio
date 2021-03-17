@@ -19,7 +19,7 @@ public class RegisterRequest extends StringRequest {
 
     public RegisterRequest(String id, String pw, String name, String email,
                            String datetime, long cigacount, double cigapay,
-                           String goal, String profileimage, Response.Listener<String> listener) { //문자형태로 보낸다는 뜻
+                           String goal, Response.Listener<String> listener) { //문자형태로 보낸다는 뜻
         super(Method.POST, URL, listener, null);
         map = new HashMap<>();
 
@@ -31,7 +31,6 @@ public class RegisterRequest extends StringRequest {
         map.put("cigacount", cigacount+"");
         map.put("cigapay", cigapay+"");
         map.put("goal", goal);
-        map.put("profileimage", profileimage);
 
     }
 

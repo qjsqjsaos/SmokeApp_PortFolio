@@ -279,8 +279,6 @@ public class BottomNavi extends AppCompatActivity {
                     updateDialog(); //업데이트 알림
                     return;
                 }
-                // TODO: 2021-03-16 툴바 이미지 다운로드 메소드 정의
-                getFireBaseProfileImage(); //파이어베이스 스토리지에서 프로필 이미지 가져오기
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
@@ -307,47 +305,6 @@ public class BottomNavi extends AppCompatActivity {
             alertDialog.show();
         }
 
-        // TODO: 2021-03-16 존나 중요!! 파이어베이스 이미지
-        /**프로필 이미지 (파이어베이스 스토리지에서 가져오기) */
-        private void getFireBaseProfileImage() {
-            //우선 디렉토리 파일 하나만든다.
-            File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/toolbar_images"); //이미지를 저장할 수 있는 디렉토리
-            //구분할 수 있게 /toolbar_images폴더에 넣어준다.
-            //이 파일안에 저 디렉토리가 있는지 확인
-            if (!file.isDirectory()) { //디렉토리가 없으면,
-                file.mkdir(); //디렉토리를 만든다.
-            }
-            List<File> toolbarImgList = new ArrayList<>(); //파일 리스트를 만든다.
-            toolbarImgList.addAll(new ArrayList<>(Arrays.asList(file.listFiles())));
-
-            downloadImg(); //이미지 다운로드해서 가져오기 메서드
-        }
-
-        /**이미지 다운로드해서 가져오기 메서드 */
-        private void downloadImg() {
-
-            FirebaseStorage storage = FirebaseStorage.getInstance("gs://nosmokingtogetherapp.appspot.com"); //파이어베이스 주소 넣기 //스토리지 인스턴스를 만들고,
-            StorageReference storageRef = storage.getReference();//스토리지를 참조한다
-            storageRef.child("toolbar_images/toolbar_0.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    //이미지 로드 성공시
-                    if(uri != null) {
-                        Glide.with(getApplicationContext())
-                                .load(uri)
-                                .into(HomeMain.userView); //프로필사진에 사진 넣기
-                    }else{
-                        Toast.makeText(getApplicationContext(), "프로필 사진 불러오기 실패", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    //이미지 로드 실패시
-                    Toast.makeText(getApplicationContext(), "프로필 사진 불러오기 실패", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
 
         private void getRemoteConfig() {
             /**나중에 해두기 업데이트 체크 부분 위에도*/
