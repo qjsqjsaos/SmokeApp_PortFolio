@@ -310,7 +310,7 @@ public class BottomNavi extends AppCompatActivity {
         // TODO: 2021-03-16 존나 중요!! 파이어베이스 이미지
         /**프로필 이미지 (파이어베이스 스토리지에서 가져오기) */
         private void getFireBaseProfileImage() {
-            //우선 파일 하나만든다.
+            //우선 디렉토리 파일 하나만든다.
             File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/toolbar_images"); //이미지를 저장할 수 있는 디렉토리
             //구분할 수 있게 /toolbar_images폴더에 넣어준다.
             //이 파일안에 저 디렉토리가 있는지 확인

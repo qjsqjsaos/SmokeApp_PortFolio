@@ -51,6 +51,7 @@ import androidx.fragment.app.Fragment;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.content.CursorLoader;
+import androidx.room.Delete;
 import androidx.viewpager2.widget.ViewPager2;
 
 
@@ -143,6 +144,8 @@ public class HomeMain extends Fragment {
     //닉네임 중복체크
     boolean nameCheck = false;
 
+    private int num; //프로필 이미지 식별값
+
 
     //로딩중 다이얼로그
 
@@ -171,6 +174,8 @@ public class HomeMain extends Fragment {
     //하루를 기준으로 피는 담배양을 하루 24시간으로 나눈 시간. ex) 하루에 10개비를 피면 2시간 24분 마다 핀것이다. 여기서 2시간 24분의 값을 초로 나타낸 것이다.
     public static long last_cigaCount;
     public static double last_cigaCost;
+
+
 
 
     /**
@@ -210,7 +215,7 @@ public class HomeMain extends Fragment {
                 Glide.with(getContext()).load(uri).into(userView); //설정시에 바로 프로필 유저뷰에 사진 넣기 (디비에서 온거아님)
                 //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
 
-                createProfile_Photo();
+                createProfile_Photo_and_Delete();
 
 
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
@@ -221,29 +226,42 @@ public class HomeMain extends Fragment {
 
     // TODO: 2021-03-16 우선 파이어베이스 저장하는 법 두번째 성공
     /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제 */
-    private void createProfile_Photo() {
+    private void createProfile_Photo_and_Delete() {
         //storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         //파일명을 만들자.
-        String filename = "dasjdijiejdsivids.jpg";
+        String filename = "profile" + num + ".jpg";  //ex) profile1.jpg 로그인하는 사람에 따라 그에 식별값에 맞는 프로필 사진 가져오기
         Uri file = uri;
         Log.d("유알", String.valueOf(file));
         //여기서 원하는 이름 넣어준다. (filename 넣어주기)
-        StorageReference riversRef = storageRef.child("toolbar_images/" + filename);
+        StorageReference riversRef = storageRef.child("profile_img/" + filename);
         UploadTask uploadTask = riversRef.putFile(file);
 
-// Register observers to listen for when the download is done or if it fails
+
+        // TODO: 2021-03-17 기존 프로필 이미지를 우선 삭제하고, 그 다음 새로운 프로필 이미지를 저장한다.
+        // Create a reference to the file to delete
+        StorageReference desertRef = storageRef.child("profile_img/" + "profile" + num + ".jpg"); //삭제할 프로필이미지 명
+        // Delete the file
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
+        // TODO: 2021-03-17 새로운 프로필 이미지 저장
+        // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
+                Toast.makeText(getContext(), "프로필 이미지가 변경되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -888,6 +906,9 @@ public class HomeMain extends Fragment {
                             nameView.setText(newName); //이름 넣기
 
                             //이미지는 파이어베이스에서 가져온다.
+                            //여기서는 식별값으로 num을 가져온다.
+                            num = jsonObject.getInt("num");
+                            Log.d("디비정보", String.valueOf(num));
 
                             //목표 가져오기
                             String goal = jsonObject.getString("goal");
