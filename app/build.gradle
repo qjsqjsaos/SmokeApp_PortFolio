@@ -55,6 +55,7 @@ allprojects {
 
 
 dependencies {
+    implementation 'com.github.prolificinteractive:material-calendarview:1.4.3' //메트리얼 캘린더뷰 (일기)
     implementation platform('com.google.firebase:firebase-bom:26.7.0')//파이버베이스 (오류나 사용자 수를 보여준다)
     implementation 'com.google.firebase:firebase-analytics' //파이버베이스 (오류나 사용자 수를 보여준다)
     implementation 'com.github.bumptech.glide:glide:3.7.0' //글라이드 이미지(프로필 사진)

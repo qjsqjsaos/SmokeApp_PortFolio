@@ -145,7 +145,7 @@ public class HomeMain extends Fragment {
     //닉네임 중복체크
     boolean nameCheck = false;
 
-    private int num; //프로필 이미지 식별값
+    public static int num; //프로필 이미지 식별값
 
 
     //로딩중 다이얼로그
@@ -189,6 +189,7 @@ public class HomeMain extends Fragment {
         }
     }
 
+
     /**
      * 앱이 맨 처음 실행될 때, 아이디값을 통해 정보를 가져온다.
      */
@@ -224,7 +225,7 @@ public class HomeMain extends Fragment {
         }
     }
 
-    // TODO: 2021-03-16 우선 파이어베이스 저장하는 법 두번째 성공
+    // TODO: 2021-03-16 우선 파이어베이스 저장하는 법
     /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제 */
     private void createProfile_Photo_and_Delete() {
         //storage
@@ -239,7 +240,7 @@ public class HomeMain extends Fragment {
         UploadTask uploadTask = riversRef.putFile(file);
 
 
-        // TODO: 2021-03-17 기존 프로필 이미지를 우선 삭제하고, 그 다음 새로운 프로필 이미지를 저장한다.
+        // TODO: 2021-03-17 기존 이미지 삭제
         // Create a reference to the file to delete
         StorageReference desertRef = storageRef.child("profile_img/" + "profile" + num + ".jpg"); //삭제할 프로필이미지 명
         // Delete the file
@@ -252,6 +253,8 @@ public class HomeMain extends Fragment {
             public void onFailure(@NonNull Exception exception) {
             }
         });
+
+
         // TODO: 2021-03-17 새로운 프로필 이미지 저장
         // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -407,6 +410,34 @@ public class HomeMain extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Profile_Dialog.dialog.dismiss(); //다이얼로그닫기
+                    }
+                });
+
+                //기본 이미지 설정 버튼 누를 때,
+                profile_dialog.defaultProfile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Drawable drawable = getResources().getDrawable(R.drawable.user); //기본이미지 드로어블로 가져오고
+                        userView.setImageDrawable(drawable); //프로필사진에 기본이미지를 넣는다.
+                        Profile_Dialog.profileImage.setImageDrawable(drawable); //다이얼로그에도 기본이미지를 넣는다.
+                        dialogwithUri = null; //다이얼로그로 가는 uri에는 null값을 주어, 껏다켜도 기본이미지를 보이게 한다.
+
+                        //그리고 기존에 있던 프로필 이미지를 삭제한다.
+                        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
+                        StorageReference storageRef = storage.getReference();//스토리지를 참조한다.
+                        // Create a reference to the file to delete
+                        StorageReference desertRef = storageRef.child("profile_img/" + "profile" + num + ".jpg"); //삭제할 프로필이미지 명
+                        // Delete the file
+                        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                            }
+                        });
+
                     }
                 });
             }

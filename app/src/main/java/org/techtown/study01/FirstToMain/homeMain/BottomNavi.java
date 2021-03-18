@@ -86,11 +86,7 @@ public class BottomNavi extends AppCompatActivity {
         static long toolbarImgCount = 15;
 
 
-
-
-
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

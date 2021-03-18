@@ -5,11 +5,9 @@
     <!-- 인터넷 접속 권한 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 접속이 되어있는지 안되있는지 식별하기 위한 권한 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 인터넷 포그라운드 권한 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <!-- 읽어오기, 수정 권한(디비) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 읽어오기, 수정 권한(디비) -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,12 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".MaintoEnd.Special.DiaryFrag"></activity>
         <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
-        <uses-library android:name="sooyeol" android:required="false"/>
+        <uses-library
+            android:name="sooyeol"
+            android:required="false" />
 
-        <activity android:name=".homeMain.Loading_Dialog"
-            tools:ignore="Instantiatable"></activity>
+        <activity
+            android:name=".homeMain.Loading_Dialog"
+            tools:ignore="Instantiatable" />
 
         <service
             android:name=".homeMain.MyService"
@@ -47,12 +48,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".start.First_page_loading"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".MaintoEnd.Special.Ranking"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".MaintoEnd.HomeMain.Shop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".homeMain.BottomNavi"

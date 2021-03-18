@@ -24,17 +24,55 @@
         android:layout_height="100dp"
         android:src="@drawable/user" />
 
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
+
     <Button
         android:id="@+id/changeProfile"
         style="@style/bold_theme"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="@dimen/find_textInput_Button_height"
+        android:layout_weight="3"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
         android:background="@drawable/all_btn"
         android:text="프로필 사진 변경"
         android:textColor="@color/textColor"
         android:textSize="@dimen/find_button_text_size" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
+
+    <Button
+        android:id="@+id/defaultProfile"
+        style="@style/bold_theme"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="@dimen/find_textInput_Button_height"
+        android:layout_gravity="center"
+        android:background="@drawable/all_btn"
+        android:text="기본 이미지 변경"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/find_button_text_size" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
+
+    </LinearLayout>
 
     <TextView
         android:layout_marginTop="20dp"

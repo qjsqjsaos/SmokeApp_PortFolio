@@ -31,7 +31,7 @@ public class Profile_Dialog extends Dialog {
 
     public static CircleImageView profileImage; //프로필 이미지
     public static Dialog dialog; //dialog 객체
-    public static Button apply, cancelprofile, change_btn;
+    public static Button apply, cancelprofile, change_btn, defaultProfile;
 
     public static EditText changedName; //이름바꾸기 에딧텍스트
 
@@ -58,6 +58,7 @@ public class Profile_Dialog extends Dialog {
         apply = dialog.findViewById(R.id.changeApply); //적용하기
         cancelprofile = dialog.findViewById(R.id.cancel_profile); //취소
         change_btn = dialog.findViewById(R.id.changeProfile); //프로필 이미지 변경 버튼
+        defaultProfile = dialog.findViewById(R.id.defaultProfile); //기본 이미지 변경 버튼
 
         NN = HomeMain.nameView.getText().toString(); //원래이름 가져오기
         Profile_Dialog.changedName.setText(NN); //이름 입력란에 원래 이름 넣기(바뀌기 전 이름)

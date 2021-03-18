@@ -130,9 +130,6 @@ public class Login extends AppCompatActivity {
 
                                         Toast.makeText(getApplicationContext(), Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(Login.this, BottomNavi.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
                                         intent.putExtra("id", Eid);
                                         intent.putExtra("name", Ename);
 
