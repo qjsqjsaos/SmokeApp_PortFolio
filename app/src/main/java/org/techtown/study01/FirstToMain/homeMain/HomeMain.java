@@ -239,7 +239,6 @@ public class HomeMain extends Fragment {
         StorageReference riversRef = storageRef.child("profile_img/" + filename);
         UploadTask uploadTask = riversRef.putFile(file);
 
-
         // TODO: 2021-03-17 기존 이미지 삭제
         // Create a reference to the file to delete
         StorageReference desertRef = storageRef.child("profile_img/" + "profile" + num + ".jpg"); //삭제할 프로필이미지 명
