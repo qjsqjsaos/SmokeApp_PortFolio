@@ -46,11 +46,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-public class Diary extends Fragment implements CalendarView.OnDateChangeListener, OnDateSelectedListener {
+public class Diary extends Fragment implements OnDateSelectedListener {
 
     private ViewGroup viewGroup;
     private MaterialCalendarView materialCalendarView;
@@ -65,7 +66,7 @@ public class Diary extends Fragment implements CalendarView.OnDateChangeListener
 
     private ArrayList<CalendarDay> calendarDayList; //캘린더 리스트 안에 내가 입력한 즉, 일기를 쓴(초록색표시) 날이 다 들어가 있음.
 
-    private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance(); //날짜 데이터 포맷
+    private static final SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
 
     @Nullable
     @Override
@@ -86,22 +87,21 @@ public class Diary extends Fragment implements CalendarView.OnDateChangeListener
 
         setInit(); //뷰페이저 실행
 
-
-
-
-        diaryWriteDate(2021, 3, 5);//일기 쓴 날짜 표시
         return viewGroup;
 
     }
 
-    /** 일기 쓴 날짜 **/
+    /** 일기 쓴 날짜 (이 곳에서 일기 쓴 날짜를 초록색 불로 표시해준다.) (날짜를 계속 넣어줘야함.) **/
 
-    private void diaryWriteDate(int year, int month, int day) {
-        int newMonth = month -1; //달은 -1 해줘야한다.
+    private void diaryWriteDate(String year, String month, String day) {
+        //스트링을 인트로 형변환
+        int yearR = Integer.parseInt(year);
+        int monthR = Integer.parseInt(month);
+        int dayR = Integer.parseInt(day);
 
         //일기를 썼던 날짜리스트를 만든다.
         calendarDayList = new ArrayList<>();
-        calendarDayList.add(CalendarDay.from(year, newMonth, day)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
+        calendarDayList.add(CalendarDay.from(yearR, monthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
         Log.d("캘린더리스트", String.valueOf(calendarDayList));
 
         EventDecorator eventDecorator = new EventDecorator(Color.GREEN, calendarDayList); //색표시 이벤트 데코레이터 호출
@@ -202,40 +202,33 @@ public class Diary extends Fragment implements CalendarView.OnDateChangeListener
         });
     }
 
+
+    /**달력 날짜를 선택할 때 여기서 날짜 값을 받아온다. 여기서 일기를 가져온다.(디비 연동)*/
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-        final String text = selected ? FORMATTER.format(date.getDate()) : "No Selection";
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
 
-        // TODO: 2021-03-19 여기서부터 시작한다. 이상하게 여기서 날짜가 받아지고 아래 onSelectedDatChange에서는 값이 안받아진다. 이 점 참고하고, 값 받을 것 
+        final String text = selected ? FORMATTER.format(date.getDate()) : "No Selection"; //날짜 클릭 시에 날짜값을 받아온다. //ex)2012-12-25
+        String year = text.substring(0,4); //받아온 연도 ex)2021
+        String month = text.substring(5,7); //받아온 달 ex)02
+        String dayofMonth = text.substring(8,10); //받아온 일 수 ex)25
+
+        // TODO: 2021-03-20 여기서 위에 날짜값에 따라 phpmyadmin(글)과 파이어베이스(그림)을 가지고 온다.
+
+//        diaryWriteDate(year, month, dayofMonth);//일기 쓴 날짜 표시 넣을 때마다 추가된 날짜들 초록색 표시
+
+//        //캘린더데이리스트안에 일기를 쓴 날짜가 있는지 없는지 식별
+//        if(calendarDayList != null) {
+//            if (calendarDayList.contains(year + "-" + month + "-" + dayOfMonth)) { //만약 안에 일기를 썼던 날짜가 있다면,
+//                Log.d("날짜확인", String.valueOf(year));
+//                Log.d("날짜확인", String.valueOf(month));
+//                Log.d("날짜확인", String.valueOf(dayOfMonth));
+//                viewPager2.setVisibility(View.VISIBLE); //뷰페이저를 보여준다.
+//            } else {//일기를 쓴 날이 아니면
+//                viewPager2.setVisibility(View.GONE); //뷰페이저를 가린다.
+//            }
+//        }
     }
 
-
-    /**달력 날짜를 선택할 때 여기서 날짜 값을 받아온다. */
-    @Override
-    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
-
-        Log.d("날짜확인", String.valueOf(year));
-        Log.d("날짜확인", String.valueOf(month));
-        Log.d("날짜확인", String.valueOf(dayOfMonth));
-
-        int newMonth = month - 1; //달은 1일 빼줘야 정확해진다.
-
-//getFireBaseProfileDiary(HomeMain.num, year, newMonth, dayOfMonth); //식별넘버를 홈메인에서 가져온다. //그리고 날짜들을 넣어준다.
-
-        //캘린더데이리스트안에 일기를 쓴 날짜가 있는지 없는지 식별
-    if(calendarDayList != null) {
-        if (calendarDayList.contains(year + "-" + month + "-" + dayOfMonth)) { //만약 안에 일기를 썼던 날짜가 있다면,
-            Log.d("날짜확인", String.valueOf(year));
-            Log.d("날짜확인", String.valueOf(month));
-            Log.d("날짜확인", String.valueOf(dayOfMonth));
-            viewPager2.setVisibility(View.VISIBLE); //뷰페이저를 보여준다.
-        } else {//일기를 쓴 날이 아니면
-            viewPager2.setVisibility(View.GONE); //뷰페이저를 가린다.
-        }
-    }
-    }
 
     /**갤러리에서 이미지 받아오기 */
     @Override
