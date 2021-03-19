@@ -50,14 +50,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView5" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/dialogPlusButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:src="@drawable/floatingbtn"
-        app:backgroundTint="@color/textColor_special"
+        android:background="@drawable/diaryplus_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"

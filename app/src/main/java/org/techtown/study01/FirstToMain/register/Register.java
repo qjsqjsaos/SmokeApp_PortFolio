@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.StrictMode;
 
 import android.os.SystemClock;
@@ -31,11 +29,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
-import org.techtown.study01.FirstToMain.findid.FindId;
-import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
+import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1_Request;
 import org.techtown.study01.FirstToMain.login_fitstPage.Login;
-import org.techtown.study01.FirstToMain.start.Quest1;
 
 import java.util.regex.Pattern;
 
@@ -470,7 +466,65 @@ public class Register extends AppCompatActivity {
                                                 })
                                                 .create()
                                                 .show();
+
+                                    /** 다이어리 테이블 만들기기*/
+                                    //회원가입하고 user테이블에 정보가 입력된 후 나는
+                                    // Frag1_request에서 num값을 가져온다(id하나로 다른 정보를 다 가지고 올 수 있음)
+                                    // 정보를 빼와서 num값을 넣는다.
+                                    Response.Listener<String> responseListener2 = new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            try {
+                                                JSONObject jsonResponse = new JSONObject(response);
+                                                boolean success = jsonResponse.getBoolean("success");
+                                                if (success) {
+                                                    int numValue = jsonResponse.getInt("num"); //넘 값을 가져와서
+                                                    loading_dialog.cancel(); //로딩창 닫기
+
+                                                    //넘 값으로 다이어리 테이블을 만든다.
+                                                    Response.Listener<String> responseListener3 = new Response.Listener<String>() {
+                                                        @Override
+                                                        public void onResponse(String response) {
+                                                            try {
+                                                                JSONObject jsonResponse = new JSONObject(response);
+                                                                boolean success = jsonResponse.getBoolean("success");
+                                                                if (success) {
+                                                                    loading_dialog.cancel(); //로딩창 닫기
+                                                                } else {
+                                                                    Toast.makeText(getApplicationContext(),"인터넷이 원활하지 않습니다.",Toast.LENGTH_SHORT).show();
+                                                                    loading_dialog.cancel(); //로딩창 닫기
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                                loading_dialog.cancel(); //로딩창 닫기
+                                                            }
+                                                        }
+
+                                                    };
+                                                    //다이어리만들기 위해 값 db로 보내기
+                                                    CreateDiaryTable_Check createDiaryTable_check = new CreateDiaryTable_Check(numValue, responseListener3);
+                                                    RequestQueue queue = Volley.newRequestQueue(Register.this);
+                                                    queue.add(createDiaryTable_check);
+
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(),"인터넷이 원활하지 않습니다.",Toast.LENGTH_SHORT).show();
+                                                    loading_dialog.cancel(); //로딩창 닫기
+                                                }
+                                            } catch (JSONException e) {
+                                                Toast.makeText(getApplicationContext(),"인터넷이 원활하지 않습니다.",Toast.LENGTH_SHORT).show();
+                                                e.printStackTrace();
                                                 loading_dialog.cancel(); //로딩창 닫기
+                                            }
+
+                                        }
+
+                                    };
+                                    //모든 값이 다 있으면 DB에 저장하는 메소드 실행
+                                    Frag1_Request frag1_request = new Frag1_Request(id, responseListener2);
+                                    RequestQueue queue = Volley.newRequestQueue(Register.this);
+                                    queue.add(frag1_request);
+
+                                    loading_dialog.cancel(); //로딩창 닫기
                                 } else {
                                     //등록 실패 했을때 실패 다이얼로그 출력
                                     AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
@@ -584,6 +638,9 @@ public class Register extends AppCompatActivity {
                        loading_dialog.cancel(); //로딩창 닫기
                        Toast.makeText(getApplicationContext(),"올바른 값을 입력해주세요.",Toast.LENGTH_SHORT).show();
                    }
+
+
+
             }
         });
     }

@@ -228,6 +228,7 @@ public class HomeMain extends Fragment {
     // TODO: 2021-03-16 우선 파이어베이스 저장하는 법
     /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제 */
     private void createProfile_Photo_and_Delete() {
+        createDir(); //디렉토리가 없으면 만들기
         //storage
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
         StorageReference storageRef = storage.getReference();//스토리지를 참조한다
@@ -241,7 +242,7 @@ public class HomeMain extends Fragment {
 
         // TODO: 2021-03-17 기존 이미지 삭제
         // Create a reference to the file to delete
-        StorageReference desertRef = storageRef.child("profile_img/" + "profile" + num + ".jpg"); //삭제할 프로필이미지 명
+        StorageReference desertRef = storageRef.child("profile_img/" + filename); //삭제할 프로필이미지 명
         // Delete the file
         desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -272,13 +273,7 @@ public class HomeMain extends Fragment {
     // TODO: 2021-03-16 존나 중요!! 파이어베이스 이미지 (시작할때 프로필 가져오기)
     /**프로필 이미지 (파이어베이스 스토리지에서 가져오기) */
     private void getFireBaseProfileImage(int num) {
-        //우선 디렉토리 파일 하나만든다.
-        File file = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img"); //이미지를 저장할 수 있는 디렉토리
-        //구분할 수 있게 /toolbar_images폴더에 넣어준다.
-        //이 파일안에 저 디렉토리가 있는지 확인
-        if (!file.isDirectory()) { //디렉토리가 없으면,
-            file.mkdir(); //디렉토리를 만든다.
-        }
+        createDir(); //디렉토리가 없으면 만들기
         downloadImg(num); //이미지 다운로드해서 가져오기 메서드
     }
 
@@ -286,7 +281,8 @@ public class HomeMain extends Fragment {
     private void downloadImg(int num) {
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고, //다운로드는 주소를 넣는다.
         StorageReference storageRef = storage.getReference();//스토리지를 참조한다
-        storageRef.child("profile_img/" + "profile" + num + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        String filename = "profile" + num + ".jpg";
+        storageRef.child("profile_img/" + filename).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Log.d("오냐오냐", String.valueOf(uri));
@@ -298,6 +294,17 @@ public class HomeMain extends Fragment {
             public void onFailure(@NonNull Exception exception) {
             }
         });
+    }
+
+    /**디렉토리 만들기(혹시 없을경우 대비해서) = 파이어베이스 */
+    public void createDir(){
+        //우선 디렉토리 파일 하나만든다.
+        File file = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img"); //이미지를 저장할 수 있는 디렉토리
+        //구분할 수 있게 /toolbar_images폴더에 넣어준다.
+        //이 파일안에 저 디렉토리가 있는지 확인
+        if (!file.isDirectory()) { //디렉토리가 없으면,
+            file.mkdir(); //디렉토리를 만든다.
+        }
     }
 
 

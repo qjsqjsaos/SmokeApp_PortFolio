@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -19,17 +20,16 @@ public class Diary_Dialog extends Dialog {
     public static Dialog dialog; //dialog 객체
     public static EditText title_diary, mainText_diary;
     public static Button inputImage, cancel_btn_diary, saveDiary;
-
+    public static ImageView inputImgeReal; //첨부파일 미리보기
 
     public Diary_Dialog(@NonNull Context context) {
         super(context);
-
         dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.diary_dialog);
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
         DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
-        params.width = (int) (dm.widthPixels * 0.8); //가로길이
-        params.height = (int) (dm.heightPixels * 0.75); //세로길이
+        params.width = (int) (dm.widthPixels * 1); //가로길이
+        params.height = (int) (dm.heightPixels * 0.9); //세로길이
         dialog.setCanceledOnTouchOutside(false); //바깥쪽 터치시 꺼짐 방지
         dialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경투명하게 해서 선 없애기
@@ -40,6 +40,7 @@ public class Diary_Dialog extends Dialog {
         inputImage = dialog.findViewById(R.id.inputImage); //이미지 첨부 버튼
         cancel_btn_diary = dialog.findViewById(R.id.cancel_btn_diary); //일기 취소 버튼
         saveDiary = dialog.findViewById(R.id.saveDiary); //일기 작성완료 버튼
+        inputImgeReal = dialog.findViewById(R.id.insertImg); //첨부한 이미지 미리보기
     }
 
 }
