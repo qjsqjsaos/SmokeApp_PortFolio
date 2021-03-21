@@ -1048,6 +1048,9 @@ public class HomeMain extends Fragment {
         timeThread.start(); //쓰레드실행
     }
 
+    /**
+     * 로딩창
+     */
     public void loadingStart() {
         loading_dialog = new Loading_Dialog(getContext());
         loading_dialog.setCanceledOnTouchOutside(false);

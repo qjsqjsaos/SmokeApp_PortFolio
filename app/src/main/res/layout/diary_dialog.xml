@@ -84,10 +84,10 @@
                                         android:layout_width="0dp"
                                         android:layout_weight="6"
                                         android:maxLength="500"
-                                        android:padding="10dp"
+                                        android:padding="20dp"
                                         android:hint="500자 이하로 가능합니다!"
                                         android:layout_height="350dp"
-                                        android:gravity="center" />
+                                        android:gravity="top" />
 
                             </LinearLayout>
                         </ScrollView>

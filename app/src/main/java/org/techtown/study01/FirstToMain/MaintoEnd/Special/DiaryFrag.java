@@ -49,13 +49,16 @@ import static android.view.View.VISIBLE;
 
 public class DiaryFrag extends Fragment {
 
-
+    public static ImageView diaryImage; //일기 이미지뷰
+    public static TextView diaryText; //일기 제목
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.diary_frag, container, false );
 
+        diaryImage = view.findViewById(R.id.diaryImage);
+        diaryText = view.findViewById(R.id.diaryText);
 
         return view;
     }
