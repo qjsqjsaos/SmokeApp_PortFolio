@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/baseColor"
     tools:context=".MaintoEnd.Special.Diary">
 
@@ -17,38 +24,59 @@
         android:paddingBottom="20dp"
         android:text="금연 일기"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2"
+         />
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.3"
+            android:src="@drawable/green_point" />
+
+        <TextView
+            android:id="@+id/countDiary"
+            style="@style/bold_theme"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="3"
+            android:gravity="center_vertical"
+            android:text=": "
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
 
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendarView5"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView36"
         app:mcv_selectionColor="@color/textColor_special"
-        app:mcv_showOtherDates="all" />
+        app:mcv_showOtherDates="all">
+
+
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/diaryViewpager"
         android:layout_width="match_parent"
         android:layout_height="280dp"
         android:clipChildren="false"
-        android:clipToPadding="false"
-        android:gravity="center"
-        android:text="수열이가 곧 수열이다 -수열-"
-        android:textColor="@color/textColor_special"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView5"
-        app:layout_constraintVertical_bias="0.481" />
+        android:clipToPadding="false" />
 
     <Button
         android:id="@+id/dialogPlusButton"
@@ -56,13 +84,8 @@
         android:layout_height="60dp"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:background="@drawable/diaryplus_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:background="@drawable/diaryplus_btn" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+</ScrollView>

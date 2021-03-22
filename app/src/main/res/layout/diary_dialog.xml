@@ -37,6 +37,7 @@
                 android:layout_weight="1"/>
 
             <EditText
+                android:singleLine="true"
                 android:id="@+id/title_diary"
                 android:background="@drawable/round_edittext"
                 android:layout_width="0dp"
@@ -159,6 +160,7 @@
             android:text="첨부된 이미지"/>
 
         <ImageView
+            android:src="@drawable/no_image"
             android:id="@+id/insertImg"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"

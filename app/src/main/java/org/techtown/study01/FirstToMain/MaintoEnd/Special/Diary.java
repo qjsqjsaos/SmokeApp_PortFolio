@@ -42,6 +42,8 @@ import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,12 +62,26 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     private static final int REQUEST_CODE = 0;
     private Uri uri;
     private Loading_Dialog loading_dialog;
+    private TextView countDiary;
 
     private ViewPager2 viewPageSetUp;
 
     private ArrayList<CalendarDay> calendarDayList; //캘린더 리스트 안에 내가 입력한 즉, 일기를 쓴(초록색표시) 날이 다 들어가 있음.
 
     private static final SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
+
+
+    /** 앱이 맨처음 실행될 때*/
+    @Override
+    public void onResume() {
+        super.onResume();
+        Date time = new Date();
+        String todayDate = FORMATTER.format(time);
+        Log.d("오늘날짜", todayDate);
+        //오늘 날짜 일기를 처음 보여준다.
+        getFireBaseProfileDiary(HomeMain.num,todayDate); //오늘 날짜 일기 이미지
+        getDBDiaryInfo(todayDate); //오늘 날짜 제목 내용
+    }
 
     @Nullable
     @Override
@@ -76,6 +92,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         diaryText = viewGroup.findViewById(R.id.diaryText); //일기 텍스트
         diaryImage = viewGroup.findViewById(R.id.diaryImage); //일기 이미지
         dialogPlusButton = viewGroup.findViewById(R.id.dialogPlusButton); //플로팅 버튼(일기 쓰기 버튼)
+        countDiary = viewGroup.findViewById(R.id.countDiary); //일기 쓴 횟수(초록색 동그라미)
+
 
         materialCalendarView = viewGroup.findViewById(R.id.calendarView5);
         materialCalendarView.setSelectedDate(CalendarDay.today()); //오늘 날짜 큰 갈색// 동그라미 표시
@@ -106,9 +124,14 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         calendarDayList = new ArrayList<>();
         calendarDayList.add(CalendarDay.from(yearR, newMonthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
         Log.d("캘린더리스트", String.valueOf(calendarDayList));
+        int countD = calendarDayList.size() + 1;
+        Log.d("캘리캘리", String.valueOf(countD));
+        countDiary.setText(": " + countD + "회");
 
-        EventDecorator eventDecorator = new EventDecorator(Color.GREEN, calendarDayList); //색표시 이벤트 데코레이터 호출
+        EventDecorator eventDecorator = new EventDecorator(Color.rgb(10, 207, 32), calendarDayList); //색표시 이벤트 데코레이터 호출
         materialCalendarView.addDecorators(eventDecorator);
+
+
     }
 
 
@@ -215,16 +238,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         getDBDiaryInfo(dbDate); //mysql디비에서 제목 내용 가져오기  //인자에는 날짜를 보낸다.
 
 
-
-//        //캘린더데이리스트안에 일기를 쓴 날짜가 있는지 없는지 식별
-//        if(calendarDayList != null) {
-//            if (calendarDayList.contains()) { //만약 안에 일기를 썼던 날짜가 있다면,
-//
-//                viewPageSetUp.setVisibility(View.VISIBLE); //뷰페이저를 보여준다.
-//            } else {//일기를 쓴 날이 아니면
-//                viewPageSetUp.setVisibility(View.GONE); //뷰페이저를 가린다.
-//            }
-//        }
     }
 
 
@@ -255,38 +268,41 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         //여기서 DP는 다이어리 포토에 줄임말이다.
         String filename = "DP"+ "_" +startdate +".jpg";  //ex) DP_2019-02-21.jpg 해당 날짜 값으로만 식별한다.(어차피 디렉토리로 분류로 나누었기 때문에 이정도 식별로 충분하다)
         Uri file = uri;
-        Log.d("유알", String.valueOf(file));
-        //여기서 원하는 이름 넣어준다. (filename 넣어주기)
-        StorageReference riversRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename);
-        UploadTask uploadTask = riversRef.putFile(file);
+        if(uri == null) { //uri값이 없으면 기본이미지로 저장한다.
+            DiaryFrag.diaryImage.setImageResource(R.drawable.no_image);
+        }else {
+            //여기서 원하는 이름 넣어준다. (filename 넣어주기)
+            StorageReference riversRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename);
+            UploadTask uploadTask = riversRef.putFile(file);
 
 
-        // TODO: 2021-03-17 기존 일기 이미지와 일기 제목과 내용을 우선 삭제한다.(중복못하게)
-        // Create a reference to the file to delete
-        StorageReference desertRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename); //삭제할 프로필이미지 명
-        // Delete the file
-        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        });
+            // TODO: 2021-03-17 기존 일기 이미지와 일기 제목과 내용을 우선 삭제한다.(중복못하게)
+            // Create a reference to the file to delete
+            StorageReference desertRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename); //삭제할 프로필이미지 명
+            // Delete the file
+            desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                }
+            });
 
-        // TODO: 2021-03-17 새로운 프로필 이미지 저장
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getContext(), "일기가 등록되었습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
+            // TODO: 2021-03-17 새로운 프로필 이미지 저장
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getContext(), "일기가 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 
@@ -340,7 +356,16 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean("success");
 
-                    if (success) {//로그인 성공시
+                    if (success) {
+                        int length = jsonObject.length() + 1;
+                        //오늘 날짜를 구해 바로 적용된 것처럼 보이기 위해 오늘 날짜에 초록표시를 한다.
+                        Date time = new Date();
+                        String todayDate = FORMATTER.format(time);
+                        String year = todayDate.substring(0,4); //받아온 연도 ex)2021
+                        String month = todayDate.substring(5,7); //받아온 달 ex)02
+                        String dayofMonth = todayDate.substring(8,10); //받아온 일 수 ex)25
+                        diaryWriteDate(year, month, dayofMonth); //지금 쓴 날짜 초록색으로 변하게 하기
+                        countDiary.setText(": "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 늘게 만든다)
 
                     }else{
 
@@ -383,6 +408,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                         //파이어베이스에서 날짜에 맞는 사진 가져오기
                         getFireBaseProfileDiary(HomeMain.num, startdate);
 
+
+
                     } else {//실패
                         Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         return;
@@ -422,7 +449,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     Log.d("어레이", String.valueOf(jsonObject));
                     boolean success = jsonObject.getBoolean("success");
                     if (success) {
-                        for(int i = 0; i<=jsonObject.length(); i++) { //있는 수만큼 반복문
+                        int length = jsonObject.length();
+                        for(int i = 0; i <= length; i++) { //있는 수만큼 반복문
                             String date = jsonObject.getString(String.valueOf(i));
                             Log.d("이제이거", String.valueOf(jsonObject.length()));
                             Log.d("이제이거", date);
@@ -432,7 +460,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                             String dayofMonth = date.substring(8,10); //받아온 일 수 ex)25
                             diaryWriteDate(year, month, dayofMonth); //있는 수만큼 날짜 초록색으로 만들기
                         }
-
+                        countDiary.setText(": "+ length + "회"); //초록불 횟수 늘리기
                     } else {//실패
                         Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         return;

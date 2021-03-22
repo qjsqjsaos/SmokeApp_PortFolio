@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="180dp"
+        android:layout_width="150dp"
         android:layout_height="240dp"
         android:elevation="10dp"
         android:background="@drawable/wisesay_settings"
@@ -20,6 +20,7 @@
 
 
         <ImageView
+            android:scaleType="centerInside"
             android:src="@drawable/no_image"
             android:id="@+id/diaryImage"
             android:layout_width="match_parent"
