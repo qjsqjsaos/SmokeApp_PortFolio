@@ -1,5 +1,6 @@
 package org.techtown.study01.FirstToMain.MaintoEnd.Special;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -33,6 +34,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
@@ -83,6 +85,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
         setInit(); //뷰페이저 실행
 
+        getDBDiaryDateGreen(); //일기 쓴 날짜들 초록색 표시
+
         return viewGroup;
 
     }
@@ -90,14 +94,17 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     /** 일기 쓴 날짜 (이 곳에서 일기 쓴 날짜를 초록색 불로 표시해준다.) (날짜를 계속 넣어줘야함.) **/
 
     private void diaryWriteDate(String year, String month, String day) {
+
         //스트링을 인트로 형변환
         int yearR = Integer.parseInt(year);
         int monthR = Integer.parseInt(month);
+        int newMonthR = monthR - 1; //달은 1빼준다.
         int dayR = Integer.parseInt(day);
+        Log.d("캘린더리스트", String.valueOf(yearR));
 
         //일기를 썼던 날짜리스트를 만든다.
         calendarDayList = new ArrayList<>();
-        calendarDayList.add(CalendarDay.from(yearR, monthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
+        calendarDayList.add(CalendarDay.from(yearR, newMonthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
         Log.d("캘린더리스트", String.valueOf(calendarDayList));
 
         EventDecorator eventDecorator = new EventDecorator(Color.GREEN, calendarDayList); //색표시 이벤트 데코레이터 호출
@@ -204,18 +211,10 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
         final String text = selected ? FORMATTER.format(date.getDate()) : "No Selection"; //날짜 클릭 시에 날짜값을 받아온다. //ex)2012-12-25
-        String year = text.substring(0,4); //받아온 연도 ex)2021
-        String month = text.substring(5,7); //받아온 달 ex)02
-        String dayofMonth = text.substring(8,10); //받아온 일 수 ex)25
-        String dbDate = year + "-" + month + "-" + dayofMonth; //위에 세 변수를 모두 합친다.
-
-        // TODO: 2021-03-20 여기서 위에 날짜값에 따라 phpmyadmin(글)과 파이어베이스(그림)을 가지고 온다.
-
+        String dbDate = dateRebuild(text); //선택한 날짜 변환해서 리턴한다.
         getDBDiaryInfo(dbDate); //mysql디비에서 제목 내용 가져오기  //인자에는 날짜를 보낸다.
 
 
-
-//        diaryWriteDate(year, month, dayofMonth);//일기 쓴 날짜 표시 넣을 때마다 추가된 날짜들 초록색 표시
 
 //        //캘린더데이리스트안에 일기를 쓴 날짜가 있는지 없는지 식별
 //        if(calendarDayList != null) {
@@ -379,35 +378,82 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                         String title = jsonObject.getString("title"); //제목 가져오기
                         Log.d("올까?", title);
                         String newTitle = textLengthChange(title); //수정한 새로운 제목
-                        DiaryFrag.diaryText.setText(title); //넣어주기
+                        DiaryFrag.diaryText.setText(newTitle); //넣어주기
 
                         //파이어베이스에서 날짜에 맞는 사진 가져오기
                         getFireBaseProfileDiary(HomeMain.num, startdate);
 
                     } else {//실패
-                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.1", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.2", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.3", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
         };
 
-        getDiaryInfo getDiaryInfo = new getDiaryInfo(HomeMain.num, startdate, responseListener);
+        getDiaryInfo_Request getDiaryInfo_Request = new getDiaryInfo_Request(HomeMain.num, startdate, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(getDiaryInfo);
+        queue.add(getDiaryInfo_Request);
 
         Log.d("올까?", String.valueOf(HomeMain.num));
         Log.d("올까?", startdate);
+    }
+
+    /**
+     * mysql에서 디비날짜정보 가져오기(초록색 일기 썼는지 유무 표시용)
+     */
+    public void getDBDiaryDateGreen() {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.d("어레이", String.valueOf(jsonObject));
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) {
+                        for(int i = 0; i<=jsonObject.length(); i++) { //있는 수만큼 반복문
+                            String date = jsonObject.getString(String.valueOf(i));
+                            Log.d("이제이거", String.valueOf(jsonObject.length()));
+                            Log.d("이제이거", date);
+                            //날짜를 년월일로 나누어서
+                            String year = date.substring(0,4); //받아온 연도 ex)2021
+                            String month = date.substring(5,7); //받아온 달 ex)02
+                            String dayofMonth = date.substring(8,10); //받아온 일 수 ex)25
+                            diaryWriteDate(year, month, dayofMonth); //있는 수만큼 날짜 초록색으로 만들기
+                        }
+
+                    } else {//실패
+                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        };
+
+        getDiaryDate_Request getDiaryDate_request = new getDiaryDate_Request(HomeMain.num, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(getDiaryDate_request);
     }
 
     /**
@@ -423,6 +469,23 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         } //아니면 그냥 타이틀로 리턴
         return title;
     }
+
+
+
+
+    /**
+     * 날짜 변환기(분해기)
+     * @return
+     */
+    public String dateRebuild(String date) {
+        String year = date.substring(0,4); //받아온 연도 ex)2021
+        String month = date.substring(5,7); //받아온 달 ex)02
+        String dayofMonth = date.substring(8,10); //받아온 일 수 ex)25
+        String dbDate = year + "-" + month + "-" + dayofMonth; //위에 세 변수를 모두 합친다.
+
+        return dbDate;
+    }
+
 
     /**
      * 로딩창
