@@ -18,7 +18,6 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="@drawable/home_and_another_background"
@@ -70,7 +69,7 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="이름"
-                        android:textSize="20sp" />
+                        android:textSize="17sp" />
 
 
 
@@ -113,13 +112,14 @@
             android:id="@+id/text_wisesay"
             android:layout_width="300dp"
             android:padding="13dp"
-            android:layout_height="190dp"
+            android:layout_height="225dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
+
             android:background="@drawable/wisesay_settings"
             android:elevation="10dp"
             android:fontFamily="@font/mapo"
             android:gravity="center"
+            android:lineSpacingMultiplier="1.2"
             android:text="안녕하세요아안녕하세요아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아\n\n- 수열 -"
             android:textColor="@color/textColor_special"
             android:textSize="17sp" />
@@ -128,7 +128,7 @@
 
 
             <androidx.viewpager2.widget.ViewPager2
-                android:layout_marginTop="15dp"
+
                 android:id="@+id/SetupFrg_ViewPage_Info"
                 android:layout_width="match_parent"
                 android:layout_height="280dp"
@@ -175,13 +175,6 @@
             android:layout_width="0dp"
             android:layout_height="30dp" />
 
-
-        <ImageView
-            android:id="@+id/testImage"
-            android:layout_gravity="center"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            />
 
 
     </LinearLayout>

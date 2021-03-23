@@ -85,12 +85,16 @@ public class BottomNavi extends AppCompatActivity {
         long newAppVersion = 1;
         static long toolbarImgCount = 15;
 
+        Loading_Dialog loading_dialog;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navi);
+
+
 
             getRemoteConfig(); //파이어베이스 리모트 컨피고(업데이트 알림)
 

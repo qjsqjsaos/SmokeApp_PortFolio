@@ -21,6 +21,7 @@
 
 
         <ImageView
+            android:adjustViewBounds="true"
             android:scaleType="centerInside"
             android:src="@drawable/no_image"
             android:id="@+id/diaryImage"
@@ -45,8 +46,9 @@
             android:background="@drawable/viewpage_image_down"
             android:gravity="center"
             android:textColor="@color/textColor_special"
-            android:textSize="22sp"
-            android:textStyle="bold"
+            android:textSize="15sp"
+            android:lineSpacingMultiplier="1.5"
+            android:fontFamily="@font/mapo"
             app:layout_constraintBottom_toTopOf="@+id/textView8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.494"

@@ -94,7 +94,7 @@
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="@color/textColor"
-        android:text="닉네임은 한글, 영어, 숫자(2~10)글자 입니다."/>
+        android:text="닉네임은 한글, 영어, 숫자(2~7)글자 입니다."/>
 
 
     <EditText

@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -58,8 +59,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     private TextView diaryText;
     private ImageView diaryImage;
-    private Button dialogPlusButton;
-    private static final int REQUEST_CODE = 0;
+    public static Button dialogPlusButton;
+
     public static Uri uri;
     public static Uri gotoViewDiaryUri; //ViewDiary로 보내는 uri
     private Loading_Dialog loading_dialog;
@@ -69,23 +70,25 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     public static String viewMaintText;
     public static String dbDate;
 
+    public static String startdate;
+
     private ViewPager2 viewPageSetUp;
 
     private ArrayList<CalendarDay> calendarDayList; //캘린더 리스트 안에 내가 입력한 즉, 일기를 쓴(초록색표시) 날이 다 들어가 있음.
 
     private static final SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
 
-
-    /** 앱이 맨처음 실행될 때*/
+    /** 앱이 맨처음 실행될 때 최초 한번만*/
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
         Date time = new Date();
         String todayDate = FORMATTER.format(time);
+        startdate = todayDate; //날짜에 오늘 날짜 넣어주기(일기 중복으로 쎃는지 체크하기 위함)
         Log.d("오늘날짜", todayDate);
         //오늘 날짜 일기를 처음 보여준다.
-        getFireBaseProfileDiary(HomeMain.num,todayDate); //오늘 날짜 일기 이미지
-        getDBDiaryInfo(todayDate); //오늘 날짜 제목 내용
+        getDBDiaryInfo(todayDate); //오늘 날짜 일기 정보
+        getFireBaseProfileDiary(HomeMain.num, todayDate); //오늘 날짜 일기 이미지
     }
 
     @Nullable
@@ -104,14 +107,24 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         materialCalendarView.setSelectedDate(CalendarDay.today()); //오늘 날짜 큰 갈색// 동그라미 표시
         materialCalendarView.setOnDateChangedListener(this);
 
-        WriteDiary(); //일기쓰기버튼
 
         setInit(); //뷰페이저 실행
 
         getDBDiaryDateGreen(); //일기 쓴 날짜들 초록색 표시
 
+        gotoWriteDiary(); //일기작성 액티비티로 가기
+
         return viewGroup;
 
+    }
+    /** 일기 작성을 인텐트 하기 **/
+    private void gotoWriteDiary() {
+        dialogPlusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                samediaryCheck(); //일기 중복으로썼는지 체크
+            }
+        });
     }
 
     /** 일기 쓴 날짜 (이 곳에서 일기 쓴 날짜를 초록색 불로 표시해준다.) (날짜를 계속 넣어줘야함.) **/
@@ -180,55 +193,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     }
 
-    /**일기 쓰기 메서드 (일기 쓰는 창(다이얼로그)을 열어준다.)*/
-    private void WriteDiary() {
-        dialogPlusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Diary_Dialog diary_dialog = new Diary_Dialog(getContext());
-                //이미지 첨부 버튼 누를때
-                diary_dialog.inputImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //인텐트를 통해 갤러리로 요청코드 보내기
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(intent, REQUEST_CODE);
-                    }
-                });
 
-                //일기 취소 버튼 누를때
-                diary_dialog.cancel_btn_diary.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Diary_Dialog.dialog.dismiss(); //다이얼로그 창 닫기
-                    }
-                });
-
-                //일기 작성완료 버튼 누를때
-
-                diary_dialog.saveDiary.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //제목과 내용 텍스트 가져오기
-                        String title = Diary_Dialog.title_diary.getText().toString(); //일기 제목
-                        String mainText = Diary_Dialog.mainText_diary.getText().toString(); //일기 본문
-                        SimpleDateFormat format1 = new SimpleDateFormat( "yyyy-MM-dd" ); //일기 쓴 날짜
-                        Date date = new Date(); //데이트 객체를 만들어
-                        String startdate = format1.format(date); //오늘 날짜를 구한다.
-                        createDiary(title, mainText, startdate); //제목, 본문, 오늘 날짜를 디비로 보낸다.
-
-                        //파이어베이스 사진 저장하기
-                        createProfile_Photo_and_Delete(HomeMain.num, startdate); //날짜로 식별한다. 날짜를 파라미터로 넣어준다.
-
-
-                        Diary_Dialog.dialog.dismiss(); //다이얼로그 창 닫기
-                    }
-                });
-            }
-        });
-    }
 
 
     /**달력 날짜를 선택할 때 여기서 날짜 값을 받아온다. 여기서 일기를 가져온다.(디비 연동)*/
@@ -238,30 +203,18 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         final String text = selected ? FORMATTER.format(date.getDate()) : "No Selection"; //날짜 클릭 시에 날짜값을 받아온다. //ex)2012-12-25
         dbDate = dateRebuild(text); //선택한 날짜 변환해서 리턴한다.
         getDBDiaryInfo(dbDate); //mysql디비에서 제목 내용 가져오기  //인자에는 날짜를 보낸다.
-
-
+        startdate = dbDate; //일기 중복으로 썼는지 체크하기 위해
+        Log.d("스타트데이트1", startdate);
     }
 
 
-    /**갤러리에서 이미지 받아오기 */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                uri = data.getData(); //사진 자료를 받는다.
-                Glide.with(getActivity()).load(uri).into(Diary_Dialog.inputImgeReal);
-            } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
-                Toast.makeText(getContext(), "이미지 불러오기 실패", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+
 
 
     // TODO: 2021-03-16 우선 파이어베이스 저장하는 법
     /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제
      * @param startdate*/
-    private void createProfile_Photo_and_Delete(int num, String startdate) {
+    void createProfile_Photo_and_Delete(int num, String startdate) {
         createDir(num); //디렉토리가 없으면 만든다.
         //storage
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
@@ -330,6 +283,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                DiaryFrag.diaryImage.setImageResource(R.drawable.no_image); //실패시 기본이미지
+                gotoViewDiaryUri = null; //uri에 널값을 주어 viewDairy에도 기본이미지가 보이게 한다.
             }
         });
     }
@@ -350,7 +305,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
      * @param title
      * @param mainText
      * @param startdate*/
-    private void createDiary(String title, String mainText, String startdate) {
+    void createDiary(String title, String mainText, String startdate) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
 
             @Override
@@ -372,7 +327,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                         Log.d("카운트다이어리2", String.valueOf(length));
 
                     }else{
-                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.6", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -380,7 +335,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
                 catch(JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.7", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -420,18 +375,17 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
                     } else {//실패
                         DiaryFrag.diaryFrag.setVisibility(View.INVISIBLE); //diaryFrag보여주기
-                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.8", Toast.LENGTH_SHORT).show();
                     return;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.9", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -480,7 +434,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -523,6 +476,50 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         String dbDate = year + "-" + month + "-" + dayofMonth; //위에 세 변수를 모두 합친다.
 
         return dbDate;
+    }
+
+    /**중복으로 같은 날짜에 일기쓰기 방지 */
+    private void samediaryCheck() {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+
+                    if (success) {//일기가 존재하지 않으면 작성하기 위해 이동
+                        Date time = new Date();
+                        String todayDate = FORMATTER.format(time);
+                        if(dbDate.equals(todayDate)) { //선택한 날짜가 오늘 날짜이면 이동
+                            Intent intent = new Intent(getActivity(), WriteDiary.class);
+                            startActivity(intent);
+                        }else{ //오늘 날짜가 아니면,
+                            Toast.makeText(getContext(), "현재 날짜에서 일기 작성이 가능합니다.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } else { //일기가 존재함
+                        Toast.makeText(getContext(), "선택 날짜에 일기가 존재합니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.4", Toast.LENGTH_SHORT).show();
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.5", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        };
+
+        SameDiaryCheck sameDiaryCheck = new SameDiaryCheck(HomeMain.num, startdate, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(sameDiaryCheck);
+        Log.d("스타트데이트2", startdate);
     }
 
 

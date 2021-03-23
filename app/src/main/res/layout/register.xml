@@ -196,7 +196,7 @@
                         android:layout_height="@dimen/register_and_textInput_height"
                         android:layout_weight="7"
                         android:background="@drawable/round_edittext"
-                        android:hint="한글, 영어, 숫자 (2~10)글자"
+                        android:hint="한글, 영어, 숫자 (2~7)글자"
                         android:maxLength="10"
                         android:maxLines="1"
                         android:paddingLeft="@dimen/register_EditText_paddingLeft"

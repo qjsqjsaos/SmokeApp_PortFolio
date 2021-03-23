@@ -617,7 +617,7 @@ public class Register extends AppCompatActivity {
 
 
                        //닉네임 유효성
-                       else if (!Pattern.matches("^[가-힣a-zA-Z0-9_]{2,10}$", name)) {
+                       else if (!Pattern.matches("^[가-힣a-zA-Z0-9_]{2,7}$", name)) {
                            AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
                            dialog = builder.setMessage("닉네임 형식을 지켜주세요.")
                                    .setPositiveButton("확인", null)
