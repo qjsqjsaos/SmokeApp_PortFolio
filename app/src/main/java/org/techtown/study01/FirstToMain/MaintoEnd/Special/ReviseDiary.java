@@ -248,6 +248,7 @@ public class ReviseDiary extends AppCompatActivity {
                         Diary.viewMaintText = mainTextC;
                         //파이어베이스로 이미지도 수정해준다.
                         createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate);
+                        DiaryFrag.diaryText.setText(titleC); //
                         Glide.with(getApplicationContext()).load(Diary.gotoViewDiaryUri).into(DiaryFrag.diaryImage); //일시적 DiaryFrag.diaryImage 이미지 사진 넣기
                         Glide.with(getApplicationContext()).load(Diary.gotoViewDiaryUri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
                         if(Diary.gotoViewDiaryUri != null){ //이 값이 널이 아니면 레이아웃을 보여준다.

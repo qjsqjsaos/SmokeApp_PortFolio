@@ -112,9 +112,9 @@
             android:id="@+id/text_wisesay"
             android:layout_width="300dp"
             android:padding="13dp"
-            android:layout_height="225dp"
+            android:layout_height="220dp"
             android:layout_gravity="center_horizontal"
-
+            android:layout_marginTop="10dp"
             android:background="@drawable/wisesay_settings"
             android:elevation="10dp"
             android:fontFamily="@font/mapo"
@@ -128,7 +128,6 @@
 
 
             <androidx.viewpager2.widget.ViewPager2
-
                 android:id="@+id/SetupFrg_ViewPage_Info"
                 android:layout_width="match_parent"
                 android:layout_height="280dp"

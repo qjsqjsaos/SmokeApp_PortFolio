@@ -91,6 +91,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         getFireBaseProfileDiary(HomeMain.num, todayDate); //오늘 날짜 일기 이미지
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -224,7 +225,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         String filename = "DP"+ "_" +startdate +".jpg";  //ex) DP_2019-02-21.jpg 해당 날짜 값으로만 식별한다.(어차피 디렉토리로 분류로 나누었기 때문에 이정도 식별로 충분하다)
         Uri file = uri;
         if(uri == null) { //uri값이 없으면 기본이미지로 저장한다.
-            DiaryFrag.diaryImage.setImageResource(R.drawable.no_image);
+            DiaryFrag.diaryImage.setImageResource(R.drawable.no_image); //실패시 기본이미지
         }else {
             //여기서 원하는 이름 넣어준다. (filename 넣어주기)
             StorageReference riversRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename);
@@ -277,7 +278,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
             @Override
             public void onSuccess(Uri uri) {
                 Log.d("매맨", String.valueOf(uri));
-                Glide.with(getContext()).load(uri).into(DiaryFrag.diaryImage); //날짜로 호출한 이미지 사진 넣기
+              Glide.with(getActivity()).load(uri).into(DiaryFrag.diaryImage);
                 gotoViewDiaryUri = uri; //ViewDiary로 uri보내기
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -454,8 +455,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
      */
 
     private String textLengthChange(String title) {
-        if(title.length() >= 10){ //14글자 이상이면 바꾼 값으로 리턴
-            String newTitle = title.substring(0,5) + "...";
+        if(title.length() >= 13){ //13글자 이상이면 바꾼 값으로 리턴
+            String newTitle = title.substring(0,13) + "...";
 
             return newTitle;
         } //아니면 그냥 타이틀로 리턴
@@ -481,7 +482,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     /**중복으로 같은 날짜에 일기쓰기 방지 */
     private void samediaryCheck() {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
-
             @Override
             public void onResponse(String response) {
                 try {

@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.circularreveal.cardview.CircularRevealCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -62,7 +64,6 @@ public class DiaryFrag extends Fragment {
         diaryImage = view.findViewById(R.id.diaryImage);
         diaryText = view.findViewById(R.id.diaryText);
         diaryFrag = view.findViewById(R.id.diaryFrag);
-
         viewDiary(); //다이어리 보기
 
         return view;
