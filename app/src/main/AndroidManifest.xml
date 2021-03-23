@@ -17,8 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MaintoEnd.Special.DiaryFrag"></activity>
-        <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
+        <activity android:name=".MaintoEnd.Special.ViewDiary"></activity>
+        <activity android:name=".MaintoEnd.Special.DiaryFrag" /> <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
         <uses-library
             android:name="sooyeol"
             android:required="false" />

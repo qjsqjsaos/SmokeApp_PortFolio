@@ -60,9 +60,14 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     private ImageView diaryImage;
     private Button dialogPlusButton;
     private static final int REQUEST_CODE = 0;
-    private Uri uri;
+    public static Uri uri;
+    public static Uri gotoViewDiaryUri; //ViewDiary로 보내는 uri
     private Loading_Dialog loading_dialog;
     private TextView countDiary;
+
+    public static String viewtitle;
+    public static String viewMaintText;
+    public static String dbDate;
 
     private ViewPager2 viewPageSetUp;
 
@@ -124,9 +129,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         calendarDayList = new ArrayList<>();
         calendarDayList.add(CalendarDay.from(yearR, newMonthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
         Log.d("캘린더리스트", String.valueOf(calendarDayList));
-        int countD = calendarDayList.size() + 1;
-        Log.d("캘리캘리", String.valueOf(countD));
-        countDiary.setText(": " + countD + "회");
 
         EventDecorator eventDecorator = new EventDecorator(Color.rgb(10, 207, 32), calendarDayList); //색표시 이벤트 데코레이터 호출
         materialCalendarView.addDecorators(eventDecorator);
@@ -234,7 +236,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
         final String text = selected ? FORMATTER.format(date.getDate()) : "No Selection"; //날짜 클릭 시에 날짜값을 받아온다. //ex)2012-12-25
-        String dbDate = dateRebuild(text); //선택한 날짜 변환해서 리턴한다.
+        dbDate = dateRebuild(text); //선택한 날짜 변환해서 리턴한다.
         getDBDiaryInfo(dbDate); //mysql디비에서 제목 내용 가져오기  //인자에는 날짜를 보낸다.
 
 
@@ -323,6 +325,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
             public void onSuccess(Uri uri) {
                 Log.d("매맨", String.valueOf(uri));
                 Glide.with(getContext()).load(uri).into(DiaryFrag.diaryImage); //날짜로 호출한 이미지 사진 넣기
+                gotoViewDiaryUri = uri; //ViewDiary로 uri보내기
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -357,7 +360,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {
-                        int length = jsonObject.length() + 1;
+                        int length = jsonObject.length() + 2;
                         //오늘 날짜를 구해 바로 적용된 것처럼 보이기 위해 오늘 날짜에 초록표시를 한다.
                         Date time = new Date();
                         String todayDate = FORMATTER.format(time);
@@ -366,9 +369,11 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                         String dayofMonth = todayDate.substring(8,10); //받아온 일 수 ex)25
                         diaryWriteDate(year, month, dayofMonth); //지금 쓴 날짜 초록색으로 변하게 하기
                         countDiary.setText(": "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 늘게 만든다)
+                        Log.d("카운트다이어리2", String.valueOf(length));
 
                     }else{
-
+                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        return;
                     }
 
                 }
@@ -401,16 +406,20 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
                     if (success) {
                         String title = jsonObject.getString("title"); //제목 가져오기
+                        String maintext = jsonObject.getString("maintext"); //제목 가져오기
                         Log.d("올까?", title);
                         String newTitle = textLengthChange(title); //수정한 새로운 제목
                         DiaryFrag.diaryText.setText(newTitle); //넣어주기
-
+                        DiaryFrag.diaryFrag.setVisibility(View.VISIBLE); //diaryFrag보여주기
                         //파이어베이스에서 날짜에 맞는 사진 가져오기
                         getFireBaseProfileDiary(HomeMain.num, startdate);
 
-
+                        //변수에 일기정보 담기(diaryFrag로 보내고, diaryFrag에서 ViewDiary로 보내기위해)
+                        viewtitle = title;
+                        viewMaintText = maintext;
 
                     } else {//실패
+                        DiaryFrag.diaryFrag.setVisibility(View.INVISIBLE); //diaryFrag보여주기
                         Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -449,7 +458,9 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     Log.d("어레이", String.valueOf(jsonObject));
                     boolean success = jsonObject.getBoolean("success");
                     if (success) {
-                        int length = jsonObject.length();
+                        int length = jsonObject.length() - 1;
+                        countDiary.setText(": "+ length + "회"); //초록불 횟수 늘리기
+                        Log.d("카운트다이어리3", String.valueOf(length));
                         for(int i = 0; i <= length; i++) { //있는 수만큼 반복문
                             String date = jsonObject.getString(String.valueOf(i));
                             Log.d("이제이거", String.valueOf(jsonObject.length()));
@@ -460,7 +471,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                             String dayofMonth = date.substring(8,10); //받아온 일 수 ex)25
                             diaryWriteDate(year, month, dayofMonth); //있는 수만큼 날짜 초록색으로 만들기
                         }
-                        countDiary.setText(": "+ length + "회"); //초록불 횟수 늘리기
+
                     } else {//실패
                         Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         return;
@@ -490,8 +501,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
      */
 
     private String textLengthChange(String title) {
-        if(title.length() >= 21){ //21글자 이상이면 바꾼 값으로 리턴
-            String newTitle = title.substring(0,21) + "...";
+        if(title.length() >= 10){ //14글자 이상이면 바꾼 값으로 리턴
+            String newTitle = title.substring(0,5) + "...";
 
             return newTitle;
         } //아니면 그냥 타이틀로 리턴
