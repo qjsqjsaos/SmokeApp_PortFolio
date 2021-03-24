@@ -40,8 +40,9 @@ public class ViewDiary extends AppCompatActivity {
         clickListener(); //클릭리스너들
         acceptInfo(); //다이어리 정보 적용
 
-
-
+        if(Diary.uri != null) {
+            Glide.with(getApplicationContext()).load(Diary.uri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
+        }
     }
     /**다이어리 정보 적용*/
     private void acceptInfo() {

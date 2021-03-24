@@ -10,6 +10,7 @@
         android:id="@+id/diaryFrag"
         android:layout_width="140dp"
         android:layout_height="240dp"
+        android:visibility="gone"
         android:elevation="10dp"
         android:background="@drawable/wisesay_settings"
         android:orientation="vertical"

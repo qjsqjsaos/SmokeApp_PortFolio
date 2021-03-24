@@ -3,6 +3,7 @@ package org.techtown.study01.FirstToMain.MaintoEnd.Special;
 import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -47,6 +48,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -59,7 +61,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     private TextView diaryText;
     private ImageView diaryImage;
-    public static Button dialogPlusButton;
+    public static Button dialogPlusButton , delete_btn, showAll_btn;
 
     public static Uri uri;
     private Loading_Dialog loading_dialog;
@@ -100,7 +102,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         diaryImage = viewGroup.findViewById(R.id.diaryImage); //일기 이미지
         dialogPlusButton = viewGroup.findViewById(R.id.dialogPlusButton); //플로팅 버튼(일기 쓰기 버튼)
         countDiary = viewGroup.findViewById(R.id.countDiary); //일기 쓴 횟수(초록색 동그라미)
-
+        delete_btn = viewGroup.findViewById(R.id.delete_btn); //일기 삭제 버튼
+        showAll_btn = viewGroup.findViewById(R.id.showAll_btn); //일기 전체보기 버튼
 
         materialCalendarView = viewGroup.findViewById(R.id.calendarView5);
         materialCalendarView.setSelectedDate(CalendarDay.today()); //오늘 날짜 큰 갈색// 동그라미 표시
@@ -126,8 +129,68 @@ public class Diary extends Fragment implements OnDateSelectedListener {
             }
         });
 
-
+        //일기 삭제 버튼
+        delete_btn.setOnClickListener(v -> {
+            reviceAlertD(); //삭제 다이얼로그 실행
+        });
     }
+
+    /**일기 삭제하기 다이얼로그 */
+    private void reviceAlertD() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(false); //외부 클릭시 막아주기
+        builder.setTitle("일기 삭제");
+        builder.setMessage(startdate + " 일기를 삭제하겠습니까?");
+        builder.setPositiveButton("아니오",
+                (dialog, which) -> {
+
+                });
+        builder.setNegativeButton("예",
+                (dialog, which) -> {
+                    delete_Diary(); //업데이트 적용하기
+                });
+        builder.show();
+    }
+
+    /** 일기 삭제 하기 (db연결)*/
+    private void delete_Diary() {
+        Response.Listener<String> responseListener = response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                Log.d("어레이", String.valueOf(jsonObject));
+                boolean success = jsonObject.getBoolean("success");
+                if (success) {
+                    justFireBase_Delete(); //파이어베이스에 이미지도 같이 삭제
+                    DiaryFrag.diaryFrag.setVisibility(View.GONE); //프래그먼트 임시적으로 없애기
+                    int length = jsonObject.length();
+                    countDiary.setText(": "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 줄게 만든다.)
+
+                    calendarDayList.remove(startdate); //캘린더에서 값을 없애고,
+                    EventDecorator eventDecorator = new EventDecorator(Color.RED, calendarDayList); //삭제한 것은 빨간색으로 일시적으로
+                    materialCalendarView.addDecorator(eventDecorator);  //addDecrator과 addDecorator은 다르다. 전자는 하나만, 후자는 여러개의 색 속성을 변경한다.
+
+                    Toast.makeText(getContext(), "삭제를 완료했습니다.", Toast.LENGTH_SHORT).show();
+                } else {//실패
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        delete_Diary_request delete_diary_request = new delete_Diary_request(HomeMain.num, startdate, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(delete_diary_request);
+        Log.d("삭제가자", String.valueOf(HomeMain.num));
+        Log.d("삭제가자",startdate);
+    }
+
+
 
     /** 일기 쓴 날짜 (이 곳에서 일기 쓴 날짜를 초록색 불로 표시해준다.) (날짜를 계속 넣어줘야함.) **/
 
@@ -212,12 +275,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
 
 
-
-
-
-
-
-
     /** 일기 정보(제목, 배경, 내용, 날짜) 가져오기 */
     private void getFireBaseProfileDiary(int num, String date) {
         createDir(num); //디렉토리 없으면 만들기
@@ -244,6 +301,31 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         });
     }
 
+
+    /** 파이어베이스 이미지만 삭제**/
+    private void justFireBase_Delete() {
+        createDir(HomeMain.num); //디렉토리가 없으면 만든다.
+        //storage
+        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
+        StorageReference storageRef = storage.getReference();//스토리지를 참조한다.
+        //파일명을 만들자.
+        //여기서 DP는 다이어리 포토에 줄임말이다.
+        String filename = "DP"+ "_" + startdate +".jpg";  //ex) DP_2019-02-21.jpg 해당 날짜 값으로만 식별한다.(어차피 디렉토리로 분류로 나누었기 때문에 이정도 식별로 충분하다)
+
+        // TODO: 일기만 삭제
+        // Create a reference to the file to delete
+        StorageReference desertRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename); //삭제할 프로필이미지 명
+        // Delete the file
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
+    }
 
     /**디렉토리 만들기(혹시 없을경우 대비해서) = 파이어베이스 */
     public void createDir(int num){

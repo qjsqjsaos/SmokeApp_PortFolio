@@ -59,6 +59,8 @@ public class WriteDiary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_diary);
 
+        setInit(); //참조정리
+
         if(ViewDiary.saveDateV == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
             SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
             Date time = new Date();
@@ -69,8 +71,6 @@ public class WriteDiary extends AppCompatActivity {
         }
 
         textChanger(); //글자 수 표시
-
-        setInit(); //참조정리
 
         buttonListener(); //버튼 리스너 모음
     }
@@ -252,7 +252,7 @@ public class WriteDiary extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {
-                        int length = jsonObject.length();
+                        int length = jsonObject.length() + 1;
                         //오늘 날짜를 구해 바로 적용된 것처럼 보이기 위해 오늘 날짜에 초록표시를 한다.
                         Date time = new Date();
                         String todayDate = Diary.FORMATTER.format(time);
@@ -268,7 +268,6 @@ public class WriteDiary extends AppCompatActivity {
                         DiaryFrag.diaryText.setText(title); //제목 부분 넣어주고
 
                         if(Diary.uri != null){ //이 값이 널이 아니면 레이아웃을 보여준다.
-                            Glide.with(getApplicationContext()).load(Diary.uri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
                             Glide.with(getApplicationContext()).load(Diary.uri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
                         }else { //아니면 없애기
                             Glide.with(getApplicationContext()).load(R.drawable.no_image).into(DiaryFrag.diaryImage); //이미지가 없으면 기본이미지를 넣는다.

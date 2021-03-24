@@ -90,7 +90,7 @@
             android:layout_weight="0.1"/>
 
         <Button
-
+        android:id="@+id/delete_btn"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="end|bottom"
@@ -102,6 +102,7 @@
             android:layout_weight="1"/>
 
         <Button
+            android:id="@+id/showAll_btn"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="end|bottom"
