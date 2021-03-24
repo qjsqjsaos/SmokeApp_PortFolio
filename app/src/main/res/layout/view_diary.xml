@@ -34,19 +34,28 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
+            <TextView
+                style="@style/bold_theme"
+                android:fontFamily="@font/mapo"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:hint="제목 : "
+                android:layout_height="70dp"
+                />
 
             <TextView
                 style="@style/bold_theme"
                 android:id="@+id/viewTitle"
                 android:fontFamily="@font/mapo"
                 android:layout_width="0dp"
-                android:layout_weight="6"
+                android:layout_weight="5"
                 android:maxLines="1"
                 android:gravity="center_vertical"
                 android:maxLength="30"
                 android:textSize="16sp"
-                android:padding="20dp"
-                android:hint="제목 : "
                 android:layout_height="70dp"
                 />
 
@@ -61,6 +70,7 @@
             android:id="@+id/viewLayout"
             android:layout_width="match_parent"
             android:gravity="center"
+            android:visibility="visible"
             android:orientation="horizontal"
             android:weightSum="8"
             android:layout_height="300dp">
@@ -70,14 +80,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/viewImage"
-            android:src="@drawable/no_image"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_weight="6"
-            android:layout_height="300dp"
-            />
+            <ImageView
+                android:id="@+id/viewImage"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:layout_weight="6"
+                android:src="@drawable/no_image" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -98,6 +108,7 @@
 
 
                 <LinearLayout
+                    android:layout_marginTop="15dp"
                     android:layout_width="0dp"
                     android:layout_weight="6"
                     android:layout_height="wrap_content"
@@ -108,12 +119,11 @@
                         android:id="@+id/viewMainText"
                         android:layout_width="0dp"
                         android:layout_weight="6"
-                        android:maxLength="500"
-                        android:padding="20dp"
+                        android:maxLength="1000"
                         android:textSize="16sp"
                         android:hint="1000자 이하로 가능합니다!"
-                        android:layout_height="wrap_content"
-                        android:gravity="top" />
+                        android:gravity="top"
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 

@@ -62,7 +62,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     public static Button dialogPlusButton;
 
     public static Uri uri;
-    public static Uri gotoViewDiaryUri; //ViewDiary로 보내는 uri
     private Loading_Dialog loading_dialog;
     public static TextView countDiary;
 
@@ -88,7 +87,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         Log.d("오늘날짜", todayDate);
         //오늘 날짜 일기를 처음 보여준다.
         getDBDiaryInfo(todayDate); //오늘 날짜 일기 정보
-        getFireBaseProfileDiary(HomeMain.num, todayDate); //오늘 날짜 일기 이미지
     }
 
 
@@ -235,13 +233,13 @@ public class Diary extends Fragment implements OnDateSelectedListener {
             public void onSuccess(Uri uri) {
                 Log.d("매맨", String.valueOf(uri));
                 Glide.with(getActivity()).load(uri).into(DiaryFrag.diaryImage);
-                gotoViewDiaryUri = uri; //ViewDiary로 uri보내기
+                Diary.uri = uri; //ViewDiary로 uri보내기
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 DiaryFrag.diaryImage.setImageResource(R.drawable.no_image); //실패시 기본이미지
-                gotoViewDiaryUri = null; //uri에 널값을 주어 viewDairy에도 기본이미지가 보이게 한다.
+                Diary.uri = null; //uri에 널값을 주어 viewDairy에도 기본이미지가 보이게 한다.
             }
         });
     }
@@ -294,11 +292,11 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.8", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.9", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -339,9 +337,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                             diaryWriteDate(year, month, dayofMonth); //있는 수만큼 날짜 초록색으로 만들기
                         }
 
-                    } else {//실패
-                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
-                        return;
                     }
 
 

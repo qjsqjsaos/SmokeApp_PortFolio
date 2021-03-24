@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -41,13 +42,14 @@ import java.util.Date;
 public class WriteDiary extends AppCompatActivity {
 
     public static EditText title_diary, mainText_diary;
-    public static Button inputImage, cancel_btn_diary, saveDiary;
+    public static Button inputImage, cancel_btn_diary, saveDiary, defaultImageW;
     public static ImageView inputImgeReal; //첨부파일 미리보기
+    public static TextView dateWW;
 
     public static String title, mainText;
 
     private static final int REQUEST_CODE = 0;
-    Diary diary = new Diary();
+    public static String titleV, mainTextV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class WriteDiary extends AppCompatActivity {
 
         setInit(); //참조정리
 
-        writeDiary(); //일기쓰기 메서드
+        buttonListener(); //버튼 리스너 모음
     }
 
 
@@ -65,6 +67,8 @@ public class WriteDiary extends AppCompatActivity {
         title_diary = findViewById(R.id.title_diary); //일기 제목
         mainText_diary = findViewById(R.id.mainText); //일기 본문
         inputImage = findViewById(R.id.inputImage); //이미지 첨부 버튼
+        defaultImageW = findViewById(R.id.defaultImageW); //이미지 없음 버튼
+        dateWW = findViewById(R.id.dateWW); //날짜 표시
         cancel_btn_diary = findViewById(R.id.cancel_btn_diary); //일기 취소 버튼
         saveDiary = findViewById(R.id.saveDiary); //일기 작성완료 버튼
         inputImgeReal = findViewById(R.id.insertImg); //첨부한 이미지 미리보기
@@ -85,7 +89,7 @@ public class WriteDiary extends AppCompatActivity {
     }
 
     /**일기 쓰기 메서드 .)*/
-    private void writeDiary() {
+    private void buttonListener() {
                 //이미지 첨부 버튼 누를때
                 inputImage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -98,6 +102,9 @@ public class WriteDiary extends AppCompatActivity {
                     }
                 });
 
+                //이미지 없음 버튼
+                defaultImageW.setOnClickListener(new Vie);
+
                 //일기 취소 버튼 누를때
                 cancel_btn_diary.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -105,12 +112,17 @@ public class WriteDiary extends AppCompatActivity {
                         finish(); //창 닫기
                     }
                 });
+
+                //일기 작성 버튼
                 saveDiary.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         title = title_diary.getText().toString();
                         mainText = mainText_diary.getText().toString();
                         createDiary(title, mainText, Diary.startdate); //제목, 본문, 오늘 날짜를 디비로 보낸다.
+                        //혹시 만들고 다이어리에 바로 들어갈 걸 예상해서 변수에 값을 넣어주고, 임시적으로 ViewDiary에서 보여준다.
+                        titleV = title;
+                        mainTextV = mainText;
                         //파이어베이스 사진 저장하기
                         createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate); //날짜로 식별한다. 날짜를 파라미터로 넣어준다
                         Log.d("보자보자", title);
@@ -119,6 +131,7 @@ public class WriteDiary extends AppCompatActivity {
                         Log.d("보자보자", String.valueOf(HomeMain.num));
                     }
                 });
+
     }
 
     /**디렉토리 만들기(혹시 없을경우 대비해서) = 파이어베이스 */
@@ -195,7 +208,7 @@ public class WriteDiary extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {
-                        int length = jsonObject.length() + 2;
+                        int length = jsonObject.length();
                         //오늘 날짜를 구해 바로 적용된 것처럼 보이기 위해 오늘 날짜에 초록표시를 한다.
                         Date time = new Date();
                         String todayDate = Diary.FORMATTER.format(time);
@@ -204,8 +217,21 @@ public class WriteDiary extends AppCompatActivity {
                         String dayofMonth = todayDate.substring(8,10); //받아온 일 수 ex)25
                         diaryWriteDate(year, month, dayofMonth); //지금 쓴 날짜 초록색으로 변하게 하기
                         Diary.countDiary.setText(": "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 늘게 만든다)
+                        Toast.makeText(getApplicationContext(), "일기가 등록되었습니다.", Toast.LENGTH_SHORT).show();
                         Log.d("카운트다이어리2", String.valueOf(length));
+                        //다이어리프래그 부분 //일시적
+                        DiaryFrag.diaryFrag.setVisibility(View.VISIBLE); //다이어리 보여주고
+                        DiaryFrag.diaryText.setText(title); //제목 부분 넣어주고
 
+                        if(Diary.uri != null){ //이 값이 널이 아니면 레이아웃을 보여준다.
+                            Glide.with(getApplicationContext()).load(Diary.uri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
+                            Glide.with(getApplicationContext()).load(Diary.uri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
+                        }else { //아니면 없애기
+                            Glide.with(getApplicationContext()).load(R.drawable.no_image).into(DiaryFrag.diaryImage); //이미지가 없으면 기본이미지를 넣는다.
+                        }
+                        Log.d("널일까?", String.valueOf(Diary.uri));
+
+                        finish(); //액티비티 끄기
                     }else{
                         Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     }
@@ -214,7 +240,7 @@ public class WriteDiary extends AppCompatActivity {
 
                 catch(JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.7", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         };

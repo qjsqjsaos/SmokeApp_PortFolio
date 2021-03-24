@@ -61,8 +61,8 @@ public class ReviseDiary extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Diary.gotoViewDiaryUri = data.getData(); //사진 자료를 받는다.
-                Glide.with(getApplicationContext()).load(Diary.gotoViewDiaryUri).into(inputImageR);
+                Diary.uri = data.getData(); //사진 자료를 받는다.
+                Glide.with(getApplicationContext()).load(Diary.uri).into(inputImageR);
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
                 Toast.makeText(getApplicationContext(), "이미지 불러오기 실패", Toast.LENGTH_SHORT).show();
             }
@@ -119,7 +119,7 @@ public class ReviseDiary extends AppCompatActivity {
         defaultImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Diary.gotoViewDiaryUri = null; //널값을 주어 이미지가 없게 하기
+                Diary.uri = null; //널값을 주어 이미지가 없게 하기
                 inputImageR.setImageResource(R.drawable.no_image); //기본이미지 값 우선 넣어주기
                 ViewDiary.viewLayout.setVisibility(View.GONE); //리니어 레이아웃도 일시적으로 없애기
             }
@@ -139,11 +139,11 @@ public class ReviseDiary extends AppCompatActivity {
         //파일명을 만들자.
         //여기서 DP는 다이어리 포토에 줄임말이다.
         String filename = "DP"+ "_" +startdate +".jpg";  //ex) DP_2019-02-21.jpg 해당 날짜 값으로만 식별한다.(어차피 디렉토리로 분류로 나누었기 때문에 이정도 식별로 충분하다)
-        Uri file = Diary.gotoViewDiaryUri;
-        Log.d("잘들어오고있지?", String.valueOf(Diary.gotoViewDiaryUri));
+        Uri file = Diary.uri;
+        Log.d("잘들어오고있지?", String.valueOf(Diary.uri));
 
 
-        if(Diary.gotoViewDiaryUri == null) { //uri값이 없으면 기본이미지로 저장한다.
+        if(Diary.uri == null) { //uri값이 없으면 기본이미지로 저장한다.
             DiaryFrag.diaryImage.setImageResource(R.drawable.no_image);
             // TODO: 삭제만하고, 리턴 이 경우는 사진 값이 없을 때, 기본이미지 저장을 위험이다.
             // Create a reference to the file to delete
@@ -216,7 +216,7 @@ public class ReviseDiary extends AppCompatActivity {
         saveDate = intent.getStringExtra("savedate"); //날짜
         titleR.setText(title); //제목에 삽입
         mainTextR.setText(mainText); //본문에 삽입
-        Glide.with(getApplicationContext()).load(Diary.gotoViewDiaryUri).into(inputImageR); //첫 이미지 삽입
+        Glide.with(getApplicationContext()).load(Diary.uri).into(inputImageR); //첫 이미지 삽입
         dateRR.setText(saveDate); //일기 쓰는 날짜
     }
 
@@ -241,7 +241,7 @@ public class ReviseDiary extends AppCompatActivity {
                     if (success) { //수정 완료
                         loading_dialog.dismiss(); //로딩창 닫기
                         //수정값 일시적으로 적용
-                        ViewDiary.viewTitle.setText("제목 : " + titleC);
+                        ViewDiary.viewTitle.setText(titleC);
                         ViewDiary.viewMainText.setText(mainTextC);
                         //다이어리 값에다가도 일시적으로 넣어주기
                         Diary.viewtitle = titleC;
@@ -249,12 +249,12 @@ public class ReviseDiary extends AppCompatActivity {
                         //파이어베이스로 이미지도 수정해준다.
                         createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate);
                         DiaryFrag.diaryText.setText(titleC); //
-                        Glide.with(getApplicationContext()).load(Diary.gotoViewDiaryUri).into(DiaryFrag.diaryImage); //일시적 DiaryFrag.diaryImage 이미지 사진 넣기
-                        Glide.with(getApplicationContext()).load(Diary.gotoViewDiaryUri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
-                        if(Diary.gotoViewDiaryUri != null){ //이 값이 널이 아니면 레이아웃을 보여준다.
+                        if(Diary.uri != null){ //이 값이 널이 아니면 레이아웃을 보여준다.
+                            Glide.with(getApplicationContext()).load(Diary.uri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
+                            Glide.with(getApplicationContext()).load(Diary.uri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
                             ViewDiary.viewLayout.setVisibility(View.VISIBLE);
                         }else { //아니면 없애기
-                            ViewDiary.viewLayout.setVisibility(View.GONE);
+                            Glide.with(getApplicationContext()).load(R.drawable.no_image).into(DiaryFrag.diaryImage); //이미지가 없으면 기본이미지를 넣는다.
                         }
                         Toast.makeText(getApplicationContext(), "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     } else { //수정 실패

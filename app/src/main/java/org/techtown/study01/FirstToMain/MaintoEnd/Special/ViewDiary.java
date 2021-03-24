@@ -59,13 +59,18 @@ public class ViewDiary extends AppCompatActivity {
             viewDate.setText("작성 일자 : " + saveDate);
         }
 
-        viewTitle.setText("제목 : "+title); //제목에 값넣기
-        viewMainText.setText(mainText); //본문값넣기
+        if(title != null || mainText != null) { //null처리 해주고,
+            viewTitle.setText(title); //제목에 값넣기
+            viewMainText.setText(mainText); //본문값넣기
+        }else if(WriteDiary.titleV != null && WriteDiary.mainTextV != null){ //혹시 누가 다이어리를 바로 만들고 들어올때 값 보기(임시)
+            viewTitle.setText(WriteDiary.titleV); //제목에 값넣기
+            viewMainText.setText(WriteDiary.mainTextV); //본문값넣기
+        }
 
-        if(Diary.gotoViewDiaryUri == null){ //uri에 값이 없으면// 서버에 이미지만 없다는 뜻이다.
+        if(Diary.uri == null){ //uri에 값이 없으면// 서버에 이미지만 없다는 뜻이다.
             viewLayout.setVisibility(View.GONE); //이미지뷰 가리기
         }else{ //이미지가 있으면 이미지를 넣어준다.
-            Glide.with(getApplicationContext()).load(Diary.gotoViewDiaryUri).into(viewImage); //이미지 넣기
+            Glide.with(getApplicationContext()).load(Diary.uri).into(viewImage); //이미지 넣기
         }
 
     }
@@ -105,10 +110,13 @@ public class ViewDiary extends AppCompatActivity {
         builder.setNegativeButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        //수정할 부분 추출
+                        String title = viewTitle.getText().toString();
+                        String maintext = viewMainText.getText().toString();
                         Intent intent = new Intent(getApplicationContext(), ReviseDiary.class); //수정하러 이동하기
-                        intent.putExtra("title", Diary.viewtitle); //제목
-                        intent.putExtra("mainText", Diary.viewMaintText); //본문
-                        intent.putExtra("saveDate", Diary.dbDate); //날짜
+                        intent.putExtra("title", title); //제목
+                        intent.putExtra("mainText", maintext); //본문
+                        intent.putExtra("saveDate", Diary.startdate); //날짜
                         startActivity(intent);
                     }
                 });
@@ -118,7 +126,7 @@ public class ViewDiary extends AppCompatActivity {
 
     /**참조하기 */
     private void setInit() {
-        viewLayout = findViewById(R.id.viewLayout); //이미지 리니어레이아웃
+        viewLayout = (LinearLayout) findViewById(R.id.viewLayout); //이미지 리니어레이아웃
         viewRevise_btn = findViewById(R.id.viewRevise_btn); //수정하기버튼
         viewBack_Btn = findViewById(R.id.ViewBack_Btn); //돌아가기 버튼
         viewDate = findViewById(R.id.viewDate); //작성 날짜 표시
