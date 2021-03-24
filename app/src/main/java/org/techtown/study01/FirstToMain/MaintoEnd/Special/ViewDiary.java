@@ -26,8 +26,9 @@ import java.util.Date;
 public class ViewDiary extends AppCompatActivity {
 
     private Button viewRevise_btn, viewBack_Btn;
-    private TextView viewDate, viewMainText, viewTitle;
-    private ImageView viewImage;
+    public static TextView viewMainText, viewTitle;
+    private TextView viewDate;
+    public static ImageView viewImage;
     public static LinearLayout viewLayout;
     public static String saveDateV;
 
