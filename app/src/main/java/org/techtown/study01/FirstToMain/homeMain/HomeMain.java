@@ -116,7 +116,7 @@ public class HomeMain extends Fragment {
 
     //뷰그룹 부분
     private ViewGroup viewGroup;
-    public static ImageView userView;
+    private ImageView userView;
     public static TextView nameView;
     private LinearLayout card;
     public static ImageView rank; //프로필 랭크 이미지
@@ -124,7 +124,7 @@ public class HomeMain extends Fragment {
     public static TextView dateView; //프로필에 디데이날짜와 금연날짜이다. 금연시작버튼이나, 다이얼로그안에 금연취소버튼을 누를시 변동한다. 이 값은 Frag1으로 가서 초기화된다.
 
     //스태틱을 붙여서 Frag1에서 참조할 수 있게 한다. //금연하기 버튼과 취소버튼
-    public static Button noSmoke_Btn, stop_Btn;
+    private Button noSmoke_Btn, stop_Btn;
 
     //NetworkConnectionCheck 참조할 수 있게 한다.
     public static TextView wiseView;

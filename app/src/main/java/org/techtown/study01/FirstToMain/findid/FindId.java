@@ -38,7 +38,7 @@ public class FindId extends AppCompatActivity {
     private EditText editText;
     private Button button;
     private String Eid, email, Eemail; //찾은 아이디 넣을 스트링 객체
-    public String message = "아이디찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
+    private String message = "아이디찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
 
 
     //로딩창 띄우기

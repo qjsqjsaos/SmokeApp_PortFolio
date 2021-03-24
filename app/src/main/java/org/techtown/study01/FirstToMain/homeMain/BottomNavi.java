@@ -73,9 +73,7 @@ import static org.techtown.study01.FirstToMain.homeMain.Profile_Dialog.profileIm
 public class BottomNavi extends AppCompatActivity {
         private BottomNavigationView bottomNavigationView;
         private HomeMain fragment1; //홈메인
-        private static final String TAG = "MyTag"; //로그 찍을때,
-
-        public static Loading_Dialog loading_dialog_BN; //바텀나비 로딩창
+        private String TAG = "MyTag"; //로그 찍을때,
 
         private String id;
 

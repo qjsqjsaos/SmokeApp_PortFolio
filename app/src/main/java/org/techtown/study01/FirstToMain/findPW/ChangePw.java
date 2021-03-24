@@ -30,7 +30,7 @@ public class ChangePw extends AppCompatActivity {
 
     private EditText pw, pwcheck;
     private String newpw, pw2;
-    public String messagepPw = "비밀번호찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
+    private String messagepPw = "비밀번호찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
 
 
     //로딩창 띄우기
