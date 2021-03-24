@@ -209,12 +209,11 @@
 
         <ImageView
             android:id="@+id/inputImageR"
-            android:src="@drawable/no_image"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            />
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/no_image" />
 
         <LinearLayout
             android:layout_marginTop="15dp"

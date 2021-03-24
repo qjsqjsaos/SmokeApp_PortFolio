@@ -26,7 +26,7 @@ import java.util.Date;
 public class ViewDiary extends AppCompatActivity {
 
     public static Button viewRevise_btn, viewBack_Btn;
-    public static TextView viewDate, viewMainText, viewTitle;
+    public static TextView viewDate, viewMainText, viewTitle, titleZ;
     public static ImageView viewImage;
     public static LinearLayout viewLayout;
     public static String saveDateV;
@@ -52,6 +52,9 @@ public class ViewDiary extends AppCompatActivity {
         String mainText = intent.getStringExtra("mainText");
         saveDateV = intent.getStringExtra("saveDate");
 
+        Log.d("뷰뷰뷰", title);
+        Log.d("뷰뷰뷰", mainText);
+
         if(saveDateV == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
             SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
             Date time = new Date();
@@ -60,14 +63,10 @@ public class ViewDiary extends AppCompatActivity {
         }else { //아니면 가져온 날짜 넣기
             viewDate.setText("작성 일자 : " + saveDateV);
         }
+        //값넣기 제목과 본문
+            viewTitle.setText(title);
+            viewMainText.setText(mainText);
 
-        if(title != null || mainText != null) { //null처리 해주고,
-            viewTitle.setText(title); //제목에 값넣기
-            viewMainText.setText(mainText); //본문값넣기
-        }else if(WriteDiary.titleV != null && WriteDiary.mainTextV != null){ //혹시 누가 다이어리를 바로 만들고 들어올때 값 보기(임시)
-            viewTitle.setText(WriteDiary.titleV); //제목에 값넣기
-            viewMainText.setText(WriteDiary.mainTextV); //본문값넣기
-        }
 
         if(Diary.uri == null){ //uri에 값이 없으면// 서버에 이미지만 없다는 뜻이다.
             viewLayout.setVisibility(View.GONE); //이미지뷰 가리기
@@ -116,7 +115,6 @@ public class ViewDiary extends AppCompatActivity {
                         String title = viewTitle.getText().toString();
                         String maintext = viewMainText.getText().toString();
                         String mainlength = String.valueOf(maintext.length());
-
                         Intent intent = new Intent(getApplicationContext(), ReviseDiary.class); //수정하러 이동하기
                         intent.putExtra("title", title); //제목
                         intent.putExtra("mainText", maintext); //본문
@@ -131,6 +129,7 @@ public class ViewDiary extends AppCompatActivity {
 
     /**참조하기 */
     private void setInit() {
+        titleZ = findViewById(R.id.titleZ); //제목: 부분
         viewLayout = (LinearLayout) findViewById(R.id.viewLayout); //이미지 리니어레이아웃
         viewRevise_btn = findViewById(R.id.viewRevise_btn); //수정하기버튼
         viewBack_Btn = findViewById(R.id.ViewBack_Btn); //돌아가기 버튼

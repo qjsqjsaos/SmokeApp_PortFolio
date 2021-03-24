@@ -168,9 +168,6 @@ public class WriteDiary extends AppCompatActivity {
                         title = title_diary.getText().toString();
                         mainText = mainText_diary.getText().toString();
                         createDiary(title, mainText, Diary.startdate); //제목, 본문, 오늘 날짜를 디비로 보낸다.
-                        //혹시 만들고 다이어리에 바로 들어갈 걸 예상해서 변수에 값을 넣어주고, 임시적으로 ViewDiary에서 보여준다.
-                        titleV = title;
-                        mainTextV = mainText;
                         //파이어베이스 사진 저장하기
                         createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate); //날짜로 식별한다. 날짜를 파라미터로 넣어준다
                         Log.d("보자보자", title);
@@ -271,7 +268,12 @@ public class WriteDiary extends AppCompatActivity {
                         //다이어리프래그 부분 //일시적
                         DiaryFrag.diaryFrag.setVisibility(View.VISIBLE); //다이어리 보여주고
                         String newTitle = textLengthChange(title); //글자 수에 맞춰 점 찍어주기
-                        DiaryFrag.diaryText.setText(newTitle); //제목 부분 넣어주고
+                        DiaryFrag.diaryText.setText(newTitle); //제목 부분 넣어주고,
+
+                        //다이어리로 값보내기
+                        Diary.viewtitle = title;
+                        Diary.viewMaintText = mainText;
+
                         if(Diary.uri != null){ //이 값이 널이 아니면 레이아웃을 보여준다.
                             Glide.with(getApplicationContext()).load(Diary.uri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
                         }else { //아니면 없애기

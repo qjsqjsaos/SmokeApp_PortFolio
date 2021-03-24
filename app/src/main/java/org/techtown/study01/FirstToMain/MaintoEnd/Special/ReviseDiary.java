@@ -86,6 +86,8 @@ public class ReviseDiary extends AppCompatActivity {
 
         textChanger(); //글자수 변경
 
+        inputImageR.setImageResource(R.drawable.no_image); //기본 이미지를 처음에 넣어준다.
+
     }
 
     /**글자수 표시*/
@@ -139,6 +141,7 @@ public class ReviseDiary extends AppCompatActivity {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intent, REQUEST_CODE);
+                ViewDiary.viewLayout.setVisibility(View.VISIBLE); //뷰다이어리 사진도 일시적으로 보이게하기
             }
         });
 
@@ -148,7 +151,7 @@ public class ReviseDiary extends AppCompatActivity {
             public void onClick(View v) {
                 Diary.uri = null; //널값을 주어 이미지가 없게 하기
                 inputImageR.setImageResource(R.drawable.no_image); //기본이미지 값 우선 넣어주기
-                ViewDiary.viewLayout.setVisibility(View.GONE); //리니어 레이아웃도 일시적으로 없애기
+                ViewDiary.viewLayout.setVisibility(View.GONE); //뷰다이어리 사진도 일시적으로 없애기
             }
         });
     }

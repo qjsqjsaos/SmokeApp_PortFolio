@@ -69,8 +69,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     private Loading_Dialog loading_dialog;
     public static TextView countDiary;
 
-    public static String viewtitle;
-    public static String viewMaintText;
+    public static String viewtitle = null;
+    public static String viewMaintText = null;
     public static String dbDate;
 
     public static String startdate;
@@ -347,6 +347,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         getDBDiaryInfo(dbDate); //mysql디비에서 제목 내용 가져오기  //인자에는 날짜를 보낸다.
         startdate = dbDate; //일기 중복으로 썼는지 체크하기 위해
         Log.d("스타트데이트1", startdate);
+
+
     }
 
 
@@ -438,7 +440,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                         DiaryFrag.diaryFrag.setVisibility(View.VISIBLE); //diaryFrag보여주기
                         //파이어베이스에서 날짜에 맞는 사진 가져오기
                         getFireBaseProfileDiary(HomeMain.num, startdate);
-
 
                         //변수에 일기정보 담기(diaryFrag로 보내고, diaryFrag에서 ViewDiary로 보내기위해)
                         viewtitle = title;
