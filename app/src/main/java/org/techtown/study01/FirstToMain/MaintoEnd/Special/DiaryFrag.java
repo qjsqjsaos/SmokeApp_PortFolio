@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Outline;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
@@ -64,6 +66,18 @@ public class DiaryFrag extends Fragment {
         diaryImage = view.findViewById(R.id.diaryImage);
         diaryText = view.findViewById(R.id.diaryText);
         diaryFrag = view.findViewById(R.id.diaryFrag);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            diaryImage.setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setRoundRect(0,0, view.getWidth(), view.getHeight()+200, 40);
+                }
+            });
+
+            diaryImage.setClipToOutline(true);
+        }
+
         viewDiary(); //다이어리 보기
 
         return view;

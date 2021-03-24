@@ -55,7 +55,7 @@ import static android.app.Activity.RESULT_OK;
 public class Diary extends Fragment implements OnDateSelectedListener {
 
     private ViewGroup viewGroup;
-    private MaterialCalendarView materialCalendarView;
+    public static MaterialCalendarView materialCalendarView;
 
     private TextView diaryText;
     private ImageView diaryImage;
@@ -64,7 +64,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     public static Uri uri;
     public static Uri gotoViewDiaryUri; //ViewDiary로 보내는 uri
     private Loading_Dialog loading_dialog;
-    private TextView countDiary;
+    public static TextView countDiary;
 
     public static String viewtitle;
     public static String viewMaintText;
@@ -74,9 +74,9 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     private ViewPager2 viewPageSetUp;
 
-    private ArrayList<CalendarDay> calendarDayList; //캘린더 리스트 안에 내가 입력한 즉, 일기를 쓴(초록색표시) 날이 다 들어가 있음.
+    public static ArrayList<CalendarDay> calendarDayList; //캘린더 리스트 안에 내가 입력한 즉, 일기를 쓴(초록색표시) 날이 다 들어가 있음.
 
-    private static final SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
+    public static final SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
 
     /** 앱이 맨처음 실행될 때 최초 한번만*/
     @Override
@@ -120,12 +120,15 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     }
     /** 일기 작성을 인텐트 하기 **/
     private void gotoWriteDiary() {
+        //일기 추가 버튼 누를때
         dialogPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 samediaryCheck(); //일기 중복으로썼는지 체크
             }
         });
+
+
     }
 
     /** 일기 쓴 날짜 (이 곳에서 일기 쓴 날짜를 초록색 불로 표시해준다.) (날짜를 계속 넣어줘야함.) **/
@@ -212,54 +215,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
 
 
-    // TODO: 2021-03-16 우선 파이어베이스 저장하는 법
-    /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제
-     * @param startdate*/
-    void createProfile_Photo_and_Delete(int num, String startdate) {
-        createDir(num); //디렉토리가 없으면 만든다.
-        //storage
-        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
-        StorageReference storageRef = storage.getReference();//스토리지를 참조한다.
-        //파일명을 만들자.
-        //여기서 DP는 다이어리 포토에 줄임말이다.
-        String filename = "DP"+ "_" +startdate +".jpg";  //ex) DP_2019-02-21.jpg 해당 날짜 값으로만 식별한다.(어차피 디렉토리로 분류로 나누었기 때문에 이정도 식별로 충분하다)
-        Uri file = uri;
-        if(uri == null) { //uri값이 없으면 기본이미지로 저장한다.
-            DiaryFrag.diaryImage.setImageResource(R.drawable.no_image); //실패시 기본이미지
-        }else {
-            //여기서 원하는 이름 넣어준다. (filename 넣어주기)
-            StorageReference riversRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename);
-            UploadTask uploadTask = riversRef.putFile(file);
 
-
-            // TODO: 2021-03-17 기존 일기 이미지와 일기 제목과 내용을 우선 삭제한다.(중복못하게)
-            // Create a reference to the file to delete
-            StorageReference desertRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename); //삭제할 프로필이미지 명
-            // Delete the file
-            desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            });
-
-            // TODO: 2021-03-17 새로운 프로필 이미지 저장
-            // Register observers to listen for when the download is done or if it fails
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), "일기가 등록되었습니다.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
 
 
 
@@ -278,7 +234,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
             @Override
             public void onSuccess(Uri uri) {
                 Log.d("매맨", String.valueOf(uri));
-              Glide.with(getActivity()).load(uri).into(DiaryFrag.diaryImage);
+                Glide.with(getActivity()).load(uri).into(DiaryFrag.diaryImage);
                 gotoViewDiaryUri = uri; //ViewDiary로 uri보내기
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -302,51 +258,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         }
     }
 
-    /**일기 만들기(num으로 사용자를 식별하고, 그에 맞는 다이어리 테이블에 컬럼값들을 저장한다.)
-     * @param title
-     * @param mainText
-     * @param startdate*/
-    void createDiary(String title, String mainText, String startdate) {
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
 
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-
-                    if (success) {
-                        int length = jsonObject.length() + 2;
-                        //오늘 날짜를 구해 바로 적용된 것처럼 보이기 위해 오늘 날짜에 초록표시를 한다.
-                        Date time = new Date();
-                        String todayDate = FORMATTER.format(time);
-                        String year = todayDate.substring(0,4); //받아온 연도 ex)2021
-                        String month = todayDate.substring(5,7); //받아온 달 ex)02
-                        String dayofMonth = todayDate.substring(8,10); //받아온 일 수 ex)25
-                        diaryWriteDate(year, month, dayofMonth); //지금 쓴 날짜 초록색으로 변하게 하기
-                        countDiary.setText(": "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 늘게 만든다)
-                        Log.d("카운트다이어리2", String.valueOf(length));
-
-                    }else{
-                        Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.6", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                }
-
-                catch(JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.7", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-        };
-        CreateDiaryColumn createDiaryTable_check = new CreateDiaryColumn(HomeMain.num, title, mainText, startdate, responseListener);
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(createDiaryTable_check);
-
-        Log.d("홈메인넘", String.valueOf(HomeMain.num));
-    }
 
     /**
      * mysql에서 디비날짜정보로 제목과 내용 가져오기, 그리고 그림도 파이어베이스로 가져오기
@@ -491,7 +403,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     if (success) {//일기가 존재하지 않으면 작성하기 위해 이동
                         Date time = new Date();
                         String todayDate = FORMATTER.format(time);
-                        if(dbDate.equals(todayDate)) { //선택한 날짜가 오늘 날짜이면 이동
+                        if(startdate.equals(todayDate)) { //선택한 날짜가 오늘 날짜이면 이동
                             Intent intent = new Intent(getActivity(), WriteDiary.class);
                             startActivity(intent);
                         }else{ //오늘 날짜가 아니면,
