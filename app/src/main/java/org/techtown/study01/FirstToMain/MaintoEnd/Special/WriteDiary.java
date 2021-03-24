@@ -253,7 +253,7 @@ public class WriteDiary extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {
-                        int length = jsonObject.length();
+                        int length = jsonObject.length() + 1;
                         //오늘 날짜를 구해 바로 적용된 것처럼 보이기 위해 오늘 날짜에 초록표시를 한다.
                         Date time = new Date();
                         String todayDate = Diary.FORMATTER.format(time);

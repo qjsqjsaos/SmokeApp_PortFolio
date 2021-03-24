@@ -37,6 +37,7 @@
                 android:layout_weight="1"/>
 
             <EditText
+                android:textSize="16sp"
                 android:fontFamily="@font/mapo"
                 android:singleLine="true"
                 android:id="@+id/titleR"
@@ -81,6 +82,7 @@
                     android:gravity="center">
 
                     <EditText
+                        android:textSize="16sp"
                         android:id="@+id/mainTextR"
                         android:fontFamily="@font/mapo"
                         android:background="@drawable/round_edittext"

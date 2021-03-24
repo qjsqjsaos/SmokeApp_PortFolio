@@ -487,37 +487,7 @@ public class HomeMain extends Fragment {
 
 
 
-    /**
-     * 프로필 바꾸기(적용버튼 사진만만) 메서드
-     * @param image
-     */
 
-    private void changeProfileImageToDB(String image) {
-
-
-        Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
-
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Profile_Img_Check profile_img_check = new Profile_Img_Check(id, image, responseListener);
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(profile_img_check);
-
-        Log.d("비트맵", String.valueOf(uri));
-    }
 
 
     /**

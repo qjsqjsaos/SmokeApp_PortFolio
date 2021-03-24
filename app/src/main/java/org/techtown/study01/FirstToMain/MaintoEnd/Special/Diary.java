@@ -221,7 +221,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                 if (success) {
                     justFireBase_Delete(); //파이어베이스에 이미지도 같이 삭제
                     DiaryFrag.diaryFrag.setVisibility(View.GONE); //프래그먼트 임시적으로 없애기
-                    int length = jsonObject.length() -1 ;
+                    int length = jsonObject.length();
                     countDiary.setText(":  "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 줄게 만든다.)
                     calendarDayList.remove(startdate); //캘린더에서 값을 없애고,
                     Log.d("스타트데이데이", startdate);
