@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -58,6 +61,7 @@ public class WriteDiary extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_diary);
+
 
         setInit(); //참조정리
 
@@ -208,7 +212,6 @@ public class WriteDiary extends AppCompatActivity {
             StorageReference riversRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename);
             UploadTask uploadTask = riversRef.putFile(file);
 
-
             // TODO: 2021-03-17 기존 일기 이미지와 일기 제목과 내용을 우선 삭제한다.(중복못하게)
             // Create a reference to the file to delete
             StorageReference desertRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename); //삭제할 프로필이미지 명
@@ -216,10 +219,12 @@ public class WriteDiary extends AppCompatActivity {
             desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
+
                 }
             });
 
@@ -265,8 +270,8 @@ public class WriteDiary extends AppCompatActivity {
                         Log.d("카운트다이어리2", String.valueOf(length));
                         //다이어리프래그 부분 //일시적
                         DiaryFrag.diaryFrag.setVisibility(View.VISIBLE); //다이어리 보여주고
-                        DiaryFrag.diaryText.setText(title); //제목 부분 넣어주고
-
+                        String newTitle = textLengthChange(title); //글자 수에 맞춰 점 찍어주기
+                        DiaryFrag.diaryText.setText(newTitle); //제목 부분 넣어주고
                         if(Diary.uri != null){ //이 값이 널이 아니면 레이아웃을 보여준다.
                             Glide.with(getApplicationContext()).load(Diary.uri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
                         }else { //아니면 없애기
@@ -294,6 +299,24 @@ public class WriteDiary extends AppCompatActivity {
         Log.d("홈메인넘", String.valueOf(HomeMain.num));
     }
 
+    /**
+     * 21자 이하로 만들고 넘으면 ... 추가하기 (일기 제목
+     * @return
+     */
+
+    private String textLengthChange(String title) {
+        if(title.length() >= 13){ //13글자 이상이면 바꾼 값으로 리턴
+            String newTitle = title.substring(0,13) + "...";
+
+            return newTitle;
+        } //아니면 그냥 타이틀로 리턴
+        return title;
+    }
+
+    /**
+     * 캘린더 리스트에 넣어주기
+
+     */
     private void diaryWriteDate(String year, String month, String day) {
 
         //스트링을 인트로 형변환

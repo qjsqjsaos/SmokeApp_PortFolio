@@ -48,7 +48,7 @@
             android:gravity="center"
             android:textColor="@color/textColor_special"
             android:textSize="17sp"
-            android:lineSpacingMultiplier="1.3"
+            android:lineSpacingMultiplier="1.5"
             android:text="아아아아아아아아아아아아아..."
             android:fontFamily="@font/mapo"
             app:layout_constraintBottom_toTopOf="@+id/textView8"

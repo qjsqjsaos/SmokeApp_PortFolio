@@ -14,10 +14,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -96,20 +98,11 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         viewGroup = (ViewGroup) inflater.inflate(R.layout.diary, container, false);
-        diaryText = viewGroup.findViewById(R.id.diaryText); //일기 텍스트
-        diaryImage = viewGroup.findViewById(R.id.diaryImage); //일기 이미지
-        dialogPlusButton = viewGroup.findViewById(R.id.dialogPlusButton); //플로팅 버튼(일기 쓰기 버튼)
-        countDiary = viewGroup.findViewById(R.id.countDiary); //일기 쓴 횟수(초록색 동그라미)
-        delete_btn = viewGroup.findViewById(R.id.delete_btn); //일기 삭제 버튼
-        showAll_btn = viewGroup.findViewById(R.id.showAll_btn); //일기 전체보기 버튼
 
-        materialCalendarView = viewGroup.findViewById(R.id.calendarView5);
-        materialCalendarView.setSelectedDate(CalendarDay.today()); //오늘 날짜 큰 갈색// 동그라미 표시
-        materialCalendarView.setOnDateChangedListener(this);
+        components(); //참조 모음
 
+        materialCalendarViewSettings(); //메트리얼뷰 세팅
 
         setInit(); //뷰페이저 실행
 
@@ -120,6 +113,33 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         return viewGroup;
 
     }
+
+    /** 참조모음 **/
+    private void components() {
+        diaryText = viewGroup.findViewById(R.id.diaryText); //일기 텍스트
+        diaryImage = viewGroup.findViewById(R.id.diaryImage); //일기 이미지
+        dialogPlusButton = viewGroup.findViewById(R.id.dialogPlusButton); //플로팅 버튼(일기 쓰기 버튼)
+        countDiary = viewGroup.findViewById(R.id.countDiary); //일기 쓴 횟수(초록색 동그라미)
+        delete_btn = viewGroup.findViewById(R.id.delete_btn); //일기 삭제 버튼
+        showAll_btn = viewGroup.findViewById(R.id.showAll_btn); //일기 전체보기 버튼
+        materialCalendarView = viewGroup.findViewById(R.id.calendarView5);
+    }
+
+    /** 메트리얼뷰 세팅 **/
+    private void materialCalendarViewSettings() {
+        materialCalendarView.setSelectedDate(CalendarDay.today()); //오늘 날짜 큰 갈색// 동그라미 표시
+        materialCalendarView.setOnDateChangedListener(this);
+        materialCalendarView.state()
+                .edit()
+                .setMinimumDate(CalendarDay.from(2021, 01, 01))
+                .commit(); //날짜범위 최소 설정
+        materialCalendarView.state().edit()
+                .setMaximumDate(CalendarDay.from(2100, 12, 31))
+                .commit(); //날짜 범위 최대 설정
+        //가로길이
+        materialCalendarView.setTileWidthDp(48);
+    }
+
     /** 일기 작성을 인텐트 하기 **/
     private void gotoWriteDiary() {
         //일기 추가 버튼 누를때
@@ -210,6 +230,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     String month = startdate.substring(5,7); //받아온 달 ex)02
                     String dayofMonth = startdate.substring(8,10); //받아온 일 수 ex)25
                     diaryWriteDate_delete(year, month, dayofMonth); //삭제 리스트에 추가
+                    uri=null; //uri 널처리를 해준다.
                     Toast.makeText(getContext(), "삭제를 완료했습니다.", Toast.LENGTH_SHORT).show();
                 } else {//실패
                     Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
