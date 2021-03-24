@@ -24,8 +24,6 @@ public class Settings extends Fragment {
 
         viewGroup = (ViewGroup) inflater.inflate(R.layout.settings, container, false);
 
-
-
         return viewGroup;
 
     }

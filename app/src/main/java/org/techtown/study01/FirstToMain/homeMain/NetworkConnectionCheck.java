@@ -33,7 +33,7 @@ public class NetworkConnectionCheck extends ConnectivityManager.NetworkCallback 
     private Context context;
     private NetworkRequest networkRequest;
     private ConnectivityManager connectivityManager;
-    public static Thread timeThread = null;
+    private Thread timeThread = null;
 
     public NetworkConnectionCheck(Context context){
         this.context=context;

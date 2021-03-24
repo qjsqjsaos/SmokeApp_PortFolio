@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat;
 
 public class MyService extends Service {
 
-    NetworkConnectionCheck networkConnectionCheck;
+    private NetworkConnectionCheck networkConnectionCheck;
     public MyService() {
 
     }

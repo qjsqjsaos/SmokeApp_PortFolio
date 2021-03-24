@@ -30,17 +30,17 @@ import static android.text.TextUtils.isEmpty;
 
 public class Quest1 extends AppCompatActivity {
 
-    public static EditText cigaCount; //Frag1에서 참조하기 위해 public static을 해준다.
-    public static EditText cigaPay; //Frag1에서 참조하기 위해 public static을 해준다.
-    public static EditText goalText; //이것도 참조해야한다.
+    private EditText cigaCount; //Frag1에서 참조하기 위해 public static을 해준다.
+    private EditText cigaPay; //Frag1에서 참조하기 위해 public static을 해준다.
+    private EditText goalText; //이것도 참조해야한다.
 
     private AlertDialog dialog; //알림 다이아로그
 
     private Button button;
 
-    String cCount;
-    String cPay;
-    String cGoal;
+    private String cCount;
+    private String cPay;
+    private String cGoal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

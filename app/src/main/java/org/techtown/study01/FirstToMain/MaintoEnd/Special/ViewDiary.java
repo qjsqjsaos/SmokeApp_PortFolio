@@ -25,9 +25,9 @@ import java.util.Date;
 
 public class ViewDiary extends AppCompatActivity {
 
-    public static Button viewRevise_btn, viewBack_Btn;
-    public static TextView viewDate, viewMainText, viewTitle, titleZ;
-    public static ImageView viewImage;
+    private Button viewRevise_btn, viewBack_Btn;
+    private TextView viewDate, viewMainText, viewTitle;
+    private ImageView viewImage;
     public static LinearLayout viewLayout;
     public static String saveDateV;
 
@@ -129,7 +129,6 @@ public class ViewDiary extends AppCompatActivity {
 
     /**참조하기 */
     private void setInit() {
-        titleZ = findViewById(R.id.titleZ); //제목: 부분
         viewLayout = (LinearLayout) findViewById(R.id.viewLayout); //이미지 리니어레이아웃
         viewRevise_btn = findViewById(R.id.viewRevise_btn); //수정하기버튼
         viewBack_Btn = findViewById(R.id.ViewBack_Btn); //돌아가기 버튼

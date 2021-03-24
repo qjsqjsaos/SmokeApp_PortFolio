@@ -18,9 +18,6 @@ public class FragPagerAdapterDiary extends FragmentStateAdapter {
     // Real Fragment Total Count
     private final int mSetItemCount = 1; //화면에 출력될 프래그먼트 개수
 
-
-
-
     public FragPagerAdapterDiary(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }

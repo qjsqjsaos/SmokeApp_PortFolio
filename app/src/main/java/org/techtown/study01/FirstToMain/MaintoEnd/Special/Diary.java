@@ -63,7 +63,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     private TextView diaryText;
     private ImageView diaryImage;
-    public static Button dialogPlusButton , delete_btn, showAll_btn;
+    private Button dialogPlusButton , delete_btn, showAll_btn;
 
     public static Uri uri;
     private Loading_Dialog loading_dialog;

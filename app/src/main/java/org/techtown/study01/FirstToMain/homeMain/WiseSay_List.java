@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class WiseSay_List extends ArrayList {
 
-    public static ArrayList<String> wiseSay;
+    private ArrayList<String> wiseSay;
 
     //명언 모음 메서드
     public String WiseArray(int randomNumber){

@@ -46,7 +46,7 @@ import java.util.Date;
 
 public class ReviseDiary extends AppCompatActivity {
 
-    public static EditText titleR, mainTextR;
+    private EditText titleR, mainTextR;
     private Button getImageR;
     private TextView textChanger, dateRR;
     private ImageView inputImageR;

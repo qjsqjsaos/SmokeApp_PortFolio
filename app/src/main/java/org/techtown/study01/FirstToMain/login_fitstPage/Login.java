@@ -36,8 +36,9 @@ public class Login extends AppCompatActivity {
 
     private EditText idText, passwordText; //아이디 비밀번호 입력
     private Button btn_login;//로그인버튼
-    private TextView rg_sign, btn_findId, btn_findPw, btn_google;
-    ; //회원가입버튼, 아이디 비번찾기 버튼
+    private TextView rg_sign, btn_findId, btn_findPw;
+    //회원가입버튼, 아이디 비번찾기 버튼
+
     private String loginId, loginPwd, loginName;//자동 로그인용
     private String Eid, Epw, Ename; //자동로그인 식별용
 

@@ -46,16 +46,15 @@ import java.util.Date;
 
 public class WriteDiary extends AppCompatActivity {
 
-    public static EditText title_diary, mainText_diary;
-    public static Button inputImage, cancel_btn_diary, saveDiary, defaultImageW;
-    public static ImageView inputImgeReal; //첨부파일 미리보기
-    public static TextView dateWW;
-    public static TextView liveTextLength;
+    private EditText title_diary, mainText_diary;
+    private Button inputImage, cancel_btn_diary, saveDiary, defaultImageW;
+    private ImageView inputImgeReal; //첨부파일 미리보기
+    private TextView dateWW;
+    private TextView liveTextLength;
 
-    public static String title, mainText;
+    private String title, mainText;
 
     private static final int REQUEST_CODE = 0;
-    public static String titleV, mainTextV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

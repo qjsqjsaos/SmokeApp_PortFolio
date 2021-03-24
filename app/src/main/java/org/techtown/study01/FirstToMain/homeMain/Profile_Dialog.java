@@ -35,7 +35,7 @@ public class Profile_Dialog extends Dialog {
 
     public static EditText changedName; //이름바꾸기 에딧텍스트
 
-    static String NN; //이름값이 바뀌었는지 아닌지 식별
+    public static String NN; //이름값이 바뀌었는지 아닌지 식별
 
     //프로필 변경하기
 

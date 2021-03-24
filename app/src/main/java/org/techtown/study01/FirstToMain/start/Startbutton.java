@@ -13,16 +13,14 @@ import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 
 public class Startbutton extends AppCompatActivity {
 
-
+    private Button imageButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_button);
 
-
-
         //"끊어 보자" 버튼 클릭 시 로그인 페이지나, 홈 화면으로 이동
-        Button imageButton = (Button) findViewById(R.id.goStart);
+        imageButton = (Button) findViewById(R.id.goStart);
         imageButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

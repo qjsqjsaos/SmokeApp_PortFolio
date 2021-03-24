@@ -50,10 +50,10 @@ public class Register extends AppCompatActivity {
     private final int COUNT_DOWN_INTERVAL = 1000; //onTick 메소드를 호출할 간격 (1초)
     private Long mLastClickTime = 0L; //이메일 버튼 클릭 방지 변수
 
-    String datetime = "0";
-    long cigacount = 0;
-    double cigapay = 0;
-    String goal = "입력해주세요!"; //이 값들은 후에 Quest1에서 넣어줄 값이다.
+    private String datetime = "0";
+    private long cigacount = 0;
+    private double cigapay = 0;
+    private String goal = "입력해주세요!"; //이 값들은 후에 Quest1에서 넣어줄 값이다.
 
 
     //로딩창 띄우기

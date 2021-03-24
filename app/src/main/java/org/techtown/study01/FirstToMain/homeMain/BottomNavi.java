@@ -79,9 +79,9 @@ public class BottomNavi extends AppCompatActivity {
 
         public static BottomNavi bottomNavi;
 
-        FirebaseRemoteConfig remoteConfig;
-        long newAppVersion = 1;
-        static long toolbarImgCount = 15;
+        private FirebaseRemoteConfig remoteConfig;
+        private long newAppVersion = 1;
+        public static long toolbarImgCount = 15;
 
         Loading_Dialog loading_dialog;
 

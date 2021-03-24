@@ -22,22 +22,19 @@ import java.text.ParseException;
 
 public class StartNoSmoking_Dialog extends Dialog {
 
-
-    private static final String TAG = "MyTag"; //로그 찍을때,
-
     //다이어로그 부분
-    public static Calculate_Date calculate_date;
-    public static TextView date, time;
-    public static Button back;
-    public static DatePickerDialog.OnDateSetListener callbackMethod;
-    public static TimePickerDialog.OnTimeSetListener callbackMethod2;
+    private Calculate_Date calculate_date;
+    private TextView date, time;
+    private Button back;
+    private DatePickerDialog.OnDateSetListener callbackMethod;
+    private TimePickerDialog.OnTimeSetListener callbackMethod2;
 
     //Frag1으로 이 버튼을 보내기 위해 public static을 달아주었다.
-    public static Button start_stop_smoking;
-    public static Dialog dialog; //dialog 객체
+    private Button start_stop_smoking;
+    private Dialog dialog; //dialog 객체
 
-    public static Context context;
-    public static CustomDialogListener customDialogListener;
+    private Context context;
+    private CustomDialogListener customDialogListener;
 
     public StartNoSmoking_Dialog(Context context) {
         super(context);

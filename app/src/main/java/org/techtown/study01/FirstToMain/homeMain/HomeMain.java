@@ -2,6 +2,7 @@ package org.techtown.study01.FirstToMain.homeMain;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
@@ -117,6 +118,7 @@ public class HomeMain extends Fragment {
     //뷰그룹 부분
     private ViewGroup viewGroup;
     private ImageView userView;
+    @SuppressLint("StaticFieldLeak")
     public static TextView nameView;
     private LinearLayout card;
     public static ImageView rank; //프로필 랭크 이미지
@@ -130,51 +132,49 @@ public class HomeMain extends Fragment {
     public static TextView wiseView;
 
     public static String id;
-    public static String name;
+    private String name;
 
     //쓰레드 부분
-    public static Thread timeThread = null;
+    private Thread timeThread = null;
     private final Boolean isRunning = true;
 
-    private static final String TAG = "MyTag"; //로그 찍을때,
+    private final String TAG = "MyTag"; //로그 찍을때,
 
     //저장 뷰모델
     private SharedViewModel sharedViewModel;
 
 
     //닉네임 중복체크
-    boolean nameCheck = false;
+    private boolean nameCheck = false;
 
     public static int num; //프로필 이미지 식별값
 
-
     //로딩중 다이얼로그
 
-    Loading_Dialog loading_dialog;
+    private Loading_Dialog loading_dialog;
 
     private AlertDialog dialog; //알림 다이아로그
 
-    public static Uri uri; //프로필 사진 자료
+    private Uri uri; //프로필 사진 자료
 
     /////////////////////Frag1이였던 것//////////////////////////
 
     //금연한지 얼마나 됬는지 날짜 값
-    public static long finallyDateTime;
+    private long finallyDateTime;
 
     //Quest1에서 가져온 담배 핀 횟수와 비용 EditText
     /**
      * 이 카운트와 코스트는 다음에 값 전달하기
      */
-    public static long cigaCount;
-    public static double cigaCost; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
+    private long cigaCount;
+    private long cigaCost; //이건 1초에 나타나는 비용이 소수점까지 가므로, long으로 표기한다.
 
     //중요 지정했던 시간이다. 디비에 넣었다가 뺄 때, 몇초 지났는지 구별해주는 시간이다.
-    public static String dateTime;
-
+    private String dateTime;
 
     //하루를 기준으로 피는 담배양을 하루 24시간으로 나눈 시간. ex) 하루에 10개비를 피면 2시간 24분 마다 핀것이다. 여기서 2시간 24분의 값을 초로 나타낸 것이다.
-    public static long last_cigaCount;
-    public static double last_cigaCost;
+    private long last_cigaCount;
+    private double last_cigaCost;
 
     public static Uri dialogwithUri;
 
