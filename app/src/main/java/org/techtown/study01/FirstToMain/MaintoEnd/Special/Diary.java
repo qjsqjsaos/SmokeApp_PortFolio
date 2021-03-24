@@ -76,6 +76,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     private ViewPager2 viewPageSetUp;
 
     public static ArrayList<CalendarDay> calendarDayList; //캘린더 리스트 안에 내가 입력한 즉, 일기를 쓴(초록색표시) 날이 다 들어가 있음.
+    public static ArrayList<CalendarDay> deleteList; //삭제한 리스트 (붉은색표시)
 
     public static final SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
 
@@ -131,6 +132,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
         //일기 삭제 버튼
         delete_btn.setOnClickListener(v -> {
+
             reviceAlertD(); //삭제 다이얼로그 실행
         });
     }
@@ -147,9 +149,46 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                 });
         builder.setNegativeButton("예",
                 (dialog, which) -> {
-                    delete_Diary(); //업데이트 적용하기
+                    check_diary_when_delete(); //삭제할 때 해당 날짜에 일기가 있는지
                 });
         builder.show();
+    }
+
+
+    /** 삭제할 때 해당 날짜에 일기가 있는지 확인 후 삭제 메서드 실행(db연결)*/
+    private void check_diary_when_delete() {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+
+                    if (success) {
+                        //일기가 있다면
+                        delete_Diary(); //다이어리 삭제실행
+                    } else {//실패
+                        Toast.makeText(getContext(), "해당 날짜에 일기가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        getDiaryInfo_Request getDiaryInfo_Request = new getDiaryInfo_Request(HomeMain.num, startdate, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(getDiaryInfo_Request);
+
+        Log.d("올까?", String.valueOf(HomeMain.num));
+        Log.d("올까?", startdate);
     }
 
     /** 일기 삭제 하기 (db연결)*/
@@ -162,13 +201,15 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                 if (success) {
                     justFireBase_Delete(); //파이어베이스에 이미지도 같이 삭제
                     DiaryFrag.diaryFrag.setVisibility(View.GONE); //프래그먼트 임시적으로 없애기
-                    int length = jsonObject.length();
-                    countDiary.setText(": "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 줄게 만든다.)
-
+                    int length = jsonObject.length() -1 ;
+                    countDiary.setText(":  "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 줄게 만든다.)
                     calendarDayList.remove(startdate); //캘린더에서 값을 없애고,
-                    EventDecorator eventDecorator = new EventDecorator(Color.RED, calendarDayList); //삭제한 것은 빨간색으로 일시적으로
-                    materialCalendarView.addDecorator(eventDecorator);  //addDecrator과 addDecorator은 다르다. 전자는 하나만, 후자는 여러개의 색 속성을 변경한다.
-
+                    Log.d("스타트데이데이", startdate);
+                    //삭제 리스트에 넣어서 붉게 만든다.
+                    String year = startdate.substring(0,4); //받아온 연도 ex)2021
+                    String month = startdate.substring(5,7); //받아온 달 ex)02
+                    String dayofMonth = startdate.substring(8,10); //받아온 일 수 ex)25
+                    diaryWriteDate_delete(year, month, dayofMonth); //삭제 리스트에 추가
                     Toast.makeText(getContext(), "삭제를 완료했습니다.", Toast.LENGTH_SHORT).show();
                 } else {//실패
                     Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
@@ -195,7 +236,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     /** 일기 쓴 날짜 (이 곳에서 일기 쓴 날짜를 초록색 불로 표시해준다.) (날짜를 계속 넣어줘야함.) **/
 
     private void diaryWriteDate(String year, String month, String day) {
-
         //스트링을 인트로 형변환
         int yearR = Integer.parseInt(year);
         int monthR = Integer.parseInt(month);
@@ -210,8 +250,24 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
         EventDecorator eventDecorator = new EventDecorator(Color.rgb(10, 207, 32), calendarDayList); //색표시 이벤트 데코레이터 호출
         materialCalendarView.addDecorators(eventDecorator);
+    }
 
+    /** 일기 삭제한 날짜 (이 곳에서 일기 쓴 날짜를 붉은 불로 표시해준다.) 삭제한 날짜 모음 **/
+    private void diaryWriteDate_delete(String year, String month, String day) {
+        //스트링을 인트로 형변환
+        int yearR = Integer.parseInt(year);
+        int monthR = Integer.parseInt(month);
+        int newMonthR = monthR - 1; //달은 1빼준다.
+        int dayR = Integer.parseInt(day);
+        Log.d("캘린더리스트", String.valueOf(yearR));
 
+        //일기를 썼던 날짜리스트를 만든다.
+        deleteList = new ArrayList<>();
+        deleteList.add(CalendarDay.from(yearR, newMonthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
+        Log.d("캘린더리스트레드", String.valueOf(deleteList));
+
+        EventDecorator eventDecorator = new EventDecorator(Color.RED , deleteList); //색표시 이벤트 데코레이터 호출
+        materialCalendarView.addDecorators(eventDecorator);
     }
 
 
@@ -362,6 +418,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                         //파이어베이스에서 날짜에 맞는 사진 가져오기
                         getFireBaseProfileDiary(HomeMain.num, startdate);
 
+
                         //변수에 일기정보 담기(diaryFrag로 보내고, diaryFrag에서 ViewDiary로 보내기위해)
                         viewtitle = title;
                         viewMaintText = maintext;
@@ -405,8 +462,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     Log.d("어레이", String.valueOf(jsonObject));
                     boolean success = jsonObject.getBoolean("success");
                     if (success) {
-                        int length = jsonObject.length() - 1;
-                        countDiary.setText(": "+ length + "회"); //초록불 횟수 늘리기
+                        int length = jsonObject.length()-1;
+                        countDiary.setText(":  "+ length + "회"); //초록불 횟수 늘리기
                         Log.d("카운트다이어리3", String.valueOf(length));
                         for(int i = 0; i <= length; i++) { //있는 수만큼 반복문
                             String date = jsonObject.getString(String.valueOf(i));
