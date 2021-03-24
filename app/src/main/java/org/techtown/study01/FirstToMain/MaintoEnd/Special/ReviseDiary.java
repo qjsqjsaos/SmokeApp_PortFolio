@@ -11,6 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +41,8 @@ import org.techtown.study01.FirstToMain.register.CreateDiaryTable_Check;
 import org.techtown.study01.FirstToMain.register.Register;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ReviseDiary extends AppCompatActivity {
 
@@ -48,7 +52,7 @@ public class ReviseDiary extends AppCompatActivity {
     private ImageView inputImageR;
     private Button cancel_btnR, goRevise, defaultImage;
 
-    private String title, mainText, saveDate;
+    private String title, mainText;
 
     private static final int REQUEST_CODE = 0;
 
@@ -80,7 +84,30 @@ public class ReviseDiary extends AppCompatActivity {
 
         getData(); //전달받은 데이터 적용하기
 
+        textChanger(); //글자수 변경
 
+    }
+
+    /**글자수 표시*/
+    private void textChanger() {
+        mainTextR.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //글자 갯수가 변할 때 메서드 실행
+                String input = mainTextR.getText().toString();
+                textChanger.setText(input.length() + "/1000");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     /**
@@ -213,11 +240,21 @@ public class ReviseDiary extends AppCompatActivity {
         Intent intent = getIntent();
         title = intent.getStringExtra("title"); //제목
         mainText = intent.getStringExtra("mainText"); //본문
-        saveDate = intent.getStringExtra("savedate"); //날짜
+        String mainlength = intent.getStringExtra("mainlength"); //글자 수
         titleR.setText(title); //제목에 삽입
         mainTextR.setText(mainText); //본문에 삽입
+        textChanger.setText(mainlength + "/1000");
+
         Glide.with(getApplicationContext()).load(Diary.uri).into(inputImageR); //첫 이미지 삽입
-        dateRR.setText(saveDate); //일기 쓰는 날짜
+
+        if(ViewDiary.saveDateV == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
+            SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
+            Date time = new Date();
+            String todayDate = FORMATTER.format(time);
+            dateRR.setText("날짜 : " + todayDate); //날짜값넣기
+        }else { //아니면 가져온 날짜 넣기
+            dateRR.setText("날짜 : " + ViewDiary.saveDateV);
+        }
     }
 
     /**

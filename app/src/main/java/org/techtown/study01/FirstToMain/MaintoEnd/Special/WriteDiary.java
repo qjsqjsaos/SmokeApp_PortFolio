@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +47,7 @@ public class WriteDiary extends AppCompatActivity {
     public static Button inputImage, cancel_btn_diary, saveDiary, defaultImageW;
     public static ImageView inputImgeReal; //첨부파일 미리보기
     public static TextView dateWW;
+    public static TextView liveTextLength;
 
     public static String title, mainText;
 
@@ -56,14 +59,48 @@ public class WriteDiary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_diary);
 
+        if(ViewDiary.saveDateV == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
+            SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
+            Date time = new Date();
+            String todayDate = FORMATTER.format(time);
+            dateWW.setText("날짜 : " + todayDate); //날짜값넣기
+        }else { //아니면 가져온 날짜 넣기
+            dateWW.setText("날짜 : " + ViewDiary.saveDateV);
+        }
+
+        textChanger(); //글자 수 표시
+
         setInit(); //참조정리
 
         buttonListener(); //버튼 리스너 모음
     }
 
+    /**글자수 표시*/
+    private void textChanger() {
+        mainText_diary.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //글자 갯수가 변할 때 메서드 실행
+                String input = mainText_diary.getText().toString();
+                liveTextLength.setText(input.length() + "/1000");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
 
     /**참조 정리 */
     private void setInit() {
+        liveTextLength = findViewById(R.id.liveTextLength); //텍스트뷰 글자수 표시
         title_diary = findViewById(R.id.title_diary); //일기 제목
         mainText_diary = findViewById(R.id.mainText); //일기 본문
         inputImage = findViewById(R.id.inputImage); //이미지 첨부 버튼
@@ -103,7 +140,14 @@ public class WriteDiary extends AppCompatActivity {
                 });
 
                 //이미지 없음 버튼
-                defaultImageW.setOnClickListener(new Vie);
+                defaultImageW.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Diary.uri = null; //널값을 주어 이미지가 없게 하기
+                        inputImgeReal.setImageResource(R.drawable.no_image); //기본이미지 값 우선 넣어주기
+                        ViewDiary.viewLayout.setVisibility(View.GONE); //리니어 레이아웃도 일시적으로 없애기
+                    }
+                });
 
                 //일기 취소 버튼 누를때
                 cancel_btn_diary.setOnClickListener(new View.OnClickListener() {

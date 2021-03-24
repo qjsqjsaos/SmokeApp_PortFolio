@@ -29,6 +29,7 @@ public class ViewDiary extends AppCompatActivity {
     public static TextView viewDate, viewMainText, viewTitle;
     public static ImageView viewImage;
     public static LinearLayout viewLayout;
+    public static String saveDateV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +49,15 @@ public class ViewDiary extends AppCompatActivity {
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
         String mainText = intent.getStringExtra("mainText");
-        String saveDate = intent.getStringExtra("saveDate");
+        saveDateV = intent.getStringExtra("saveDate");
 
-        if(saveDate == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
+        if(saveDateV == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
             SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
             Date time = new Date();
             String todayDate = FORMATTER.format(time);
             viewDate.setText("작성 일자 : " + todayDate); //날짜값넣기
         }else { //아니면 가져온 날짜 넣기
-            viewDate.setText("작성 일자 : " + saveDate);
+            viewDate.setText("작성 일자 : " + saveDateV);
         }
 
         if(title != null || mainText != null) { //null처리 해주고,
@@ -113,10 +114,13 @@ public class ViewDiary extends AppCompatActivity {
                         //수정할 부분 추출
                         String title = viewTitle.getText().toString();
                         String maintext = viewMainText.getText().toString();
+                        String mainlength = String.valueOf(maintext.length());
+
                         Intent intent = new Intent(getApplicationContext(), ReviseDiary.class); //수정하러 이동하기
                         intent.putExtra("title", title); //제목
                         intent.putExtra("mainText", maintext); //본문
                         intent.putExtra("saveDate", Diary.startdate); //날짜
+                        intent.putExtra("mainlength", mainlength); //글자 길이
                         startActivity(intent);
                     }
                 });
