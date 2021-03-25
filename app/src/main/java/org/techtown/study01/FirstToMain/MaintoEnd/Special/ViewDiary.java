@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.List.DiaryInfo_GetterSetter;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.List.RecyclerMain;
 import org.techtown.study01.FirstToMain.R;
 
 import java.text.SimpleDateFormat;
@@ -46,11 +48,9 @@ public class ViewDiary extends AppCompatActivity {
 
         getIntentValue(); //기본 미리보기용
 
-
-
-            if (Diary.uri != null) {
-                Glide.with(getApplicationContext()).load(Diary.uri).into(viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
-            }
+        if (Diary.uri != null) {
+            Glide.with(getApplicationContext()).load(Diary.uri).into(viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기 (수정후에)
+        }
 
     }
 

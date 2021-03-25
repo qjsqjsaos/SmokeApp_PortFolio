@@ -1,5 +1,6 @@
 package org.techtown.study01.FirstToMain.MaintoEnd.Special.List;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import org.techtown.study01.FirstToMain.R;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> implements OnDiaryItemClickListener{
 
@@ -88,6 +93,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         private TextView recyclerTitle; //금연 제목
         private TextView recyclerDate; //금연 몇일차
+        public static CircleImageView circleImage; //일기 사진
 
 
         //생성자에서 참조
@@ -97,6 +103,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             //뷰홀더의 생성자에 전달되는 뷰 객체에 들어있는 텍스트 뷰를 참조한다.
             recyclerTitle = itemView.findViewById(R.id.recyclerTitle);
             recyclerDate = itemView.findViewById(R.id.recyclerDate);
+            circleImage = itemView.findViewById(R.id.circleImage);
 
             //리사일러뷰 클릭시
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -113,8 +120,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
         public void setItem (DiaryInfo_GetterSetter diaryInfo_getterSetter){
+            Context context = diaryInfo_getterSetter.getContext(); //컨텍스트 가지고 오기(글라이드 이미지를 위해)
             recyclerTitle.setText(diaryInfo_getterSetter.getR_title());
             recyclerDate.setText(diaryInfo_getterSetter.getR_writeDate());
+            Glide.with(context).load(diaryInfo_getterSetter.getR_uri()).into(circleImage);
         }
     }
 }
