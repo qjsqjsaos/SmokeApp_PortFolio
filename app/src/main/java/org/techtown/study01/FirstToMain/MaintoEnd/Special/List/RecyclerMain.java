@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.DiaryFrag;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.ViewDiary;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.delete_Diary_request;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryDate_Request;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryInfo_Request;
@@ -108,15 +110,17 @@ public class RecyclerMain extends AppCompatActivity {
 
                 boolean success = jsonObject.getBoolean("success");
                 if (success) {
-                    String title = jsonObject.getString("title"); //타이틀 가져오기
+                    String title = jsonObject.getString("title"); //타이틀 가오기
+                    String mainText = jsonObject.getString("maintext"); //내용 가져오기
+                    //RecyclerMain으로 이동,
+                   Intent intent = new Intent(getApplication(), ViewDiary.class);
+                   intent.putExtra("Rtitle", title);
+                   intent.putExtra("Rmaintext", mainText);
+                   intent.putExtra("Rdate", date);
+                   startActivity(intent);
 
-                    item.add(new DiaryInfo_GetterSetter(title, date));
-                    //리사이클러뷰 어뎁터 설정으로 마무리
-                    adapter.setItems(item);
-                    recyclerView.setAdapter(adapter);
-
-                    Log.d("베이베베이베2", title);
-                    Log.d("베이베베이베2", date);
+                    Log.d("마지막리사이클", title);
+                    Log.d("마지막리사이클", mainText);
 
                 } else {//실패
                     Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();

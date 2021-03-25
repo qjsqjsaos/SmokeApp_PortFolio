@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,8 @@ public class ViewDiary extends AppCompatActivity {
     public static ImageView viewImage;
     public static LinearLayout viewLayout;
     public static String saveDateV;
+    private String title, mainText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,24 +41,39 @@ public class ViewDiary extends AppCompatActivity {
         setContentView(R.layout.view_diary);
 
         setInit();//참조하기
-        clickListener(); //클릭리스너들
-        acceptInfo(); //다이어리 정보 적용
 
-        if(Diary.uri != null) {
-            Glide.with(getApplicationContext()).load(Diary.uri).into(viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
+        clickListener(); //클릭리스너들
+
+        getIntentValue(); //기본 미리보기용
+
+
+
+            if (Diary.uri != null) {
+                Glide.with(getApplicationContext()).load(Diary.uri).into(viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
+            }
+
+    }
+
+    /**인텐트 널체크 및 구분*/
+    private void getIntentValue() {
+        Intent intent = getIntent();
+        if(!TextUtils.isEmpty(intent.getStringExtra("Rtitle"))){ //인텐트 널체크 만약 Rtitle이라는 글자가 안비어 있다면,
+            title = intent.getStringExtra("Rtitle");
+            mainText = intent.getStringExtra("RmainText");
+            saveDateV = intent.getStringExtra("Rdate");
+            acceptInfo(); //다이어리 정보 적용
+        }else{//만약 일반 다이어리에서 넘어왔다면, 아래를 실행시킨다.
+            title = intent.getStringExtra("title");
+            mainText = intent.getStringExtra("mainText");
+            saveDateV = intent.getStringExtra("saveDate");
+            acceptInfo(); //다이어리 정보 적용
         }
     }
+
+
+
     /**다이어리 정보 적용*/
     private void acceptInfo() {
-        //DiaryFrag에서 받기
-        Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        String mainText = intent.getStringExtra("mainText");
-        saveDateV = intent.getStringExtra("saveDate");
-
-        Log.d("뷰뷰뷰", title);
-        Log.d("뷰뷰뷰", mainText);
-
         if(saveDateV == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
             SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
             Date time = new Date();
