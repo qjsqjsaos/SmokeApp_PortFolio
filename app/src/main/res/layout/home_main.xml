@@ -12,10 +12,10 @@
         android:background="@drawable/home_and_another_background"
         android:orientation="vertical">
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,12 +23,19 @@
             android:background="@drawable/home_and_another_background"
             android:gravity="center|center_vertical"
             android:orientation="horizontal"
+            android:weightSum="10"
             >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
 
             <LinearLayout
                 android:elevation="10dp"
                 android:id="@+id/card"
-                android:layout_width="300dp"
+                android:layout_width="0dp"
+                android:layout_weight="8"
                 android:layout_height="75dp"
                 android:background="@drawable/all_btn"
                 android:clickable="false"
@@ -106,23 +113,44 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="245dp"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/text_wisesay"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
+            android:layout_weight="8"
             android:padding="13dp"
             android:layout_height="220dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/wisesay_settings"
             android:elevation="10dp"
             android:fontFamily="@font/mapo"
             android:gravity="center"
             android:lineSpacingMultiplier="1.2"
-            android:text="안녕하세요아안녕하세요아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아\n\n- 수열 -"
             android:textColor="@color/textColor_special"
             android:textSize="17sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
 
 
 

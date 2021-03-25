@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MaintoEnd.Special.ReviseDiary"></activity>
+        <activity android:name=".MaintoEnd.Special.List.RecyclerMain"></activity>
+        <activity android:name=".MaintoEnd.Special.ReviseDiary" />
         <activity android:name=".MaintoEnd.Special.WriteDiary" />
         <activity android:name=".MaintoEnd.Special.ViewDiary" />
         <activity android:name=".MaintoEnd.Special.DiaryFrag" /> <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->

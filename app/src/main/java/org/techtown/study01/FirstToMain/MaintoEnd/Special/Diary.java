@@ -155,6 +155,12 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
             reviceAlertD(); //삭제 다이얼로그 실행
         });
+
+        //일기 전체보기 버튼
+        showAll_btn.setOnClickListener(v -> {
+
+            // TODO: 2021-03-25 제목이랑 날짜 RecyclerMain으로 보내기 
+        });
     }
 
     /**일기 삭제하기 다이얼로그 */
