@@ -584,7 +584,7 @@ public class HomeMain extends Fragment {
                         Log.d("시가카운트", String.valueOf(cigaCount));
 
                         //하루 담배값 계산
-                        last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+                        last_cigaCost = cigaCost / 86400d; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
                         Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
                         Log.d("시가코스트", String.valueOf(cigaCost));
 
@@ -1005,7 +1005,7 @@ public class HomeMain extends Fragment {
         Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
 
         //하루 담배값 계산
-        last_cigaCost = cigaCost / 86400; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
+        last_cigaCost = cigaCost / 86400d; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
         Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
 
         //스트링열 원하는 부분 제거
