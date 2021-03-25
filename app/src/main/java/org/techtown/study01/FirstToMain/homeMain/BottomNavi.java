@@ -1,5 +1,6 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -265,6 +266,7 @@ public class BottomNavi extends AppCompatActivity {
 
 
         // TODO: 2021-03-16 존나 중요!! 파이어베이스
+        @SuppressLint("NewApi")
         private void checkVersion() {
             /**나중에 해두기 업데이트 체크 부분 위에도*/
             try {

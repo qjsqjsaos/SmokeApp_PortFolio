@@ -56,7 +56,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     private Button dialogPlusButton , delete_btn, showAll_btn;
 
     public static Uri uri;
-    private Loading_Dialog loading_dialog;
     public static TextView countDiary;
 
     public static String viewtitle = null;
@@ -446,18 +445,14 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
                     } else {//실패
                         DiaryFrag.diaryFrag.setVisibility(View.INVISIBLE); //diaryFrag보여주기
-                        return;
+
                     }
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
-                    return;
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
-                    return;
+
                 }
             }
         };
@@ -503,11 +498,11 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    return;
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
-                    return;
+
                 }
             }
         };
@@ -564,22 +559,22 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                             startActivity(intent);
                         }else{ //오늘 날짜가 아니면,
                             Toast.makeText(getContext(), "현재 날짜에서 일기 작성이 가능합니다.", Toast.LENGTH_SHORT).show();
-                            return;
+
                         }
                     } else { //일기가 존재함
                         Toast.makeText(getContext(), "선택 날짜에 일기가 존재합니다.", Toast.LENGTH_SHORT).show();
-                        return;
+
                     }
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.4", Toast.LENGTH_SHORT).show();
-                    return;
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.5", Toast.LENGTH_SHORT).show();
-                    return;
+
                 }
             }
         };
@@ -590,16 +585,5 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         Log.d("스타트데이트2", startdate);
     }
 
-
-    /**
-     * 로딩창
-     */
-    public void loadingStart() {
-        loading_dialog = new Loading_Dialog(getContext());
-        loading_dialog.setCanceledOnTouchOutside(false);
-        loading_dialog.setCancelable(false); //뒤로가기방지
-        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        loading_dialog.show();
-    }
 
 }

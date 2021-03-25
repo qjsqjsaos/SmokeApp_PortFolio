@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryDate_Request;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryInfo_Request;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
+import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 
 import java.util.ArrayList;
 
@@ -34,11 +36,15 @@ public class RecyclerMain extends AppCompatActivity {
     private RecyclerAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<DiaryInfo_GetterSetter> item = new ArrayList<>();
+    private Loading_Dialog loading_dialog;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_main);
+        loadingStart();//로딩창
 
         recyclerView = findViewById(R.id.recyclerView);
 
@@ -59,6 +65,7 @@ public class RecyclerMain extends AppCompatActivity {
             }
         });
 
+        loading_dialog.dismiss(); //로딩창끄기
 
     }
 
@@ -80,17 +87,21 @@ public class RecyclerMain extends AppCompatActivity {
 
                         Log.d("베이베베이베2", title);
                         Log.d("베이베베이베2", date);
+                        loading_dialog.dismiss(); //로딩창끄기
 
                     } else {//실패
                         Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        loading_dialog.dismiss(); //로딩창끄기
                     }
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    loading_dialog.dismiss(); //로딩창끄기
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    loading_dialog.dismiss(); //로딩창끄기
                 }
             };
 
@@ -115,10 +126,9 @@ public class RecyclerMain extends AppCompatActivity {
                     //RecyclerMain으로 이동,
                    Intent intent = new Intent(getApplication(), ViewDiary.class);
                    intent.putExtra("Rtitle", title);
-                   intent.putExtra("Rmaintext", mainText);
+                   intent.putExtra("RmainText", mainText);
                    intent.putExtra("Rdate", date);
                    startActivity(intent);
-
                     Log.d("마지막리사이클", title);
                     Log.d("마지막리사이클", mainText);
 
@@ -161,14 +171,17 @@ public class RecyclerMain extends AppCompatActivity {
 
                 } else {//실패
                     Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    loading_dialog.dismiss(); //로딩창끄기
                 }
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
+                loading_dialog.dismiss(); //로딩창끄기
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                loading_dialog.dismiss(); //로딩창끄기
             }
         };
 
@@ -177,4 +190,15 @@ public class RecyclerMain extends AppCompatActivity {
         queue.add(getDiaryDate_request);
 
     }
+    /**
+     * 로딩창
+     */
+    public void loadingStart() {
+        loading_dialog = new Loading_Dialog(RecyclerMain.this);
+        loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.setCancelable(false); //뒤로가기방지
+        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading_dialog.show();
+    }
+
 }
