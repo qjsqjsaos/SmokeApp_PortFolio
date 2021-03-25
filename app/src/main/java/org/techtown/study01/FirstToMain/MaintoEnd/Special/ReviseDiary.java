@@ -57,6 +57,8 @@ public class ReviseDiary extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 0;
 
+    private Uri file;
+
     //로딩창 띄우기
     private Loading_Dialog loading_dialog;
 
@@ -86,8 +88,6 @@ public class ReviseDiary extends AppCompatActivity {
         getData(); //전달받은 데이터 적용하기
 
         textChanger(); //글자수 변경
-
-        inputImageR.setImageResource(R.drawable.no_image); //기본 이미지를 처음에 넣어준다.
 
     }
 
@@ -157,6 +157,27 @@ public class ReviseDiary extends AppCompatActivity {
         });
     }
 
+    /**일기 이미지 다운로드해서 가져오기 메서드 */
+    private void downloadDiaryImage(int num, String date) {
+        createDir(num); //디렉토리가 없으면 만든다.
+        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고, //다운로드는 주소를 넣는다.
+        StorageReference storageRef = storage.getReference();//스토리지를 참조한다
+        storageRef.child("diary_photo/num" + num + "/" + "DP" + "_" + date +".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d("매맨", String.valueOf(uri));
+                Glide.with(getBaseContext()).load(uri).into(inputImageR);
+                file = uri; //ViewDiary로 uri보내기
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                inputImageR.setImageResource(R.drawable.no_image); //실패시 기본이미지
+                Diary.uri = null; //uri에 널값을 주어 viewDairy에도 기본이미지가 보이게 한다.
+            }
+        });
+    }
+
 
     // TODO: 2021-03-16 우선 파이어베이스 저장하는 법
     /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제
@@ -170,27 +191,11 @@ public class ReviseDiary extends AppCompatActivity {
         //파일명을 만들자.
         //여기서 DP는 다이어리 포토에 줄임말이다.
         String filename = "DP"+ "_" +startdate +".jpg";  //ex) DP_2019-02-21.jpg 해당 날짜 값으로만 식별한다.(어차피 디렉토리로 분류로 나누었기 때문에 이정도 식별로 충분하다)
-        Uri file = Diary.uri;
+        file = Diary.uri;
         Log.d("잘들어오고있지?", String.valueOf(Diary.uri));
+        Log.d("잘들어오고있지?", String.valueOf(file));
 
 
-        if(Diary.uri == null) { //uri값이 없으면 기본이미지로 저장한다.
-            DiaryFrag.diaryImage.setImageResource(R.drawable.no_image);
-            // TODO: 삭제만하고, 리턴 이 경우는 사진 값이 없을 때, 기본이미지 저장을 위험이다.
-            // Create a reference to the file to delete
-            StorageReference desertRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename); //삭제할 프로필이미지 명
-            // Delete the file
-            desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            });
-            return;
-        }else {
             //여기서 원하는 이름 넣어준다. (filename 넣어주기)
             StorageReference riversRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename);
             UploadTask uploadTask = riversRef.putFile(file);
@@ -221,7 +226,6 @@ public class ReviseDiary extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 }
             });
-        }
     }
 
 
@@ -245,11 +249,11 @@ public class ReviseDiary extends AppCompatActivity {
         title = intent.getStringExtra("title"); //제목
         mainText = intent.getStringExtra("mainText"); //본문
         String mainlength = intent.getStringExtra("mainlength"); //글자 수
+        String saveDateV = intent.getStringExtra("saveDate"); //날짜
         titleR.setText(title); //제목에 삽입
         mainTextR.setText(mainText); //본문에 삽입
         textChanger.setText(mainlength + "/1000");
 
-        Glide.with(getApplicationContext()).load(Diary.uri).into(inputImageR); //첫 이미지 삽입
 
         if(ViewDiary.saveDateV == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
             SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
@@ -257,8 +261,9 @@ public class ReviseDiary extends AppCompatActivity {
             String todayDate = FORMATTER.format(time);
             dateRR.setText("날짜 : " + todayDate); //날짜값넣기
         }else { //아니면 가져온 날짜 넣기
-            dateRR.setText("날짜 : " + ViewDiary.saveDateV);
+            dateRR.setText("날짜 : " + saveDateV);
         }
+        downloadDiaryImage(HomeMain.num, saveDateV); //
     }
 
     /**
@@ -268,8 +273,8 @@ public class ReviseDiary extends AppCompatActivity {
         //날짜로 식별해서 수정한다.
         loadingStart(); //로딩창 띄우기
         //새로 입력한 값 가져오기
-        String titleC = titleR.getText().toString();
-        String mainTextC = mainTextR.getText().toString();
+        String titleC = titleR.getText().toString() + "";
+        String mainTextC = mainTextR.getText().toString() + "";
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
 
@@ -296,6 +301,7 @@ public class ReviseDiary extends AppCompatActivity {
                             ViewDiary.viewLayout.setVisibility(View.VISIBLE);
                         }else { //아니면 없애기
                             Glide.with(getApplicationContext()).load(R.drawable.no_image).into(DiaryFrag.diaryImage); //이미지가 없으면 기본이미지를 넣는다.
+                            ViewDiary.viewLayout.setVisibility(View.GONE);
                         }
                         Toast.makeText(getApplicationContext(), "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     } else { //수정 실패

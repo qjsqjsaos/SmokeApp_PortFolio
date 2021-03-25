@@ -11,18 +11,6 @@ import java.util.TimeZone;
 
 public class Calculate_Date {
 
-    public String WhatTimeIsItAll() { //전체 다
-        //현재 시간을 나타내는 메서드
-        long now = System.currentTimeMillis();
-
-        Date mDate = new Date(now);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String getAll = simpleDateFormat.format(mDate); //스트링 형태로 현재 날짜 시간을 가져옴.
-
-        return getAll;
-    }
-
-
     public String WhatTimeIsItDate() { //날짜만
         //현재 시간을 나타내는 메서드
         long now = System.currentTimeMillis();

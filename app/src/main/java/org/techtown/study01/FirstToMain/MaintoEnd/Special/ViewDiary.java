@@ -48,9 +48,7 @@ public class ViewDiary extends AppCompatActivity {
 
         getIntentValue(); //기본 미리보기용
 
-        if (Diary.uri != null) {
-            Glide.with(getApplicationContext()).load(Diary.uri).into(viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기 (수정후에)
-        }
+
 
     }
 
@@ -62,11 +60,23 @@ public class ViewDiary extends AppCompatActivity {
             mainText = intent.getStringExtra("RmainText");
             saveDateV = intent.getStringExtra("Rdate");
             acceptInfo(); //다이어리 정보 적용
+            if (RecyclerMain.uriR != null) {
+                Glide.with(getApplicationContext()).load(RecyclerMain.uriR).into(viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기 (수정후에)
+            }else { //uriR에 값이 없으면// 서버에 이미지만 없다는 뜻이다.
+                viewLayout.setVisibility(View.GONE); //이미지뷰 가리기
+            }
+
         }else{//만약 일반 다이어리에서 넘어왔다면, 아래를 실행시킨다.
             title = intent.getStringExtra("title");
             mainText = intent.getStringExtra("mainText");
             saveDateV = intent.getStringExtra("saveDate");
             acceptInfo(); //다이어리 정보 적용
+            if (Diary.uri != null) {
+                Glide.with(getApplicationContext()).load(Diary.uri).into(viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기 (수정후에)
+            }else { //uri에 값이 없으면// 서버에 이미지만 없다는 뜻이다.
+                viewLayout.setVisibility(View.GONE); //이미지뷰 가리기
+            }
+
         }
     }
 
@@ -87,11 +97,6 @@ public class ViewDiary extends AppCompatActivity {
             viewMainText.setText(mainText);
 
 
-        if(Diary.uri == null){ //uri에 값이 없으면// 서버에 이미지만 없다는 뜻이다.
-            viewLayout.setVisibility(View.GONE); //이미지뷰 가리기
-        }else{ //이미지가 있으면 이미지를 넣어준다.
-            Glide.with(getApplicationContext()).load(Diary.uri).into(viewImage); //이미지 넣기
-        }
 
     }
 

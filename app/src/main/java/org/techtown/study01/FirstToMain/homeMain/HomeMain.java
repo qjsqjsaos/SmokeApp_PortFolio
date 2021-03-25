@@ -201,6 +201,14 @@ public class HomeMain extends Fragment {
 
         }
 
+    /**
+     * 혹시나 로딩창이 있다면 종료해주기
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        loading_dialog.cancel();
+    }
 
     /**
      * 프로필 사진 갤러리에 요청시에 값을 여기서 받고 프로필 사진란에 이미지를 넣어준다.
@@ -286,7 +294,7 @@ public class HomeMain extends Fragment {
             @Override
             public void onSuccess(Uri uri) {
                 Log.d("오냐오냐", String.valueOf(uri));
-                Glide.with(getContext()).load(uri).into(userView);
+                Glide.with(requireContext()).load(uri).into(userView);
                 dialogwithUri = uri; //첫 다이얼로그 프로필 보여주기
             }
         }).addOnFailureListener(new OnFailureListener() {

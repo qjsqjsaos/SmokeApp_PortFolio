@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class RecyclerMain extends AppCompatActivity {
@@ -42,7 +44,12 @@ public class RecyclerMain extends AppCompatActivity {
     private Loading_Dialog loading_dialog;
     public static Uri uriR;
 
-
+    /** 화면 안보일때 로딩창 켜져있으면 제거*/
+        @Override
+        protected void onStop() {
+            super.onStop();
+            loading_dialog.cancel();
+        }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,6 +208,7 @@ public class RecyclerMain extends AppCompatActivity {
     /**일기 이미지 다운로드해서 가져오기 메서드
      */
     private void downloadDiaryImage(int num, String date) {
+        createDir(num);
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고, //다운로드는 주소를 넣는다.
         StorageReference storageRef = storage.getReference();//스토리지를 참조한다
         storageRef.child("diary_photo/num" + num + "/" + "DP" + "_" + date +".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -216,6 +224,17 @@ public class RecyclerMain extends AppCompatActivity {
                 getDairyInfo(date, uriR);  //모든 컬럼날짜 전달
             }
         });
+    }
+
+    /**디렉토리 만들기(혹시 없을경우 대비해서) = 파이어베이스 */
+    public void createDir(int num){
+        //우선 디렉토리 파일 하나만든다.
+        File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES + "diary_photo/num" + num + "/"); //이미지를 저장할 수 있는 디렉토리 ex)//diary_photo1(식별값)
+        //구분할 수 있게 /toolbar_images폴더에 넣어준다.
+        //이 파일안에 저 디렉토리가 있는지 확인
+        if (!file.isDirectory()) { //디렉토리가 없으면,
+            file.mkdir(); //디렉토리를 만든다.
+        }
     }
 
     /**

@@ -47,6 +47,12 @@ public class Login extends AppCompatActivity {
     private Loading_Dialog loading_dialog;
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        loading_dialog.cancel();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_fistpage);

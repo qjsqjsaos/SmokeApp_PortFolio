@@ -84,7 +84,6 @@ public class BottomNavi extends AppCompatActivity {
         private long newAppVersion = 1;
         public static long toolbarImgCount = 15;
 
-        Loading_Dialog loading_dialog;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
