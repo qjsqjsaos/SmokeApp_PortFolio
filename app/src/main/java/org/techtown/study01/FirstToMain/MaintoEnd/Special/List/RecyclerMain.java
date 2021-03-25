@@ -6,29 +6,171 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.DiaryFrag;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.delete_Diary_request;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryDate_Request;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryInfo_Request;
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.homeMain.HomeMain;
+
+import java.util.ArrayList;
 
 public class RecyclerMain extends AppCompatActivity {
+
+
+    private RecyclerAdapter adapter;
+    private RecyclerView recyclerView;
+    private ArrayList<DiaryInfo_GetterSetter> item = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
 
         //리사이클러뷰에 레이아웃 매니저 설정하기
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerAdapter adapter = new RecyclerAdapter();
+        adapter = new RecyclerAdapter();
+        getDairyAllDate(); //일기 리스트 생성
 
-        //어뎁터에 넣을 데이터 넣어주기
-        adapter.addItem(new DiaryInfo_GetterSetter("안녕", "1일차","2012-07-11"));
+        //리사이클러뷰 클릭시 액션
+        adapter.setOnDiaryItemClickListener(new OnDiaryItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerAdapter.ViewHolder holder, View view, int position) {
+                DiaryInfo_GetterSetter item = adapter.getItem(position);
+                String rDate = item.R_writeDate; //클릭한 뷰 날짜정보를 가져온다.
+                Log.d("리사이클러뷰", rDate);
+                getDairyInfoRecyclerView(rDate); //보내서 디비에서 정보를 가져온다.
+            }
+        });
 
 
-        //리사이클러뷰 어뎁터 설정으로 마무리
-        recyclerView.setAdapter(adapter);
+    }
+
+    /** 날짜를 통해 제목 정보 가져오기*/
+    private void getDairyInfo(String date) {
+
+            Response.Listener<String> responseListener = response -> {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) {
+                        String title = jsonObject.getString("title"); //타이틀 가져오기
+
+                        item.add(new DiaryInfo_GetterSetter(title, date));
+                        //리사이클러뷰 어뎁터 설정으로 마무리
+                        adapter.setItems(item);
+                        recyclerView.setAdapter(adapter);
+
+                        Log.d("베이베베이베2", title);
+                        Log.d("베이베베이베2", date);
+
+                    } else {//실패
+                        Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                }
+            };
+
+            getDiaryInfo_Request getDiaryInfo_request = new getDiaryInfo_Request(HomeMain.num, date, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(getApplication());
+            queue.add(getDiaryInfo_request);
+
+        }
+
+
+    /** 날짜를 통해 타이틀과 내용 정보 가져오기 (리사이클러뷰용)*/
+    private void getDairyInfoRecyclerView(String date) {
+
+        Response.Listener<String> responseListener = response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+                boolean success = jsonObject.getBoolean("success");
+                if (success) {
+                    String title = jsonObject.getString("title"); //타이틀 가져오기
+
+                    item.add(new DiaryInfo_GetterSetter(title, date));
+                    //리사이클러뷰 어뎁터 설정으로 마무리
+                    adapter.setItems(item);
+                    recyclerView.setAdapter(adapter);
+
+                    Log.d("베이베베이베2", title);
+                    Log.d("베이베베이베2", date);
+
+                } else {//실패
+                    Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        getDiaryInfo_Request getDiaryInfo_request = new getDiaryInfo_Request(HomeMain.num, date, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getApplication());
+        queue.add(getDiaryInfo_request);
+
+    }
+
+    /** 고유넘버 num을 통해 모든 날짜 컬럼 가져오기*/
+    private void getDairyAllDate() {
+
+        Response.Listener<String> responseListener = response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+                boolean success = jsonObject.getBoolean("success");
+                if (success) {
+                    int length = jsonObject.length()-1;
+                    for(int i = 0; i <= length; i++) { //있는 수만큼 반복문
+                        String date = jsonObject.getString(String.valueOf(i));
+                        Log.d("베이베베이베", String.valueOf(jsonObject.length()));
+                        Log.d("베이베베이베", date);
+                        //모든 컬럼날짜 전달
+                        getDairyInfo(date);
+                    }
+
+                } else {//실패
+                    Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        getDiaryDate_Request getDiaryDate_request = new getDiaryDate_Request(HomeMain.num, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getApplication());
+        queue.add(getDiaryDate_request);
+
     }
 }

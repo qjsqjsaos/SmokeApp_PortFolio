@@ -1,6 +1,5 @@
 package org.techtown.study01.FirstToMain.MaintoEnd.Special;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -14,12 +13,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,28 +30,21 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.List.RecyclerMain;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
 public class Diary extends Fragment implements OnDateSelectedListener {
 
@@ -82,6 +72,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     public static final SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
 
+
     /** 앱이 맨처음 실행될 때 최초 한번만*/
     @Override
     public void onAttach(@NonNull Context context) {
@@ -93,7 +84,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         //오늘 날짜 일기를 처음 보여준다.
         getDBDiaryInfo(todayDate); //오늘 날짜 일기 정보
     }
-
 
     @Nullable
     @Override
@@ -158,8 +148,9 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
         //일기 전체보기 버튼
         showAll_btn.setOnClickListener(v -> {
-
-            // TODO: 2021-03-25 제목이랑 날짜 RecyclerMain으로 보내기 
+            //recyclerView로 이동
+            Intent intent = new Intent(getActivity(), RecyclerMain.class);
+            startActivity(intent);
         });
     }
 
@@ -268,7 +259,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         int monthR = Integer.parseInt(month);
         int newMonthR = monthR - 1; //달은 1빼준다.
         int dayR = Integer.parseInt(day);
-        Log.d("캘린더리스트", String.valueOf(yearR));
 
         //일기를 썼던 날짜리스트를 만든다.
         calendarDayList = new ArrayList<>();
@@ -277,7 +267,10 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
         EventDecorator eventDecorator = new EventDecorator(Color.rgb(10, 207, 32), calendarDayList); //색표시 이벤트 데코레이터 호출
         materialCalendarView.addDecorators(eventDecorator);
+        Log.d("캘린더리스트2", String.valueOf(calendarDayList));
+
     }
+
 
     /** 일기 삭제한 날짜 (이 곳에서 일기 쓴 날짜를 붉은 불로 표시해준다.) 삭제한 날짜 모음 **/
     private void diaryWriteDate_delete(String year, String month, String day) {
@@ -502,6 +495,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                             String month = date.substring(5,7); //받아온 달 ex)02
                             String dayofMonth = date.substring(8,10); //받아온 일 수 ex)25
                             diaryWriteDate(year, month, dayofMonth); //있는 수만큼 날짜 초록색으로 만들기
+                            //인터페이스를 이용해 데이터 전달하기(날짜만)
                         }
 
                     }

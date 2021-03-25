@@ -5,12 +5,10 @@ package org.techtown.study01.FirstToMain.MaintoEnd.Special.List;
 public class DiaryInfo_GetterSetter {
 
     String R_title; //금연제목
-    String R_days; //금연 몇일차
     String R_writeDate; //금연 일기 쓴 날짜
 
-    public DiaryInfo_GetterSetter(String r_title, String r_days, String r_writeDate) { //생성자
+    public DiaryInfo_GetterSetter(String r_title, String r_writeDate) { //생성자
         this.R_title = r_title;
-        this.R_days = r_days;
         this.R_writeDate = r_writeDate;
     }
 
@@ -20,14 +18,6 @@ public class DiaryInfo_GetterSetter {
 
     public void setR_title(String r_title) {
         R_title = r_title;
-    }
-
-    public String getR_days() {
-        return R_days;
-    }
-
-    public void setR_days(String r_days) {
-        R_days = r_days;
     }
 
     public String getR_writeDate() {

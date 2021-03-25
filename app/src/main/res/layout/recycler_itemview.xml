@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         android:background="@drawable/home_and_another_background"
         android:gravity="center|center_vertical"
         android:orientation="horizontal"
@@ -22,7 +22,7 @@
             android:elevation="10dp"
             android:layout_width="0dp"
             android:layout_weight="8"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/all_btn"
             android:clickable="false"
             android:orientation="horizontal"
@@ -68,7 +68,7 @@
 
 
                 <TextView
-                    android:id="@+id/recyclerDays"
+                    android:id="@+id/recyclerDate"
                     android:textColor="@color/textColor"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -78,24 +78,6 @@
                     android:text="금연 몇 일차"
                     android:textSize="18sp" />
 
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:orientation="vertical"
-                android:gravity="top"
-                android:padding="5dp"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/recyclerWriteDate"
-                    android:textSize="14sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="2018-02-12"/>
 
             </LinearLayout>
 

@@ -3,6 +3,7 @@ package org.techtown.study01.FirstToMain.MaintoEnd.Special.List;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,10 +13,12 @@ import org.techtown.study01.FirstToMain.R;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> implements OnDiaryItemClickListener{
 
-    ArrayList<DiaryInfo_GetterSetter> items = new ArrayList<DiaryInfo_GetterSetter>();
+    private ArrayList<DiaryInfo_GetterSetter> items = new ArrayList<DiaryInfo_GetterSetter>();
     //DiaryInfo_GetterSetter에 들어있는 아이템들을 넣고, int로 꺼내주기 용이하게 ArrayList를 하나 만든다.
+
+    private OnDiaryItemClickListener onDiaryItemClickListener; //인테페이스
 
     //뷰홀더가 만들어질 때 호출
     @NonNull
@@ -28,7 +31,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         //인플레이션을 통해 뷰 객체를 만든다.
         View itemView = inflater.inflate(R.layout.recycler_itemview, viewGroup, false);
 
-        return new ViewHolder(itemView); //이 코드 제일 아래있는 ViewHolder 클래스에 있는 ViewHolder생성자에 아이템 뷰를 전달하고,
+        return new ViewHolder(itemView, this); //이 코드 제일 아래있는 ViewHolder 클래스에 있는 ViewHolder생성자에 아이템 뷰를 전달하고,
                                         //새로운 뷰홀더 객체를 만들어 반환한다.
     }
 
@@ -68,28 +71,50 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
 
+    //클릭리스너를 구현하기 위한 인터페이스 생성자
+   @Override
+    public void onItemClick(ViewHolder holder, View view, int position) {
+       if(onDiaryItemClickListener != null){
+           onDiaryItemClickListener.onItemClick(holder, view, position);
+       }
+    }
+    //클릭리스너를 구현하기 위한 인터페이스 생성자
+    public void setOnDiaryItemClickListener(OnDiaryItemClickListener onDiaryItemClickListener) {
+        this.onDiaryItemClickListener = onDiaryItemClickListener;
+    }
+
     //뷰홀더 (각 아이템을 보여줄 뷰를 이 뷰홀더에 담아두게 된다.)
     static class ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView recyclerTitle; //금연 제목
-        private TextView recyclerDays; //금연 몇일차
-        private TextView recyclerWriteDate; //금연 일기 쓴 날짜
+        private TextView recyclerDate; //금연 몇일차
+
 
         //생성자에서 참조
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnDiaryItemClickListener onDiaryItemClickListener) {
             super(itemView);
 
             //뷰홀더의 생성자에 전달되는 뷰 객체에 들어있는 텍스트 뷰를 참조한다.
             recyclerTitle = itemView.findViewById(R.id.recyclerTitle);
-            recyclerDays = itemView.findViewById(R.id.recyclerDays);
-            recyclerWriteDate = itemView.findViewById(R.id.recyclerWriteDate);
+            recyclerDate = itemView.findViewById(R.id.recyclerDate);
+
+            //리사일러뷰 클릭시
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(onDiaryItemClickListener != null) {
+                        onDiaryItemClickListener.onItemClick(ViewHolder.this, v, position);
+                    }
+                }
+
+            });
         }
 
 
         public void setItem (DiaryInfo_GetterSetter diaryInfo_getterSetter){
             recyclerTitle.setText(diaryInfo_getterSetter.getR_title());
-            recyclerDays.setText(diaryInfo_getterSetter.getR_days());
-            recyclerWriteDate.setText(diaryInfo_getterSetter.getR_writeDate());
+            recyclerDate.setText(diaryInfo_getterSetter.getR_writeDate());
         }
     }
 }
