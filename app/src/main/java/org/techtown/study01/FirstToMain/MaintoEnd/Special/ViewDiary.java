@@ -1,5 +1,6 @@
 package org.techtown.study01.FirstToMain.MaintoEnd.Special;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -18,11 +20,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.List.DiaryInfo_GetterSetter;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.List.RecyclerMain;
 import org.techtown.study01.FirstToMain.R;
+import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -62,10 +70,10 @@ public class ViewDiary extends AppCompatActivity {
             mainText = intent.getStringExtra("RmainText");
             saveDateV = intent.getStringExtra("Rdate");
             acceptInfo(); //다이어리 정보 적용
-            if (RecyclerMain.uriR != null) {
-                Glide.with(getApplicationContext()).load(RecyclerMain.uriR).into(viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기 (수정후에)
-            }else { //uriR에 값이 없으면// 서버에 이미지만 없다는 뜻이다.
-                viewLayout.setVisibility(View.GONE); //이미지뷰 가리기
+            if (saveDateV != null) { //날짜 값이 있으면
+                downloadDiaryImage(HomeMain.num, saveDateV);
+            }else{
+                Toast.makeText(this, "날짜 값 오류입니다.. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
             }
 
         }else{//만약 일반 다이어리에서 넘어왔다면, 아래를 실행시킨다.
@@ -144,7 +152,7 @@ public class ViewDiary extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), ReviseDiary.class); //수정하러 이동하기
                         intent.putExtra("title", title); //제목
                         intent.putExtra("mainText", maintext); //본문
-                        intent.putExtra("saveDate", Diary.startdate); //날짜
+                        intent.putExtra("saveDate", saveDateV); //날짜
                         intent.putExtra("mainlength", mainlength); //글자 길이
                         startActivity(intent);
                     }
@@ -162,5 +170,37 @@ public class ViewDiary extends AppCompatActivity {
         viewMainText = findViewById(R.id.viewMainText); //본문 내용
         viewTitle = findViewById(R.id.viewTitle); //본문 제목
         viewImage = findViewById(R.id.viewImage); //본문 이미지
+    }
+
+    /**일기 이미지 다운로드해서 가져오기 메서드 */
+    private void downloadDiaryImage(int num, String date) {
+        createDir(num); //디렉토리 없으면 만들기
+        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고, //다운로드는 주소를 넣는다.
+        StorageReference storageRef = storage.getReference();//스토리지를 참조한다
+        storageRef.child("diary_photo/num" + num + "/" + "DP" + "_" + date +".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d("매맨", String.valueOf(uri));
+                Glide.with(getApplication()).load(uri).into(viewImage);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                //이미지 불러오기 실패면 이미지가 없다는 뜻이다. 이미지뷰를 가려준다.
+                viewLayout.setVisibility(View.GONE); //이미지뷰 가리기
+            }
+        });
+    }
+
+    /**디렉토리 만들기(혹시 없을경우 대비해서) = 파이어베이스 */
+    public void createDir(int num){
+        //우선 디렉토리 파일 하나만든다.
+        File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES + "diary_photo/num" + num + "/"); //이미지를 저장할 수 있는 디렉토리 ex)//diary_photo1(식별값)
+        //구분할 수 있게 /toolbar_images폴더에 넣어준다.
+        //이 파일안에 저 디렉토리가 있는지 확인
+        if (!file.isDirectory()) { //디렉토리가 없으면,
+            file.mkdir(); //디렉토리를 만든다.
+        }
     }
 }

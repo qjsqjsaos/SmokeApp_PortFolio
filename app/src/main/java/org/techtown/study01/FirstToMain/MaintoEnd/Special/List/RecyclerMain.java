@@ -57,8 +57,6 @@ public class RecyclerMain extends AppCompatActivity {
         setContentView(R.layout.recycler_main);
         loadingStart();//로딩창
 
-
-
         recyclerView = findViewById(R.id.recyclerView);
 
         //리사이클러뷰에 레이아웃 매니저 설정하기
@@ -143,7 +141,7 @@ public class RecyclerMain extends AppCompatActivity {
                    intent.putExtra("RmainText", mainText);
                    intent.putExtra("Rdate", date);
                    startActivity(intent);
-                   finish(); //업데이트 할 걸 우려해서 꺼버리기
+//                   finish(); //업데이트 할 걸 우려해서 꺼버리기
                     Log.d("마지막리사이클", title);
                     Log.d("마지막리사이클", mainText);
 

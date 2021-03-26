@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONObject;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.List.RecyclerMain;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
@@ -53,6 +57,8 @@ public class ReviseDiary extends AppCompatActivity {
     private boolean uriValue = true;
 
     private static final int REQUEST_CODE = 0;
+
+    private String saveDateV;
 
 
     //로딩창 띄우기
@@ -273,24 +279,27 @@ public class ReviseDiary extends AppCompatActivity {
     private void getData() {
         // TODO: 2021-03-23 여기 있는 거 전역변수로 넣고, 수정 기능 만들기 이거 다음으로 삭제 기능 만들기
         Intent intent = getIntent();
-        title = intent.getStringExtra("title"); //제목
-        mainText = intent.getStringExtra("mainText"); //본문
-        String mainlength = intent.getStringExtra("mainlength"); //글자 수
-        String saveDateV = intent.getStringExtra("saveDate"); //날짜
-        titleR.setText(title); //제목에 삽입
-        mainTextR.setText(mainText); //본문에 삽입
-        textChanger.setText(mainlength + "/1000");
+            title = intent.getStringExtra("title"); //제목
+            mainText = intent.getStringExtra("mainText"); //본문
+            String mainlength = intent.getStringExtra("mainlength"); //글자 수
+            saveDateV = intent.getStringExtra("saveDate"); //날짜
+            titleR.setText(title); //제목에 삽입
+            mainTextR.setText(mainText); //본문에 삽입
+            textChanger.setText(mainlength + "/1000");
 
 
-        if(ViewDiary.saveDateV == null){ //날짜 값이 없으면 오늘 날짜를 넣는다.
-            SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
-            Date time = new Date();
-            String todayDate = FORMATTER.format(time);
-            dateRR.setText("날짜 : " + todayDate); //날짜값넣기
-        }else { //아니면 가져온 날짜 넣기
-            dateRR.setText("날짜 : " + saveDateV);
-        }
-        downloadDiaryImage(HomeMain.num, saveDateV); //이미지 가져오기
+            if (saveDateV == null) { //날짜 값이 없으면 오늘 날짜를 넣는다.
+                SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
+                Date time = new Date();
+                String todayDate = FORMATTER.format(time);
+                dateRR.setText("날짜 : " + todayDate); //날짜값넣기
+                downloadDiaryImage(HomeMain.num, todayDate); //이미지 가져오기
+            } else { //아니면 가져온 날짜 넣기
+                dateRR.setText("날짜 : " + saveDateV);
+                downloadDiaryImage(HomeMain.num, saveDateV); //이미지 가져오기
+            }
+
+
     }
 
     /**
@@ -323,7 +332,7 @@ public class ReviseDiary extends AppCompatActivity {
                         if(ReviseUri != null){ //만약 사진이 바뀌었다면
                             createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate, ReviseUri); //수정일 될때만 사진 저장
                             ViewDiary.viewLayout.setVisibility(View.VISIBLE);
-                            Glide.with(getApplicationContext()).load(ReviseUri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
+                            Target<GlideDrawable> into = Glide.with(getApplicationContext()).load(ReviseUri).into(ViewDiary.viewImage);//일시적 ViewDiary.viewImage 이미지 사진 넣기
                             Glide.with(getApplicationContext()).load(ReviseUri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
                             Diary.uri = ReviseUri;
                         }else{
@@ -386,6 +395,8 @@ public class ReviseDiary extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         updateDiary(); //업데이트 적용하기
+                        RecyclerMain recyclerMain = new RecyclerMain();
+                        recyclerMain.finish(); //수정완료가 되면 리스트 끄기(새로고침을 위해 임의로)
                         finish();
                     }
                 });

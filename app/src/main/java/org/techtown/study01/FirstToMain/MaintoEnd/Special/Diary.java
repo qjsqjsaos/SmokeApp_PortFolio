@@ -369,7 +369,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
             public void onSuccess(Uri uri) {
                 Log.d("매맨", String.valueOf(uri));
                 Glide.with(getActivity()).load(uri).into(DiaryFrag.diaryImage);
-                Diary.uri = uri; //ViewDiary로 uri보내기
+                Diary.uri = uri; //uri넣기
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -520,8 +520,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
      */
 
     private String textLengthChange(String title) {
-        if(title.length() >= 13){ //13글자 이상이면 바꾼 값으로 리턴
-            String newTitle = title.substring(0,13) + "...";
+        if(title.length() >= 14){ //13글자 이상이면 바꾼 값으로 리턴
+            String newTitle = title.substring(0,14) + "...";
 
             return newTitle;
         } //아니면 그냥 타이틀로 리턴
