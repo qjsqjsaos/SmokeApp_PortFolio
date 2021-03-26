@@ -54,10 +54,10 @@ public class ReviseDiary extends AppCompatActivity {
     private Button cancel_btnR, goRevise, defaultImage;
 
     private String title, mainText;
+    private Uri ReviseUri;
 
     private static final int REQUEST_CODE = 0;
 
-    private Uri file;
 
     //로딩창 띄우기
     private Loading_Dialog loading_dialog;
@@ -68,8 +68,8 @@ public class ReviseDiary extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Diary.uri = data.getData(); //사진 자료를 받는다.
-                Glide.with(getApplicationContext()).load(Diary.uri).into(inputImageR);
+                ReviseUri = data.getData(); //사진 자료를 받는다.
+                Glide.with(getApplicationContext()).load(ReviseUri).into(inputImageR);
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
                 Toast.makeText(getApplicationContext(), "이미지 불러오기 실패", Toast.LENGTH_SHORT).show();
             }
@@ -80,6 +80,9 @@ public class ReviseDiary extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.revise_diary);
+
+        Log.d("자자자자R", String.valueOf(ReviseUri));
+        Log.d("자자자자D", String.valueOf(Diary.uri));
 
         setInit(); //참조정리
 
@@ -150,7 +153,8 @@ public class ReviseDiary extends AppCompatActivity {
         defaultImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Diary.uri = null; //널값을 주어 이미지가 없게 하기
+                ReviseUri = null; //널값을 주어 이미지가 없게 하기
+                Diary.uri = null;
                 inputImageR.setImageResource(R.drawable.no_image); //기본이미지 값 우선 넣어주기
                 ViewDiary.viewLayout.setVisibility(View.GONE); //뷰다이어리 사진도 일시적으로 없애기
             }
@@ -167,23 +171,33 @@ public class ReviseDiary extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 Log.d("매맨", String.valueOf(uri));
                 Glide.with(getBaseContext()).load(uri).into(inputImageR);
-                file = uri; //ViewDiary로 uri보내기
+                if(uri != null) {
+                    ReviseUri = uri;
+                }else{
+                    Diary.uri = null; //uri에 널값을 주어 viewDairy에도 기본이미지가 보이게 한다.
+                    ReviseUri = null; //여기 uri도 널을 준다.
+                }
+                Log.d("페이페이", String.valueOf(uri));
+                Log.d("페이페이", String.valueOf(ReviseUri));
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 inputImageR.setImageResource(R.drawable.no_image); //실패시 기본이미지
                 Diary.uri = null; //uri에 널값을 주어 viewDairy에도 기본이미지가 보이게 한다.
+                ReviseUri = null; //여기 uri도 널을 준다.
             }
         });
     }
 
-
     // TODO: 2021-03-16 우선 파이어베이스 저장하는 법
     /**파이어베이스로 프로필 이미지 저장 및 기존 이미지 삭제
      * @param startdate*/
-    void createProfile_Photo_and_Delete(int num, String startdate) {
-        Log.d("잘들어오고있지?", startdate);
+    void createProfile_Photo_and_Delete(int num, String startdate, Uri uri) {
+        Log.d("자자자자 들어온 넘", String.valueOf(num));
+        Log.d("자자자자 들어온 스타트데이트", String.valueOf(startdate));
+        Log.d("자자자자 들어온 유알아이", String.valueOf(uri));
         createDir(num); //디렉토리가 없으면 만든다.
         //storage
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
@@ -191,15 +205,11 @@ public class ReviseDiary extends AppCompatActivity {
         //파일명을 만들자.
         //여기서 DP는 다이어리 포토에 줄임말이다.
         String filename = "DP"+ "_" +startdate +".jpg";  //ex) DP_2019-02-21.jpg 해당 날짜 값으로만 식별한다.(어차피 디렉토리로 분류로 나누었기 때문에 이정도 식별로 충분하다)
-        file = Diary.uri;
-        Log.d("잘들어오고있지?", String.valueOf(Diary.uri));
-        Log.d("잘들어오고있지?", String.valueOf(file));
-
-
             //여기서 원하는 이름 넣어준다. (filename 넣어주기)
             StorageReference riversRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename);
-            UploadTask uploadTask = riversRef.putFile(file);
 
+            UploadTask uploadTask = riversRef.putFile(uri);
+            Log.d("자자자자 들어온 유알아이", String.valueOf(uri));
 
             // TODO: 2021-03-17 기존 일기 이미지와 일기 제목과 내용을 우선 삭제한다.(중복못하게)
             // Create a reference to the file to delete
@@ -220,10 +230,12 @@ public class ReviseDiary extends AppCompatActivity {
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(getApplicationContext(), "수정을 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getApplicationContext(), "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
     }
@@ -292,33 +304,15 @@ public class ReviseDiary extends AppCompatActivity {
                         //다이어리 값에다가도 일시적으로 넣어주기
                         Diary.viewtitle = titleC;
                         Diary.viewMaintText = mainTextC;
-                        //파이어베이스로 이미지도 수정해준다.
-                        createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate);
                         DiaryFrag.diaryText.setText(titleC); //
-                        if(Diary.uri != null){ //이 값이 널이 아니면 레이아웃을 보여준다.
-                            Glide.with(getApplicationContext()).load(Diary.uri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
-                            Glide.with(getApplicationContext()).load(Diary.uri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
-                            ViewDiary.viewLayout.setVisibility(View.VISIBLE);
-                        }else { //아니면 없애기
-                            Glide.with(getApplicationContext()).load(R.drawable.no_image).into(DiaryFrag.diaryImage); //이미지가 없으면 기본이미지를 넣는다.
-                            ViewDiary.viewLayout.setVisibility(View.GONE);
-                        }
-                        Toast.makeText(getApplicationContext(), "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     } else { //수정 실패
                         Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         loading_dialog.dismiss(); //로딩창 닫기
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
-                    loading_dialog.dismiss(); //로딩창 닫기
-                    return;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     loading_dialog.dismiss(); //로딩창 닫기
-                    return;
                 }
             }
         };
@@ -362,10 +356,32 @@ public class ReviseDiary extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         updateDiary(); //업데이트 적용하기
+                        setUri();
                         finish();
                     }
                 });
         builder.show();
+    }
+
+    private void setUri() {
+
+        if(ReviseUri != null){
+            Toast.makeText(this, "리버스", Toast.LENGTH_SHORT).show();
+            ViewDiary.viewLayout.setVisibility(View.VISIBLE);
+            createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate, ReviseUri); //파이어베이스에서 사진가져오기
+            Glide.with(getApplicationContext()).load(ReviseUri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
+            Glide.with(getApplicationContext()).load(ReviseUri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
+        }else if(Diary.uri != null){
+            Toast.makeText(this, "다이어리", Toast.LENGTH_SHORT).show();
+            ViewDiary.viewLayout.setVisibility(View.VISIBLE);
+            createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate, Diary.uri); //파이어베이스에서 사진가져오기
+            Glide.with(getApplicationContext()).load(Diary.uri).into(ViewDiary.viewImage); //일시적 ViewDiary.viewImage 이미지 사진 넣기
+            Glide.with(getApplicationContext()).load(Diary.uri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
+        } else { //아니면 없애기 둘다 널일때
+            Glide.with(getApplicationContext()).load(R.drawable.no_image).into(DiaryFrag.diaryImage); //이미지가 없으면 기본이미지를 넣는다.
+            ViewDiary.viewLayout.setVisibility(View.GONE);
+        }
+
     }
 
     /**수정취소 다이얼로그 */
