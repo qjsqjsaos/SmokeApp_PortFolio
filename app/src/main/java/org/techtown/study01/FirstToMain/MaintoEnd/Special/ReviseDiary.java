@@ -50,7 +50,7 @@ public class ReviseDiary extends AppCompatActivity {
 
     private String title, mainText;
     private Uri ReviseUri;
-    boolean uriValue = true;
+    private boolean uriValue = true;
 
     private static final int REQUEST_CODE = 0;
 
@@ -327,14 +327,12 @@ public class ReviseDiary extends AppCompatActivity {
                             Glide.with(getApplicationContext()).load(ReviseUri).into(DiaryFrag.diaryImage); //넣었던 이미지를 넣는다.
                             Diary.uri = ReviseUri;
                         }else{
-                            if(uriValue == false) {//이미지없음 버튼을 눌렀다면,
+                            if(!uriValue) {//이미지없음 버튼을 눌렀다면,
                                 justDeleteFireBase(HomeMain.num, Diary.startdate); //이미지 삭제하기
                                 DiaryFrag.diaryImage.setImageResource(R.drawable.no_image); //기본이미지 값 우선 넣어주기
                                 ViewDiary.viewImage.setImageResource(R.drawable.no_image); //기본이미지 값 우선 넣어주기
                                 ViewDiary.viewLayout.setVisibility(View.GONE); //뷰다이어리 사진도 일시적으로 없애기
                                 Diary.uri = null; //다시 뷰 다이어리로 들어갈 것을 방지
-                            }else{
-                                Toast.makeText(ReviseDiary.this, "잘했어요", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } else { //수정 실패

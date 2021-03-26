@@ -13,7 +13,7 @@
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="담배를 끊는 이유가 무엇인가요?"
+        android:text="담배를 끊는 이유"
         android:textColor="@color/textColor"
         android:textStyle="bold" />
     <LinearLayout

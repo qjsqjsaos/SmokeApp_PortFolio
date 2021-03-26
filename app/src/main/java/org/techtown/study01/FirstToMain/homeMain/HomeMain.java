@@ -178,6 +178,8 @@ public class HomeMain extends Fragment {
 
     public static Uri dialogwithUri;
 
+    private boolean defaultProfile_img = true;
+
     /**
      * 앱 종료시 쓰레드가 종료할 때만 쓰레드 종료(어차피 돌아오면 다시 켜짐)
      */
@@ -218,14 +220,10 @@ public class HomeMain extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-
                 uri = data.getData();
                 dialogwithUri = uri; //uri넣고, dialog로 보내기
                 Log.d("유알", String.valueOf(uri));
                 Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기(일시적임)
-                Glide.with(getContext()).load(uri).into(userView); //프로필 사진 이미지 넣기(일시적임)
-                //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
-                createProfile_Photo_and_Delete();
 
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
                 Toast.makeText(getContext(), "이미지 불러오기 실패", Toast.LENGTH_SHORT).show();
@@ -407,15 +405,23 @@ public class HomeMain extends Fragment {
                         //하지만 닉네임이 처음 글씨와 다를 경우 중복체크 및 나머지 메서드 실행
                         String changeValue = Profile_Dialog.changedName.getText().toString();
                         loading_dialog.show(); //로딩창 띄우기
+                        if(!defaultProfile_img){ //기본이미지 버튼 눌렀을 때는 파이어베이스에 이미지만 삭제한다.
+                            fireBaseDelete(); //파이어베이스 이미지만 삭제
+                        }else{//만약 다른 사진으로 변경을 했다면,
+                            //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
+                            createProfile_Photo_and_Delete();
+                        }
+
                         if (Profile_Dialog.NN.equals(changeValue)) {
                             Profile_Dialog.dialog.dismiss(); //다이어로그닫기
                             loading_dialog.dismiss(); //로딩창 닫기
                         }
-                        if (!Profile_Dialog.NN.equals(changeValue)) {
+                        else {
                             String newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
                             Log.d("궁금2", newName);
                             nickNameCheck(newName); //이름 중복체크
                         }
+                        Glide.with(getContext()).load(uri).into(userView); //프로필 사진 이미지 넣기(일시적임)
                     }
                 });
 
@@ -423,6 +429,7 @@ public class HomeMain extends Fragment {
                 profile_dialog.cancelprofile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        dialogwithUri = null; //안에 선택이미지 초기화
                         Profile_Dialog.dialog.dismiss(); //다이얼로그닫기
                     }
                 });
@@ -434,24 +441,9 @@ public class HomeMain extends Fragment {
                         Drawable drawable = getResources().getDrawable(R.drawable.user); //기본이미지 드로어블로 가져오고
                         userView.setImageDrawable(drawable); //프로필사진에 기본이미지를 넣는다.
                         Profile_Dialog.profileImage.setImageDrawable(drawable); //다이얼로그에도 기본이미지를 넣는다.
+                        userView.setImageResource(R.drawable.user);
                         dialogwithUri = null; //다이얼로그로 가는 uri에는 null값을 주어, 껏다켜도 기본이미지를 보이게 한다.
-
-                        //그리고 기존에 있던 프로필 이미지를 삭제한다.
-                        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
-                        StorageReference storageRef = storage.getReference();//스토리지를 참조한다.
-                        // Create a reference to the file to delete
-                        StorageReference desertRef = storageRef.child("profile_img/" + "profile" + num + ".jpg"); //삭제할 프로필이미지 명
-                        // Delete the file
-                        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                            }
-                        });
-
+                        defaultProfile_img = false; //기본이미지 false로 바꿔준다.
                     }
                 });
             }
@@ -490,12 +482,31 @@ public class HomeMain extends Fragment {
         return viewGroup;
     }
 
+    /**
+     * 파이어베이스 이미지만 삭제
+     */
 
-
-
-
-
-
+    private void fireBaseDelete() {
+        // TODO: 2021-03-17 기존 이미지 삭제
+        // Create a reference to the file to delete
+        createDir(); //디렉토리가 없으면 만들기
+        //storage
+        FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
+        StorageReference storageRef = storage.getReference();//스토리지를 참조한다
+        String filename = "profile" + num + ".jpg";
+        StorageReference desertRef = storageRef.child("profile_img/" + filename); //삭제할 프로필이미지 명
+        // Delete the file
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                userView.setImageResource(R.drawable.user); //기본 프로필 넣기
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
+    }
 
 
     /**
@@ -526,6 +537,7 @@ public class HomeMain extends Fragment {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {  //새로운 이름 입력하기
+
                         nameView.setText(newName);
                         loading_dialog.cancel(); //로딩창 닫기
                         Profile_Dialog.dialog.dismiss(); //다이얼로그닫기

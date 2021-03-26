@@ -64,6 +64,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     public static String startdate;
 
+    public static int length = 0; //일기 갯수
+
     private ViewPager2 viewPageSetUp;
 
     public static ArrayList<CalendarDay> calendarDayList; //캘린더 리스트 안에 내가 입력한 즉, 일기를 쓴(초록색표시) 날이 다 들어가 있음.
@@ -217,7 +219,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                 if (success) {
                     justFireBase_Delete(); //파이어베이스에 이미지도 같이 삭제
                     DiaryFrag.diaryFrag.setVisibility(View.GONE); //프래그먼트 임시적으로 없애기
-                    int length = jsonObject.length();
+                    length = length - 1;
                     countDiary.setText(":  "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 줄게 만든다.)
                     calendarDayList.remove(startdate); //캘린더에서 값을 없애고,
                     Log.d("스타트데이데이", startdate);
@@ -478,7 +480,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     Log.d("어레이", String.valueOf(jsonObject));
                     boolean success = jsonObject.getBoolean("success");
                     if (success) {
-                        int length = jsonObject.length()-1;
+                        length = jsonObject.length()-1; //처음에 일기 갯수 넘겨 주기
                         countDiary.setText(":  "+ length + "회"); //초록불 횟수 늘리기
                         Log.d("카운트다이어리3", String.valueOf(length));
                         for(int i = 0; i <= length; i++) { //있는 수만큼 반복문

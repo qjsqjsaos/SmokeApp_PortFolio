@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -246,6 +247,7 @@ public class WriteDiary extends AppCompatActivity {
     void createDiary(String title, String mainText, String startdate) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(String response) {
                 try {
@@ -253,7 +255,7 @@ public class WriteDiary extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {
-                        int length = jsonObject.length() + 1;
+                        Diary.length = Diary.length + 1; //일기 갯수 하나 추가
                         //오늘 날짜를 구해 바로 적용된 것처럼 보이기 위해 오늘 날짜에 초록표시를 한다.
                         Date time = new Date();
                         String todayDate = Diary.FORMATTER.format(time);
@@ -261,9 +263,8 @@ public class WriteDiary extends AppCompatActivity {
                         String month = todayDate.substring(5,7); //받아온 달 ex)02
                         String dayofMonth = todayDate.substring(8,10); //받아온 일 수 ex)25
                         diaryWriteDate(year, month, dayofMonth); //지금 쓴 날짜 초록색으로 변하게 하기
-                        Diary.countDiary.setText(":  "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 늘게 만든다)
+                        Diary.countDiary.setText(":  "+ Diary.length + "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 늘게 만든다)
                         Toast.makeText(getApplicationContext(), "일기가 등록되었습니다.", Toast.LENGTH_SHORT).show();
-                        Log.d("카운트다이어리2", String.valueOf(length));
                         //다이어리프래그 부분 //일시적
                         DiaryFrag.diaryFrag.setVisibility(View.VISIBLE); //다이어리 보여주고
                         String newTitle = textLengthChange(title); //글자 수에 맞춰 점 찍어주기
@@ -278,6 +279,8 @@ public class WriteDiary extends AppCompatActivity {
                         }else { //아니면 없애기
                             Glide.with(getApplicationContext()).load(R.drawable.no_image).into(DiaryFrag.diaryImage); //이미지가 없으면 기본이미지를 넣는다.
                         }
+
+
                         Log.d("널일까?", String.valueOf(Diary.uri));
 
                         finish(); //액티비티 끄기
