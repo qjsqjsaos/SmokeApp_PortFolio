@@ -34,6 +34,8 @@ import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class RecyclerMain extends AppCompatActivity {
 
@@ -56,6 +58,8 @@ public class RecyclerMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_main);
         loadingStart();//로딩창
+
+
 
         recyclerView = findViewById(R.id.recyclerView);
 
@@ -91,14 +95,13 @@ public class RecyclerMain extends AppCompatActivity {
                     if (success) {
                         String title = jsonObject.getString("title"); //타이틀 가져오기
 
+                        ArrayList<DiaryInfo_GetterSetter> item = new ArrayList<>();
                         item.add(new DiaryInfo_GetterSetter(title, date, uri, getApplicationContext()));
                         Log.d("유알아이좀보자2", String.valueOf(uri));
                         //리사이클러뷰 어뎁터 설정으로 마무리
                         adapter.setItems(item);
                         recyclerView.setAdapter(adapter);
 
-                        Log.d("베이베베이베2", title);
-                        Log.d("베이베베이베2", date);
                         loading_dialog.dismiss(); //로딩창끄기
 
                     } else {//실패
@@ -176,9 +179,13 @@ public class RecyclerMain extends AppCompatActivity {
                     int length = jsonObject.length()-1;
                     for(int i = 0; i <= length; i++) { //있는 수만큼 반복문
                         String date = jsonObject.getString(String.valueOf(i));
-                        Log.d("베이베베이베", String.valueOf(jsonObject.length()));
+                        Log.d("베이베베이베", String.valueOf(length));
                         Log.d("베이베베이베", date);
+
+
+
                         downloadDiaryImage(HomeMain.num, date); //날짜에 맞는 (uri) 이미지 넣기
+                        loading_dialog.dismiss(); //로딩창끄기
                     }
 
                 } else {//실패
