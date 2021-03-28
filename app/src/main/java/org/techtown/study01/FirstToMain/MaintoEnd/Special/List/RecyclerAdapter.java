@@ -25,18 +25,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private OnDiaryItemClickListener onDiaryItemClickListener; //인테페이스
 
+
     //뷰홀더가 만들어질 때 호출
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         //가각의 뷰타입에 따라 xml레이아웃을 인플레이션해서 보여줘야한다.
         //인플레이션을 위해선 인자로 넘어온 ViewGroup에 Context객체가 필요하다.)
-        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-
         //인플레이션을 통해 뷰 객체를 만든다.
-        View itemView = inflater.inflate(R.layout.recycler_itemview, viewGroup, false);
+       View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_itemview, viewGroup, false);
 
-        return new ViewHolder(itemView, this); //이 코드 제일 아래있는 ViewHolder 클래스에 있는 ViewHolder생성자에 아이템 뷰를 전달하고,
+        return new ViewHolder(v,this); //이 코드 제일 아래있는 ViewHolder 클래스에 있는 ViewHolder생성자에 아이템 뷰를 전달하고,
                                         //새로운 뷰홀더 객체를 만들어 반환한다.
     }
 
@@ -93,7 +92,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         private TextView recyclerTitle; //금연 제목
         private TextView recyclerDate; //금연 몇일차
-        public static CircleImageView circleImage; //일기 사진
+        private CircleImageView circleImage; //일기 사진
 
 
         //생성자에서 참조
@@ -123,7 +122,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             Context context = diaryInfo_getterSetter.getContext(); //컨텍스트 가지고 오기(글라이드 이미지를 위해)
             recyclerTitle.setText(diaryInfo_getterSetter.getR_title());
             recyclerDate.setText(diaryInfo_getterSetter.getR_writeDate());
-            Glide.with(context).load(diaryInfo_getterSetter.getR_uri()).into(circleImage);
+            if(diaryInfo_getterSetter.getR_uri() != null){
+                Glide.with(context).load(diaryInfo_getterSetter.getR_uri()).into(circleImage);
+            }else{
+                Glide.with(context).load(R.drawable.no_image).into(circleImage);
+            }
+
         }
     }
 }

@@ -44,7 +44,9 @@ public class RecyclerMain extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ArrayList<DiaryInfo_GetterSetter> item = new ArrayList<>();
     private Loading_Dialog loading_dialog;
-    public static Uri uriR;
+    //이미지 값 겹치지 않게 두가지로 나눈다.
+    private Uri uriS;
+    private Uri uriF;
 
     /** 화면 안보일때 로딩창 켜져있으면 제거*/
         @Override
@@ -59,8 +61,6 @@ public class RecyclerMain extends AppCompatActivity {
         setContentView(R.layout.recycler_main);
         loadingStart();//로딩창
 
-
-
         recyclerView = findViewById(R.id.recyclerView);
 
         //리사이클러뷰에 레이아웃 매니저 설정하기
@@ -68,6 +68,8 @@ public class RecyclerMain extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new RecyclerAdapter();
         getDairyAllDate(); //일기 리스트 생성
+
+
 
         //리사이클러뷰 클릭시 액션
         adapter.setOnDiaryItemClickListener(new OnDiaryItemClickListener() {
@@ -94,13 +96,21 @@ public class RecyclerMain extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean("success");
                     if (success) {
                         String title = jsonObject.getString("title"); //타이틀 가져오기
-
-                        ArrayList<DiaryInfo_GetterSetter> item = new ArrayList<>();
                         item.add(new DiaryInfo_GetterSetter(title, date, uri, getApplicationContext()));
+
                         Log.d("유알아이좀보자2", String.valueOf(uri));
+                        Collections.sort(item, new Comparator<DiaryInfo_GetterSetter>() {
+                            @Override
+                            public int compare(DiaryInfo_GetterSetter o1, DiaryInfo_GetterSetter o2) {
+                                adapter.setItems(item);
+                                recyclerView.setAdapter(adapter);
+                                return o2.getR_writeDate().compareTo(o1.getR_writeDate());
+                            }
+                        });
+
                         //리사이클러뷰 어뎁터 설정으로 마무리
-                        adapter.setItems(item);
-                        recyclerView.setAdapter(adapter);
+
+
 
                         loading_dialog.dismiss(); //로딩창끄기
 
@@ -181,11 +191,9 @@ public class RecyclerMain extends AppCompatActivity {
                         String date = jsonObject.getString(String.valueOf(i));
                         Log.d("베이베베이베", String.valueOf(length));
                         Log.d("베이베베이베", date);
-
-
-
                         downloadDiaryImage(HomeMain.num, date); //날짜에 맞는 (uri) 이미지 넣기
                         loading_dialog.dismiss(); //로딩창끄기
+
                     }
 
                 } else {//실패
@@ -219,14 +227,14 @@ public class RecyclerMain extends AppCompatActivity {
         storageRef.child("diary_photo/num" + num + "/" + "DP" + "_" + date +".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                uriR = uri; //url변수 저장
-                getDairyInfo(date, uriR);  //모든 컬럼날짜 전달
+                uriS = uri; //url변수 저장
+                getDairyInfo(date, uriS);  //모든 컬럼날짜 전달
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                uriR = null; //uri에 널값을 주어 이미지가 없으면 기본이미지를 보여주게 한다.
-                getDairyInfo(date, uriR);  //모든 컬럼날짜 전달
+                uriF = null; //uri에 널값을 주어 이미지가 없으면 기본이미지를 보여주게 한다.
+                getDairyInfo(date, uriF);  //모든 컬럼날짜 전달
             }
         });
     }
