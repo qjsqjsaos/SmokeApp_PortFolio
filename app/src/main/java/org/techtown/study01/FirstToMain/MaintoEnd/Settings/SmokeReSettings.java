@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,22 +20,36 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryInfo_Request;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.HomeMain;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
 
-public class SmokeReSettings extends AppCompatActivity {
+public class SmokeReSettings extends AppCompatActivity{
 
     private TextInputEditText cigaCount, cigaCost;
     private Button resettingSmoke, cancelsettings_btn;
+    private long cigaCountS, cigaCostS;
+    private String firstCost, fisrtCount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.smoke_re_settings);
-
         setInit();
+        try {
+            Intent intent = getIntent();
+            if (intent != null) {
+                cigaCostS = intent.getLongExtra("cost",0);
+                cigaCountS = intent.getLongExtra("count",0);
+                cigaCost.setText(String.valueOf(cigaCostS));
+                cigaCount.setText(String.valueOf(cigaCountS));
+                firstCost = cigaCost.getText().toString();
+                fisrtCount = cigaCount.getText().toString();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         clickListener();
     }
@@ -42,8 +58,11 @@ public class SmokeReSettings extends AppCompatActivity {
         resettingSmoke.setOnClickListener(v -> {
             updateSmokeSettings();
         });
-    }
+        cancelsettings_btn.setOnClickListener(v ->{
+            finish();
+        });
 
+    }
 
 
     /**참조하기 */
@@ -59,6 +78,18 @@ public class SmokeReSettings extends AppCompatActivity {
        int newCigaCost = Integer.parseInt(cigaCost.getText().toString());
        int newCigaCount = Integer.parseInt(cigaCount.getText().toString());
 
+       if(cigaCost.equals("") || cigaCount.equals("")){
+           Toast.makeText(this, "빈칸을 입력해주세요.", Toast.LENGTH_SHORT).show();
+           return;
+       }else if(newCigaCost == 0 || newCigaCount == 0){
+           Toast.makeText(this, "빈칸을 입력해주세요.", Toast.LENGTH_SHORT).show();
+           return;
+       }else if(firstCost.equals(String.valueOf(newCigaCost)) && fisrtCount.equals(String.valueOf(newCigaCount))){ //똑같은 값에 적용을 누를 때,
+            Toast.makeText(this, "새로운 값이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+       }
+
         Response.Listener<String> responseListener = new Response.Listener<String>() {
 
             @Override
@@ -68,12 +99,13 @@ public class SmokeReSettings extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean("success");
 
                     if (success) {
-                        HomeMain homeMain = new HomeMain();
-                        Bundle bundle = new Bundle();
-                        bundle.putLong("cigaCost", newCigaCost);
-                        bundle.putLong("cigaCount", newCigaCount);
-                        homeMain.setArguments(bundle);
-
+                            Toast.makeText(getApplication(), "새로운 값이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+                            HomeMain homeMain = new HomeMain();
+                            Bundle bundle = new Bundle();
+                            bundle.putLong("cost", newCigaCost);
+                            bundle.putLong("count", newCigaCount);
+                            homeMain.setArguments(bundle);
+                            finish();
                     } else {//실패
                         Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     }
@@ -91,7 +123,5 @@ public class SmokeReSettings extends AppCompatActivity {
         queue.add(smoke_settings_request);
 
     }
-
-
 
 }

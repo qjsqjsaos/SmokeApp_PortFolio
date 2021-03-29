@@ -70,4 +70,27 @@ public class SharedViewModel extends ViewModel {
         haelthSecond.setValue(longa);
     }
 
+
+    ///////////////////////////////settings용
+
+    private MutableLiveData<Long> liveCount = new MutableLiveData<>();
+
+    public LiveData<Long> getLiveCount(){
+        return liveCount;
+    }
+
+    public void setLiveCount(Long longa){
+        liveCount.setValue(longa);
+    }
+
+    private MutableLiveData<Long> liveCost = new MutableLiveData<>();
+
+    public LiveData<Long> getLiveCost(){
+        return liveCost;
+    }
+
+    public void setLiveCost(Long longa){
+        liveCost.setValue(longa);
+    }
+
 }

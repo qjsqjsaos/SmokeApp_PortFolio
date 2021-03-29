@@ -73,7 +73,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/cigaCount"
-                android:maxLength="30"
+                android:maxLength="2"
                 android:paddingTop="@dimen/floating_hint_margin"
                 android:background="@drawable/edit_text_login"
                 android:layout_width="@dimen/login_textInput"
@@ -81,7 +81,7 @@
                 android:layout_gravity="center_horizontal"
                 android:maxLines="1"
                 android:hint="하루 평균 흡연량을 입력해주세요."
-                android:inputType="textEmailAddress"
+                android:inputType="number"
                 android:paddingLeft="@dimen/login_EditText_paddingLeft"
                 android:textColor="@color/textColor_special"
                 android:textSize="@dimen/Login_text_size"
@@ -126,7 +126,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/cigaCost"
-                android:maxLength="30"
+                android:maxLength="5"
                 android:paddingTop="@dimen/floating_hint_margin"
                 android:background="@drawable/edit_text_login"
                 android:layout_width="@dimen/login_textInput"
@@ -135,7 +135,7 @@
                 android:paddingLeft="@dimen/login_EditText_paddingLeft"
                 android:layout_gravity="center_horizontal"
                 android:hint="하루 평균 흡연비용을 입력해주세요."
-                android:inputType="textWebPassword"
+                android:inputType="number"
                 android:textSize="@dimen/Login_text_size"
 
                 android:textColor="@color/textColor_special"

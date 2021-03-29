@@ -2,45 +2,25 @@ package org.techtown.study01.FirstToMain.homeMain;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.service.controls.templates.ControlTemplate;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
 
@@ -49,27 +29,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
 import org.techtown.study01.FirstToMain.MaintoEnd.Settings.Settings;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
-import org.techtown.study01.FirstToMain.MaintoEnd.Special.ReviseDiary;
 import org.techtown.study01.FirstToMain.R;
 
-import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1_Request;
 import org.techtown.study01.FirstToMain.start.First_page_loading;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static org.techtown.study01.FirstToMain.homeMain.Profile_Dialog.profileImage;
 
 
 public class BottomNavi extends AppCompatActivity {

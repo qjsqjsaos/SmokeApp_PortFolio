@@ -1,35 +1,23 @@
 package org.techtown.study01.FirstToMain.homeMain;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.Network;
+
+
 import android.net.Uri;
-import android.net.UrlQuerySanitizer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+
 import android.os.Message;
-import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +39,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.loader.content.CursorLoader;
-import androidx.room.Delete;
+
+
 import androidx.viewpager2.widget.ViewPager2;
 
 
@@ -60,18 +48,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
@@ -86,20 +68,12 @@ import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag7;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag_ondestroy;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
 import org.techtown.study01.FirstToMain.register.NameRequest;
-import org.techtown.study01.FirstToMain.register.Register;
-import org.techtown.study01.FirstToMain.register.RegisterRequest;
+
 import org.techtown.study01.FirstToMain.start.First_page_loading;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+
 import java.util.regex.Pattern;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -180,6 +154,8 @@ public class HomeMain extends Fragment {
 
     private boolean defaultProfile_img = true;
 
+
+
     /**
      * 앱 종료시 쓰레드가 종료할 때만 쓰레드 종료(어차피 돌아오면 다시 켜짐)
      */
@@ -200,8 +176,8 @@ public class HomeMain extends Fragment {
         super.onResume();
         loadingStart();//로딩창 보여주기
         idcheckandButton(); //아이디를 토대로 버튼정보가져오기
-
         }
+
 
     /**
      * 혹시나 로딩창이 있다면 종료해주기
@@ -211,6 +187,11 @@ public class HomeMain extends Fragment {
         super.onStop();
         loading_dialog.cancel();
     }
+
+
+
+
+
 
     /**
      * 프로필 사진 갤러리에 요청시에 값을 여기서 받고 프로필 사진란에 이미지를 넣어준다.
@@ -329,11 +310,13 @@ public class HomeMain extends Fragment {
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
 
-        Bundle bundle2 = getArguments();
-        if(bundle2 != null){
-            cigaCost = bundle2.getLong("cigaCost");
-            cigaCount = bundle2.getLong("cigaCount");
+        Bundle extra = this.getArguments();
+        if(extra != null) {
+            extra = getArguments();
+            cigaCost = extra.getLong("cost");
+            cigaCount = extra.getLong("count");
         }
+
 
 
         /**명언 랜덤 추출기 */
@@ -586,10 +569,6 @@ public class HomeMain extends Fragment {
                     public void onPositiveClicked(String date, String time) throws ParseException { //지정된 날짜, 지정된 시간
                         Calculate_Date calculate_date = new Calculate_Date();
 
-                        /** 임시로 일단 값주기*/
-                        cigaCount = 5;
-                        cigaCost = 5000;
-
                         dateTime = date + " " + time; // 지정된 날짜와 데이트 시간 합치기
                         Log.d("3값", dateTime);
 
@@ -605,7 +584,7 @@ public class HomeMain extends Fragment {
                         Log.d("3값", String.valueOf(finallyDateTime));
 
                         //하루 담배량 계산
-                        last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
+                        last_cigaCount = 86400 / cigaCount * 1L; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
                         Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
                         Log.d("시가카운트", String.valueOf(cigaCount));
 
@@ -654,8 +633,8 @@ public class HomeMain extends Fragment {
             long min = (datatime_last / 1000) / 60 % 60; //분
             long hour = (datatime_last / 1000) / 3600 % 24; //시
             long day = datatime_last / (24 * 60 * 60 * 1000);//하루
-            long ciga_Time = (datatime_last / 1000) / last_cigaCount; //담배를 피지 않은 횟수
-            double ciga_Money = (datatime_last / 1000) * last_cigaCost; //지금껏 아낀 비용
+            long ciga_Time = (datatime_last / 1000) / last_cigaCount * 1L; //담배를 피지 않은 횟수
+            double ciga_Money = (datatime_last / 1000) * last_cigaCost *1d; //지금껏 아낀 비용
 
 
 
@@ -979,6 +958,13 @@ public class HomeMain extends Fragment {
                             String goal = jsonObject.getString("goal");
                             Frag4.newGoalText.setText(goal);
 
+                            //흡연량과 가격 가지고 오기
+                            cigaCost = jsonObject.getLong("cigapay");
+                            cigaCount = jsonObject.getLong("cigacount");
+
+                            sharedViewModel.setLiveCost(cigaCost);
+                            sharedViewModel.setLiveCount(cigaCount);
+
                             if (dateTime.equals("0")) { //여기서 datetime이 0이면(아직 금연을 시작한게 아니거나, 이미 금연을 포기해서 값이 0인 경우)
                                 //금연버튼 활성화
                                 noSmoke_Btn.setVisibility(VISIBLE);
@@ -1022,9 +1008,6 @@ public class HomeMain extends Fragment {
         Calculate_Date calculate_date = new Calculate_Date();
 
         finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
-        /** 임시로 일단 값주기*/
-        cigaCount = 5;
-        cigaCost = 5000;
 
         //하루 담배량 계산
         last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
