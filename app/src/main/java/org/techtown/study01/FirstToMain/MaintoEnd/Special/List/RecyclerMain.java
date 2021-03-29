@@ -2,10 +2,10 @@ package org.techtown.study01.FirstToMain.MaintoEnd.Special.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.accessibility.AccessibilityViewCommand;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -13,13 +13,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -27,6 +25,7 @@ import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.ReviseDiary;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.ViewDiary;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryDate_Request;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.getDiaryInfo_Request;
@@ -41,7 +40,6 @@ import java.util.Comparator;
 
 public class RecyclerMain extends AppCompatActivity {
 
-
     private RecyclerAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<DiaryInfo_GetterSetter> item = new ArrayList<>();
@@ -49,8 +47,12 @@ public class RecyclerMain extends AppCompatActivity {
     //이미지 값 겹치지 않게 두가지로 나눈다.
     private Uri uriS;
     private Uri uriF;
-    int start = 0;
-    int end = 3;
+    private int start = 0;
+    private int end = 3;
+
+    public static RecyclerMain recyclerMain;
+
+
     /** 화면 안보일때 로딩창 켜져있으면 제거*/
         @Override
         protected void onStop() {
@@ -63,6 +65,8 @@ public class RecyclerMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_main);
         loadingStart();//로딩창
+
+        recyclerMain = RecyclerMain.this;
 
         recyclerView = findViewById(R.id.recyclerView);
 

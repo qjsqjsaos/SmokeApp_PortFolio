@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -44,6 +46,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.techtown.study01.FirstToMain.MaintoEnd.Special.List.RecyclerMain.recyclerMain;
+
 public class ReviseDiary extends AppCompatActivity {
 
     private EditText titleR, mainTextR;
@@ -59,6 +63,8 @@ public class ReviseDiary extends AppCompatActivity {
     private static final int REQUEST_CODE = 0;
 
     private String saveDateV;
+
+    private RecyclerMain recyclerMain = RecyclerMain.recyclerMain;
 
 
     //로딩창 띄우기
@@ -394,10 +400,15 @@ public class ReviseDiary extends AppCompatActivity {
         builder.setNegativeButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        updateDiary(); //업데이트 적용하기
-                        RecyclerMain recyclerMain = new RecyclerMain();
-                        recyclerMain.finish(); //수정완료가 되면 리스트 끄기(새로고침을 위해 임의로)
-                        finish();
+                        if(recyclerMain != null){
+                            updateDiary(); //업데이트 적용하기
+                            recyclerMain.finish(); //수정완료가 되면 리스트 끄기(새로고침을 위해 임의로)
+                            finish();
+                        }else{
+                            updateDiary(); //업데이트 적용하기
+                            finish();
+                        }
+
                     }
                 });
         builder.show();

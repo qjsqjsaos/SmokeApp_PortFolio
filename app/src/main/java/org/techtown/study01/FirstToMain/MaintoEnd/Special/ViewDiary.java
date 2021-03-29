@@ -52,7 +52,6 @@ public class ViewDiary extends AppCompatActivity {
 
         setInit();//참조하기
 
-        Log.d("자자자자 날짜",Diary.startdate);
 
         clickListener(); //클릭리스너들
 
