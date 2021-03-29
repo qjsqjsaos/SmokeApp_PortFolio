@@ -26,17 +26,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private OnDiaryItemClickListener onDiaryItemClickListener; //인테페이스
 
 
+
+
     //뷰홀더가 만들어질 때 호출
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         //가각의 뷰타입에 따라 xml레이아웃을 인플레이션해서 보여줘야한다.
         //인플레이션을 위해선 인자로 넘어온 ViewGroup에 Context객체가 필요하다.)
-        //인플레이션을 통해 뷰 객체를 만든다.
-       View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_itemview, viewGroup, false);
 
-        return new ViewHolder(v,this); //이 코드 제일 아래있는 ViewHolder 클래스에 있는 ViewHolder생성자에 아이템 뷰를 전달하고,
-                                        //새로운 뷰홀더 객체를 만들어 반환한다.
+        //인플레이션을 통해 뷰 객체를 만든다.
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_itemview, viewGroup, false);
+
+            return new ViewHolder(v,this); //이 코드 제일 아래있는 ViewHolder 클래스에 있는 ViewHolder생성자에 아이템 뷰를 전달하고,
     }
 
     //뷰홀더가 재사용될 때 호출(보통은 아이템에 개수만큼 객체가 만들어지지 않는다.

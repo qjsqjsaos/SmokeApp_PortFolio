@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -49,7 +50,7 @@ public class RecyclerMain extends AppCompatActivity {
     private Uri uriS;
     private Uri uriF;
     int start = 0;
-    int end = 1;
+    int end = 3;
     /** 화면 안보일때 로딩창 켜져있으면 제거*/
         @Override
         protected void onStop() {
@@ -69,25 +70,48 @@ public class RecyclerMain extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new RecyclerAdapter();
-        getDairyAllDate(start, end); //일기 리스트 생성 //처음값 끝 값
 
+
+        getDairyAllDate(start, end); //일기 리스트 생성 //처음값 끝 값
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-                if (lastVisibleItemPosition == itemTotalCount) {
-                    recyclerView.scrollToPosition(adapter.getItemCount()-1);
-                    int newStart = start + 2;
-                    int newEnd = newStart + 1;
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(!recyclerView.canScrollVertically(1)) {
+                    int newStart = start + 4; //10개씩 가지고 오기
+                    int newEnd = newStart + 3;
                     start = newStart; //값 최신화
                     end = newEnd; //값 최신화
                     getDairyAllDate(newStart, newEnd);
+
+                    Log.d("뉴엔드", String.valueOf(newEnd));
+
                 }
+
             }
         });
+
+
+
+
+//
+//                addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                    @Override
+//                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                        super.onScrolled(recyclerView, dx, dy);
+//
+//                        int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+//                        int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+//                        if (lastVisibleItemPosition == itemTotalCount) {
+//                            recyclerView.scrollToPosition(adapter.getItemCount()-1);
+//                            int newStart = start + 2;
+//                            int newEnd = newStart + 1;
+//                            start = newStart; //값 최신화
+//                            end = newEnd; //값 최신화
+//                            getDairyAllDate(newStart, newEnd);
+//                        }
+//                    }
+//                });
 
 
 
@@ -127,7 +151,11 @@ public class RecyclerMain extends AppCompatActivity {
                             @Override
                             public int compare(DiaryInfo_GetterSetter o1, DiaryInfo_GetterSetter o2) {
                                 adapter.setItems(item);
+                                Log.d("이건 몇일까?", String.valueOf(adapter.getItemCount()));
                                 recyclerView.setAdapter(adapter);
+                                recyclerView.smoothScrollToPosition(end-6); //며칠 차이 날지 보여주기
+
+                                    Log.d("뉴엔드2", String.valueOf(end));
                                 return o2.getR_writeDate().compareTo(o1.getR_writeDate());
                             }
                         });
@@ -144,12 +172,8 @@ public class RecyclerMain extends AppCompatActivity {
                     }
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    loading_dialog.dismiss(); //로딩창끄기
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     loading_dialog.dismiss(); //로딩창끄기
                 }
             };
@@ -217,6 +241,7 @@ public class RecyclerMain extends AppCompatActivity {
                         loading_dialog.dismiss(); //로딩창끄기
 
                     }
+
 
                 } else {//실패
                     Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
