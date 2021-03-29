@@ -69,6 +69,22 @@ public class RecyclerMain extends AppCompatActivity {
         adapter = new RecyclerAdapter();
         getDairyAllDate(); //일기 리스트 생성
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+                if (lastVisibleItemPosition == itemTotalCount) {
+                    Toast.makeText(RecyclerMain.this, "끝", Toast.LENGTH_SHORT).show();
+                    getDairyAllDate();
+                }
+            }
+        });
+
+
+        출처: https://roemilk.tistory.com/40 [Blessing Venus]
 
 
         //리사이클러뷰 클릭시 액션
@@ -99,6 +115,8 @@ public class RecyclerMain extends AppCompatActivity {
                         item.add(new DiaryInfo_GetterSetter(title, date, uri, getApplicationContext()));
 
                         Log.d("유알아이좀보자2", String.valueOf(uri));
+
+                        //어레이리스트안에 있는 날짜데이터들을 정렬하는 함수이다.
                         Collections.sort(item, new Comparator<DiaryInfo_GetterSetter>() {
                             @Override
                             public int compare(DiaryInfo_GetterSetter o1, DiaryInfo_GetterSetter o2) {
