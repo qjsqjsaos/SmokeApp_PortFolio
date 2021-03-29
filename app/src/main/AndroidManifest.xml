@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MaintoEnd.Special.List.RecyclerMain"></activity>
+        <activity android:name=".MaintoEnd.Settings.SmokeReSettings"></activity>
+        <activity android:name=".MaintoEnd.Special.List.RecyclerMain" />
         <activity android:name=".MaintoEnd.Special.ReviseDiary" />
         <activity android:name=".MaintoEnd.Special.WriteDiary" />
         <activity android:name=".MaintoEnd.Special.ViewDiary" />

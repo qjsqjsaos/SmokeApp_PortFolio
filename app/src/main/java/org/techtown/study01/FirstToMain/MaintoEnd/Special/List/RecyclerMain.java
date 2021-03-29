@@ -60,6 +60,8 @@ public class RecyclerMain extends AppCompatActivity {
             loading_dialog.cancel();
         }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

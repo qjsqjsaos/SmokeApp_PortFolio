@@ -73,17 +73,35 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     public static final SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd"); //날짜 데이터 포맷
 
+    private Loading_Dialog loading_dialog;
+
+    /** 화면 안보일때 로딩창 켜져있으면 제거*/
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        loading_dialog.cancel();
+    }
 
     /** 앱이 맨처음 실행될 때 최초 한번만*/
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        loadingStart(); //로딩창
         Date time = new Date();
         String todayDate = FORMATTER.format(time);
         startdate = todayDate; //날짜에 오늘 날짜 넣어주기(일기 중복으로 쎃는지 체크하기 위함)
         Log.d("오늘날짜", todayDate);
         //오늘 날짜 일기를 처음 보여준다.
         getDBDiaryInfo(todayDate); //오늘 날짜 일기 정보
+    }
+
+    /**로딩창*/
+    public void loadingStart(){
+        loading_dialog = new Loading_Dialog(getContext());
+        loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.setCancelable(false); //뒤로가기방지
+        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading_dialog.show();
     }
 
     @Nullable
@@ -447,7 +465,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
                     } else {//실패
                         DiaryFrag.diaryFrag.setVisibility(View.INVISIBLE); //diaryFrag보여주기
-
                     }
 
 
@@ -494,17 +511,14 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                             diaryWriteDate(year, month, dayofMonth); //있는 수만큼 날짜 초록색으로 만들기
                             //인터페이스를 이용해 데이터 전달하기(날짜만)
                         }
+                        loading_dialog.dismiss();
 
                     }
 
 
                 } catch (JSONException e) {
+                    loading_dialog.dismiss();
                     e.printStackTrace();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
-
                 }
             }
         };

@@ -6,27 +6,26 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-<LinearLayout style="@style/bold_theme"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/start_background"
-    android:orientation="vertical"
-    >
+    <LinearLayout style="@style/bold_theme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/start_background"
+        android:orientation="vertical"
+        >
 
         <TextView
-            android:id="@+id/textView3"
             style="@style/title_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:text="로그인"
+            android:text="흡연 재설정"
             android:textColor="@color/textColor"
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/imageView4"
+
             android:layout_width="136dp"
             android:layout_height="153dp"
             android:layout_gravity="center"
@@ -34,6 +33,34 @@
             android:paddingTop="12.5dp"
             android:paddingBottom="12.5dp"
             android:src="@drawable/smokeimage" />
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:text="하루 평균 흡연량" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/TextInputLayout1"
@@ -45,7 +72,7 @@
             app:hintTextAppearance="@style/TextLabel">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idText"
+                android:id="@+id/cigaCount"
                 android:maxLength="30"
                 android:paddingTop="@dimen/floating_hint_margin"
                 android:background="@drawable/edit_text_login"
@@ -53,7 +80,7 @@
                 android:layout_height="@dimen/Login_and_textInput_height"
                 android:layout_gravity="center_horizontal"
                 android:maxLines="1"
-                android:hint="아이디를 입력해주세요"
+                android:hint="하루 평균 흡연량을 입력해주세요."
                 android:inputType="textEmailAddress"
                 android:paddingLeft="@dimen/login_EditText_paddingLeft"
                 android:textColor="@color/textColor_special"
@@ -62,7 +89,30 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:text="하루 평균 흡연비용" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/TextInputLayout2"
@@ -75,7 +125,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordText"
+                android:id="@+id/cigaCost"
                 android:maxLength="30"
                 android:paddingTop="@dimen/floating_hint_margin"
                 android:background="@drawable/edit_text_login"
@@ -84,7 +134,7 @@
                 android:maxLines="1"
                 android:paddingLeft="@dimen/login_EditText_paddingLeft"
                 android:layout_gravity="center_horizontal"
-                android:hint="비밀번호를 입력해주세요."
+                android:hint="하루 평균 흡연비용을 입력해주세요."
                 android:inputType="textWebPassword"
                 android:textSize="@dimen/Login_text_size"
 
@@ -94,63 +144,29 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
-            android:id="@+id/btn_login"
+        <Button
+            android:id="@+id/resettingSmoke"
             android:layout_width="@dimen/login_Button_width"
             android:layout_height="@dimen/login_Button_height"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:background="@drawable/all_btn"
-            android:text="로그인"
+            android:text="흡연 재설정하기"
             android:textColor="@color/textColor"
             android:textSize="@dimen/Login_text_size"
             android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="370dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="19dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_id"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="아이디찾기"
+        <Button
+            android:id="@+id/cancelsettings_btn"
+            android:layout_width="@dimen/login_Button_width"
+            android:layout_height="@dimen/login_Button_height"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/all_btn"
+            android:text="취소하기"
             android:textColor="@color/textColor"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:textSize="@dimen/Login_sideButton_text_size"
+            android:textSize="@dimen/Login_text_size"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_pass"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="비밀번호찾기"
-            android:textColor="@color/textColor"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:textSize="@dimen/Login_sideButton_text_size"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/rg_sign"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="간편가입"
-            android:textColor="@color/textColor"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:textSize="@dimen/Login_sideButton_text_size"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
 
     </LinearLayout>
 </ScrollView>

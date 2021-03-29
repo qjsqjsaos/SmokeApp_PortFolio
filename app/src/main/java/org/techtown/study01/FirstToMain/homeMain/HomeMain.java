@@ -329,6 +329,12 @@ public class HomeMain extends Fragment {
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
 
+        Bundle bundle2 = getArguments();
+        if(bundle2 != null){
+            cigaCost = bundle2.getLong("cigaCost");
+            cigaCount = bundle2.getLong("cigaCount");
+        }
+
 
         /**명언 랜덤 추출기 */
         int randomNumber = (int) (Math.random()*999); // 0~999중에서 랜덤 숫자 추출

@@ -1,6 +1,7 @@
 package org.techtown.study01.FirstToMain.MaintoEnd.HomeMain;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -25,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
+import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
 
 import java.math.BigInteger;
@@ -46,12 +48,38 @@ public class HealthCheck extends Fragment {
 
     private SharedViewModel sharedViewModel; //뷰모델 (데이터 받기)
 
+    private Loading_Dialog loading_dialog;
+
+    /** 화면 안보일때 로딩창 켜져있으면 제거*/
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        loading_dialog.cancel();
+    }
+
+
+    /**로딩창*/
+    public void loadingStart(){
+        loading_dialog = new Loading_Dialog(getContext());
+        loading_dialog.setCanceledOnTouchOutside(false);
+        loading_dialog.setCancelable(false); //뒤로가기방지
+        loading_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading_dialog.show();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        loadingStart();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         viewGroup = (ViewGroup) inflater.inflate(R.layout.health_check, container, false);
+
+        loading_dialog.dismiss();
 
         findProgressandImageView(); //프로그레스바와 이미지뷰 참조하기
 

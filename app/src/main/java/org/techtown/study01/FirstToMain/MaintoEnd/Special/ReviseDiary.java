@@ -84,6 +84,15 @@ public class ReviseDiary extends AppCompatActivity {
         }
     }
 
+    /** 화면 안보일때 로딩창 켜져있으면 제거*/
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        loading_dialog.cancel();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

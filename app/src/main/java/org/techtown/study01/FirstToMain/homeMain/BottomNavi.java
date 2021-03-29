@@ -54,6 +54,7 @@ import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.MaintoEnd.HomeMain.HealthCheck;
 import org.techtown.study01.FirstToMain.MaintoEnd.Settings.Settings;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.Diary;
+import org.techtown.study01.FirstToMain.MaintoEnd.Special.ReviseDiary;
 import org.techtown.study01.FirstToMain.R;
 
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.Frag1_Request;
@@ -334,5 +335,6 @@ public class BottomNavi extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
             startActivity(intent);
         }
+
     }
 
