@@ -2,6 +2,7 @@ package org.techtown.study01.FirstToMain.MaintoEnd.Special.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.accessibility.AccessibilityViewCommand;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,7 +48,8 @@ public class RecyclerMain extends AppCompatActivity {
     //이미지 값 겹치지 않게 두가지로 나눈다.
     private Uri uriS;
     private Uri uriF;
-
+    int start = 0;
+    int end = 1;
     /** 화면 안보일때 로딩창 켜져있으면 제거*/
         @Override
         protected void onStop() {
@@ -67,7 +69,7 @@ public class RecyclerMain extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new RecyclerAdapter();
-        getDairyAllDate(); //일기 리스트 생성
+        getDairyAllDate(start, end); //일기 리스트 생성 //처음값 끝 값
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -77,14 +79,17 @@ public class RecyclerMain extends AppCompatActivity {
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
                 int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
                 if (lastVisibleItemPosition == itemTotalCount) {
-                    Toast.makeText(RecyclerMain.this, "끝", Toast.LENGTH_SHORT).show();
-                    getDairyAllDate();
+                    recyclerView.scrollToPosition(adapter.getItemCount()-1);
+                    int newStart = start + 2;
+                    int newEnd = newStart + 1;
+                    start = newStart; //값 최신화
+                    end = newEnd; //값 최신화
+                    getDairyAllDate(newStart, newEnd);
                 }
             }
         });
 
 
-        출처: https://roemilk.tistory.com/40 [Blessing Venus]
 
 
         //리사이클러뷰 클릭시 액션
@@ -101,6 +106,7 @@ public class RecyclerMain extends AppCompatActivity {
         loading_dialog.dismiss(); //로딩창끄기
 
     }
+
 
     /** 날짜를 통해 제목 정보 가져오기*/
     private void getDairyInfo(String date, Uri uri) {
@@ -196,7 +202,7 @@ public class RecyclerMain extends AppCompatActivity {
     }
 
     /** 고유넘버 num을 통해 모든 날짜 컬럼 가져오기*/
-    private void getDairyAllDate() {
+    private void getDairyAllDate(int start, int end) {
 
         Response.Listener<String> responseListener = response -> {
             try {
@@ -204,10 +210,8 @@ public class RecyclerMain extends AppCompatActivity {
 
                 boolean success = jsonObject.getBoolean("success");
                 if (success) {
-                    int length = jsonObject.length()-1;
-                    for(int i = 0; i <= length; i++) { //있는 수만큼 반복문
+                    for(int i = start; i <= end; i++) { //있는 수만큼 반복문
                         String date = jsonObject.getString(String.valueOf(i));
-                        Log.d("베이베베이베", String.valueOf(length));
                         Log.d("베이베베이베", date);
                         downloadDiaryImage(HomeMain.num, date); //날짜에 맞는 (uri) 이미지 넣기
                         loading_dialog.dismiss(); //로딩창끄기
