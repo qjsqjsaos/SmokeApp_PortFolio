@@ -37,6 +37,7 @@ public class Startbutton extends AppCompatActivity {
                 intent.putExtra("id",id);
                 intent.putExtra("pw",pw);
                 startActivity(intent);
+                finish();
             }
         });
     }

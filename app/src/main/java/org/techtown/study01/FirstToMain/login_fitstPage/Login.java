@@ -126,16 +126,14 @@ public class Login extends AppCompatActivity {
                                 boolean success = jsonObject.getBoolean("success");
 
                                 if (success) {//로그인 성공시
-                                    Eid = jsonObject.getString("id");
-                                    Epw = jsonObject.getString("pw");
-                                    Ename = jsonObject.getString("name");
-
-                                    Log.d("이름", Ename);
-                                    Log.d("이름", Eid);
-                                    Log.d("이름", Epw);
-                                    firstcheck = jsonObject.getInt("firstcheck");
-
-                                    Log.d("펄스트체크", String.valueOf(firstcheck));
+                                        Eid = jsonObject.getString("id");
+                                        Epw = jsonObject.getString("pw");
+                                        Ename = jsonObject.getString("name");
+                                        int firstcheck = Integer.parseInt(jsonObject.getString("firstcheck"));
+                                        Log.d("이름", Ename);
+                                        Log.d("이름", Eid);
+                                        Log.d("이름", Epw);
+                                        Log.d("이름", String.valueOf(firstcheck));
 
                                         if(firstcheck == 1) { //만약 첫로그인이 아니라면, 그냥 로그인
                                             loadingStart();
@@ -146,6 +144,8 @@ public class Login extends AppCompatActivity {
                                             autoLogin.putString("inputPwd", Epw);
                                             autoLogin.putString("inputName", Ename);
                                             autoLogin.commit(); //커밋을 해야지 값이 저장된다.
+
+
                                             loading_dialog.cancel(); //로딩창 닫기
                                             Toast.makeText(getApplicationContext(), Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(Login.this, BottomNavi.class);
@@ -165,6 +165,7 @@ public class Login extends AppCompatActivity {
                                             intent.putExtra("name", Ename);
                                             intent.putExtra("pw", Epw);
                                             startActivity(intent);
+                                            finish();
                                         }
 
 
@@ -176,6 +177,7 @@ public class Login extends AppCompatActivity {
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                Log.d("제이슨", String.valueOf(e));
                                 loading_dialog.cancel(); //로딩창 닫기
                                 Toast.makeText(getApplicationContext(), "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                                 return;
