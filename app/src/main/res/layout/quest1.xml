@@ -56,7 +56,7 @@
         android:id="@+id/dayofciga"
         android:hint="갯수만 적어주세요 ex)15"
         android:inputType="number"
-        android:maxLength="4"
+        android:maxLength="2"
         android:maxLines="1"
         android:layout_width="@dimen/pledge_textInput_width"
         android:paddingLeft="@dimen/pledge_EditText_paddingLeft"
@@ -75,8 +75,8 @@
             android:textSize="@dimen/pledge_question_text_size" />
 
         <EditText
-            android:hint="숫자만 적어주세요 ex)4500"
-            android:maxLength="6"
+            android:hint="5만원 이하로 적어주세요 ex)4500"
+            android:maxLength="5"
             android:maxLines="1"
             android:inputType="number"
             android:id="@+id/pay"

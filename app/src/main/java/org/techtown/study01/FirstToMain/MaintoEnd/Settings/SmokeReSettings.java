@@ -74,22 +74,37 @@ public class SmokeReSettings extends AppCompatActivity{
     }
     /**흡연량과 흡연비용 업데이트 하기 */
     private void updateSmokeSettings() {
+        int newCigaCost = 0;
+        int newCigaCount = 0;
+        String C1 = null, C2 = null;
 
-       int newCigaCost = Integer.parseInt(cigaCost.getText().toString());
-       int newCigaCount = Integer.parseInt(cigaCount.getText().toString());
+        try {
+            newCigaCost = Integer.parseInt(cigaCost.getText().toString());
+            newCigaCount = Integer.parseInt(cigaCount.getText().toString());
+            C1 = cigaCost.getText().toString();
+            C2 = cigaCount.getText().toString();
+        }catch (Exception e){
+            e.printStackTrace();
 
-       if(cigaCost.equals("") || cigaCount.equals("")){
+        }
+
+       if(C1 == null || C2 == null){
            Toast.makeText(this, "빈칸을 입력해주세요.", Toast.LENGTH_SHORT).show();
            return;
-       }else if(newCigaCost == 0 || newCigaCount == 0){
-           Toast.makeText(this, "빈칸을 입력해주세요.", Toast.LENGTH_SHORT).show();
+       }else if (newCigaCost == 0 || newCigaCount == 0){
+           Toast.makeText(this, "갯수나 금액이 0일 수 없습니다.", Toast.LENGTH_SHORT).show();
            return;
        }else if(firstCost.equals(String.valueOf(newCigaCost)) && fisrtCount.equals(String.valueOf(newCigaCount))){ //똑같은 값에 적용을 누를 때,
             Toast.makeText(this, "새로운 값이 설정되었습니다.", Toast.LENGTH_SHORT).show();
             finish();
             return;
+       }else if(newCigaCost > 50000){
+           Toast.makeText(this, "5만원 이하로 입력이 가능합니다.", Toast.LENGTH_SHORT).show();
+           return;
        }
 
+        int finalNewCigaCost = newCigaCost;
+        int finalNewCigaCount = newCigaCount;
         Response.Listener<String> responseListener = new Response.Listener<String>() {
 
             @Override
@@ -102,8 +117,8 @@ public class SmokeReSettings extends AppCompatActivity{
                             Toast.makeText(getApplication(), "새로운 값이 설정되었습니다.", Toast.LENGTH_SHORT).show();
                             HomeMain homeMain = new HomeMain();
                             Bundle bundle = new Bundle();
-                            bundle.putLong("cost", newCigaCost);
-                            bundle.putLong("count", newCigaCount);
+                            bundle.putLong("cost", finalNewCigaCost);
+                            bundle.putLong("count", finalNewCigaCount);
                             homeMain.setArguments(bundle);
                             finish();
                     } else {//실패

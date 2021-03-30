@@ -2,30 +2,38 @@ package org.techtown.study01.FirstToMain.MaintoEnd.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import org.techtown.study01.FirstToMain.MaintoEnd.Notice.Notice;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.ReviseDiary;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.study01.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
+import org.techtown.study01.FirstToMain.login_fitstPage.Login;
 
 public class Settings extends Fragment {
 
     private ViewGroup viewGroup;
-    private Button smokeReSettings, developerGive, opinion, review, version, logout;
+    private Button smokeReSettings, developerGive, opinion, review, notice, logout;
     private Loading_Dialog loading_dialog;
     private SharedViewModel sharedViewModel;
     private Intent intent;
@@ -64,7 +72,58 @@ public class Settings extends Fragment {
             Log.d("들어오냐", String.valueOf(count));
         });
 
+        opinion.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSeABrL-1cL3iFHo86hdlULyw6KwvMhNvfNFR5A6kRAj_z0kWA/viewform?vc=0&c=0&w=1&flr=0&gxids=7628"));
+            startActivity(intent);
+        });
+
+        notice.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), Notice.class);
+            startActivity(intent);
+        });
+
+        logout.setOnClickListener(v -> {
+            dialog();
+        });
+
     }
+
+    /**로그아웃하기 */
+
+    private void goLogin() {
+        Intent intent = new Intent(getContext(), Login.class);
+        SharedPreferences auto = getActivity().getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor autoLogin = auto.edit();
+        autoLogin.putString("inputId", null);
+        autoLogin.putString("inputPwd", null);
+        autoLogin.putString("inputName", null);
+        autoLogin.commit(); //커밋을 해야지 값이 저장된다.
+        Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+        startActivity(intent);
+    }
+
+    /**다이얼로그 띄우기 */
+
+    private void dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(false); //외부 클릭시 막아주기
+        builder.setTitle("로그아웃");
+        builder.setMessage("로그아웃 하시겠습니까?");
+        builder.setPositiveButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.setNegativeButton("예",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        goLogin();
+                    }
+                });
+        builder.show();
+    }
+
 
     /**참조하기 */
     private void setInit() {
@@ -72,7 +131,7 @@ public class Settings extends Fragment {
         developerGive = viewGroup.findViewById(R.id.developerGive);
         opinion = viewGroup.findViewById(R.id.opinion);
         review = viewGroup.findViewById(R.id.review);
-        version = viewGroup.findViewById(R.id.version);
+        notice = viewGroup.findViewById(R.id.notice);
         logout = viewGroup.findViewById(R.id.logout);
     }
 

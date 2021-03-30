@@ -79,7 +79,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        loading_dialog.cancel();
+        loading_dialog = null;
     }
 
     /** 앱이 맨처음 실행될 때 최초 한번만*/

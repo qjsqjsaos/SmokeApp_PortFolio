@@ -3,8 +3,10 @@ package org.techtown.study01.FirstToMain.start;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -38,14 +40,19 @@ public class Quest1 extends AppCompatActivity {
 
     private Button button;
 
-    private String cCount;
-    private String cPay;
-    private String cGoal;
+    private String cCount = null , cGoal = null , id = null, name = null, pw = null;
+    private int cPay = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest1);
+
+        Intent intent = getIntent();
+        name = intent.getStringExtra("name");
+        id = intent.getStringExtra("id");
+        pw = intent.getStringExtra("pw");
 
         cigaCount = (EditText) findViewById(R.id.dayofciga); //하루 평균 담배 갯수
         cigaPay = (EditText) findViewById(R.id.pay); // 담배값
@@ -56,16 +63,21 @@ public class Quest1 extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() { //금연시작 버튼
             @Override
             public void onClick(View v) {
-                cCount = cigaCount.getText().toString();
-                cPay = cigaPay.getText().toString();
-                cGoal = goalText.getText().toString();
+                try {
+                        cCount = cigaCount.getText().toString();
+                        cPay = Integer.parseInt(cigaPay.getText().toString());
+                        cGoal = goalText.getText().toString();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
-                /** 이 부분 Login부분이랑 번갈아 가면서 확인 할 것.*/
-                //로그인으로 부터 id가져오기 (이걸로 판별해서 위에 3개의 값을 다 입력할 것이다)
-//                Intent intent = getIntent();
-//                String Eid = intent.getStringExtra("id");
-
-                String Eid = "qjsqjsaos";
+                if(cPay > 50000){
+                    Toast.makeText(Quest1.this, "5만원 이하로 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(cPay == 0 || cCount.equals("") || cGoal.equals("")) {
+                    Toast.makeText(Quest1.this, "빈칸 없이 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -80,11 +92,21 @@ public class Quest1 extends AppCompatActivity {
                                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+
+                                                SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                                                SharedPreferences.Editor autoLogin = auto.edit();
+                                                autoLogin.putString("inputId", id);
+                                                autoLogin.putString("inputPwd", pw);
+                                                autoLogin.putString("inputName", name);
+                                                autoLogin.commit(); //커밋을 해야지 값이 저장된다.
+
                                                 Intent intent = new Intent(Quest1.this, BottomNavi.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
                                                 startActivity(intent);
+                                                Toast.makeText(Quest1.this, name + "님의 금연을 응원합니다!", Toast.LENGTH_SHORT).show();
+                                                finish();
                                             }
                                         })
                                         .create()
@@ -109,7 +131,7 @@ public class Quest1 extends AppCompatActivity {
                     if (isEmpty(cCount)) {
                         Toast.makeText(getApplicationContext(), "하루 평균 흡연량을 적어주세요.", Toast.LENGTH_LONG).show();
                         return;
-                    } else if (isEmpty(cPay)) {
+                    } else if (cPay == 0) {
                         Toast.makeText(getApplicationContext(), "하루 평균 담배값을 적어주세요.", Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -129,7 +151,7 @@ public class Quest1 extends AppCompatActivity {
                     }
 
                     //담배값 유효성
-                    else if (!Pattern.matches("^[0-9]*$", cPay)) {
+                    else if (!Pattern.matches("^[0-9]*$", String.valueOf(cPay))) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(Quest1.this);
                         dialog = builder.setMessage("숫자만 입력해주세요!")
                                 .setPositiveButton("확인", null)
@@ -147,7 +169,7 @@ public class Quest1 extends AppCompatActivity {
                         dialog.show();
                         return;
                     } else {
-                        Quest1_Request quest1_request = new Quest1_Request(Eid, cCount, cPay, cGoal, responseListener);
+                        Quest1_Request quest1_request = new Quest1_Request(id, cCount, String.valueOf(cPay), cGoal, responseListener);
                         RequestQueue queue = Volley.newRequestQueue(Quest1.this);
                         queue.add(quest1_request);
 

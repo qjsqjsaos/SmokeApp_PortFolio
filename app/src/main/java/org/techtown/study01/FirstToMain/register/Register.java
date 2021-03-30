@@ -54,6 +54,7 @@ public class Register extends AppCompatActivity {
     private long cigacount = 0;
     private double cigapay = 0;
     private String goal = "입력해주세요!"; //이 값들은 후에 Quest1에서 넣어줄 값이다.
+    private int firstCheck = 0; //첫 로그인인지 식별
 
 
     //로딩창 띄우기
@@ -511,7 +512,6 @@ public class Register extends AppCompatActivity {
                                                     loading_dialog.cancel(); //로딩창 닫기
                                                 }
                                             } catch (JSONException e) {
-                                                Toast.makeText(getApplicationContext(),"인터넷이 원활하지 않습니다.",Toast.LENGTH_SHORT).show();
                                                 e.printStackTrace();
                                                 loading_dialog.cancel(); //로딩창 닫기
                                             }
@@ -628,7 +628,7 @@ public class Register extends AppCompatActivity {
                        } else {
                            //모든 값이 다 있으면 DB에 저장하는 메소드 실행
                            RegisterRequest register = new RegisterRequest(id, pw, name, email, datetime,
-                                   cigacount, cigapay, goal, responseListener);
+                                   cigacount, cigapay, goal, firstCheck, responseListener);
                            RequestQueue queue = Volley.newRequestQueue(Register.this);
                            queue.add(register);
                        }

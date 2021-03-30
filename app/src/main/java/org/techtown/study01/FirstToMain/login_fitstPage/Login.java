@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.study01.FirstToMain.register.Register_Auth;
 import org.techtown.study01.FirstToMain.start.Quest1;
+import org.techtown.study01.FirstToMain.start.Startbutton;
 
 public class Login extends AppCompatActivity {
     private static final String TAG = "Login"; //로그 찍을때,
@@ -41,6 +43,7 @@ public class Login extends AppCompatActivity {
 
     private String loginId, loginPwd, loginName;//자동 로그인용
     private String Eid, Epw, Ename; //자동로그인 식별용
+    private int firstcheck;
 
 
     //로딩창 띄우기
@@ -49,7 +52,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        loading_dialog.cancel();
+        loading_dialog = null;
     }
 
     @Override
@@ -70,6 +73,8 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
 
         btn_login = findViewById(R.id.btn_login);
@@ -102,6 +107,9 @@ public class Login extends AppCompatActivity {
                     loadingStart(); //로딩창띄우기
                     String id = idText.getText().toString();
                     String pw = passwordText.getText().toString();
+                    Log.d("에에에", id);
+                    Log.d("에에에", pw);
+
 
                     if(id.isEmpty() || pw.isEmpty()){
                         loading_dialog.cancel(); //로딩창 닫기
@@ -122,33 +130,43 @@ public class Login extends AppCompatActivity {
                                     Epw = jsonObject.getString("pw");
                                     Ename = jsonObject.getString("name");
 
-                                    SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-                                    SharedPreferences.Editor autoLogin = auto.edit();
-                                    autoLogin.putString("inputId", Eid);
-                                    autoLogin.putString("inputPwd", Epw);
-                                    autoLogin.putString("inputName", Ename);
-                                    autoLogin.commit(); //커밋을 해야지 값이 저장된다.
-                                    loading_dialog.cancel(); //로딩창 닫기
+                                    Log.d("이름", Ename);
+                                    Log.d("이름", Eid);
+                                    Log.d("이름", Epw);
+                                    firstcheck = jsonObject.getInt("firstcheck");
 
-                                    Log.d(TAG, String.valueOf(autoLogin));
+                                    Log.d("펄스트체크", String.valueOf(firstcheck));
 
-                                    if (id.equals(Eid) && pw.equals(Epw)) {
-                                        loadingStart();
+                                        if(firstcheck == 1) { //만약 첫로그인이 아니라면, 그냥 로그인
+                                            loadingStart();
 
-                                        Toast.makeText(getApplicationContext(), Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(Login.this, BottomNavi.class);
-                                        intent.putExtra("id", Eid);
-                                        intent.putExtra("name", Ename);
+                                            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                                            SharedPreferences.Editor autoLogin = auto.edit();
+                                            autoLogin.putString("inputId", Eid);
+                                            autoLogin.putString("inputPwd", Epw);
+                                            autoLogin.putString("inputName", Ename);
+                                            autoLogin.commit(); //커밋을 해야지 값이 저장된다.
+                                            loading_dialog.cancel(); //로딩창 닫기
+                                            Toast.makeText(getApplicationContext(), Ename + "님 환영합니다.", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(Login.this, BottomNavi.class);
+                                            intent.putExtra("id", Eid);
+                                            intent.putExtra("name", Ename);
+                                            Log.d("이름", Ename);
+                                            Log.d(TAG, String.valueOf(autoLogin));
 
+                                            startActivity(intent);
+                                            finish();
+                                            loading_dialog.cancel(); //로딩창 닫기
 
-                                        Log.d("이름", Ename);
+                                            Log.d(TAG, "자동 로그인 값 저장");
+                                        }else{ //만약 첫 로그인 이라면,
+                                            Intent intent = new Intent(Login.this, Startbutton.class);
+                                            intent.putExtra("id", Eid);
+                                            intent.putExtra("name", Ename);
+                                            intent.putExtra("pw", Epw);
+                                            startActivity(intent);
+                                        }
 
-                                        startActivity(intent);
-                                        finish();
-                                        loading_dialog.cancel(); //로딩창 닫기
-
-                                        Log.d(TAG, "자동 로그인 값 저장");
-                                    }
 
                                 } else {//로그인 실패시
                                     loading_dialog.cancel(); //로딩창 닫기

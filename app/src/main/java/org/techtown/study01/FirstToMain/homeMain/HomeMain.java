@@ -92,7 +92,6 @@ public class HomeMain extends Fragment {
     //뷰그룹 부분
     private ViewGroup viewGroup;
     private ImageView userView;
-    @SuppressLint("StaticFieldLeak")
     public static TextView nameView;
     private LinearLayout card;
     public static ImageView rank; //프로필 랭크 이미지
@@ -185,7 +184,7 @@ public class HomeMain extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        loading_dialog.cancel();
+        loading_dialog = null;
     }
 
 
@@ -455,9 +454,8 @@ public class HomeMain extends Fragment {
                     @Override
                     public void onClick(View v) {
                         loadingStart();//로딩창 보여주기
-                        int value = 0;
                         String svalue = "0";
-                        saveValueToDB(value, svalue); //디비에 값 0으로 초기화
+                        saveValueToDB(svalue); //디비에 값 0으로 초기화
                         noSmoke_Btn.setVisibility(VISIBLE); //금연하기 버튼 보이게 하고,
                         stop_Btn.setVisibility(GONE); //금연중지 버튼 없애기
                         timeThread.interrupt();//쓰레드 취소하기
@@ -841,7 +839,7 @@ public class HomeMain extends Fragment {
      * 금연을 포기하여 0으로 저장되는 곳
      */
 
-    public void saveValueToDB(int value, String svalue) {
+    public void saveValueToDB(String svalue) {
         Response.Listener<String> responseListener = new Response.Listener<String>() { //여기서 여기서 Quest1에서 썼던 데이터를 다가져온다.
 
             @Override
@@ -873,10 +871,9 @@ public class HomeMain extends Fragment {
         };
 
         //모두 취소된 값 0으로 저장
-        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(svalue, value, value, id, responseListener);
+        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(svalue, id, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(frag_ondestroy);
-        Log.d("뭐야", svalue + "/" + value + "/" + HomeMain.id);
     }
 
 
@@ -912,10 +909,9 @@ public class HomeMain extends Fragment {
             }
         };
 
-        //모두 취소된 값 0으로 저장
-        Frag_ondestroy frag_ondestroy = new Frag_ondestroy(dateTime, cigaCount, cigaCost, id, responseListener);
+        SaveSmokeInfo saveSmokeInfo = new SaveSmokeInfo(dateTime, cigaCount, cigaCost, id, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(frag_ondestroy);
+        queue.add(saveSmokeInfo);
         Log.d("뭐야", dateTime + "/" + cigaCount + "/" + cigaCost + "/" + HomeMain.id);
     }
 
