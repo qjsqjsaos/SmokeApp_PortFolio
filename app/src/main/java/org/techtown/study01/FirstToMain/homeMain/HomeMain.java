@@ -188,10 +188,6 @@ public class HomeMain extends Fragment {
     }
 
 
-
-
-
-
     /**
      * 프로필 사진 갤러리에 요청시에 값을 여기서 받고 프로필 사진란에 이미지를 넣어준다.
      */
@@ -350,20 +346,6 @@ public class HomeMain extends Fragment {
             }
         });
 
-//        try {
-//            Intent intent = getActivity().getIntent();
-//            if (intent != null) {
-//                name = intent.getStringExtra("name");
-//                id = intent.getStringExtra("id");
-//                cigaCount = intent.getLongExtra("count", 0);
-//                cigaCost = intent.getLongExtra("cost", 0);
-//                String goal = intent.getStringExtra("goal");
-//                Frag4.newGoalText.setText(goal);
-//                Purpose_Dialog.inputGoal.setText(goal);
-//            }
-
-        } catch (Exception e){
-        }
 
         setInit(); //뷰페이저 실행 메서드
 
