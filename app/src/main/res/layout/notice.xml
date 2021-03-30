@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/baseColor"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <TextView
-        android:id="@+id/textView16"
         style="@style/title_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_stroke"
         android:gravity="center"
+        android:textSize="22sp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
         android:text="공지사항"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
 
     <ScrollView
-        android:layout_marginTop="78dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
+            android:id="@+id/notice1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -34,30 +33,33 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:weightSum="10"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView17"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
                     android:layout_height="50dp"
                     android:gravity="fill_vertical"
                     android:paddingLeft="10dp"
-                    android:text="금연 동기부여"
+                    android:text="금연 플랫폼 '그만' 출시"
                     android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textView19"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:gravity="fill_vertical"
+                    android:layout_weight="3"
+                    android:paddingRight="10dp"
+                    android:gravity="center|right"
                     android:paddingLeft="10dp"
                     android:text="2021-01-20"
                     android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

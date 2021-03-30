@@ -18,6 +18,9 @@ import org.techtown.study01.FirstToMain.R;
 
 import java.sql.Time;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class StartNoSmoking_Dialog extends Dialog {
@@ -103,7 +106,20 @@ public class StartNoSmoking_Dialog extends Dialog {
 
                     }
                 };
-                DatePickerDialog dateDialog = new DatePickerDialog(getContext(), callbackMethod, 2021, 7, 26);
+                SimpleDateFormat FORMATTER =  new SimpleDateFormat("yyyy-MM-dd");
+                Date time = new Date();
+                String todayDate = FORMATTER.format(time);
+                int yearQ = Integer.parseInt(todayDate.substring(0, 4));
+                int monthQ = Integer.parseInt(todayDate.substring(5, 7));
+                int Goodmonth = monthQ + 1;
+                int dayQ = Integer.parseInt(todayDate.substring(8, 10));
+                DatePickerDialog dateDialog = new DatePickerDialog(getContext(), callbackMethod, yearQ, Goodmonth, dayQ);
+                Calendar minDate = Calendar.getInstance();
+                Calendar maxDate = Calendar.getInstance();
+                minDate.set(1970,0,1);
+                maxDate.set(yearQ,Goodmonth,dayQ);
+                dateDialog.getDatePicker().setMinDate(minDate.getTime().getTime());
+                dateDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
                 dateDialog.show();
             }
         });
@@ -118,9 +134,17 @@ public class StartNoSmoking_Dialog extends Dialog {
 
                     }
                 };
+                SimpleDateFormat FORMATTER =  new SimpleDateFormat("HH:mm");
+                Date time = new Date();
+                String time2 = FORMATTER.format(time);
+                int hourOfDay = Integer.parseInt(time2.substring(0, 2));
+                int minute = Integer.parseInt(time2.substring(3, 5));
+                TimePickerDialog dialog = new TimePickerDialog(getContext(), callbackMethod2, hourOfDay, minute, true);
 
-                TimePickerDialog dialog = new TimePickerDialog(getContext(), callbackMethod2, 8, 10, true);
+
                 dialog.show();
+
+
             }
         });
         start_stop_smoking.setOnClickListener(new View.OnClickListener() {
