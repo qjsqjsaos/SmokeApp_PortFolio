@@ -53,15 +53,6 @@ public class RecyclerMain extends AppCompatActivity {
     public static RecyclerMain recyclerMain;
 
 
-    /** 화면 안보일때 로딩창 켜져있으면 제거*/
-    @Override
-    protected void onStop() {
-        super.onStop();
-        loading_dialog.cancel();
-    }
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +70,7 @@ public class RecyclerMain extends AppCompatActivity {
 
 
         getDairyAllDate(start, end); //일기 리스트 생성 //처음값 끝 값
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -96,6 +88,8 @@ public class RecyclerMain extends AppCompatActivity {
 
             }
         });
+
+
 
 
         //리사이클러뷰 클릭시 액션
@@ -128,25 +122,27 @@ public class RecyclerMain extends AppCompatActivity {
 
                     Log.d("유알아이좀보자2", String.valueOf(uri));
 
-                    //어레이리스트안에 있는 날짜데이터들을 정렬하는 함수이다.
-                    Collections.sort(item, new Comparator<DiaryInfo_GetterSetter>() {
-                        @Override
-                        public int compare(DiaryInfo_GetterSetter o1, DiaryInfo_GetterSetter o2) {
-                            adapter.setItems(item);
-                            Log.d("이건 몇일까?", String.valueOf(adapter.getItemCount()));
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.smoothScrollToPosition(end-6); //며칠 차이 날지 보여주기
+                    if(item.size() == 1){ //리스트가 한개일때 표시가 안되서 넣음
+                        adapter.setItems(item);
+                        recyclerView.setAdapter(adapter);
+                        loading_dialog.dismiss(); //로딩창끄기
+                        return;
+                    }else{
+                        //어레이리스트안에 있는 날짜데이터들을 정렬하는 함수이다.
+                        Collections.sort(item, new Comparator<DiaryInfo_GetterSetter>() {
+                            @Override
+                            public int compare(DiaryInfo_GetterSetter o1, DiaryInfo_GetterSetter o2) {
+                                adapter.setItems(item);
+                                recyclerView.setAdapter(adapter);
+                                recyclerView.smoothScrollToPosition(end-6); //며칠 차이 날지 보여주기
+                                //리사이클러뷰 어뎁터 설정으로 마무리
+                                Log.d("뉴엔드2", String.valueOf(end));
+                                loading_dialog.dismiss(); //로딩창끄기
+                                return o2.getR_writeDate().compareTo(o1.getR_writeDate());
+                            }
+                        });
 
-                            Log.d("뉴엔드2", String.valueOf(end));
-                            return o2.getR_writeDate().compareTo(o1.getR_writeDate());
-                        }
-                    });
-
-                    //리사이클러뷰 어뎁터 설정으로 마무리
-
-
-
-                    loading_dialog.dismiss(); //로딩창끄기
+                    }
 
                 } else {//실패
                     Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
@@ -216,11 +212,11 @@ public class RecyclerMain extends AppCompatActivity {
 
                 boolean success = jsonObject.getBoolean("success");
                 if (success) {
-                    for(int i = start; i <= end; i++) { //있는 수만큼 반복문
-                        String date = jsonObject.getString(String.valueOf(i));
-                        Log.d("베이베베이베", date);
-                        downloadDiaryImage(HomeMain.num, date); //날짜에 맞는 (uri) 이미지 넣기
-                        loading_dialog.dismiss(); //로딩창끄기
+                        for (int i = start; i <= end; i++) { //있는 수만큼 반복문
+                            String date = jsonObject.getString(String.valueOf(i));
+                            Log.d("베이베베이베", date);
+                            downloadDiaryImage(HomeMain.num, date); //날짜에 맞는 (uri) 이미지 넣기
+                            loading_dialog.dismiss(); //로딩창끄기
 
                     }
 

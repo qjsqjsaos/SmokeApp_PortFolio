@@ -167,9 +167,9 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
         //일기 전체보기 버튼
         showAll_btn.setOnClickListener(v -> {
-            //recyclerView로 이동
-            Intent intent = new Intent(getActivity(), RecyclerMain.class);
-            startActivity(intent);
+                    //recyclerView로 이동
+                    Intent intent = new Intent(getActivity(), RecyclerMain.class);
+                    startActivity(intent);
         });
     }
 

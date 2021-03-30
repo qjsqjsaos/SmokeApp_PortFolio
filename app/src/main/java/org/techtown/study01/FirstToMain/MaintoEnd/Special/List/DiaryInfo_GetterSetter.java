@@ -51,3 +51,4 @@ public class DiaryInfo_GetterSetter {
         this.context = context;
     }
 }
+
