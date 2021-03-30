@@ -36,9 +36,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         //인플레이션을 위해선 인자로 넘어온 ViewGroup에 Context객체가 필요하다.)
 
         //인플레이션을 통해 뷰 객체를 만든다.
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_itemview, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_itemview, viewGroup, false);
 
-            return new ViewHolder(v,this); //이 코드 제일 아래있는 ViewHolder 클래스에 있는 ViewHolder생성자에 아이템 뷰를 전달하고,
+        return new ViewHolder(v,this); //이 코드 제일 아래있는 ViewHolder 클래스에 있는 ViewHolder생성자에 아이템 뷰를 전달하고,
     }
 
     //뷰홀더가 재사용될 때 호출(보통은 아이템에 개수만큼 객체가 만들어지지 않는다.
@@ -58,7 +58,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     /*DiaryInfo_GetterSetter 객체를 ArrayList안에 넣어서 관리하기 때문에 여기 어댑터에서 DiaryInfo_GetterSetter객체를 넣거나 가져 갈 수 있도록
-    * 다음과 같은 addItem(), setItems(), getItem(), setItem() 메서드를 추가한다. */
+     * 다음과 같은 addItem(), setItems(), getItem(), setItem() 메서드를 추가한다. */
 
     public void addItem(DiaryInfo_GetterSetter item){ //DiaryInfo_GetterSetter객체를 ArrayList에 add한다.
         items.add(item);
@@ -78,11 +78,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
     //클릭리스너를 구현하기 위한 인터페이스 생성자
-   @Override
+    @Override
     public void onItemClick(ViewHolder holder, View view, int position) {
-       if(onDiaryItemClickListener != null){
-           onDiaryItemClickListener.onItemClick(holder, view, position);
-       }
+        if(onDiaryItemClickListener != null){
+            onDiaryItemClickListener.onItemClick(holder, view, position);
+        }
     }
     //클릭리스너를 구현하기 위한 인터페이스 생성자
     public void setOnDiaryItemClickListener(OnDiaryItemClickListener onDiaryItemClickListener) {
@@ -110,7 +110,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    int position = getAbsoluteAdapterPosition();
                     if(onDiaryItemClickListener != null) {
                         onDiaryItemClickListener.onItemClick(ViewHolder.this, v, position);
                     }

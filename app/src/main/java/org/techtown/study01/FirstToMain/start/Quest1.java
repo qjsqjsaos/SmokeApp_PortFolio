@@ -87,7 +87,6 @@ public class Quest1 extends AppCompatActivity {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             if (success) {
-                                Toast.makeText(Quest1.this, "맞아?", Toast.LENGTH_SHORT).show();
                                 AlertDialog.Builder builder = new AlertDialog.Builder(Quest1.this);
                                 //등록후 응답받은 값이 true이면 성공 다이얼로그 출력
                                 builder.setMessage("꼭 성공하시길 바랍니다.")
@@ -104,10 +103,6 @@ public class Quest1 extends AppCompatActivity {
 
                                                 Intent intent = new Intent(Quest1.this, BottomNavi.class);
                                                 intent.putExtra("id", id);
-                                                intent.putExtra("name", name);
-                                                intent.putExtra("count", cCount);
-                                                intent.putExtra("cost", cPay);
-                                                intent.putExtra("goal", cGoal);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // 이전에 사용하던 액티비티를 종료한다.
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
@@ -175,7 +170,7 @@ public class Quest1 extends AppCompatActivity {
                                 .create();
                         dialog.show();
                         return;
-                    } else {
+                    }
                         Quest1_Request quest1_request = new Quest1_Request(id, cCount, cPay, cGoal, firstcheck, responseListener);
                         RequestQueue queue = Volley.newRequestQueue(Quest1.this);
                         queue.add(quest1_request);
@@ -184,9 +179,6 @@ public class Quest1 extends AppCompatActivity {
                         Log.d("몰까", String.valueOf(cPay));
                         Log.d("몰까", String.valueOf(cGoal));
                         Log.d("몰까", String.valueOf(firstcheck));
-
-                    }
-                    return;
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "올바른 값을 입력해주세요.", Toast.LENGTH_SHORT).show();

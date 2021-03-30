@@ -7,3 +7,4 @@ public interface OnDiaryItemClickListener {
     void onItemClick(RecyclerAdapter.ViewHolder holder, View view, int position);
 
 }
+

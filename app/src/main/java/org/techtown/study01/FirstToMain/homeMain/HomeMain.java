@@ -179,16 +179,6 @@ public class HomeMain extends Fragment {
 
 
     /**
-     * 혹시나 로딩창이 있다면 종료해주기
-     */
-    @Override
-    public void onStop() {
-        super.onStop();
-        loading_dialog = null;
-    }
-
-
-    /**
      * 프로필 사진 갤러리에 요청시에 값을 여기서 받고 프로필 사진란에 이미지를 넣어준다.
      */
     @Override

@@ -54,11 +54,11 @@ public class RecyclerMain extends AppCompatActivity {
 
 
     /** 화면 안보일때 로딩창 켜져있으면 제거*/
-        @Override
-        protected void onStop() {
-            super.onStop();
-            loading_dialog.cancel();
-        }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        loading_dialog.cancel();
+    }
 
 
 
@@ -98,30 +98,6 @@ public class RecyclerMain extends AppCompatActivity {
         });
 
 
-
-
-//
-//                addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                    @Override
-//                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                        super.onScrolled(recyclerView, dx, dy);
-//
-//                        int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-//                        int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-//                        if (lastVisibleItemPosition == itemTotalCount) {
-//                            recyclerView.scrollToPosition(adapter.getItemCount()-1);
-//                            int newStart = start + 2;
-//                            int newEnd = newStart + 1;
-//                            start = newStart; //값 최신화
-//                            end = newEnd; //값 최신화
-//                            getDairyAllDate(newStart, newEnd);
-//                        }
-//                    }
-//                });
-
-
-
-
         //리사이클러뷰 클릭시 액션
         adapter.setOnDiaryItemClickListener(new OnDiaryItemClickListener() {
             @Override
@@ -141,54 +117,54 @@ public class RecyclerMain extends AppCompatActivity {
     /** 날짜를 통해 제목 정보 가져오기*/
     private void getDairyInfo(String date, Uri uri) {
 
-            Response.Listener<String> responseListener = response -> {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
+        Response.Listener<String> responseListener = response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
 
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        String title = jsonObject.getString("title"); //타이틀 가져오기
-                        item.add(new DiaryInfo_GetterSetter(title, date, uri, getApplicationContext()));
+                boolean success = jsonObject.getBoolean("success");
+                if (success) {
+                    String title = jsonObject.getString("title"); //타이틀 가져오기
+                    item.add(new DiaryInfo_GetterSetter(title, date, uri, getApplicationContext()));
 
-                        Log.d("유알아이좀보자2", String.valueOf(uri));
+                    Log.d("유알아이좀보자2", String.valueOf(uri));
 
-                        //어레이리스트안에 있는 날짜데이터들을 정렬하는 함수이다.
-                        Collections.sort(item, new Comparator<DiaryInfo_GetterSetter>() {
-                            @Override
-                            public int compare(DiaryInfo_GetterSetter o1, DiaryInfo_GetterSetter o2) {
-                                adapter.setItems(item);
-                                Log.d("이건 몇일까?", String.valueOf(adapter.getItemCount()));
-                                recyclerView.setAdapter(adapter);
-                                recyclerView.smoothScrollToPosition(end-6); //며칠 차이 날지 보여주기
+                    //어레이리스트안에 있는 날짜데이터들을 정렬하는 함수이다.
+                    Collections.sort(item, new Comparator<DiaryInfo_GetterSetter>() {
+                        @Override
+                        public int compare(DiaryInfo_GetterSetter o1, DiaryInfo_GetterSetter o2) {
+                            adapter.setItems(item);
+                            Log.d("이건 몇일까?", String.valueOf(adapter.getItemCount()));
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.smoothScrollToPosition(end-6); //며칠 차이 날지 보여주기
 
-                                    Log.d("뉴엔드2", String.valueOf(end));
-                                return o2.getR_writeDate().compareTo(o1.getR_writeDate());
-                            }
-                        });
+                            Log.d("뉴엔드2", String.valueOf(end));
+                            return o2.getR_writeDate().compareTo(o1.getR_writeDate());
+                        }
+                    });
 
-                        //리사이클러뷰 어뎁터 설정으로 마무리
-
-
-
-                        loading_dialog.dismiss(); //로딩창끄기
-
-                    } else {//실패
-                        Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
-                        loading_dialog.dismiss(); //로딩창끄기
-                    }
+                    //리사이클러뷰 어뎁터 설정으로 마무리
 
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                    loading_dialog.dismiss(); //로딩창끄기
+
+                } else {//실패
+                    Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                     loading_dialog.dismiss(); //로딩창끄기
                 }
-            };
 
-            getDiaryInfo_Request getDiaryInfo_request = new getDiaryInfo_Request(HomeMain.num, date, responseListener);
-            RequestQueue queue = Volley.newRequestQueue(getApplication());
-            queue.add(getDiaryInfo_request);
 
-        }
+            } catch (Exception e) {
+                e.printStackTrace();
+                loading_dialog.dismiss(); //로딩창끄기
+            }
+        };
+
+        getDiaryInfo_Request getDiaryInfo_request = new getDiaryInfo_Request(HomeMain.num, date, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(getApplication());
+        queue.add(getDiaryInfo_request);
+
+    }
 
 
     /** 날짜를 통해 타이틀과 내용 정보 가져오기 (리사이클러뷰용)*/
@@ -203,11 +179,11 @@ public class RecyclerMain extends AppCompatActivity {
                     String title = jsonObject.getString("title"); //타이틀 가오기
                     String mainText = jsonObject.getString("maintext"); //내용 가져오기
                     //RecyclerMain으로 이동,
-                   Intent intent = new Intent(getApplication(), ViewDiary.class);
-                   intent.putExtra("Rtitle", title);
-                   intent.putExtra("RmainText", mainText);
-                   intent.putExtra("Rdate", date);
-                   startActivity(intent);
+                    Intent intent = new Intent(getApplication(), ViewDiary.class);
+                    intent.putExtra("Rtitle", title);
+                    intent.putExtra("RmainText", mainText);
+                    intent.putExtra("Rdate", date);
+                    startActivity(intent);
 //                   finish(); //업데이트 할 걸 우려해서 꺼버리기
                     Log.d("마지막리사이클", title);
                     Log.d("마지막리사이클", mainText);
