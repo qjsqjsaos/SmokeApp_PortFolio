@@ -1,6 +1,6 @@
 <resources>
     <!-- 설명, 약관보기 관련 -->
-    <dimen name="terms_checkbox_text_size">17sp</dimen> //체크박스 텍스트 사이즈
+    <dimen name="terms_checkbox_text_size">15sp</dimen> //체크박스 텍스트 사이즈
     <dimen name="terms_detail_text_size">15sp</dimen> //약관보기 텍스트 사이즈
     <dimen name="terms_all_width_size">320dp</dimen> //체크박스와 약관보기 레이아웃 가로 사이즈
     <dimen name="terms_button_text_size">18sp</dimen> //버튼 텍스트 사이즈

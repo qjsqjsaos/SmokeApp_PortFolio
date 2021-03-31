@@ -1,6 +1,7 @@
 package org.techtown.GmanService.FirstToMain.register;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -127,8 +128,7 @@ public class Register_Auth extends AppCompatActivity{
                 serviceView.setOnClickListener(new View.OnClickListener() { //이용약관 동의 약관보기
                         @Override
                         public void onClick(View v) {
-                                Intent intent = new Intent(Register_Auth.this, Terms_Service.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://daldalhanstory.tistory.com/210"));
                                 startActivity(intent);
                         }
                 });
@@ -136,8 +136,7 @@ public class Register_Auth extends AppCompatActivity{
                 personalView.setOnClickListener(new View.OnClickListener() { //개인정보 처리방침 동의 보기
                         @Override
                         public void onClick(View v) {
-                                Intent intent = new Intent(Register_Auth.this, Terms_Personal.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://daldalhanstory.tistory.com/209"));
                                 startActivity(intent);
                         }
                 });

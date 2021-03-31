@@ -45,12 +45,6 @@
         <activity android:name="org.techtown.GmanService.FirstToMain.findPW.AuthforPw" />
         <activity android:name="org.techtown.GmanService.FirstToMain.findPW.ChangePw" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.register.Terms_Service"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="org.techtown.GmanService.FirstToMain.register.Terms_Personal"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="org.techtown.GmanService.FirstToMain.register.Register_Auth"
             android:screenOrientation="portrait" />
         <activity

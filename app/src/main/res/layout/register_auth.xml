@@ -57,21 +57,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:weightSum="10"
             android:orientation="horizontal">
 
             <CheckBox
                 android:textColor="@color/textColor_special"
                 android:id="@+id/check_btn1"
                 android:textSize="@dimen/terms_checkbox_text_size"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="7"
                 android:layout_height="wrap_content"
                 android:text="이용약관 동의 (필수)" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                />
+
 
 
             <TextView
@@ -83,28 +81,24 @@
                 android:layout_width="0dp"
                 android:layout_height="30sp"
                 android:text="약관보기"
-                android:layout_weight="1" />
+                android:layout_weight="3" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:orientation="horizontal">
 
     <CheckBox
         android:textColor="@color/textColor_special"
         android:id="@+id/check_btn2"
         android:textSize="@dimen/terms_checkbox_text_size"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="7"
         android:layout_height="wrap_content"
         android:text="개인정보취급방침 동의 (필수)" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.14"
-            />
 
 
         <TextView
@@ -116,7 +110,7 @@
             android:layout_width="0dp"
             android:layout_height="30sp"
             android:text="약관보기"
-            android:layout_weight="1" />
+            android:layout_weight="3" />
 
         </LinearLayout>
 
