@@ -29,10 +29,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -82,6 +89,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     private Loading_Dialog loading_dialog;
 
+    private InterstitialAd interstitialAd; //전면광고 애드몹
+
 
     /** 화면 안보일때 로딩창 켜져있으면 제거*/
     @Override
@@ -124,6 +133,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
         components(); //참조 모음
 
+        FullAd(); //애드몹 전면 광고 다운
 
         materialCalendarViewSettings(); //메트리얼뷰 세팅
 
@@ -182,8 +192,9 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         //일기 전체보기 버튼
         showAll_btn.setOnClickListener(v -> {
                     //recyclerView로 이동
-                    Intent intent = new Intent(getActivity(), RecyclerMain.class);
-                    startActivity(intent);
+            Intent intent = new Intent(getActivity(), RecyclerMain.class);
+            startActivity(intent);
+            showInterstitial();
         });
     }
 
@@ -615,5 +626,81 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         Log.d("스타트데이트2", startdate);
     }
 
+    /**
+     * 이 아래는 전부 전면 광고이다.
+     */
+    public void loadAd() {
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(
+                getContext(),
+                getString(R.string.admob__unit_FullBanner),
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd2) {
+
+                        interstitialAd = interstitialAd2;
+                        interstitialAd.setFullScreenContentCallback(
+                                new FullScreenContentCallback() {
+                                    @Override
+                                    public void onAdDismissedFullScreenContent() {
+                                        interstitialAd = null;
+                                        //광고가 사라질 때,
+                                    }
+
+                                    @Override
+                                    public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                        interstitialAd = null;
+                                        //광고 보여주기 실패할 때,
+                                    }
+
+                                    @Override
+                                    public void onAdShowedFullScreenContent() {
+                                        //광고가 보여질 때
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        interstitialAd = null; //광고 받기 실패시
+                    }
+                });
+    }
+
+
+    private void showInterstitial() {
+        if (interstitialAd != null) { //광고가 로드 되었으면 보여주기
+            interstitialAd.show(getActivity());
+        } else {
+            //만약 로드가 안되었다면, 로드하기 호출
+            startGame();
+        }
+    }
+
+    private void startGame() {
+        //여기서 로드하기 // 한마디로 다운은 처음에 받지만, 실패할경우 한 번 더 받게 리사이클 돌게 해둔 것이다.
+        if (interstitialAd == null) {
+            loadAd();
+        }
+    }
+
+    /**
+     * 애드몹 전면 광고
+     */
+    private void FullAd() {
+
+        // 애드 몹 전면광고 초기화 //시작
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        loadAd(); //광고 다운받기
+        startGame(); //광고가 값이 없으면 다시 다운 받기
+        //끝
+    }
 
 }

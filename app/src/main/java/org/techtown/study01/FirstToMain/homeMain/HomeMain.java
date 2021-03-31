@@ -51,13 +51,18 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -93,6 +98,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 
 import static android.view.View.VISIBLE;
+import static org.techtown.study01.FirstToMain.homeMain.Profile_Dialog.profileImage;
 
 
 //홈 화면
@@ -140,7 +146,7 @@ public class HomeMain extends Fragment {
 
     private AlertDialog dialog; //알림 다이아로그
 
-    private Uri uri; //프로필 사진 자료
+    public static Uri uri; //프로필 사진 자료
 
     /////////////////////Frag1이였던 것//////////////////////////
 
@@ -161,9 +167,10 @@ public class HomeMain extends Fragment {
     private long last_cigaCount;
     private double last_cigaCost;
 
-    public static Uri dialogwithUri;
 
     private boolean defaultProfile_img = true;
+
+    private InterstitialAd interstitialAd; //전면광고 애드몹
 
 
     /**
@@ -198,10 +205,9 @@ public class HomeMain extends Fragment {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 uri = data.getData();
-                dialogwithUri = uri; //uri넣고, dialog로 보내기
                 Log.d("유알", String.valueOf(uri));
-                Glide.with(getContext()).load(uri).into(Profile_Dialog.profileImage); //다이얼로그 이미지사진에 넣기(일시적임)
-
+                Glide.with(getContext()).load(uri).into(profileImage); //다이얼로그 이미지사진에 넣기(일시적임)
+                defaultProfile_img = true;
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
                 Toast.makeText(getContext(), "이미지 불러오기 실패", Toast.LENGTH_SHORT).show();
             }
@@ -267,10 +273,10 @@ public class HomeMain extends Fragment {
         String filename = "profile" + num + ".jpg";
         storageRef.child("profile_img/" + filename).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onSuccess(Uri uri) {
-                Log.d("오냐오냐", String.valueOf(uri));
-                Glide.with(requireContext()).load(uri).into(userView);
-                dialogwithUri = uri; //첫 다이얼로그 프로필 보여주기
+            public void onSuccess(Uri uri2) {
+                Log.d("오냐오냐", String.valueOf(uri2));
+                Glide.with(requireContext()).load(uri2).into(userView);
+                uri = uri2;
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -305,6 +311,8 @@ public class HomeMain extends Fragment {
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
+
+        FullAd(); //애드몹 전면 광고 다운
 
         Bundle extra = this.getArguments();
         if(extra != null) {
@@ -389,10 +397,12 @@ public class HomeMain extends Fragment {
                         //하지만 닉네임이 처음 글씨와 다를 경우 중복체크 및 나머지 메서드 실행
                         String changeValue = Profile_Dialog.changedName.getText().toString();
                         loading_dialog.show(); //로딩창 띄우기
-                        if(!defaultProfile_img){ //기본이미지 버튼 눌렀을 때는 파이어베이스에 이미지만 삭제한다.
+                        if(defaultProfile_img == false){ //이 값이 false 일때, 기본이미지 버튼 눌렀을 때는 파이어베이스에 이미지만 삭제한다.
+                            userView.setImageResource(R.drawable.user); //기본이미지로 변경
                             fireBaseDelete(); //파이어베이스 이미지만 삭제
                         }else{//만약 다른 사진으로 변경을 했다면,
                             //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
+                            Glide.with(getContext()).load(uri).into(userView); //유저뷰에 변경한 이미지를 넣는다.
                             createProfile_Photo_and_Delete();
                         }
 
@@ -405,7 +415,6 @@ public class HomeMain extends Fragment {
                             Log.d("궁금2", newName);
                             nickNameCheck(newName); //이름 중복체크
                         }
-                        Glide.with(getContext()).load(uri).into(userView); //프로필 사진 이미지 넣기(일시적임)
                     }
                 });
 
@@ -413,7 +422,7 @@ public class HomeMain extends Fragment {
                 profile_dialog.cancelprofile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialogwithUri = null; //안에 선택이미지 초기화
+                        uri = null; //안에 선택이미지 초기화
                         Profile_Dialog.dialog.dismiss(); //다이얼로그닫기
                     }
                 });
@@ -422,11 +431,8 @@ public class HomeMain extends Fragment {
                 profile_dialog.defaultProfile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Drawable drawable = getResources().getDrawable(R.drawable.user); //기본이미지 드로어블로 가져오고
-                        userView.setImageDrawable(drawable); //프로필사진에 기본이미지를 넣는다.
-                        Profile_Dialog.profileImage.setImageDrawable(drawable); //다이얼로그에도 기본이미지를 넣는다.
-                        userView.setImageResource(R.drawable.user);
-                        dialogwithUri = null; //다이얼로그로 가는 uri에는 null값을 주어, 껏다켜도 기본이미지를 보이게 한다.
+                        profileImage.setImageResource(R.drawable.user); //다이얼로그에도 기본이미지를 넣는다.
+                        uri = null; //다이얼로그로 가는 uri에는 null값을 주어, 껏다켜도 기본이미지를 보이게 한다.
                         defaultProfile_img = false; //기본이미지 false로 바꿔준다.
                     }
                 });
@@ -438,6 +444,7 @@ public class HomeMain extends Fragment {
         stop_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //다이얼로그 띄우고,
+                showInterstitial(); //광고 보여주기
                 GiveUpNoSmoking_Dialog giveUpNoSmoking_dialog = new GiveUpNoSmoking_Dialog(getContext());
                 giveUpNoSmoking_dialog.NSYES.setOnClickListener(new View.OnClickListener() { //다시도전하기 버튼을 누르면
                     @Override
@@ -556,6 +563,7 @@ public class HomeMain extends Fragment {
         noSmoke_Btn.setOnClickListener(new View.OnClickListener() { //홈메인에 있는 버튼을 가져와서 클릭한다.
             @Override
             public void onClick(View v) {
+                showInterstitial(); //광고 보여주기
                 StartNoSmoking_Dialog dialog = new StartNoSmoking_Dialog(getContext());
                 dialog.setDialogListener(new StartNoSmoking_Dialog.CustomDialogListener() {
 
@@ -1065,6 +1073,85 @@ public class HomeMain extends Fragment {
         NameRequest nameRequest = new NameRequest(dbname, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(nameRequest);
+    }
+
+
+
+    /**
+     * 이 아래는 전부 전면 광고이다.
+     */
+    public void loadAd() {
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(
+                getContext(),
+                getString(R.string.admob__unit_FullBanner),
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd2) {
+
+                        interstitialAd = interstitialAd2;
+                        interstitialAd.setFullScreenContentCallback(
+                                new FullScreenContentCallback() {
+                                    @Override
+                                    public void onAdDismissedFullScreenContent() {
+                                        interstitialAd = null;
+                                        //광고가 사라질 때,
+                                    }
+
+                                    @Override
+                                    public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                        interstitialAd = null;
+                                        //광고 보여주기 실패할 때,
+                                    }
+
+                                    @Override
+                                    public void onAdShowedFullScreenContent() {
+                                        //광고가 보여질 때
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        interstitialAd = null; //광고 받기 실패시
+                    }
+                });
+    }
+
+
+    private void showInterstitial() {
+        if (interstitialAd != null) { //광고가 로드 되었으면 보여주기
+            interstitialAd.show(getActivity());
+        } else {
+            //만약 로드가 안되었다면, 로드하기 호출
+            startGame();
+        }
+    }
+
+    private void startGame() {
+        //여기서 로드하기 // 한마디로 다운은 처음에 받지만, 실패할경우 한 번 더 받게 리사이클 돌게 해둔 것이다.
+        if (interstitialAd == null) {
+            loadAd();
+        }
+    }
+
+    /**
+     * 애드몹 전면 광고
+     */
+    private void FullAd() {
+
+        // 애드 몹 전면광고 초기화 //시작
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        loadAd(); //광고 다운받기
+        startGame(); //광고가 값이 없으면 다시 다운 받기
+        //끝
     }
 
 }

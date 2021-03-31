@@ -23,6 +23,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -40,6 +43,7 @@ public class SmokeReSettings extends AppCompatActivity{
 
     private AdView adView;
     private FrameLayout adContainerView;
+
 
 
     /**애드몹 시작*/
@@ -74,15 +78,16 @@ public class SmokeReSettings extends AppCompatActivity{
         setContentView(R.layout.smoke_re_settings);
         setInit();
 
-        // 애드 몹 초기화 //시작
-        MobileAds.initialize(this, initializationStatus -> { });
 
+        // 애드 몹 띠광고 초기화 //시작
+        MobileAds.initialize(this, initializationStatus -> { });
         adContainerView = findViewById(R.id.ad_view_container5);
         adView = new AdView(this);
         adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
         adContainerView.addView(adView);
         loadBanner();
         //끝
+
 
         try {
             Intent intent = getIntent();

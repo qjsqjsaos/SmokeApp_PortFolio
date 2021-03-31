@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -24,12 +26,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import org.techtown.study01.FirstToMain.MaintoEnd.Notice.Notice;
 import org.techtown.study01.FirstToMain.MaintoEnd.Special.ReviseDiary;
@@ -47,13 +57,14 @@ public class Settings extends Fragment {
     private Intent intent;
     private long cost, count;
 
+
+    private InterstitialAd interstitialAd; //전면광고 애드몹
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         loadingStart();
     }
-
-
 
     @Nullable
     @Override
@@ -63,6 +74,8 @@ public class Settings extends Fragment {
 
         loading_dialog.dismiss();
 
+        FullAd(); //애드몹 전면 광고 다운
+
         setInit();
 
         buttonListener();
@@ -70,7 +83,29 @@ public class Settings extends Fragment {
         return viewGroup;
 
     }
-    /**버튼 리스너*/
+
+
+    /**
+     * 애드몹 전면 광고
+     */
+    private void FullAd() {
+
+        // 애드 몹 전면광고 초기화 //시작
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        loadAd(); //광고 다운받기
+        startGame(); //광고가 값이 없으면 다시 다운 받기
+        //끝
+    }
+
+
+    /**
+     * 버튼 리스너
+     */
     private void buttonListener() {
         smokeReSettings.setOnClickListener(v -> {
             intent = new Intent(getActivity(), SmokeReSettings.class);
@@ -79,6 +114,7 @@ public class Settings extends Fragment {
             startActivity(intent);
             Log.d("들어오냐", String.valueOf(cost));
             Log.d("들어오냐", String.valueOf(count));
+            showInterstitial(); //광고 삽입하기(보여주기) 쉽게말해 loadAd -> showIntersritial (다운이 안되거나 오류가 뜨면 다시 다운받기)-> startGame 으로 순으로 진행이 된다.
         });
 
         opinion.setOnClickListener(v -> {
@@ -86,7 +122,7 @@ public class Settings extends Fragment {
             startActivity(intent);
         });
 
-        notice.setOnClickListener(v ->{
+        notice.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), Notice.class);
             startActivity(intent);
         });
@@ -97,7 +133,9 @@ public class Settings extends Fragment {
 
     }
 
-    /**로그아웃하기 */
+    /**
+     * 로그아웃하기
+     */
 
     private void goLogin() {
         Intent intent = new Intent(getContext(), Login.class);
@@ -111,7 +149,9 @@ public class Settings extends Fragment {
         startActivity(intent);
     }
 
-    /**다이얼로그 띄우기 */
+    /**
+     * 다이얼로그 띄우기
+     */
 
     private void dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -134,7 +174,9 @@ public class Settings extends Fragment {
     }
 
 
-    /**참조하기 */
+    /**
+     * 참조하기
+     */
     private void setInit() {
         smokeReSettings = viewGroup.findViewById(R.id.smokeReSettings);
         developerGive = viewGroup.findViewById(R.id.developerGive);
@@ -150,8 +192,10 @@ public class Settings extends Fragment {
         loading_dialog.dismiss();
     }
 
-    /**로딩창*/
-    public void loadingStart(){
+    /**
+     * 로딩창
+     */
+    public void loadingStart() {
         loading_dialog = new Loading_Dialog(getContext());
         loading_dialog.setCanceledOnTouchOutside(false);
         loading_dialog.setCancelable(false); //뒤로가기방지
@@ -169,7 +213,6 @@ public class Settings extends Fragment {
             @Override
             public void onChanged(Long along) {
                 cost = along;
-                Log.d("들어오냐2", String.valueOf(along));
             }
         });
         //담배 갯수
@@ -177,9 +220,70 @@ public class Settings extends Fragment {
             @Override
             public void onChanged(Long along) {
                 count = along;
-                Log.d("들어오냐2", String.valueOf(along));
             }
         });
 
     }
+
+
+    /**
+     * 이 아래는 전부 전면 광고이다.
+     */
+    public void loadAd() {
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(
+                getContext(),
+                getString(R.string.admob__unit_FullBanner),
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd2) {
+
+                        interstitialAd = interstitialAd2;
+                        interstitialAd.setFullScreenContentCallback(
+                                new FullScreenContentCallback() {
+                                    @Override
+                                    public void onAdDismissedFullScreenContent() {
+                                        interstitialAd = null;
+                                        //광고가 사라질 때,
+                                    }
+
+                                    @Override
+                                    public void onAdFailedToShowFullScreenContent(AdError adError) {
+                                        interstitialAd = null;
+                                        //광고 보여주기 실패할 때,
+                                    }
+
+                                    @Override
+                                    public void onAdShowedFullScreenContent() {
+                                     //광고가 보여질 때
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        interstitialAd = null; //광고 받기 실패시
+                    }
+                });
+    }
+
+
+    private void showInterstitial() {
+        if (interstitialAd != null) { //광고가 로드 되었으면 보여주기
+            interstitialAd.show(getActivity());
+        } else {
+            //만약 로드가 안되었다면, 로드하기 호출
+            startGame();
+        }
+    }
+
+    private void startGame() {
+        //여기서 로드하기 // 한마디로 다운은 처음에 받지만, 실패할경우 한 번 더 받게 리사이클 돌게 해둔 것이다.
+        if (interstitialAd == null) {
+            loadAd();
+        }
+    }
 }
+
