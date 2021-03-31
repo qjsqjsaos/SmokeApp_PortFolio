@@ -16,7 +16,7 @@
         android:gravity="center"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="Service Agreement"
+        android:text="약관 동의"
         android:textStyle="bold" />
 
     <TextView
@@ -144,5 +144,11 @@
         android:layout_marginTop="52dp"
         android:text="금연투게더는 개인정보를 안전하게\n      보호하고, 취급하고 있습니다."
         android:textSize="@dimen/terms_explain_text" />
+
+    <FrameLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/ad_view_container18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

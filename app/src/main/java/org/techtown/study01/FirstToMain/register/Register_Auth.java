@@ -2,14 +2,22 @@ package org.techtown.study01.FirstToMain.register;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import org.techtown.study01.FirstToMain.R;
 
@@ -20,10 +28,48 @@ public class Register_Auth extends AppCompatActivity{
         private CheckBox checkBoxAll, check1, check2;
         private TextView serviceView, personalView;
 
+        private AdView adView;
+        private FrameLayout adContainerView;
+
+        /**애드몹 시작*/
+
+        private void loadBanner() {
+                AdRequest adRequest = new AdRequest.Builder().build();
+                AdSize adSize = getAdSize();
+                adView.setAdSize(adSize);
+                adView.loadAd(adRequest);
+
+        }
+
+        private AdSize getAdSize() {
+                Display display = getWindowManager().getDefaultDisplay();
+                DisplayMetrics outMetrics = new DisplayMetrics();
+                display.getMetrics(outMetrics);
+
+                float widthPixels = outMetrics.widthPixels;
+                float density = outMetrics.density;
+
+                int adWidth = (int) (widthPixels / density);
+
+                return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+        }
+
+        /**애드몹 끝*/
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.register_auth);
+
+                // 애드 몹 초기화 //시작
+                MobileAds.initialize(this, initializationStatus -> { });
+
+                adContainerView = findViewById(R.id.ad_view_container18);
+                adView = new AdView(this);
+                adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
+                adContainerView.addView(adView);
+                loadBanner();
+                //끝
 
                 serviceView = findViewById(R.id.serviceView);
                 personalView = findViewById(R.id.personalView);
@@ -56,12 +102,14 @@ public class Register_Auth extends AppCompatActivity{
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                                 startActivity(intent);
+                                                finish();
                                         } else if (check1.isChecked() && check2.isChecked() && checkBoxAll.isChecked()) { //전체선택 1번 2번 눌렀을 경우 참
                                                 Intent intent = new Intent(Register_Auth.this, Register.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                                 startActivity(intent);
+                                                finish();
                                         } else if(!check1.isChecked() && !check2.isChecked() && !checkBoxAll.isChecked()){ //다 클릭 안했을 때 참
                                                 Toast.makeText(getApplicationContext(), "항목을 체크해주세요.", Toast.LENGTH_SHORT).show();
                                                 return;

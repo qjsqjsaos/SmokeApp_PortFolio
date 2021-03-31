@@ -23,10 +23,15 @@
             android:gravity="center"
             android:paddingTop="20dp"
             android:paddingBottom="10dp"
-            android:text="Sign Up"
+            android:text="회원가입"
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/ad_view_container20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
     <LinearLayout
@@ -379,12 +384,14 @@
 
         </ScrollView>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"/>
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/ad_view_container19"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 
 
 </LinearLayout>
