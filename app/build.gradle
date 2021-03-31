@@ -10,7 +10,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "org.techtown.study01.FirstToMain"
+        applicationId "org.techtown.GmanService.FirstToMain"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 2

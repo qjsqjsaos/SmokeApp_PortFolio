@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:210513731504:android:de20469a223ab9b8a80075",
         "android_client_info": {
-          "package_name": "org.techtown.study01.FirstToMain"
+          "package_name": "org.techtown.GmanService.FirstToMain"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "210513731504-l9ah4ile50mvitca82t5hfstbbdj4a7p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "org.techtown.study01.FirstToMain",
+            "package_name": "org.techtown.GmanService.FirstToMain",
             "certificate_hash": "30012953434b5c66cfd65383c90e01514bce8fd2"
           }
         },
