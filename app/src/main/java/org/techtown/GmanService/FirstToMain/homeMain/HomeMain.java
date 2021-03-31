@@ -390,6 +390,7 @@ public class HomeMain extends Fragment {
                         loading_dialog.show(); //로딩창 띄우기
                         if(defaultProfile_img == false){ //이 값이 false 일때, 기본이미지 버튼 눌렀을 때는 파이어베이스에 이미지만 삭제한다.
                             userView.setImageResource(R.drawable.user); //기본이미지로 변경
+                            profileImage.setImageResource(R.drawable.user); //다이얼로그 이미지도 기본으로
                             fireBaseDelete(); //파이어베이스 이미지만 삭제
                         }else{//만약 다른 사진으로 변경을 했다면,
                             //파이어베이스에 내 새로운 프로필 이미지는 저장하고, 전에 이미지는 삭제한다.
