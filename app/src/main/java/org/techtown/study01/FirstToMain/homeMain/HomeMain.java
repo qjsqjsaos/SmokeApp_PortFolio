@@ -165,9 +165,9 @@ public class HomeMain extends Fragment {
 
     private boolean defaultProfile_img = true;
 
-    //애드몹
-    private FrameLayout adContainerView;
     private AdView adView;
+
+
 
 
 
@@ -294,44 +294,10 @@ public class HomeMain extends Fragment {
             file.mkdir(); //디렉토리를 만든다.
         }
     }
-
     /**애드몹 시작*/
-    private void loadBanner() {
-        // Create an ad request. Check your logcat output for the hashed device ID
-        // to get test ads on a physical device, e.g.,
-        // "Use AdRequest.Builder.addTestDevice("ABCDE0123") to get test ads on this
-        // device.
-        List<String> testDevices = new ArrayList<>();
-        testDevices.add(AdRequest.DEVICE_ID_EMULATOR);
-        RequestConfiguration requestConfiguration
-                = new RequestConfiguration.Builder()
-                .setTestDeviceIds(testDevices)
-                .build();
-        MobileAds.setRequestConfiguration(requestConfiguration);
-
-        AdSize adSize = getAdSize();
-        // Step 4 - Set the adaptive ad size on the ad view.
-        adView.setAdSize(adSize);
 
 
-        // Step 5 - Start loading the ad in the background.
-        adView.loadAd(new AdRequest.Builder().build());
-    }
 
-    private AdSize getAdSize() {
-        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float widthPixels = outMetrics.widthPixels;
-        float density = outMetrics.density;
-
-        int adWidth = (int) (widthPixels / density);
-
-        // Step 3 - Get adaptive ad size and return for setting on the ad view.
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getContext(), adWidth);
-    }
     /**애드몹 끝*/
 
     @Nullable
@@ -350,20 +316,19 @@ public class HomeMain extends Fragment {
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
 
         // 애드 몹 초기화 //시작
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+        MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
 
-        adContainerView = viewGroup.findViewById(R.id.ad_view_container);
-        // Step 1 - Create an AdView and set the ad unit ID on it.
-        adView = new AdView(getContext());
-        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
-        adContainerView.addView(adView);
-        loadBanner();
 
+        adView = viewGroup.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
         //끝
+
+
 
         Bundle extra = this.getArguments();
         if(extra != null) {
