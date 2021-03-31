@@ -167,6 +167,29 @@
                 android:textSize="17sp"
                  />
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="20dp" />
+
+        <FrameLayout
+            android:id="@+id/ad_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.gms.ads.AdView
+                android:layout_gravity="center"
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/admob__unit_TTIBanner">
+            </com.google.android.gms.ads.AdView>
+
+        </FrameLayout>
+
 
         <LinearLayout
             android:layout_width="0dp"
@@ -197,6 +220,9 @@
                 android:text="다시 시작할래요. ㅠㅠ"
                 android:textColor="@color/textColor_special"
             />
+
+
+
 
         <LinearLayout
             android:layout_width="0dp"

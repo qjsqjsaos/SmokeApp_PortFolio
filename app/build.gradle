@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "org.techtown.study01.FirstToMain"
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 2
         versionName '1.0.0.2'
@@ -55,7 +55,8 @@ allprojects {
 
 
 dependencies {
-    implementation 'androidx.recyclerview:recyclerview:1.2.0-rc01' //리사이클러뷰
+    implementation 'com.google.android.gms:play-services-ads:19.8.0' //구글 애드몹몹
+   implementation 'androidx.recyclerview:recyclerview:1.2.0-rc01' //리사이클러뷰
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3' //메트리얼 캘린더뷰 (일기)
     implementation platform('com.google.firebase:firebase-bom:26.7.0')//파이버베이스 (오류나 사용자 수를 보여준다)
     implementation 'com.google.firebase:firebase-analytics' //파이버베이스 (오류나 사용자 수를 보여준다)

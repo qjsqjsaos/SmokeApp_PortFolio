@@ -6,6 +6,10 @@
     <string name="title_diary">일기</string>
     <string name="title_check_health">상태 변화</string>
     <string name="title_settings">설정</string>
+    <string name="app_id">ca-app-pub-7522479314167243~9048215236</string>
+    <string name="admob__unit_TTIBanner">ca-app-pub-7522479314167243/2017146299</string>
+
+
 
     <!-- Ted Permission -->
     <string name="permission_1">[설정] > [권한] 에서 권한을 허용할 수 있습니다.</string>
