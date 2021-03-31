@@ -166,7 +166,7 @@ public class HomeMain extends Fragment {
     private boolean defaultProfile_img = true;
 
     private AdView adView;
-
+    private FrameLayout adContainerView;
 
 
 
@@ -296,7 +296,33 @@ public class HomeMain extends Fragment {
     }
     /**애드몹 시작*/
 
+    private void loadBanner() {
+        // Create an ad request. Check your logcat output for the hashed device ID
+        // to get test ads on a physical device, e.g.,
+        // "Use AdRequest.Builder.addTestDevice("ABCDE0123") to get test ads on this
+        // device."
 
+        AdRequest adRequest = new AdRequest.Builder().build();
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+        adView.loadAd(adRequest);
+
+    }
+
+    private AdSize getAdSize() {
+        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        // Step 3 - Get adaptive ad size and return for setting on the ad view.
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getActivity(), adWidth);
+    }
 
     /**애드몹 끝*/
 
@@ -316,16 +342,18 @@ public class HomeMain extends Fragment {
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
 
         // 애드 몹 초기화 //시작
+        // Initialize the Mobile Ads SDK.
         MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
             @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
+            public void onInitializationComplete(InitializationStatus initializationStatus) { }
         });
 
-
-        adView = viewGroup.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        adContainerView = viewGroup.findViewById(R.id.ad_view_container);
+        // Step 1 - Create an AdView and set the ad unit ID on it.
+        adView = new AdView(getActivity());
+        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        adContainerView.addView(adView);
+        loadBanner();
         //끝
 
 
