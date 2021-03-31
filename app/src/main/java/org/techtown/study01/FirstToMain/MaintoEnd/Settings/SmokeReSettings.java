@@ -8,14 +8,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -31,12 +38,52 @@ public class SmokeReSettings extends AppCompatActivity{
     private long cigaCountS, cigaCostS;
     private String firstCost, fisrtCount;
 
+    private AdView adView;
+    private FrameLayout adContainerView;
+
+
+    /**애드몹 시작*/
+
+    private void loadBanner() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+        adView.loadAd(adRequest);
+
+    }
+
+    private AdSize getAdSize() {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    /**애드몹 끝*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.smoke_re_settings);
         setInit();
+
+        // 애드 몹 초기화 //시작
+        MobileAds.initialize(this, initializationStatus -> { });
+
+        adContainerView = findViewById(R.id.ad_view_container5);
+        adView = new AdView(this);
+        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
+        adContainerView.addView(adView);
+        loadBanner();
+        //끝
+
         try {
             Intent intent = getIntent();
             if (intent != null) {

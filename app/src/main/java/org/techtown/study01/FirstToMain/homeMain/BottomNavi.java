@@ -12,7 +12,9 @@ import android.net.Network;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -57,7 +59,34 @@ public class BottomNavi extends AppCompatActivity {
         private long newAppVersion = 1;
         public static long toolbarImgCount = 15;
 
+    private AdView adView;
+    private FrameLayout adContainerView;
 
+
+    /**애드몹 시작*/
+
+    private void loadBanner() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+        adView.loadAd(adRequest);
+
+    }
+
+    private AdSize getAdSize() {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    /**애드몹 끝*/
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -65,6 +94,16 @@ public class BottomNavi extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navi);
+
+        // 애드 몹 초기화 //시작
+        MobileAds.initialize(this, initializationStatus -> { });
+
+        adContainerView = findViewById(R.id.ad_view_container6);
+        adView = new AdView(this);
+        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
+        adContainerView.addView(adView);
+        loadBanner();
+        //끝
 
 
             getRemoteConfig(); //파이어베이스 리모트 컨피고(업데이트 알림)

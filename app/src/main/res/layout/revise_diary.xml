@@ -12,7 +12,6 @@
         android:background="@color/baseColor">
 
         <TextView
-
             style="@style/title_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,6 +21,11 @@
             android:text="일기 다시 쓰기"
             android:textColor="@color/textColor"
             android:textStyle="bold" />
+
+        <FrameLayout
+            android:id="@+id/ad_view_container9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_marginTop="20dp"

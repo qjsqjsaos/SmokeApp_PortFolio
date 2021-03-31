@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    android:layout_width="match_parent"
+
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:background="@color/baseColor"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/baseColor"
-    tools:context=".MaintoEnd.Special.Diary">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView36"
@@ -28,109 +23,135 @@
         />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="0.2"
-         />
-
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="12dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.3"
-            android:src="@drawable/green_point" />
-
-        <TextView
-            android:id="@+id/countDiary"
-            style="@style/bold_theme"
-            android:layout_width="0dp"
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
-            android:layout_weight="3"
-            android:gravity="center_vertical"
-            android:text=":  0회"
-            android:textSize="16sp" />
-
-
-    </LinearLayout>
-
-
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView5"
-        android:layout_width="match_parent"
-        android:layout_height="270dp"
-        app:mcv_selectionColor="@color/textColor_special"
-        app:mcv_showOtherDates="all">
-
-
-    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/diaryViewpager"
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:clipChildren="false"
-        android:clipToPadding="false" />
-
-    <LinearLayout
-        android:gravity="start"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+            android:fillViewport="true">
 
         <LinearLayout
-
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"/>
-
-        <Button
-        android:id="@+id/delete_btn"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/diary_delete" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/showAll_btn"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/diary_all" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/dialogPlusButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/diaryplus_btn" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/baseColor"
+            tools:context=".MaintoEnd.Special.Diary">
 
 
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-       />
+            <FrameLayout
+                android:id="@+id/ad_view_container3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="0.2"
+                 />
+
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.3"
+                    android:src="@drawable/green_point" />
+
+                <TextView
+                    android:id="@+id/countDiary"
+                    style="@style/bold_theme"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical"
+                    android:text=":  0회"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView5"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                app:mcv_selectionColor="@color/textColor_special"
+                app:mcv_showOtherDates="all">
+
+
+            </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/diaryViewpager"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:clipChildren="false"
+                android:clipToPadding="false" />
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                />
+
+            <LinearLayout
+                android:gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"/>
+
+                <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/diary_delete" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/showAll_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/diary_all" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/dialogPlusButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/diaryplus_btn" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="80dp" />
+
+        </LinearLayout>
+        </ScrollView>
 </LinearLayout>
-</ScrollView>

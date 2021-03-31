@@ -16,10 +16,13 @@ import android.os.Environment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,10 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -70,6 +77,34 @@ public class ReviseDiary extends AppCompatActivity {
     //로딩창 띄우기
     private Loading_Dialog loading_dialog;
 
+    private AdView adView;
+    private FrameLayout adContainerView;
+
+    /**애드몹 시작*/
+
+    private void loadBanner() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+        adView.loadAd(adRequest);
+
+    }
+
+    private AdSize getAdSize() {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    /**애드몹 끝*/
+
     /**갤러리에서 이미지 받아오기 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -102,6 +137,16 @@ public class ReviseDiary extends AppCompatActivity {
         Log.d("자자자자D", String.valueOf(Diary.uri));
 
         setInit(); //참조정리
+
+        // 애드 몹 초기화 //시작
+        MobileAds.initialize(this, initializationStatus -> { });
+
+        adContainerView = findViewById(R.id.ad_view_container9);
+        adView = new AdView(this);
+        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
+        adContainerView.addView(adView);
+        loadBanner();
+        //끝
 
         clickListener(); //리스너 모음
 

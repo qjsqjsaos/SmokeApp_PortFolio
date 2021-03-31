@@ -6,12 +6,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +26,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.BottomNavi;
@@ -50,6 +60,9 @@ public class HealthCheck extends Fragment {
 
     private Loading_Dialog loading_dialog;
 
+    private AdView adView;
+    private FrameLayout adContainerView;
+
     /** 화면 안보일때 로딩창 켜져있으면 제거*/
     @Override
     public void onDestroy() {
@@ -73,6 +86,31 @@ public class HealthCheck extends Fragment {
         loadingStart();
     }
 
+    /**애드몹 시작*/
+
+    private void loadBanner() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+        adView.loadAd(adRequest);
+
+    }
+
+    private AdSize getAdSize() {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getActivity(), adWidth);
+    }
+
+    /**애드몹 끝*/
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,6 +118,16 @@ public class HealthCheck extends Fragment {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.health_check, container, false);
 
         loading_dialog.dismiss();
+
+        // 애드 몹 초기화 //시작
+        MobileAds.initialize(getActivity(), initializationStatus -> { });
+
+        adContainerView = viewGroup.findViewById(R.id.ad_view_container2);
+        adView = new AdView(getActivity());
+        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
+        adContainerView.addView(adView);
+        loadBanner();
+        //끝
 
         findProgressandImageView(); //프로그레스바와 이미지뷰 참조하기
 

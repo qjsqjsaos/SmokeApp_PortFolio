@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:background="@color/baseColor"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/baseColor"
-        tools:context=".MaintoEnd.Special.Diary">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
 
         <TextView
             style="@style/title_name"
@@ -25,78 +19,116 @@
             android:textStyle="bold"
             />
 
-        <Button
-            android:id="@+id/smokeReSettings"
-        android:layout_width="@dimen/login_Button_width"
-        android:layout_height="@dimen/login_Button_height"
-        android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-        android:background="@drawable/all_btn"
-        android:text="흡연 재설정"
-        android:textColor="@color/textColor"
-        android:textSize="@dimen/Login_text_size"
-        android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/developerGive"
-            android:layout_width="@dimen/login_Button_width"
-            android:layout_height="@dimen/login_Button_height"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/all_btn"
-            android:text="개발자 후원하기"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/Login_text_size"
-            android:textStyle="bold" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-        <Button
-            android:id="@+id/opinion"
-            android:layout_width="@dimen/login_Button_width"
-            android:layout_height="@dimen/login_Button_height"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/all_btn"
-            android:text="의견 및 문의"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/Login_text_size"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/review"
-            android:layout_width="@dimen/login_Button_width"
-            android:layout_height="@dimen/login_Button_height"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/all_btn"
-            android:text="리뷰 써주기"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/Login_text_size"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/notice"
-            android:layout_width="@dimen/login_Button_width"
-            android:layout_height="@dimen/login_Button_height"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/all_btn"
-            android:text="공지사항"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/Login_text_size"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="@dimen/login_Button_width"
-            android:layout_height="@dimen/login_Button_height"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/all_btn"
-            android:text="로그아웃"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/Login_text_size"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/baseColor"
+                tools:context=".MaintoEnd.Special.Diary">
 
 
-    </LinearLayout>
-</ScrollView>
+
+                <FrameLayout
+                    android:id="@+id/ad_view_container4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/adX"
+                    android:layout_width="@dimen/login_Button_width"
+                    android:layout_height="@dimen/login_Button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/all_btn_adx"
+                    android:text="광고 제거 버전으로 전환하기"
+                    android:textColor="@color/baseColor"
+                    android:textSize="@dimen/Login_text_size"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/smokeReSettings"
+                android:layout_width="@dimen/login_Button_width"
+                android:layout_height="@dimen/login_Button_height"
+                android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                android:background="@drawable/all_btn"
+                android:text="흡연 재설정"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/Login_text_size"
+                android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/developerGive"
+                    android:layout_width="@dimen/login_Button_width"
+                    android:layout_height="@dimen/login_Button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/all_btn"
+                    android:text="개발자 후원하기"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/Login_text_size"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/opinion"
+                    android:layout_width="@dimen/login_Button_width"
+                    android:layout_height="@dimen/login_Button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/all_btn"
+                    android:text="의견 및 문의"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/Login_text_size"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/review"
+                    android:layout_width="@dimen/login_Button_width"
+                    android:layout_height="@dimen/login_Button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/all_btn"
+                    android:text="리뷰 써주기"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/Login_text_size"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/notice"
+                    android:layout_width="@dimen/login_Button_width"
+                    android:layout_height="@dimen/login_Button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/all_btn"
+                    android:text="공지사항"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/Login_text_size"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="@dimen/login_Button_width"
+                    android:layout_height="@dimen/login_Button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/all_btn"
+                    android:text="로그아웃"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/Login_text_size"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp" />
+
+
+            </LinearLayout>
+        </ScrollView>
+
+</LinearLayout>

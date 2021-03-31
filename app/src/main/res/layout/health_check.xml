@@ -21,19 +21,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
-        android:layout_width="match_parent"
 
+
+    <ScrollView
+        android:background="@drawable/home_and_another_background"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:background="@color/baseColor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <FrameLayout
+                android:id="@+id/ad_view_container2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
@@ -1621,7 +1630,12 @@
                     android:gravity="center"
                     android:text="출처 : 대한민국 보건소 및 네이버 관련자료"/>
 
+
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="80dp" />
 
 
         </LinearLayout>

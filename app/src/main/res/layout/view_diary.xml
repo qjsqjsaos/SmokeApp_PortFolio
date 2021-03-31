@@ -227,5 +227,10 @@
             android:layout_height="40dp"
             />
 
+        <FrameLayout
+            android:id="@+id/ad_view_container7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 </ScrollView>

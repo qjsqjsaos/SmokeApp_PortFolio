@@ -11,15 +11,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -44,6 +51,34 @@ public class ViewDiary extends AppCompatActivity {
     public static String saveDateV;
     private String title, mainText;
 
+    private AdView adView;
+    private FrameLayout adContainerView;
+
+    /**애드몹 시작*/
+
+    private void loadBanner() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+        adView.loadAd(adRequest);
+
+    }
+
+    private AdSize getAdSize() {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    /**애드몹 끝*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +86,16 @@ public class ViewDiary extends AppCompatActivity {
         setContentView(R.layout.view_diary);
 
         setInit();//참조하기
+
+        // 애드 몹 초기화 //시작
+        MobileAds.initialize(this, initializationStatus -> { });
+
+        adContainerView = findViewById(R.id.ad_view_container7);
+        adView = new AdView(this);
+        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
+        adContainerView.addView(adView);
+        loadBanner();
+        //끝
 
         clickListener(); //클릭리스너들
 

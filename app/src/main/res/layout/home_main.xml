@@ -12,10 +12,11 @@
         android:background="@drawable/home_and_another_background"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="1dp"
-            android:layout_height="30dp"
-            />
+        <FrameLayout
+            android:id="@+id/ad_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -168,17 +169,6 @@
                  />
 
 
-        <FrameLayout
-            android:id="@+id/ad_view_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="20dp" />
-
-
         <Button
             android:id="@+id/button2"
             style="@style/bold_theme"
@@ -204,14 +194,9 @@
                 android:textColor="@color/textColor_special"
             />
 
-
-
-
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="30dp" />
-
-
+            android:layout_height="80dp" />
 
     </LinearLayout>
 
