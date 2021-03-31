@@ -24,7 +24,7 @@ import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.findid.FindId;
 import org.techtown.study01.FirstToMain.findid.IdEmailCheck_for_pw;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
-import org.techtown.study01.FirstToMain.register.GMailSender;
+import org.techtown.study01.FirstToMain.register.NaverSender;
 
 import java.util.regex.Pattern;
 
@@ -169,19 +169,19 @@ public class FindPw extends AppCompatActivity {
                 result = result - 100000;
             }
 
-            //구글 이메일로 smtp 사용해서 인증번호 보내기
-            GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694!@");
-            //GMailSender.sendMail(제목, 본문내용, 받는사람);
-            try {
-                gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 인증번호를 확인해주세요.",
-                        "인증번호는 : \"" + result + "\" 입니다. \n " +
-                                "인증번호를 입력하시고 확인버튼을 누르시면 비밀번호를 변경하실 수 있습니다.", email); //받는 사람 이메일
-                Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "비밀번호 찾기 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        //네이버 메일 smtp보내기
+        NaverSender naverSender = new NaverSender();
+        //naverSender.NaverSender(제목, 본문내용, 받는 사람);
+        try {
+            naverSender.NaverSender("금연 솔루션 플랫폼 '그만'입니다. 인증번호를 확인해주세요.",
+                    "인증번호는 : \"" + result + "\" 입니다. \n " +
+                            "인증번호를 입력하시고 확인버튼을 누르시면 비밀번호를 변경하실 수 있습니다.", email);
+            Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "비밀번호 찾기 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
     }
 

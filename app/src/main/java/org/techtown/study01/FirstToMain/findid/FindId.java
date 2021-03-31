@@ -29,7 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.techtown.study01.FirstToMain.R;
 import org.techtown.study01.FirstToMain.homeMain.Loading_Dialog;
-import org.techtown.study01.FirstToMain.register.GMailSender;
+import org.techtown.study01.FirstToMain.register.NaverSender;
 
 public class FindId extends AppCompatActivity {
 
@@ -138,19 +138,20 @@ public class FindId extends AppCompatActivity {
 
 
     public void idSendStart()  {
-        //구글 이메일로 smtp 사용해서 인증번호 보내기
-        GMailSender gMailSender = new GMailSender("merrygoaround0726@gmail.com", "asdf4694!@");
-                //GMailSender.sendMail(제목, 본문내용, 받는사람);
-
+        //네이버 메일 smtp보내기
+        NaverSender naverSender = new NaverSender();
+        //naverSender.NaverSender(제목, 본문내용, 받는 사람);
         try {
-            gMailSender.sendMail("금연 솔루션 플랫폼 '그만'입니다. 아이디를 확인해주세요.", "아이디는 \"" + replaceStar(Eid,5) + "\" 입니다. \n " +
+            naverSender.NaverSender("금연 솔루션 플랫폼 '그만'입니다. 아이디를 확인해주세요.", "아이디는 \"" + replaceStar(Eid,5) + "\" 입니다. \n " +
                     "아이디가 맞는지 확인해 주시고, 궁금하신 점은 'merrygoaround0726@gmail.com' 이메일로 문의주시기 바랍니다. 감사합니다. ", email);
+            Toast.makeText(getApplicationContext(), "이메일로 아이디가 전송되었습니다.", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "이메일 전송 오류, 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+            return;
         }
-        Toast.makeText(getApplicationContext(), "이메일로 아이디가 전송되었습니다.", Toast.LENGTH_SHORT).show();
 
-            }
+    }
 
     public static String replaceStar(String str, int len){ //아이디 별표시해서 출력
         String returnStr="";
