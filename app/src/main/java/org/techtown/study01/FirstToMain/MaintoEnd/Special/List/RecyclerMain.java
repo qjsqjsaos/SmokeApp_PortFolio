@@ -174,15 +174,20 @@ public class RecyclerMain extends AppCompatActivity {
                 if (success) {
                     String title = jsonObject.getString("title"); //타이틀 가오기
                     String mainText = jsonObject.getString("maintext"); //내용 가져오기
-                    //RecyclerMain으로 이동,
-                    Intent intent = new Intent(getApplication(), ViewDiary.class);
-                    intent.putExtra("Rtitle", title);
-                    intent.putExtra("RmainText", mainText);
-                    intent.putExtra("Rdate", date);
-                    startActivity(intent);
-//                   finish(); //업데이트 할 걸 우려해서 꺼버리기
-                    Log.d("마지막리사이클", title);
-                    Log.d("마지막리사이클", mainText);
+                    if(title.equals("") && mainText.equals("")) {
+                        //RecyclerMain으로 이동,
+                        Intent intent = new Intent(getApplication(), ViewDiary.class);
+                        intent.putExtra("Rdate", date);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(getApplication(), ViewDiary.class);
+                        intent.putExtra("Rtitle", title);
+                        intent.putExtra("RmainText", mainText);
+                        intent.putExtra("Rdate", date);
+                        startActivity(intent);
+                        Log.d("마지막리사이클", title);
+                        Log.d("마지막리사이클", mainText);
+                    }
 
                 } else {//실패
                     Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();

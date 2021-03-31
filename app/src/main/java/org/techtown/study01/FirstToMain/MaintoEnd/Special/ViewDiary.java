@@ -52,13 +52,9 @@ public class ViewDiary extends AppCompatActivity {
 
         setInit();//참조하기
 
-
         clickListener(); //클릭리스너들
 
         getIntentValue(); //기본 미리보기용
-
-
-
     }
 
     /**인텐트 널체크 및 구분*/
@@ -67,6 +63,15 @@ public class ViewDiary extends AppCompatActivity {
         if(!TextUtils.isEmpty(intent.getStringExtra("Rtitle"))){ //인텐트 널체크 만약 Rtitle이라는 글자가 안비어 있다면,
             title = intent.getStringExtra("Rtitle");
             mainText = intent.getStringExtra("RmainText");
+            saveDateV = intent.getStringExtra("Rdate");
+            acceptInfo(); //다이어리 정보 적용
+            if (saveDateV != null) { //날짜 값이 있으면
+                downloadDiaryImage(HomeMain.num, saveDateV);
+            }else{
+                Toast.makeText(this, "날짜 값 오류입니다.. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+            }
+
+        }else if(!TextUtils.isEmpty(intent.getStringExtra("Rdate"))){ //날짜 값만 넘어 왔으면 이렇게 처리한다.
             saveDateV = intent.getStringExtra("Rdate");
             acceptInfo(); //다이어리 정보 적용
             if (saveDateV != null) { //날짜 값이 있으면
