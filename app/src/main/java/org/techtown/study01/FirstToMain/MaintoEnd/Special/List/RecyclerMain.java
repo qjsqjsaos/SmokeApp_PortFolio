@@ -174,7 +174,7 @@ public class RecyclerMain extends AppCompatActivity {
                 if (success) {
                     String title = jsonObject.getString("title"); //타이틀 가오기
                     String mainText = jsonObject.getString("maintext"); //내용 가져오기
-                    if(title.equals("") && mainText.equals("")) {
+                    if(title.equals("") || mainText.equals("")) {
                         //RecyclerMain으로 이동,
                         Intent intent = new Intent(getApplication(), ViewDiary.class);
                         intent.putExtra("Rdate", date);

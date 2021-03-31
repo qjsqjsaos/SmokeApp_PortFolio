@@ -75,12 +75,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     private Loading_Dialog loading_dialog;
 
-    /** 화면 안보일때 로딩창 켜져있으면 제거*/
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        loading_dialog = null;
-    }
 
     /** 앱이 맨처음 실행될 때 최초 한번만*/
     @Override
