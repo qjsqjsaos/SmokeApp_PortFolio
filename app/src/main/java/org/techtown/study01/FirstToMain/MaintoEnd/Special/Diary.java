@@ -82,8 +82,15 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
     private Loading_Dialog loading_dialog;
 
-    private AdView adView;
-    private FrameLayout adContainerView;
+
+    /** 화면 안보일때 로딩창 켜져있으면 제거*/
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(loading_dialog != null) {
+            loading_dialog.dismiss();
+        }
+    }
 
 
     /** 앱이 맨처음 실행될 때 최초 한번만*/
@@ -108,30 +115,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         loading_dialog.show();
     }
 
-    /**애드몹 시작*/
 
-    private void loadBanner() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        AdSize adSize = getAdSize();
-        adView.setAdSize(adSize);
-        adView.loadAd(adRequest);
-
-    }
-
-    private AdSize getAdSize() {
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float widthPixels = outMetrics.widthPixels;
-        float density = outMetrics.density;
-
-        int adWidth = (int) (widthPixels / density);
-
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getActivity(), adWidth);
-    }
-
-    /**애드몹 끝*/
 
     @Nullable
     @Override
@@ -140,15 +124,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
 
         components(); //참조 모음
 
-        // 애드 몹 초기화 //시작
-        MobileAds.initialize(getActivity(), initializationStatus -> { });
-
-        adContainerView = viewGroup.findViewById(R.id.ad_view_container3);
-        adView = new AdView(getActivity());
-        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
-        adContainerView.addView(adView);
-        loadBanner();
-        //끝
 
         materialCalendarViewSettings(); //메트리얼뷰 세팅
 

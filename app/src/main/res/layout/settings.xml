@@ -33,12 +33,6 @@
                 tools:context=".MaintoEnd.Special.Diary">
 
 
-
-                <FrameLayout
-                    android:id="@+id/ad_view_container4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
                 <Button
                     android:id="@+id/adX"
                     android:layout_width="@dimen/login_Button_width"

@@ -30,16 +30,11 @@
         android:fillViewport="true">
 
         <LinearLayout
-            android:layout_marginTop="10dp"
             android:background="@color/baseColor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/ad_view_container2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_marginTop="10dp"

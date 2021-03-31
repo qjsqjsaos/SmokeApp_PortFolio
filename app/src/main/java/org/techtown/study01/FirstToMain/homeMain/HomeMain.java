@@ -165,11 +165,6 @@ public class HomeMain extends Fragment {
 
     private boolean defaultProfile_img = true;
 
-    private AdView adView;
-    private FrameLayout adContainerView;
-
-
-
 
     /**
      * 앱 종료시 쓰레드가 종료할 때만 쓰레드 종료(어차피 돌아오면 다시 켜짐)
@@ -296,31 +291,6 @@ public class HomeMain extends Fragment {
     }
 
 
-    /**애드몹 시작*/
-
-    private void loadBanner() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        AdSize adSize = getAdSize();
-        adView.setAdSize(adSize);
-        adView.loadAd(adRequest);
-
-    }
-
-    private AdSize getAdSize() {
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float widthPixels = outMetrics.widthPixels;
-        float density = outMetrics.density;
-
-        int adWidth = (int) (widthPixels / density);
-
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getActivity(), adWidth);
-    }
-
-    /**애드몹 끝*/
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -335,18 +305,6 @@ public class HomeMain extends Fragment {
         noSmoke_Btn = viewGroup.findViewById(R.id.button2); //금연하기버튼
         stop_Btn = viewGroup.findViewById(R.id.ns_stop); //금연취소 버튼
         rank = viewGroup.findViewById(R.id.rank); //프로필 등급 이미지
-
-        // 애드 몹 초기화 //시작
-        MobileAds.initialize(getActivity(), initializationStatus -> { });
-
-        adContainerView = viewGroup.findViewById(R.id.ad_view_container);
-        adView = new AdView(getActivity());
-        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
-        adContainerView.addView(adView);
-        loadBanner();
-        //끝
-
-
 
         Bundle extra = this.getArguments();
         if(extra != null) {

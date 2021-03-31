@@ -60,14 +60,14 @@ public class HealthCheck extends Fragment {
 
     private Loading_Dialog loading_dialog;
 
-    private AdView adView;
-    private FrameLayout adContainerView;
 
     /** 화면 안보일때 로딩창 켜져있으면 제거*/
     @Override
     public void onDestroy() {
         super.onDestroy();
-        loading_dialog.cancel();
+        if(loading_dialog != null) {
+            loading_dialog.dismiss();
+        }
     }
 
 
@@ -86,30 +86,6 @@ public class HealthCheck extends Fragment {
         loadingStart();
     }
 
-    /**애드몹 시작*/
-
-    private void loadBanner() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        AdSize adSize = getAdSize();
-        adView.setAdSize(adSize);
-        adView.loadAd(adRequest);
-
-    }
-
-    private AdSize getAdSize() {
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float widthPixels = outMetrics.widthPixels;
-        float density = outMetrics.density;
-
-        int adWidth = (int) (widthPixels / density);
-
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getActivity(), adWidth);
-    }
-
-    /**애드몹 끝*/
 
     @Nullable
     @Override
@@ -118,16 +94,6 @@ public class HealthCheck extends Fragment {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.health_check, container, false);
 
         loading_dialog.dismiss();
-
-        // 애드 몹 초기화 //시작
-        MobileAds.initialize(getActivity(), initializationStatus -> { });
-
-        adContainerView = viewGroup.findViewById(R.id.ad_view_container2);
-        adView = new AdView(getActivity());
-        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
-        adContainerView.addView(adView);
-        loadBanner();
-        //끝
 
         findProgressandImageView(); //프로그레스바와 이미지뷰 참조하기
 

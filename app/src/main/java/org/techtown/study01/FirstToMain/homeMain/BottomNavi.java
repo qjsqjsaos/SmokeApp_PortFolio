@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.Uri;
@@ -55,9 +56,6 @@ public class BottomNavi extends AppCompatActivity {
 
         public static BottomNavi bottomNavi;
 
-        private FirebaseRemoteConfig remoteConfig;
-        private long newAppVersion = 1;
-        public static long toolbarImgCount = 15;
 
     private AdView adView;
     private FrameLayout adContainerView;
@@ -104,10 +102,6 @@ public class BottomNavi extends AppCompatActivity {
         adContainerView.addView(adView);
         loadBanner();
         //끝
-
-
-            getRemoteConfig(); //파이어베이스 리모트 컨피고(업데이트 알림)
-
 
             //서비스실행 (인터넷이 연결되어 있는지 아닌지 확인해준다.(NetworkConnectionCheck -> MyService -> BottomNavi)) 항상 실행중
         Intent serviceIntent = new Intent(this,MyService.class);
@@ -276,69 +270,6 @@ public class BottomNavi extends AppCompatActivity {
     }
 
 
-        // TODO: 2021-03-16 존나 중요!! 파이어베이스
-        @SuppressLint("NewApi")
-        private void checkVersion() {
-            /**나중에 해두기 업데이트 체크 부분 위에도*/
-            try {
-                PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-                long appVersion;
-                appVersion = pi.getLongVersionCode();
-                Log.d("버전", String.valueOf(appVersion));
-
-                if (appVersion < newAppVersion) { //사용자의 버전이 현재 나온 앱 버전보다 낮을때
-                    updateDialog(); //업데이트 알림
-                    return;
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        private void updateDialog() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("업데이트 알림");
-            builder.setMessage("최신버전이 등록되었습니다.\n업데이트가 필요합니다.")
-                    .setCancelable(false)
-                    .setPositiveButton("업데이트", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("market://details?id=org.techtown.study01.FirstToMain.homeMain"));
-                            //플레이스토어로감
-                            startActivity(intent);
-                            dialog.cancel();
-                            Toast.makeText(BottomNavi.this, "성공", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-        }
-
-
-        private void getRemoteConfig() {
-            /**나중에 해두기 업데이트 체크 부분 위에도*/
-
-            //파이에베이스 리모트콘피그(앱이 업데이트 되었을때 사용자에게 알리기 위해)
-            remoteConfig = FirebaseRemoteConfig.getInstance();
-            FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                    .build();
-            remoteConfig.setConfigSettingsAsync(configSettings);
-            remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
-
-            remoteConfig.fetchAndActivate()
-                    .addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Boolean> task) {
-                            newAppVersion = remoteConfig.getLong("new_app_version");
-                            toolbarImgCount = remoteConfig.getLong("toolbar_img_count");
-                            checkVersion();
-                        }
-                    });
-        }
-
-
         public void popupIntent2(){ // 만약 인터넷이 연결이 되어 있지 않으면 인텐트를 한다.
             Intent intent = new Intent(BottomNavi.this, First_page_loading.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); //똑같은 액티비티가 중첩되지 않게 해준다.
@@ -346,6 +277,8 @@ public class BottomNavi extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY); // 그동안 쌓여있던 액티비티를 전부 종료해준다.
             startActivity(intent);
         }
+
+
 
     }
 

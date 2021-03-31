@@ -54,6 +54,7 @@ public class ViewDiary extends AppCompatActivity {
     private AdView adView;
     private FrameLayout adContainerView;
 
+
     /**애드몹 시작*/
 
     private void loadBanner() {

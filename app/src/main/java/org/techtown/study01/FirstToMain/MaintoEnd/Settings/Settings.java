@@ -47,39 +47,13 @@ public class Settings extends Fragment {
     private Intent intent;
     private long cost, count;
 
-    private AdView adView;
-    private FrameLayout adContainerView;
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         loadingStart();
     }
 
-    /**애드몹 시작*/
 
-    private void loadBanner() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        AdSize adSize = getAdSize();
-        adView.setAdSize(adSize);
-        adView.loadAd(adRequest);
-
-    }
-
-    private AdSize getAdSize() {
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float widthPixels = outMetrics.widthPixels;
-        float density = outMetrics.density;
-
-        int adWidth = (int) (widthPixels / density);
-
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getActivity(), adWidth);
-    }
-
-    /**애드몹 끝*/
 
     @Nullable
     @Override
@@ -87,20 +61,9 @@ public class Settings extends Fragment {
 
         viewGroup = (ViewGroup) inflater.inflate(R.layout.settings, container, false);
 
-
         loading_dialog.dismiss();
 
         setInit();
-
-        // 애드 몹 초기화 //시작
-        MobileAds.initialize(getActivity(), initializationStatus -> { });
-
-        adContainerView = viewGroup.findViewById(R.id.ad_view_container4);
-        adView = new AdView(getActivity());
-        adView.setAdUnitId(getString(R.string.admob__unit_TTIBanner));
-        adContainerView.addView(adView);
-        loadBanner();
-        //끝
 
         buttonListener();
 

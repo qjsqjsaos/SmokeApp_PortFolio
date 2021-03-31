@@ -35,14 +35,6 @@
             android:background="@color/baseColor"
             tools:context=".MaintoEnd.Special.Diary">
 
-
-
-            <FrameLayout
-                android:id="@+id/ad_view_container3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
