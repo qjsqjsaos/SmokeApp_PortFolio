@@ -211,6 +211,7 @@ public class WriteDiary extends AppCompatActivity {
                         createDiary(title, mainText, Diary.startdate); //제목, 본문, 오늘 날짜를 디비로 보낸다.
                         //파이어베이스 사진 저장하기
                         createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate); //날짜로 식별한다. 날짜를 파라미터로 넣어준다
+
                         Log.d("보자보자", title);
                         Log.d("보자보자", mainText);
                         Log.d("보자보자", Diary.startdate);

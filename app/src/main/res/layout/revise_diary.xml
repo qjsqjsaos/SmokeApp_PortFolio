@@ -86,6 +86,7 @@
                     android:gravity="center">
 
                     <EditText
+                        android:lineSpacingMultiplier="1.5"
                         android:textSize="16sp"
                         android:id="@+id/mainTextR"
                         android:fontFamily="@font/mapo"

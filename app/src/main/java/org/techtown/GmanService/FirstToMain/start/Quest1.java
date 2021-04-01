@@ -158,16 +158,6 @@ public class Quest1 extends AppCompatActivity {
                         dialog.show();
                         return;
                     }
-
-                    //금연 목표 유효성
-                    else if (!Pattern.matches("^[가-힣a-zA-Z0-9_]{2,30}$", cGoal)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Quest1.this);
-                        dialog = builder.setMessage("목표는 최소 2자에서 ~ 30자입니다.(특수문자도 안됨)")
-                                .setPositiveButton("확인", null)
-                                .create();
-                        dialog.show();
-                        return;
-                    }
                         Quest1_Request quest1_request = new Quest1_Request(id, cCount, cPay, cGoal, firstcheck, responseListener);
                         RequestQueue queue = Volley.newRequestQueue(Quest1.this);
                         queue.add(quest1_request);

@@ -255,7 +255,7 @@
                         android:background="@drawable/round_edittext"
                         android:hint="인증 번호를 받을 이메일 주소"
                         android:inputType="textEmailAddress"
-                        android:maxLength="30"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:paddingLeft="@dimen/register_EditText_paddingLeft"
                         android:textSize="@dimen/register_hint_size" />

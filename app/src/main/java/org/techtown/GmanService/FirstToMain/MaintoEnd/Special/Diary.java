@@ -126,6 +126,8 @@ public class Diary extends Fragment implements OnDateSelectedListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.diary, container, false);
 
+        loading_dialog.dismiss();
+
         components(); //참조 모음
 
         FullAd(); //애드몹 전면 광고 다운

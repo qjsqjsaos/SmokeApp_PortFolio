@@ -34,18 +34,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
+
             <TextView
                 android:id="@+id/titleZ"
                 style="@style/bold_theme"
-                android:fontFamily="@font/mapo"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:maxLines="1"
-                android:gravity="center_vertical"
-                android:textSize="16sp"
-                android:hint="제목 : "
                 android:layout_height="70dp"
-                />
+                android:layout_weight="1"
+                android:fontFamily="@font/mapo"
+                android:gravity="center_vertical"
+                android:hint="제목 :  "
+                android:maxLines="1"
+                android:textSize="16sp" />
 
             <TextView
                 style="@style/bold_theme"

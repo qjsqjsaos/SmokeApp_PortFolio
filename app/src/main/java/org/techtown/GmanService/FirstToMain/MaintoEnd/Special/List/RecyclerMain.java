@@ -270,7 +270,7 @@ public class RecyclerMain extends AppCompatActivity {
 
 
                 } else {//실패
-                    Toast.makeText(getApplication(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "일기를 추가해주세요.", Toast.LENGTH_SHORT).show();
                     loading_dialog.dismiss(); //로딩창끄기
                 }
 
