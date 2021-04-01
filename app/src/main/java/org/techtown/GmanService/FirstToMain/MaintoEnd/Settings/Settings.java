@@ -107,18 +107,29 @@ public class Settings extends Fragment {
             showInterstitial(); //광고 삽입하기(보여주기) 쉽게말해 loadAd -> showIntersritial (다운이 안되거나 오류가 뜨면 다시 다운받기)-> startGame 으로 순으로 진행이 된다.
         });
 
+        //의견 및 문의
         opinion.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSeABrL-1cL3iFHo86hdlULyw6KwvMhNvfNFR5A6kRAj_z0kWA/viewform?vc=0&c=0&w=1&flr=0&gxids=7628"));
             startActivity(intent);
         });
 
+        //공지사항
         notice.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), Notice.class);
             startActivity(intent);
         });
 
+        //로그아웃
         logout.setOnClickListener(v -> {
             dialog();
+        });
+
+        //리뷰 쓰기
+        review.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setData(Uri.parse("market://details?id=" + getActivity().getPackageName()));
+            startActivity(intent);
         });
 
     }
