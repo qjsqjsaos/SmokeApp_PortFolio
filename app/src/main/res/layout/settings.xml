@@ -106,6 +106,18 @@
                     android:textStyle="bold" />
 
                 <Button
+                    android:id="@+id/developerInfo"
+                    android:layout_width="@dimen/login_Button_width"
+                    android:layout_height="@dimen/login_Button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/all_btn"
+                    android:text="저도 함께 금연하고 있어요!"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/Login_text_size"
+                    android:textStyle="bold" />
+
+                <Button
                     android:id="@+id/logout"
                     android:layout_width="@dimen/login_Button_width"
                     android:layout_height="@dimen/login_Button_height"

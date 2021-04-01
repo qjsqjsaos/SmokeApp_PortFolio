@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/baseColor"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/title_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="앱 정보"
+        android:textStyle="bold"
+        />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <TextView
+            android:fontFamily="@font/mapo"
+            style="@style/title_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:text="개발자는 현재 "
+            android:textStyle="bold"
+            />
+
+            <TextView
+                android:fontFamily="@font/mapo"
+                android:id="@+id/NSText"
+                style="@style/title_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="100sp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:textStyle="bold"
+                />
+
+
+        <TextView
+            android:fontFamily="@font/mapo"
+            style="@style/title_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:text="일 째 금연중입니다."
+            android:textStyle="bold"
+            />
+
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/smokeimage"/>
+
+
+            <TextView
+                android:layout_marginTop="20dp"
+                style="@style/title_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:text="-앱을 만든 계기-"
+                android:textStyle="bold"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"/>
+
+            <TextView
+                android:lineSpacingMultiplier="1.5"
+                style="@style/title_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:text="  우연히 개발에 흥미를 가지고, 나는 어떤 앱을 만들 수 있을까? 매일을 고민하다가, 매번 실패하는 금연을 개선하고자 금연 앱을 한번 만들어보자고 생각이 들었습니다. 하지만 이미 시중에는 좋은 금연앱들이 많이 나와있었습니다. 하지만 금연을 하는 데에는 직접적인 도움을 못 받았다고 느꼈습니다. 이미 금연을 시도한 횟수는 100번이 가깝게 느껴질 정도입니다. 결국은 자기 의지라는 것을 깨달았습니다. 그래도.. 조금이라도 도움이 될 수 있는 방법이 없을까 하다가, 생각하게 된 것이 매일을 기록하는 습관을 가지도록 하는 것입니다. '매일 일기를 쓰게 하고, 쓴 일기를 돌아볼 수 있게 앱을 만들어 보자'고 마음을 먹고, 매일 바뀌는 동기부여 글을 보게 만들어서 '조금이라도 약해진 의지를 심어주자'라는 생각이 들었습니다. 사람들과 금연의 의지를 다질 수 있고, 소통을 위한 채팅 기능도 만들고 싶었지만, 서버를 감당할 돈이 아직은 없고, 아직 실력이 많이 부족하다고 느껴, 채팅 기능은 추후에 생각하기로 마음을 먹었습니다. 이 앱을 만들면서 동기부여만큼 사람의 성장에 도움을 주는 추진력이 없다고 생각이 들었습니다. 저도 매일 도움이 되는 동기부여 영상을 보면서, 앱 만드는데 추진력을 키우고, 더 재밌게 앱을 만들 수 있었던 것 같습니다. 또 운이 좋게도, 개발을 시작하고 같이 시작했던 금연도 현재 2021-04-01 기준으로 반년 가까이 이어지고 있습니다. 여러분에게 추천드리는 방법은 보건소에 가서 상담과 보조 제품을 얻으라는 것입니다. 대부분 사람들이 자기 의지로 끊으시려고 도전하시려는 분들이 있는데, 그 방법은 정말 쉬운 방법이 아닙니다. 되려 실패하면 자신의 의지가 약하다고 판단해버리기 때문입니다. 금연은 정말로 쉬운 것이 아닙니다. 어렵다고 인정을 하고, 보건소에 적극적으로 찾아가 도움을 받으시는 것을 권장드립니다. 저도 같이 끝까지 금연해나가겠습니다. 저의 금연일기와 개발일지를 이 블로그에 매일 정리해두고 있습니다.\n\n부족한 저의 첫 앱을 이용해 주셔서 감사합니다. "
+                android:textStyle="bold"
+                android:layout_weight="9"
+                />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/goToWeb"
+                android:layout_width="@dimen/login_Button_width"
+                android:layout_height="@dimen/login_Button_height"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/all_btn_adx"
+                android:text="개발자 사이트 가기"
+                android:textColor="@color/baseColor"
+                android:textSize="@dimen/Login_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="30dp" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

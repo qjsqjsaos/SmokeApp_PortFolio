@@ -17,75 +17,78 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".MaintoEnd.Settings.Developer_Info"></activity>
         <!-- 구글 애드몹 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/app_id" />
 
-        <activity android:name="org.techtown.GmanService.FirstToMain.MaintoEnd.Settings.SmokeReSettings"></activity>
-        <activity android:name="org.techtown.GmanService.FirstToMain.MaintoEnd.Special.List.RecyclerMain" />
-        <activity android:name="org.techtown.GmanService.FirstToMain.MaintoEnd.Special.ReviseDiary" />
-        <activity android:name="org.techtown.GmanService.FirstToMain.MaintoEnd.Special.WriteDiary" />
-        <activity android:name="org.techtown.GmanService.FirstToMain.MaintoEnd.Special.ViewDiary" />
-        <activity android:name="org.techtown.GmanService.FirstToMain.MaintoEnd.Notice.Notice"/>
-        <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
+        <activity android:name=".MaintoEnd.Settings.SmokeReSettings" />
+        <activity android:name=".MaintoEnd.Special.List.RecyclerMain" />
+        <activity android:name=".MaintoEnd.Special.ReviseDiary" />
+        <activity android:name=".MaintoEnd.Special.WriteDiary" />
+        <activity android:name=".MaintoEnd.Special.ViewDiary" />
+        <activity android:name=".MaintoEnd.Notice.Notice" /> <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
         <uses-library
             android:name="sooyeol"
             android:required="false" />
 
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.homeMain.Loading_Dialog"
+            android:name=".homeMain.Loading_Dialog"
             tools:ignore="Instantiatable" />
 
         <service
-            android:name="org.techtown.GmanService.FirstToMain.homeMain.MyService"
+            android:name=".homeMain.MyService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name="org.techtown.GmanService.FirstToMain.findPW.AuthforPw" />
-        <activity android:name="org.techtown.GmanService.FirstToMain.findPW.ChangePw" />
+        <activity android:name=".findPW.AuthforPw" />
+        <activity android:name=".findPW.ChangePw" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.register.Register_Auth"
+            android:name=".register.Register_Auth"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.start.Quest1"
+            android:name=".start.Quest1"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.start.First_page_loading"
+            android:name=".start.First_page_loading"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.homeMain.BottomNavi"
+            android:name=".homeMain.BottomNavi"
             android:label="@string/title_activity_bottom_navi"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.register.Register"
+            android:name=".register.Register"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.start.Startbutton"
+            android:name=".start.Startbutton"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.findid.FindId"
+            android:name=".findid.FindId"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.findPW.FindPw"
+            android:name=".findPW.FindPw"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.findid.Id_pw_complete"
+            android:name=".findid.Id_pw_complete"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.techtown.GmanService.FirstToMain.login_fitstPage.Login"
+            android:name=".login_fitstPage.Login"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="market" android:host="details"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="details"
+                    android:scheme="market" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>
