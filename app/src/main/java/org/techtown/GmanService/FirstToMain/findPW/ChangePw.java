@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -26,14 +27,16 @@ import org.json.JSONObject;
 import org.techtown.GmanService.FirstToMain.R;
 import org.techtown.GmanService.FirstToMain.findid.Id_pw_complete;
 import org.techtown.GmanService.FirstToMain.homeMain.Loading_Dialog;
+import org.techtown.GmanService.FirstToMain.register.SHA516_Hash_InCode;
 
 import java.util.regex.Pattern;
 
 public class ChangePw extends AppCompatActivity {
 
     private EditText pw, pwcheck;
-    private String newpw, pw2;
+    private String newpw, pw2, hashPw2, saltHash2, Epw, Eid;
     private String messagepPw = "비밀번호찾기"; //아이디찾기인지 비밀번호 찾기인지 식별하기 위한 메세지
+
 
 
     //로딩창 띄우기
@@ -82,6 +85,12 @@ public class ChangePw extends AppCompatActivity {
         loadBanner();
         //끝
 
+        //아이디 비번 인텐트로 가져오기
+        Intent intent = getIntent();
+        Eid = intent.getStringExtra("id");
+        Epw = intent.getStringExtra("pw"); //이미 해시화가 됨
+        Log.d("비번이왜안오지?3", Epw);
+
         pw = findViewById(R.id.IdforPw); //비밀번호
         pwcheck = findViewById(R.id.AuthTextEmail33); //비밀번호 확인
 
@@ -92,13 +101,17 @@ public class ChangePw extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingStart();//로딩창 띄우기
-                //아이디 비번 인텐트로 가져오기
-                Intent intent = getIntent();
-                String Eid = intent.getStringExtra("id");
-                String Epw = intent.getStringExtra("pw");
 
+                /** 비밀번호 해시화 중요(보안)*/
+
+                //새로운 비밀번호 전 비밀번호와 구별을 위해 해시화
                 newpw = pw.getText().toString();
+                saltHash2 = "sooyeolBestDeveloperEver"+ newpw +"inyoungBestWomanIntheWorld";
+                SHA516_Hash_InCode hash_inCode = new SHA516_Hash_InCode();
+                hashPw2 = hash_inCode.SHA516_Hash_InCode(saltHash2); //솔팅한 값 해시화한 값
+
                 pw2 = pwcheck.getText().toString();
+
 
                 if(!newpw.equals(pw2)) { //비밀번호와 비밀번호 확인이 맞지 않을때,
                     loading_dialog.cancel(); //로딩창 닫기
@@ -110,7 +123,7 @@ public class ChangePw extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "비밀번호를 전부 입력해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(Epw.equals(newpw) || Epw.equals(pw2)) {//전에 쓰던 비밀번호와 같을때,
+                if(Epw.equals(hashPw2)) {//전에 쓰던 비밀번호와 같을때,
                     loading_dialog.cancel(); //로딩창 닫기
                     Toast.makeText(getApplicationContext(), "전에 쓰던 비밀번호는 사용하실 수 없습니다.", Toast.LENGTH_SHORT).show();
                     return;

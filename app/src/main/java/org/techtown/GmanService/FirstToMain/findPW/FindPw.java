@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Display;
 import android.view.View;
@@ -159,6 +160,7 @@ public class FindPw extends AppCompatActivity {
                                 //비밀번호 변경하는 AuthforPw거쳐서 ChangePw로 보내기
                                 String Eid = jsonObject.getString("id"); //아이디 꺼내기
                                 String Epw = jsonObject.getString("pw"); //비밀번호 꺼내기
+                                Log.d("비번이왜안오지?1", Epw);
 
                                 Intent intent = new Intent(FindPw.this, AuthforPw.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -220,7 +222,7 @@ public class FindPw extends AppCompatActivity {
         try {
             naverSender.NaverSender("금연 솔루션 플랫폼 '그만'입니다. 인증번호를 확인해주세요.",
                     "인증번호는 : \"" + result + "\" 입니다. \n " +
-                            "인증번호를 입력하시고 확인버튼을 누르시면 비밀번호를 변경하실 수 있습니다.", email);
+                            "인증번호를 입력하시고 인증하기를 누르시면 비밀번호를 변경하실 수 있습니다.", email);
             Toast.makeText(getApplicationContext(), "인증번호가 전송되었습니다.", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();

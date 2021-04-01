@@ -35,6 +35,7 @@ import org.techtown.GmanService.FirstToMain.findid.FindId;
 import org.techtown.GmanService.FirstToMain.homeMain.BottomNavi;
 import org.techtown.GmanService.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.GmanService.FirstToMain.register.Register_Auth;
+import org.techtown.GmanService.FirstToMain.register.SHA516_Hash_InCode;
 import org.techtown.GmanService.FirstToMain.start.Startbutton;
 
 public class Login extends AppCompatActivity {
@@ -51,6 +52,9 @@ public class Login extends AppCompatActivity {
 
     private AdView adView;
     private FrameLayout adContainerView;
+
+    private String saltHash;
+    private String hashPw;
 
     /**애드몹 시작*/
 
@@ -145,6 +149,12 @@ public class Login extends AppCompatActivity {
                     Log.d("에에에", id);
                     Log.d("에에에", pw);
 
+                    /** 비밀번호 해시화 중요(보안)*/
+                    //서버에서 솔팅한 값
+                    saltHash = "sooyeolBestDeveloperEver"+ pw +"inyoungBestWomanIntheWorld";
+                    SHA516_Hash_InCode hash_inCode = new SHA516_Hash_InCode();
+                    hashPw = hash_inCode.SHA516_Hash_InCode(saltHash); //솔팅한 값 해시화한 값
+
 
                     if(id.isEmpty() || pw.isEmpty()){
                         loading_dialog.cancel(); //로딩창 닫기
@@ -163,6 +173,7 @@ public class Login extends AppCompatActivity {
                                 if (success) {//로그인 성공시
                                         Eid = jsonObject.getString("id");
                                         Epw = jsonObject.getString("pw");
+                                        Log.d("해시화", Epw);
                                         Ename = jsonObject.getString("name");
                                         int firstcheck = Integer.parseInt(jsonObject.getString("firstcheck"));
                                         Log.d("이름", Ename);
@@ -219,7 +230,7 @@ public class Login extends AppCompatActivity {
                             }
                         }
                     };
-                    LoginRequest loginRequest = new LoginRequest(id, pw, responseListener);
+                    LoginRequest loginRequest = new LoginRequest(id, hashPw, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(Login.this);
                     queue.add(loginRequest);
 
