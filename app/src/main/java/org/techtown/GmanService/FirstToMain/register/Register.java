@@ -153,8 +153,8 @@ public class Register extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                     loading_dialog.cancel(); //로딩창 닫기
-                    Toast.makeText(getApplicationContext(), "잘못된 값입니다1.문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getApplicationContext(), "잘못된 값입니다.문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
 
@@ -187,6 +187,7 @@ public class Register extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                             loading_dialog.cancel(); //로딩창 닫기
+                            return;
                         }
                     }
                 };
@@ -301,8 +302,6 @@ public class Register extends AppCompatActivity {
                                 if (SystemClock.elapsedRealtime() - mLastClickTime > 300000) { //5분 동안 타이머
                                     switch (v.getId()) {
                                         case R.id.sendEmail:
-
-
                                             try {
                                                 //랜덤 인증번호 (6자)
                                                 result = (int) (Math.floor(Math.random() * 1000000) + 100000);
@@ -313,9 +312,7 @@ public class Register extends AppCompatActivity {
 
                                                 try {
                                                     if (!dbEmail.equals("")) {
-                                                                startLoading(dbEmail);  //지메일 호출되게하는 메서드
-
-
+                                                        startLoading(dbEmail);  //네이버 메일 보내기 메서드
 
                                                         //타이머 설정
                                                         countView = (TextView) findViewById(R.id.countView);
@@ -367,7 +364,7 @@ public class Register extends AppCompatActivity {
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                                 loading_dialog.cancel(); //로딩창 닫기
-                                                Toast.makeText(getApplicationContext(), "잘못된 값입니다3. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "잘못된 값입니다. 문의 부탁드립니다.", Toast.LENGTH_SHORT).show();
                                                 return;
                                             }
 
@@ -388,6 +385,7 @@ public class Register extends AppCompatActivity {
                             e.printStackTrace();
                             loading_dialog.cancel(); //로딩창 닫기
                             Toast.makeText(getApplicationContext(), "이메일 중복 오류, 문의 바랍니다.", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     }
                 };
@@ -676,11 +674,11 @@ public class Register extends AppCompatActivity {
                            RequestQueue queue = Volley.newRequestQueue(Register.this);
                            queue.add(register);
                        }
-                       return;
                    } catch (Exception e){
                        e.printStackTrace();
                        loading_dialog.cancel(); //로딩창 닫기
                        Toast.makeText(getApplicationContext(),"올바른 값을 입력해주세요.",Toast.LENGTH_SHORT).show();
+                       return;
                    }
 
 
