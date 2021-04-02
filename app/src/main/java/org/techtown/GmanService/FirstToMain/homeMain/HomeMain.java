@@ -213,39 +213,44 @@ public class HomeMain extends Fragment {
         StorageReference storageRef = storage.getReference();//스토리지를 참조한다
         //파일명을 만들자.
         String filename = "profile" + num + ".jpg";  //ex) profile1.jpg 로그인하는 사람에 따라 그에 식별값에 맞는 프로필 사진 가져오기
-        Uri file = uri;
-        Log.d("유알", String.valueOf(file));
-        //여기서 원하는 이름 넣어준다. (filename 넣어주기)
-        StorageReference riversRef = storageRef.child("profile_img/" + filename);
-        UploadTask uploadTask = riversRef.putFile(file);
-
-        // TODO: 2021-03-17 기존 이미지 삭제
-        // Create a reference to the file to delete
-        StorageReference desertRef = storageRef.child("profile_img/" + filename); //삭제할 프로필이미지 명
-        // Delete the file
-        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        });
+        if(uri != null) {
+            Uri file = uri;
+            Log.d("유알", String.valueOf(file));
+            //여기서 원하는 이름 넣어준다. (filename 넣어주기)
+            StorageReference riversRef = storageRef.child("profile_img/" + filename);
+            UploadTask uploadTask = riversRef.putFile(file);
 
 
-        // TODO: 2021-03-17 새로운 프로필 이미지 저장
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getContext(), "프로필 이미지가 변경되었습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
+            // TODO: 2021-03-17 기존 이미지 삭제
+            // Create a reference to the file to delete
+            StorageReference desertRef = storageRef.child("profile_img/" + filename); //삭제할 프로필이미지 명
+            // Delete the file
+            desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                }
+            });
+
+
+            // TODO: 2021-03-17 새로운 프로필 이미지 저장
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getContext(), "프로필 이미지가 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{ //uri가 없으면 이 경우는 폴더가 안 만들어진 상태인 것,
+            profileImage.setImageResource(R.drawable.user);
+        }
     }
 
 
@@ -278,7 +283,7 @@ public class HomeMain extends Fragment {
     /**디렉토리 만들기(혹시 없을경우 대비해서) = 파이어베이스 */
     public void createDir(){
         //우선 디렉토리 파일 하나만든다.
-        File file = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/profile_img"); //이미지를 저장할 수 있는 디렉토리
+        File file = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES + "profile_img/"); //이미지를 저장할 수 있는 디렉토리
         //구분할 수 있게 /toolbar_images폴더에 넣어준다.
         //이 파일안에 저 디렉토리가 있는지 확인
         if (!file.isDirectory()) { //디렉토리가 없으면,

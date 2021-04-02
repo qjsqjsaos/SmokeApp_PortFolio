@@ -484,8 +484,6 @@ public class Register extends AppCompatActivity {
                 String email = Eemail.getText().toString();
                 String smsnumber = Esmsnumber.getText().toString();
 
-
-
                     //결과 리스너 생성
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
@@ -534,7 +532,7 @@ public class Register extends AppCompatActivity {
                                                                 if (success) {
                                                                     loading_dialog.cancel(); //로딩창 닫기
                                                                 } else {
-                                                                    Toast.makeText(getApplicationContext(),"인터넷이 원활하지 않습니다.",Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(getApplicationContext(),"회원등록에 실패했습니다.",Toast.LENGTH_SHORT).show();
                                                                     loading_dialog.cancel(); //로딩창 닫기
                                                                 }
                                                             } catch (JSONException e) {
@@ -550,7 +548,7 @@ public class Register extends AppCompatActivity {
                                                     queue.add(createDiaryTable_check);
 
                                                 } else {
-                                                    Toast.makeText(getApplicationContext(),"인터넷이 원활하지 않습니다.",Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getApplicationContext(),"회원등록에 실패했습니다.",Toast.LENGTH_SHORT).show();
                                                     loading_dialog.cancel(); //로딩창 닫기
                                                 }
                                             } catch (JSONException e) {
@@ -580,7 +578,7 @@ public class Register extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 loading_dialog.cancel(); //로딩창 닫기
-                                Toast.makeText(getApplicationContext(),"잘못된 값입니다4. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"잘못된 값입니다. 문의 부탁드립니다.",Toast.LENGTH_SHORT).show();
                             }
                         }
                     };
