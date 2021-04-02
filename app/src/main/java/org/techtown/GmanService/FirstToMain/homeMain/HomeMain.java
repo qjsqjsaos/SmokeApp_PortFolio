@@ -250,6 +250,7 @@ public class HomeMain extends Fragment {
             });
         }else{ //uri가 없으면 이 경우는 폴더가 안 만들어진 상태인 것,
             profileImage.setImageResource(R.drawable.user);
+
         }
     }
 
