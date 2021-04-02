@@ -174,6 +174,13 @@ public class HomeMain extends Fragment {
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (finallyDateTime > 0) { //쓰레드가 살아있을 때만 쓰레드를 종료하자
+            timeThread.interrupt(); //쓰레드 종료
+        }
+    }
 
     /**
      * 앱이 맨 처음 실행될 때, 아이디값을 통해 정보를 가져온다.
