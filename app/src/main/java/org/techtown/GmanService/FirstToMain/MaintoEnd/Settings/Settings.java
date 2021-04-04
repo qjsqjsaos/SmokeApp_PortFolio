@@ -41,7 +41,7 @@ import org.techtown.GmanService.FirstToMain.login_fitstPage.Login;
 public class Settings extends Fragment {
 
     private ViewGroup viewGroup;
-    private Button smokeReSettings, developerGive, opinion, review, notice, logout, developerInfo;
+    private Button smokeReSettings, developerGive, opinion, review, notice, logout, developerInfo, adX;
     private Loading_Dialog loading_dialog;
     private SharedViewModel sharedViewModel;
     private Intent intent;
@@ -137,6 +137,16 @@ public class Settings extends Fragment {
             Intent intent = new Intent(getContext(), Developer_Info.class);
             startActivity(intent);
         });
+
+        //광고제거 버튼
+        adX.setOnClickListener(v ->{
+            Toast.makeText(getContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+        });
+
+        //개발자 후원
+        developerGive.setOnClickListener(v ->{
+            Toast.makeText(getContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+        });
     }
 
     /**
@@ -191,6 +201,7 @@ public class Settings extends Fragment {
         review = viewGroup.findViewById(R.id.review);
         notice = viewGroup.findViewById(R.id.notice);
         logout = viewGroup.findViewById(R.id.logout);
+        adX = viewGroup.findViewById(R.id.adX);
     }
 
     @Override
