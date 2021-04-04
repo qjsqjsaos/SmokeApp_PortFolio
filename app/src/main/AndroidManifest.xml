@@ -28,7 +28,7 @@
         <activity android:name=".MaintoEnd.Special.ReviseDiary" />
         <activity android:name=".MaintoEnd.Special.WriteDiary" />
         <activity android:name=".MaintoEnd.Special.ViewDiary" />
-        <activity android:name=".MaintoEnd.Notice.Notice" /> <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
+        <!-- 프로필 사진 업로드 시 외부저장소에 대한 퍼미션 -->
         <uses-library
             android:name="sooyeol"
             android:required="false" />

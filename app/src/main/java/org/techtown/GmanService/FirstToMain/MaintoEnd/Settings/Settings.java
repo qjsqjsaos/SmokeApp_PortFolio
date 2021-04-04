@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
-import org.techtown.GmanService.FirstToMain.MaintoEnd.Notice.Notice;
 import org.techtown.GmanService.FirstToMain.R;
 import org.techtown.GmanService.FirstToMain.homeMain.Loading_Dialog;
 import org.techtown.GmanService.FirstToMain.homeMain.ViewpagerFM.SharedViewModel;
@@ -41,7 +39,7 @@ import org.techtown.GmanService.FirstToMain.login_fitstPage.Login;
 public class Settings extends Fragment {
 
     private ViewGroup viewGroup;
-    private Button smokeReSettings, developerGive, opinion, review, notice, logout, developerInfo, adX;
+    private Button smokeReSettings, developerGive, opinion, review, logout, developerInfo, adX;
     private Loading_Dialog loading_dialog;
     private SharedViewModel sharedViewModel;
     private Intent intent;
@@ -111,12 +109,6 @@ public class Settings extends Fragment {
             startActivity(intent);
         });
 
-        //공지사항
-        notice.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), Notice.class);
-            startActivity(intent);
-        });
-
         //로그아웃
         logout.setOnClickListener(v -> {
             dialog();
@@ -161,6 +153,7 @@ public class Settings extends Fragment {
         autoLogin.commit(); //커밋을 해야지 값이 저장된다.
         Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
         startActivity(intent);
+        getActivity().finish();
     }
 
     /**
@@ -197,7 +190,6 @@ public class Settings extends Fragment {
         developerGive = viewGroup.findViewById(R.id.developerGive);
         opinion = viewGroup.findViewById(R.id.opinion);
         review = viewGroup.findViewById(R.id.review);
-        notice = viewGroup.findViewById(R.id.notice);
         logout = viewGroup.findViewById(R.id.logout);
         adX = viewGroup.findViewById(R.id.adX);
     }
