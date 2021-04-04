@@ -120,9 +120,6 @@ public class ReviseDiary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.revise_diary);
 
-        Log.d("자자자자R", String.valueOf(ReviseUri));
-        Log.d("자자자자D", String.valueOf(Diary.uri));
-
         setInit(); //참조정리
 
         // 애드 몹 초기화 //시작
@@ -216,7 +213,6 @@ public class ReviseDiary extends AppCompatActivity {
         storageRef.child("diary_photo/num" + num + "/" + "DP" + "_" + date +".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Log.d("매맨", String.valueOf(uri));
                 Glide.with(getBaseContext()).load(uri).into(inputImageR);
 
             }
@@ -265,9 +261,6 @@ public class ReviseDiary extends AppCompatActivity {
      * @param startdate
      * @param uri*/
     void createProfile_Photo_and_Delete(int num, String startdate, Uri uri) {
-        Log.d("자자자자 들어온 넘", String.valueOf(num));
-        Log.d("자자자자 들어온 스타트데이트", String.valueOf(startdate));
-        Log.d("자자자자 들어온 유알아이", String.valueOf(uri));
         createDir(num); //디렉토리가 없으면 만든다.
         //storage
         FirebaseStorage storage = FirebaseStorage.getInstance(); //스토리지 인스턴스를 만들고,
@@ -279,7 +272,6 @@ public class ReviseDiary extends AppCompatActivity {
             StorageReference riversRef = storageRef.child("diary_photo/num" + HomeMain.num + "/" + filename);
 
             UploadTask uploadTask = riversRef.putFile(uri);
-            Log.d("자자자자 들어온 유알아이", String.valueOf(uri));
 
             // TODO: 2021-03-17 기존 일기 이미지와 일기 제목과 내용을 우선 삭제한다.(중복못하게)
             // Create a reference to the file to delete
@@ -406,10 +398,6 @@ public class ReviseDiary extends AppCompatActivity {
         ReviseDiary_Check reviseDiary_check = new ReviseDiary_Check(HomeMain.num, titleC, mainTextC, Diary.startdate, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         queue.add(reviseDiary_check);
-        Log.d("어디보자", String.valueOf(HomeMain.num));
-        Log.d("어디보자", title);
-        Log.d("어디보자", mainText);
-        Log.d("어디보자", Diary.startdate);
     }
 
 

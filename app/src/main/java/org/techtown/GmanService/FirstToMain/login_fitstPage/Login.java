@@ -146,8 +146,6 @@ public class Login extends AppCompatActivity {
                     loadingStart(); //로딩창띄우기
                     String id = idText.getText().toString();
                     String pw = passwordText.getText().toString();
-                    Log.d("에에에", id);
-                    Log.d("에에에", pw);
 
                     /** 비밀번호 해시화 중요(보안)*/
                     //서버에서 솔팅한 값
@@ -173,13 +171,8 @@ public class Login extends AppCompatActivity {
                                 if (success) {//로그인 성공시
                                         Eid = jsonObject.getString("id");
                                         Epw = jsonObject.getString("pw");
-                                        Log.d("해시화", Epw);
                                         Ename = jsonObject.getString("name");
                                         int firstcheck = Integer.parseInt(jsonObject.getString("firstcheck"));
-                                        Log.d("이름", Ename);
-                                        Log.d("이름", Eid);
-                                        Log.d("이름", Epw);
-                                        Log.d("이름", String.valueOf(firstcheck));
 
                                         if(firstcheck == 1) { //만약 첫로그인이 아니라면, 그냥 로그인
                                             loadingStart();
@@ -197,14 +190,11 @@ public class Login extends AppCompatActivity {
                                             Intent intent = new Intent(Login.this, BottomNavi.class);
                                             intent.putExtra("id", Eid);
                                             intent.putExtra("name", Ename);
-                                            Log.d("이름", Ename);
-                                            Log.d(TAG, String.valueOf(autoLogin));
 
                                             startActivity(intent);
                                             finish();
                                             loading_dialog.cancel(); //로딩창 닫기
 
-                                            Log.d(TAG, "자동 로그인 값 저장");
                                         }else{ //만약 첫 로그인 이라면,
                                             Intent intent = new Intent(Login.this, Startbutton.class);
                                             intent.putExtra("id", Eid);
@@ -223,7 +213,6 @@ public class Login extends AppCompatActivity {
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.d("제이슨", String.valueOf(e));
                                 loading_dialog.cancel(); //로딩창 닫기
                                 Toast.makeText(getApplicationContext(), "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                                 return;

@@ -86,8 +86,6 @@ public class HealthCheck extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onChanged(Long Longa) { //넘어온 Longa + 00을 해주고, setMax에 넘겨주어 값을 맞춘다.
-                Log.d("롱가", String.valueOf(Longa));
-
                 healthCheck(Longa); //프로그레스바와 이미지뷰 상황에 맞게 실행
 
             }

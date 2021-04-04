@@ -122,8 +122,6 @@ public class Frag4 extends Fragment {
         Frag4_Request frag4_request = new Frag4_Request(HomeMain.id, goal, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(frag4_request);
-        Log.d("골값보자", goal + "/" + HomeMain.id);
-
     }
 
     public void loadingStart() {

@@ -230,11 +230,6 @@ public class WriteDiary extends AppCompatActivity {
                         createDiary(title, mainText, Diary.startdate); //제목, 본문, 오늘 날짜를 디비로 보낸다.
                         //파이어베이스 사진 저장하기
                         createProfile_Photo_and_Delete(HomeMain.num, Diary.startdate); //날짜로 식별한다. 날짜를 파라미터로 넣어준다
-
-                        Log.d("보자보자", title);
-                        Log.d("보자보자", mainText);
-                        Log.d("보자보자", Diary.startdate);
-                        Log.d("보자보자", String.valueOf(HomeMain.num));
                     }
                 });
 
@@ -341,9 +336,6 @@ public class WriteDiary extends AppCompatActivity {
                             Glide.with(getApplicationContext()).load(R.drawable.no_image).into(DiaryFrag.diaryImage); //이미지가 없으면 기본이미지를 넣는다.
                         }
 
-
-                        Log.d("널일까?", String.valueOf(Diary.uri));
-
                         finish(); //액티비티 끄기
                     }else{
                         Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
@@ -361,7 +353,6 @@ public class WriteDiary extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         queue.add(createDiaryTable_check);
 
-        Log.d("홈메인넘", String.valueOf(HomeMain.num));
     }
 
     /**
@@ -389,12 +380,11 @@ public class WriteDiary extends AppCompatActivity {
         int monthR = Integer.parseInt(month);
         int newMonthR = monthR - 1; //달은 1빼준다.
         int dayR = Integer.parseInt(day);
-        Log.d("캘린더리스트", String.valueOf(yearR));
+
 
         //일기를 썼던 날짜리스트를 만든다.
         Diary.calendarDayList = new ArrayList<>();
         Diary.calendarDayList.add(CalendarDay.from(yearR, newMonthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
-        Log.d("캘린더리스트", String.valueOf(Diary.calendarDayList));
 
         EventDecorator eventDecorator = new EventDecorator(Color.rgb(10, 207, 32), Diary.calendarDayList); //색표시 이벤트 데코레이터 호출
         Diary.materialCalendarView.addDecorators(eventDecorator);

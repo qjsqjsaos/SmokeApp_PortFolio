@@ -161,11 +161,6 @@ public class Quest1 extends AppCompatActivity {
                         Quest1_Request quest1_request = new Quest1_Request(id, cCount, cPay, cGoal, firstcheck, responseListener);
                         RequestQueue queue = Volley.newRequestQueue(Quest1.this);
                         queue.add(quest1_request);
-                        Log.d("몰까",id);
-                        Log.d("몰까", String.valueOf(cCount));
-                        Log.d("몰까", String.valueOf(cPay));
-                        Log.d("몰까", String.valueOf(cGoal));
-                        Log.d("몰까", String.valueOf(firstcheck));
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "올바른 값을 입력해주세요.", Toast.LENGTH_SHORT).show();

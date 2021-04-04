@@ -102,8 +102,6 @@ public class Settings extends Fragment {
             intent.putExtra("cost", cost);
             intent.putExtra("count", count);
             startActivity(intent);
-            Log.d("들어오냐", String.valueOf(cost));
-            Log.d("들어오냐", String.valueOf(count));
             showInterstitial(); //광고 삽입하기(보여주기) 쉽게말해 loadAd -> showIntersritial (다운이 안되거나 오류가 뜨면 다시 다운받기)-> startGame 으로 순으로 진행이 된다.
         });
 

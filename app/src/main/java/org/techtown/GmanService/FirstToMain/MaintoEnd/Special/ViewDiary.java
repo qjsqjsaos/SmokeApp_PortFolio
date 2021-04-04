@@ -227,7 +227,6 @@ public class ViewDiary extends AppCompatActivity {
         storageRef.child("diary_photo/num" + num + "/" + "DP" + "_" + date +".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Log.d("매맨", String.valueOf(uri));
                 Glide.with(getApplication()).load(uri).into(viewImage);
 
             }

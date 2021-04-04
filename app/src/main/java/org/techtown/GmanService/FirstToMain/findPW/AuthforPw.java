@@ -78,7 +78,6 @@ public class AuthforPw extends AppCompatActivity {
         Intent intent = getIntent(); // FindPw에서 온 아이디와 비밀번호, 인증번호 꺼내기
         id = intent.getStringExtra("id");
         pw = intent.getStringExtra("pw");
-        Log.d("비번이왜안오지?2", pw);
         AuthNumber = intent.getIntExtra("authNumber",1); //인트 데이터는 기본값 1붙여줘야함.
 
         AuthButton.setOnClickListener(new View.OnClickListener() { //만약 인증하기 버튼을 누르면

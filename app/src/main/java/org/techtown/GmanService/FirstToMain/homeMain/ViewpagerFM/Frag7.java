@@ -42,7 +42,6 @@ public class Frag7 extends Fragment {
         sharedViewModel.gethaelthSecond().observe(getViewLifecycleOwner(), new Observer<Long>() {
             @Override
             public void onChanged(Long aLong) { //1초면 1로 10초면 10으로 딱 맞춰서 넘어옴.
-                Log.d("다이아", String.valueOf(aLong));
 
                 //시간에 흐름에 따라 이미지 바꾸기
                 if (259200 > aLong) { //금연 타이머가 시작되면

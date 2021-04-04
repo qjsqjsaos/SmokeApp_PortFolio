@@ -121,20 +121,13 @@ public class BottomNavi extends AppCompatActivity {
             Intent intent = getIntent();
             String name = intent.getStringExtra("name");
             id = intent.getStringExtra("id");
-            Log.d(TAG,"일반로그인");
 
 
             //데이터 보내기
             Bundle bundle = new Bundle();
             bundle.putString("name", name);
             bundle.putString("id", id);
-
-            Log.d("bundle", String.valueOf(bundle));
             fragment1.setArguments(bundle);
-            Log.d(TAG,"번들 보내기");
-
-
-
 
         bottomNavigationView = findViewById(R.id.nav_view);
 

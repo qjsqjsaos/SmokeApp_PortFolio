@@ -105,7 +105,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         Date time = new Date();
         String todayDate = FORMATTER.format(time);
         startdate = todayDate; //날짜에 오늘 날짜 넣어주기(일기 중복으로 쎃는지 체크하기 위함)
-        Log.d("오늘날짜", todayDate);
         //오늘 날짜 일기를 처음 보여준다.
         getDBDiaryInfo(todayDate); //오늘 날짜 일기 정보
     }
@@ -245,8 +244,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(getDiaryInfo_Request);
 
-        Log.d("올까?", String.valueOf(HomeMain.num));
-        Log.d("올까?", startdate);
     }
 
     /** 일기 삭제 하기 (db연결)*/
@@ -254,7 +251,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         Response.Listener<String> responseListener = response -> {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                Log.d("어레이", String.valueOf(jsonObject));
                 boolean success = jsonObject.getBoolean("success");
                 if (success) {
                     justFireBase_Delete(); //파이어베이스에 이미지도 같이 삭제
@@ -262,7 +258,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     length = length - 1;
                     countDiary.setText(":  "+ length+ "회"); //초록불 횟수 늘리기(일기를 쓰게 된다면 하나 더 줄게 만든다.)
                     calendarDayList.remove(startdate); //캘린더에서 값을 없애고,
-                    Log.d("스타트데이데이", startdate);
                     //삭제 리스트에 넣어서 붉게 만든다.
                     String year = startdate.substring(0,4); //받아온 연도 ex)2021
                     String month = startdate.substring(5,7); //받아온 달 ex)02
@@ -286,8 +281,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         delete_Diary_request delete_diary_request = new delete_Diary_request(HomeMain.num, startdate, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(delete_diary_request);
-        Log.d("삭제가자", String.valueOf(HomeMain.num));
-        Log.d("삭제가자",startdate);
     }
 
 
@@ -304,11 +297,11 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         //일기를 썼던 날짜리스트를 만든다.
         calendarDayList = new ArrayList<>();
         calendarDayList.add(CalendarDay.from(yearR, newMonthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
-        Log.d("캘린더리스트", String.valueOf(calendarDayList));
+
 
         EventDecorator eventDecorator = new EventDecorator(Color.rgb(10, 207, 32), calendarDayList); //색표시 이벤트 데코레이터 호출
         materialCalendarView.addDecorators(eventDecorator);
-        Log.d("캘린더리스트2", String.valueOf(calendarDayList));
+
 
     }
 
@@ -320,12 +313,12 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         int monthR = Integer.parseInt(month);
         int newMonthR = monthR - 1; //달은 1빼준다.
         int dayR = Integer.parseInt(day);
-        Log.d("캘린더리스트", String.valueOf(yearR));
+
 
         //일기를 썼던 날짜리스트를 만든다.
         deleteList = new ArrayList<>();
         deleteList.add(CalendarDay.from(yearR, newMonthR, dayR)); //일기 쓴 날짜 표시/ 일기 쓴 날 들을 add해준다.
-        Log.d("캘린더리스트레드", String.valueOf(deleteList));
+
 
         EventDecorator eventDecorator = new EventDecorator(Color.RED , deleteList); //색표시 이벤트 데코레이터 호출
         materialCalendarView.addDecorators(eventDecorator);
@@ -386,7 +379,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         dbDate = dateRebuild(text); //선택한 날짜 변환해서 리턴한다.
         getDBDiaryInfo(dbDate); //mysql디비에서 제목 내용 가져오기  //인자에는 날짜를 보낸다.
         startdate = dbDate; //일기 중복으로 썼는지 체크하기 위해
-        Log.d("스타트데이트1", startdate);
+
 
 
     }
@@ -407,7 +400,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         storageRef.child("diary_photo/num" + num + "/" + "DP" + "_" + date +".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Log.d("매맨", String.valueOf(uri));
+
                 Glide.with(getActivity()).load(uri).into(DiaryFrag.diaryImage);
                 Diary.uri = uri; //uri넣기
             }
@@ -474,7 +467,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
                     if (success) {
                         String title = jsonObject.getString("title"); //제목 가져오기
                         String maintext = jsonObject.getString("maintext"); //제목 가져오기
-                        Log.d("올까?", title);
+
                         String newTitle = textLengthChange(title); //수정한 새로운 제목
                         DiaryFrag.diaryText.setText(newTitle); //넣어주기
                         DiaryFrag.diaryFrag.setVisibility(View.VISIBLE); //diaryFrag보여주기
@@ -502,8 +495,7 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(getDiaryInfo_Request);
 
-        Log.d("올까?", String.valueOf(HomeMain.num));
-        Log.d("올까?", startdate);
+
     }
 
     /**
@@ -516,16 +508,14 @@ public class Diary extends Fragment implements OnDateSelectedListener {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    Log.d("어레이", String.valueOf(jsonObject));
+
                     boolean success = jsonObject.getBoolean("success");
                     if (success) {
                         length = jsonObject.length()-1; //처음에 일기 갯수 넘겨 주기
                         countDiary.setText(":  "+ length + "회"); //초록불 횟수 늘리기
-                        Log.d("카운트다이어리3", String.valueOf(length));
                         for(int i = 0; i <= length; i++) { //있는 수만큼 반복문
                             String date = jsonObject.getString(String.valueOf(i));
-                            Log.d("이제이거", String.valueOf(jsonObject.length()));
-                            Log.d("이제이거", date);
+
                             //날짜를 년월일로 나누어서
                             String year = date.substring(0,4); //받아온 연도 ex)2021
                             String month = date.substring(5,7); //받아온 달 ex)02
@@ -620,7 +610,6 @@ public class Diary extends Fragment implements OnDateSelectedListener {
         SameDiaryCheck sameDiaryCheck = new SameDiaryCheck(HomeMain.num, startdate, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(sameDiaryCheck);
-        Log.d("스타트데이트2", startdate);
     }
 
     /**

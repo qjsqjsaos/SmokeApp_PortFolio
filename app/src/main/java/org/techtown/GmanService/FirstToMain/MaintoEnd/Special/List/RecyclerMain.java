@@ -124,9 +124,6 @@ public class RecyclerMain extends AppCompatActivity {
                     start = newStart; //값 최신화
                     end = newEnd; //값 최신화
                     getDairyAllDate(newStart, newEnd);
-
-                    Log.d("뉴엔드", String.valueOf(newEnd));
-
                 }
 
             }
@@ -141,7 +138,6 @@ public class RecyclerMain extends AppCompatActivity {
             public void onItemClick(RecyclerAdapter.ViewHolder holder, View view, int position) {
                 DiaryInfo_GetterSetter item = adapter.getItem(position);
                 String rDate = item.getR_writeDate(); //클릭한 뷰 날짜정보를 가져온다.
-                Log.d("리사이클러뷰", rDate);
                 getDairyInfoRecyclerView(rDate); //보내서 디비에서 정보를 가져온다.
             }
         });
@@ -163,8 +159,6 @@ public class RecyclerMain extends AppCompatActivity {
                     String title = jsonObject.getString("title"); //타이틀 가져오기
                     item.add(new DiaryInfo_GetterSetter(title, date, uri, getApplicationContext()));
 
-                    Log.d("유알아이좀보자2", String.valueOf(uri));
-
                     if(item.size() == 1){ //리스트가 한개일때 표시가 안되서 넣음
                         adapter.setItems(item);
                         recyclerView.setAdapter(adapter);
@@ -179,7 +173,7 @@ public class RecyclerMain extends AppCompatActivity {
                                 recyclerView.setAdapter(adapter);
                                 recyclerView.smoothScrollToPosition(end-6); //며칠 차이 날지 보여주기
                                 //리사이클러뷰 어뎁터 설정으로 마무리
-                                Log.d("뉴엔드2", String.valueOf(end));
+
                                 loading_dialog.dismiss(); //로딩창끄기
                                 return o2.getR_writeDate().compareTo(o1.getR_writeDate());
                             }
@@ -228,8 +222,6 @@ public class RecyclerMain extends AppCompatActivity {
                         intent.putExtra("RmainText", mainText);
                         intent.putExtra("Rdate", date);
                         startActivity(intent);
-                        Log.d("마지막리사이클", title);
-                        Log.d("마지막리사이클", mainText);
                     }
 
                 } else {//실패
@@ -262,7 +254,6 @@ public class RecyclerMain extends AppCompatActivity {
                 if (success) {
                         for (int i = start; i <= end; i++) { //있는 수만큼 반복문
                             String date = jsonObject.getString(String.valueOf(i));
-                            Log.d("베이베베이베", date);
                             downloadDiaryImage(HomeMain.num, date); //날짜에 맞는 (uri) 이미지 넣기
                             loading_dialog.dismiss(); //로딩창끄기
 

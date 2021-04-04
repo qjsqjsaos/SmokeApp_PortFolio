@@ -24,9 +24,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private OnDiaryItemClickListener onDiaryItemClickListener; //인테페이스
 
-
-
-
     //뷰홀더가 만들어질 때 호출
     @NonNull
     @Override

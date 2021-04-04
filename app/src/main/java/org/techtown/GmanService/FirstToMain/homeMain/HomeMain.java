@@ -202,7 +202,6 @@ public class HomeMain extends Fragment {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 uri = data.getData();
-                Log.d("유알", String.valueOf(uri));
                 Glide.with(getContext()).load(uri).into(profileImage); //다이얼로그 이미지사진에 넣기(일시적임)
                 defaultProfile_img = true;
             } else if (resultCode == RESULT_CANCELED) {// 취소시 호출할 행동 쓰기
@@ -222,7 +221,6 @@ public class HomeMain extends Fragment {
         String filename = "profile" + num + ".jpg";  //ex) profile1.jpg 로그인하는 사람에 따라 그에 식별값에 맞는 프로필 사진 가져오기
         if(uri != null) {
             Uri file = uri;
-            Log.d("유알", String.valueOf(file));
             //여기서 원하는 이름 넣어준다. (filename 넣어주기)
             StorageReference riversRef = storageRef.child("profile_img/" + filename);
             UploadTask uploadTask = riversRef.putFile(file);
@@ -277,7 +275,6 @@ public class HomeMain extends Fragment {
         storageRef.child("profile_img/" + filename).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri2) {
-                Log.d("오냐오냐", String.valueOf(uri2));
                 Glide.with(requireContext()).load(uri2).into(userView);
                 uri = uri2;
             }
@@ -328,7 +325,6 @@ public class HomeMain extends Fragment {
 
         /**명언 랜덤 추출기 */
         int randomNumber = (int) (Math.random()*999); // 0~999중에서 랜덤 숫자 추출
-        Log.d("랜덤넘버", String.valueOf(randomNumber));
         WiseSay_List wiseSay_list = new WiseSay_List();
         String WS = wiseSay_list.WiseArray(randomNumber); //여기에 랜덤숫자 만들어서 넣기
         wiseView.setText(WS);
@@ -364,15 +360,12 @@ public class HomeMain extends Fragment {
 
         //BottomNavi에서 받은 번들 데이터
         Bundle bundle = this.getArguments();
-        Log.d(TAG, "번들가져오고");
 
         name = bundle.getString("name");
         id = bundle.getString("id");
-        Log.d(TAG, "번들 메세지들 다 가져옴");
 
         if (name != null) { //일반 로그인
             nameView.setText(name); //닉네임으로 이름바꿔주기
-            Log.d(TAG, name);
         }
 
 
@@ -417,7 +410,6 @@ public class HomeMain extends Fragment {
                         }
                         else {
                             String newName = Profile_Dialog.changedName.getText().toString(); //새로운 이름 가져오기
-                            Log.d("궁금2", newName);
                             nickNameCheck(newName); //이름 중복체크
                         }
                     }
@@ -553,9 +545,6 @@ public class HomeMain extends Fragment {
         ApplyProFile applyProFile = new ApplyProFile(id, newName, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(applyProFile);
-
-        Log.d("아디가뭐야", id);
-        Log.d("아디가뭐야", newName);
     }
 
     /**
@@ -577,7 +566,6 @@ public class HomeMain extends Fragment {
                         Calculate_Date calculate_date = new Calculate_Date();
 
                         dateTime = date + " " + time; // 지정된 날짜와 데이트 시간 합치기
-                        Log.d("3값", dateTime);
 
                         finallyDateTime = calculate_date.calTimeDateBetweenAandB(dateTime); //날 차이 구하기 (지정날짜와 시간만 넣기)
 
@@ -585,20 +573,13 @@ public class HomeMain extends Fragment {
                         //문자를 지우는 함수다. dateTime에서 시간만 지우고 날짜만 출력한 값이다.
                         StringBuffer origin = new StringBuffer(dateTime);
                         StringBuffer justDate = origin.delete(10, 19);
-                        Log.d("저스트", String.valueOf(justDate));
                         dateView.setText(justDate); //날짜 프로필에다가 넣어주기 //금연 시작 날짜
-
-                        Log.d("3값", String.valueOf(finallyDateTime));
 
                         //하루 담배량 계산
                         last_cigaCount = 86400 / cigaCount * 1L; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
-                        Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
-                        Log.d("시가카운트", String.valueOf(cigaCount));
 
                         //하루 담배값 계산
                         last_cigaCost = cigaCost / 86400d; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
-                        Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
-                        Log.d("시가코스트", String.valueOf(cigaCost));
 
                         noSmoke_Btn.setVisibility(GONE); //금연버튼을 비활성화
                         stop_Btn.setVisibility(VISIBLE); //취소버튼을 활성화
@@ -629,12 +610,10 @@ public class HomeMain extends Fragment {
             //쓰레드에서 번들정보 가져오기
             Bundle bundle = msg.getData();
             long dateTime = bundle.getLong("dateTime");
-            Log.d("데이트타임", String.valueOf(dateTime));
 
             //타이머가 86400000 이 있으면 백의 자리에서 증감이 일어남 그래서,
             // dataTime에 0을 붙여서 천의 자리부터 숫자가 증가하게 만들어 올바른 타이머 동작을 구현했다.
             long datatime_last = Long.parseLong(dateTime + "0");
-            Log.d("마지막데트", String.valueOf(datatime_last));
             /////////////////////////////////////
             long sec = (datatime_last / 1000) % 60; //초
             long min = (datatime_last / 1000) / 60 % 60; //분
@@ -643,22 +622,8 @@ public class HomeMain extends Fragment {
             long ciga_Time = (datatime_last / 1000) / last_cigaCount * 1L; //담배를 피지 않은 횟수
             double ciga_Money = (datatime_last / 1000) * last_cigaCost *1d; //지금껏 아낀 비용
 
-
-
-
             //스트링 열로 포맷한다.
             String result = String.format("%02d:%02d:%02d", hour, min, sec);
-
-            Log.d("진짜", String.valueOf(msg.arg2));
-            Log.d("리절트", result);
-            Log.d("데이", String.valueOf(day));
-            Log.d("타임", String.valueOf(ciga_Time));
-            Log.d("머니", String.valueOf(ciga_Money));
-
-
-
-
-
 
             /** 실시간 데이터들 뷰모델로 각 프래그먼트로 전달*/
             sharedViewModel.setstartDate(result); //타이머 실시간 표시
@@ -671,7 +636,7 @@ public class HomeMain extends Fragment {
 
             //setmax에 int형으로 밖에 못넣어서 1000으로 나눈다 => 0이 하나도 안붙어있는 숫자로만 전달
             long healthSecond = (datatime_last / 1000) * 1L;
-            Log.d("헬스세컨드", String.valueOf(healthSecond));
+
             sharedViewModel.sethaelthSecond(healthSecond); //ViewModel을 통해서 HealthCheck과 Frag7로 보내기 위해 Livedata에 datatime을 보낸다.
         }
     };
@@ -685,8 +650,6 @@ public class HomeMain extends Fragment {
         @Override
         public void run() {
             long dateTime = finallyDateTime * 1L; //여기에는 날짜와 시간을 넣는데, 마찬가지로 초 형식으로 넣는다.
-            Log.d("나", String.valueOf(dateTime));
-            Log.d("나", String.valueOf(finallyDateTime));
             while (true) {
                 while (isRunning) { //반복문으로 반복하기
                     //메세지에 번들정보 담아서 보내기
@@ -921,7 +884,6 @@ public class HomeMain extends Fragment {
         SaveSmokeInfo saveSmokeInfo = new SaveSmokeInfo(dateTime, cigaCount, cigaCost, id, responseListener);
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(saveSmokeInfo);
-        Log.d("뭐야", dateTime + "/" + cigaCount + "/" + cigaCost + "/" + HomeMain.id);
     }
 
 
@@ -945,18 +907,15 @@ public class HomeMain extends Fragment {
 
                             //시간가져오기
                             dateTime = jsonObject.getString("datetime");
-                            Log.d("디비정보", dateTime);
 
                             //이름가져오기
                             String newName = jsonObject.getString("name");
-                            Log.d("디비정보", newName);
 
                             nameView.setText(newName); //이름 넣기
 
                             //이미지는 파이어베이스에서 가져온다.
                             //여기서는 식별값으로 num을 가져온다.
                             num = jsonObject.getInt("num");
-                            Log.d("디비정보", String.valueOf(num));
                             getFireBaseProfileImage(num); //파이어베이스 프로필 사진 가져오기
 
                             //목표 가져오기
@@ -1016,16 +975,13 @@ public class HomeMain extends Fragment {
 
         //하루 담배량 계산
         last_cigaCount = 86400 / cigaCount; //86400은 하루를 초로 나타낸 값이고, 그 것을 하루 담배량으로 나눈 값을 아래 핸들러로 보내서 계산한다.
-        Log.d("라스트시가카운트", String.valueOf(last_cigaCount));
 
         //하루 담배값 계산
         last_cigaCost = cigaCost / 86400d; //ex) 하루를 담배값 4500원으로 나눌때, 담배가 4500원 기준이면, 1초에 0.052원이 발생하게 만든다.
-        Log.d("라스트시가코스트", String.valueOf(last_cigaCost));
 
         //스트링열 원하는 부분 제거
         StringBuffer origin = new StringBuffer(dateTime);
         StringBuffer justDate = origin.delete(10, 19);
-        Log.d("저스트", String.valueOf(justDate));
         dateView.setText(justDate); //날짜 프로필에다가 넣어주기 //금연 시작 날짜
 
         timeThread = new Thread(new timeThread());

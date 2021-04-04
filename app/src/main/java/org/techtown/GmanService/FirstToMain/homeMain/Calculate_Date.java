@@ -58,12 +58,6 @@ public class Calculate_Date {
         System.out.println("differentTimestamp 타임스탬프=> "+todayTimestamp);
         System.out.println("todayTimestamp 타임스탬프=> "+todayTimestamp);
         System.out.println("일수차=> "  +  difference/ (24*60*60*1000));
-
-        Log.d("알려줘", String.valueOf(difference));
-        Log.d("알려줘", String.valueOf(last_diff));
-        Log.d("알려줘", todayDate2);
-        Log.d("알려줘", differentDate);
-
         return last_diff;
     }
 

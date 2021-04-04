@@ -327,7 +327,6 @@ public class Register extends AppCompatActivity {
                                                             public void onTick(long millisUntilFinished) { //(300초에서 1초 마다 계속 줄어듬)
                                                                 timeLimit = true;
                                                                 long emailAuthCount = millisUntilFinished / 1000;
-                                                                Log.d("Alex", emailAuthCount + "");
 
                                                                 if ((emailAuthCount - ((emailAuthCount / 60) * 60)) >= 10) { //초가 10보다 크면 그냥 출력
                                                                     countView.setText((emailAuthCount / 60) + " : " + (emailAuthCount - ((emailAuthCount / 60) * 60)));

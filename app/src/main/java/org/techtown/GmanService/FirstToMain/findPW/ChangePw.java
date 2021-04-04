@@ -89,7 +89,6 @@ public class ChangePw extends AppCompatActivity {
         Intent intent = getIntent();
         Eid = intent.getStringExtra("id");
         Epw = intent.getStringExtra("pw"); //이미 해시화가 됨
-        Log.d("비번이왜안오지?3", Epw);
 
         pw = findViewById(R.id.IdforPw); //비밀번호
         pwcheck = findViewById(R.id.AuthTextEmail33); //비밀번호 확인

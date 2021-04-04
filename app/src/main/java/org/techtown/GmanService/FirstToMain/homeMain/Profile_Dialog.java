@@ -81,7 +81,6 @@ public class Profile_Dialog extends Dialog {
         storageRef.child("profile_img/" + filename).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri2) {
-                Log.d("오냐오냐", String.valueOf(uri2));
                 Glide.with(getContext()).load(uri2).into(profileImage);
             }
         }).addOnFailureListener(new OnFailureListener() {

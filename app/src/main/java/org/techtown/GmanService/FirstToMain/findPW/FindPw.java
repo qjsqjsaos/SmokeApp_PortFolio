@@ -160,7 +160,6 @@ public class FindPw extends AppCompatActivity {
                                 //비밀번호 변경하는 AuthforPw거쳐서 ChangePw로 보내기
                                 String Eid = jsonObject.getString("id"); //아이디 꺼내기
                                 String Epw = jsonObject.getString("pw"); //비밀번호 꺼내기
-                                Log.d("비번이왜안오지?1", Epw);
 
                                 Intent intent = new Intent(FindPw.this, AuthforPw.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
