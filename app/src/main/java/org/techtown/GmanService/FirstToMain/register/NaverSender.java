@@ -48,8 +48,8 @@ class MyAuthentication extends Authenticator {
     PasswordAuthentication account;
 
     public MyAuthentication(){
-        String id = "id";
-        String pw = "pw";
+        String id = "qjsqjsaos";
+        String pw = "tnduf4694!";
         account = new PasswordAuthentication(id, pw);
     }
 
