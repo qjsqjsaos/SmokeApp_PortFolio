@@ -43,6 +43,8 @@ public class NaverSender {
     }
 }
 
+
+
 class MyAuthentication extends Authenticator {
 
     PasswordAuthentication account;
