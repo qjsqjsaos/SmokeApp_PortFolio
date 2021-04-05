@@ -42,9 +42,7 @@ public class ChangePw extends AppCompatActivity {
 
     private AdView adView;
     private FrameLayout adContainerView;
-
     /**애드몹 시작*/
-
     private void loadBanner() {
         AdRequest adRequest = new AdRequest.Builder().build();
         AdSize adSize = getAdSize();
