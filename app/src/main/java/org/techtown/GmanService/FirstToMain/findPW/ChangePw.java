@@ -103,11 +103,11 @@ public class ChangePw extends AppCompatActivity {
 
                 /** 비밀번호 해시화 중요(보안)*/
 
-                //새로운 비밀번호 전 비밀번호와 구별을 위해 해시화
-                newpw = pw.getText().toString();
-                saltHash2 = "sooyeolBestDeveloperEver"+ newpw +"inyoungBestWomanIntheWorld";
-                SHA516_Hash_InCode hash_inCode = new SHA516_Hash_InCode();
-                hashPw2 = hash_inCode.SHA516_Hash_InCode(saltHash2); //솔팅한 값 해시화한 값
+//                //새로운 비밀번호 전 비밀번호와 구별을 위해 해시화
+//                newpw = pw.getText().toString();
+//                saltHash2 = "보안상 가립니다.";
+//                SHA516_Hash_InCode hash_inCode = new SHA516_Hash_InCode();
+//                hashPw2 = hash_inCode.SHA516_Hash_InCode(saltHash2); //솔팅한 값 해시화한 값
 
                 pw2 = pwcheck.getText().toString();
 

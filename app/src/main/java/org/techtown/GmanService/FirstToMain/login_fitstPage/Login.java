@@ -147,11 +147,11 @@ public class Login extends AppCompatActivity {
                     String id = idText.getText().toString();
                     String pw = passwordText.getText().toString();
 
-                    /** 비밀번호 해시화 중요(보안)*/
-                    //서버에서 솔팅한 값
-                    saltHash = "sooyeolBestDeveloperEver"+ pw +"inyoungBestWomanIntheWorld";
-                    SHA516_Hash_InCode hash_inCode = new SHA516_Hash_InCode();
-                    hashPw = hash_inCode.SHA516_Hash_InCode(saltHash); //솔팅한 값 해시화한 값
+//                    /** 비밀번호 해시화 중요(보안)*/
+//                    //서버에서 솔팅한 값
+//                    saltHash = "보안상 가립니다.";
+//                    SHA516_Hash_InCode hash_inCode = new SHA516_Hash_InCode();
+//                    hashPw = hash_inCode.SHA516_Hash_InCode(saltHash); //솔팅한 값 해시화한 값
 
 
                     if(id.isEmpty() || pw.isEmpty()){
